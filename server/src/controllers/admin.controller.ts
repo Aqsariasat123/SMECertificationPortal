@@ -1,0 +1,906 @@
+import { Response } from 'express';
+import { PrismaClient, CertificationStatus } from '@prisma/client';
+import { AuthenticatedRequest } from '../types';
+
+const prisma = new PrismaClient();
+
+// GET /api/admin/dashboard - Get dashboard stats
+export const getDashboardStats = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const [
+      totalUsers,
+      totalSMEs,
+      pendingApplications,
+      certifiedSMEs,
+      recentActivity,
+    ] = await Promise.all([
+      prisma.user.count({ where: { role: 'user' } }),
+      prisma.user.count({ where: { role: 'sme' } }),
+      prisma.sMEProfile.count({
+        where: {
+          certificationStatus: { in: ['submitted', 'under_review'] },
+        },
+      }),
+      prisma.sMEProfile.count({
+        where: { certificationStatus: 'certified' },
+      }),
+      prisma.auditLog.findMany({
+        take: 10,
+        orderBy: { timestamp: 'desc' },
+        include: {
+          user: {
+            select: { fullName: true, email: true },
+          },
+        },
+      }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        stats: {
+          totalUsers,
+          totalSMEs,
+          pendingApplications,
+          certifiedSMEs,
+        },
+        recentActivity,
+      },
+    });
+  } catch (error) {
+    console.error('Get dashboard stats error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch dashboard stats',
+    });
+  }
+};
+
+// GET /api/admin/users - Get all users with pagination
+export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string || '';
+    const role = req.query.role as string || '';
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = [
+        { fullName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (role && ['user', 'sme', 'admin'].includes(role)) {
+      where.role = role;
+    }
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          role: true,
+          isVerified: true,
+          createdAt: true,
+          lastLogin: true,
+        },
+      }),
+      prisma.user.count({ where }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        users,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get users error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch users',
+    });
+  }
+};
+
+// GET /api/admin/applications - Get all SME applications
+export const getApplications = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string || '';
+    const status = req.query.status as string || '';
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = [
+        { companyName: { contains: search, mode: 'insensitive' } },
+        { user: { fullName: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    if (status && ['draft', 'submitted', 'under_review', 'certified', 'rejected', 'revision_requested'].includes(status)) {
+      where.certificationStatus = status;
+    }
+
+    const [applications, total] = await Promise.all([
+      prisma.sMEProfile.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { updatedAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+          reviewedBy: {
+            select: {
+              fullName: true,
+            },
+          },
+        },
+      }),
+      prisma.sMEProfile.count({ where }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        applications,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get applications error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch applications',
+    });
+  }
+};
+
+// GET /api/admin/applications/:id - Get single application detail
+export const getApplicationDetail = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phoneNumber: true,
+            createdAt: true,
+          },
+        },
+        reviewedBy: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Get audit history for this application
+    const auditHistory = await prisma.auditLog.findMany({
+      where: {
+        targetType: 'SMEProfile',
+        targetId: id,
+      },
+      orderBy: { timestamp: 'desc' },
+      take: 20,
+      include: {
+        user: {
+          select: { fullName: true },
+        },
+      },
+    });
+
+    return res.json({
+      success: true,
+      data: {
+        application,
+        auditHistory,
+      },
+    });
+  } catch (error) {
+    console.error('Get application detail error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch application details',
+    });
+  }
+};
+
+// POST /api/admin/applications/:id/review - Review application (approve/reject/request revision)
+export const reviewApplication = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const id = req.params.id as string;
+    const { action, notes } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    if (!action || !['approve', 'reject', 'request_revision', 'start_review'].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid action. Must be: approve, reject, request_revision, or start_review',
+      });
+    }
+
+    // Get application
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Validate state transitions
+    const validTransitions: Record<string, string[]> = {
+      submitted: ['start_review'],
+      under_review: ['approve', 'reject', 'request_revision'],
+    };
+
+    const currentStatus = application.certificationStatus;
+    if (!validTransitions[currentStatus]?.includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: `Cannot perform '${action}' on application with status '${currentStatus}'`,
+      });
+    }
+
+    // Determine new status
+    let newStatus: CertificationStatus;
+    let actionDescription: string;
+
+    switch (action) {
+      case 'start_review':
+        newStatus = CertificationStatus.under_review;
+        actionDescription = `Started review for ${application.companyName}`;
+        break;
+      case 'approve':
+        newStatus = CertificationStatus.certified;
+        actionDescription = `Approved certification for ${application.companyName}`;
+        break;
+      case 'reject':
+        if (!notes) {
+          return res.status(400).json({
+            success: false,
+            message: 'Rejection notes are required',
+          });
+        }
+        newStatus = CertificationStatus.rejected;
+        actionDescription = `Rejected certification for ${application.companyName}`;
+        break;
+      case 'request_revision':
+        if (!notes) {
+          return res.status(400).json({
+            success: false,
+            message: 'Revision notes are required',
+          });
+        }
+        newStatus = CertificationStatus.revision_requested;
+        actionDescription = `Requested revision for ${application.companyName}`;
+        break;
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid action',
+        });
+    }
+
+    // Update application
+    const updatedApplication = await prisma.sMEProfile.update({
+      where: { id },
+      data: {
+        certificationStatus: newStatus,
+        reviewedById: adminId,
+        revisionNotes: action === 'request_revision' || action === 'reject' ? notes : null,
+        listingVisible: action === 'approve', // Auto-enable visibility on approval
+      },
+      include: {
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    // Create audit log
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,
+        actionType: `CERTIFICATION_${action.toUpperCase()}`,
+        actionDescription,
+        targetType: 'SMEProfile',
+        targetId: id,
+        ipAddress: req.ip || 'unknown',
+        newValue: JSON.stringify({ status: newStatus, notes }),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Application ${action.replace('_', ' ')} successfully`,
+      data: updatedApplication,
+    });
+  } catch (error) {
+    console.error('Review application error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to review application',
+    });
+  }
+};
+
+// GET /api/admin/audit-logs - Get audit logs with pagination
+export const getAuditLogs = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const actionType = req.query.actionType as string || '';
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (actionType) {
+      where.actionType = actionType;
+    }
+
+    const [logs, total] = await Promise.all([
+      prisma.auditLog.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { timestamp: 'desc' },
+        include: {
+          user: {
+            select: {
+              fullName: true,
+              email: true,
+              role: true,
+            },
+          },
+        },
+      }),
+      prisma.auditLog.count({ where }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        logs,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get audit logs error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch audit logs',
+    });
+  }
+};
+
+// PUT /api/admin/registry/:profileId/visibility - Toggle SME listing visibility
+export const updateVisibility = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const profileId = req.params.profileId as string;
+    const { visible } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    if (typeof visible !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        message: 'Visibility must be a boolean value',
+      });
+    }
+
+    // Get the SME profile
+    const profile = await prisma.sMEProfile.findUnique({
+      where: { id: profileId },
+      select: {
+        id: true,
+        companyName: true,
+        certificationStatus: true,
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: 'SME profile not found',
+      });
+    }
+
+    // Only certified SMEs can have visibility toggled
+    if (profile.certificationStatus !== 'certified') {
+      return res.status(400).json({
+        success: false,
+        message: 'Only certified SMEs can have their listing visibility changed',
+      });
+    }
+
+    // Update visibility
+    const updatedProfile = await prisma.sMEProfile.update({
+      where: { id: profileId },
+      data: { listingVisible: visible },
+      select: {
+        id: true,
+        companyName: true,
+        listingVisible: true,
+      },
+    });
+
+    // Create audit log
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,
+        actionType: visible ? 'LISTING_ENABLED' : 'LISTING_DISABLED',
+        actionDescription: `${visible ? 'Enabled' : 'Disabled'} listing visibility for ${profile.companyName}`,
+        targetType: 'SMEProfile',
+        targetId: profileId,
+        ipAddress: req.ip || 'unknown',
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Listing visibility ${visible ? 'enabled' : 'disabled'} successfully`,
+      data: updatedProfile,
+    });
+  } catch (error) {
+    console.error('Update visibility error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update listing visibility',
+    });
+  }
+};
+
+// GET /api/admin/introduction-requests - Get all introduction requests
+export const getIntroductionRequests = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const status = (req.query.status as string) || '';
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (status && ['pending', 'viewed', 'responded'].includes(status)) {
+      where.status = status;
+    }
+
+    const [requests, total] = await Promise.all([
+      prisma.introductionRequest.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { requestedDate: 'desc' },
+        include: {
+          requester: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+            },
+          },
+          smeProfile: {
+            select: {
+              id: true,
+              companyName: true,
+              industrySector: true,
+            },
+          },
+        },
+      }),
+      prisma.introductionRequest.count({ where }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        requests: requests.map(req => ({
+          id: req.id,
+          requester: req.requester,
+          sme: {
+            id: req.smeProfile.id,
+            companyName: req.smeProfile.companyName,
+            industrySector: req.smeProfile.industrySector,
+          },
+          message: req.message,
+          status: req.status,
+          requestedDate: req.requestedDate,
+        })),
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get introduction requests error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch introduction requests',
+    });
+  }
+};
+
+// GET /api/admin/audit-logs/export - Export audit logs as CSV
+export const exportAuditLogs = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const actionType = (req.query.actionType as string) || '';
+    const startDate = req.query.startDate as string;
+    const endDate = req.query.endDate as string;
+
+    const where: any = {};
+
+    if (actionType) {
+      where.actionType = actionType;
+    }
+
+    if (startDate || endDate) {
+      where.timestamp = {};
+      if (startDate) {
+        where.timestamp.gte = new Date(startDate);
+      }
+      if (endDate) {
+        where.timestamp.lte = new Date(endDate);
+      }
+    }
+
+    const logs = await prisma.auditLog.findMany({
+      where,
+      orderBy: { timestamp: 'desc' },
+      take: 10000, // Limit export to 10000 records
+      include: {
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    // Generate CSV content
+    const headers = ['Timestamp', 'User', 'Email', 'Role', 'Action Type', 'Description', 'Target Type', 'Target ID', 'IP Address'];
+    const rows = logs.map(log => [
+      new Date(log.timestamp).toISOString(),
+      log.user.fullName,
+      log.user.email,
+      log.user.role,
+      log.actionType,
+      log.actionDescription,
+      log.targetType || '',
+      log.targetId || '',
+      log.ipAddress || '',
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+    ].join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=audit-logs-${new Date().toISOString().split('T')[0]}.csv`);
+    return res.send(csvContent);
+  } catch (error) {
+    console.error('Export audit logs error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to export audit logs',
+    });
+  }
+};
+
+// GET /api/admin/pending-update-requests - Get pending profile update requests
+export const getPendingUpdateRequests = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    // Get all PROFILE_UPDATE_REQUEST audit logs
+    const updateRequests = await prisma.auditLog.findMany({
+      where: {
+        actionType: 'PROFILE_UPDATE_REQUEST',
+      },
+      orderBy: { timestamp: 'desc' },
+      take: 20,
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    // Filter to only include requests that haven't been approved yet
+    const pendingRequests = [];
+    for (const request of updateRequests) {
+      if (request.targetId) {
+        // Check if there's a PROFILE_UPDATE_APPROVED or PROFILE_UPDATE_REJECTED entry AFTER this request
+        const handledAfter = await prisma.auditLog.findFirst({
+          where: {
+            actionType: {
+              in: ['PROFILE_UPDATE_APPROVED', 'PROFILE_UPDATE_REJECTED'],
+            },
+            targetId: request.targetId,
+            timestamp: {
+              gt: request.timestamp,
+            },
+          },
+        });
+
+        // Skip if already handled (approved or rejected)
+        if (handledAfter) {
+          continue;
+        }
+
+        const profile = await prisma.sMEProfile.findUnique({
+          where: { id: request.targetId },
+          select: {
+            id: true,
+            companyName: true,
+            certificationStatus: true,
+          },
+        });
+
+        // Only include if profile exists and is certified (still needs approval)
+        if (profile && profile.certificationStatus === 'certified') {
+          // Parse the reason from newValue JSON
+          let reason = '';
+          if (request.newValue) {
+            try {
+              const parsed = JSON.parse(request.newValue);
+              reason = parsed.reason || '';
+            } catch {
+              reason = '';
+            }
+          }
+
+          pendingRequests.push({
+            id: request.id,
+            profileId: profile.id,
+            companyName: profile.companyName,
+            requestedBy: request.user.fullName,
+            requestedByEmail: request.user.email,
+            reason,
+            requestedAt: request.timestamp,
+          });
+        }
+      }
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        requests: pendingRequests,
+        count: pendingRequests.length,
+      },
+    });
+  } catch (error) {
+    console.error('Get pending update requests error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch pending update requests',
+    });
+  }
+};
+
+// POST /api/admin/reject-update-request/:profileId - Reject profile update request
+export const rejectUpdateRequest = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const profileId = req.params.profileId as string;
+    const { reason } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Get the SME profile
+    const profile = await prisma.sMEProfile.findUnique({
+      where: { id: profileId },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: 'SME profile not found',
+      });
+    }
+
+    // Create audit log for rejection (this marks the request as handled)
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,
+        actionType: 'PROFILE_UPDATE_REJECTED',
+        actionDescription: `Rejected profile update request for ${profile.companyName}${reason ? ': ' + reason : ''}`,
+        targetType: 'SMEProfile',
+        targetId: profileId,
+        ipAddress: req.ip || 'unknown',
+        newValue: JSON.stringify({ reason: reason || 'No reason provided' }),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Profile update request rejected for ${profile.companyName}.`,
+      data: {
+        id: profile.id,
+        companyName: profile.companyName,
+      },
+    });
+  } catch (error) {
+    console.error('Reject update request error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to reject update request',
+    });
+  }
+};
+
+// POST /api/admin/approve-update-request/:profileId - Approve profile update request (allow SME to edit)
+export const approveUpdateRequest = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const profileId = req.params.profileId as string;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Get the SME profile
+    const profile = await prisma.sMEProfile.findUnique({
+      where: { id: profileId },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: 'SME profile not found',
+      });
+    }
+
+    // Only certified or submitted profiles can have update requests approved
+    if (profile.certificationStatus !== 'certified' &&
+        profile.certificationStatus !== 'submitted' &&
+        profile.certificationStatus !== 'under_review') {
+      return res.status(400).json({
+        success: false,
+        message: 'This profile does not have an active update request',
+      });
+    }
+
+    // Update status to revision_requested so SME can edit
+    const updatedProfile = await prisma.sMEProfile.update({
+      where: { id: profileId },
+      data: {
+        certificationStatus: CertificationStatus.revision_requested,
+        revisionNotes: 'Profile update approved by admin. You can now edit your profile.',
+        reviewedById: adminId,
+      },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    // Create audit log
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,
+        actionType: 'PROFILE_UPDATE_APPROVED',
+        actionDescription: `Approved profile update request for ${profile.companyName}. SME can now edit their profile.`,
+        targetType: 'SMEProfile',
+        targetId: profileId,
+        ipAddress: req.ip || 'unknown',
+        previousValue: JSON.stringify({ status: profile.certificationStatus }),
+        newValue: JSON.stringify({ status: 'revision_requested' }),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Profile update approved for ${profile.companyName}. SME can now edit their profile.`,
+      data: {
+        id: updatedProfile.id,
+        companyName: updatedProfile.companyName,
+        certificationStatus: updatedProfile.certificationStatus,
+      },
+    });
+  } catch (error) {
+    console.error('Approve update request error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to approve update request',
+    });
+  }
+};

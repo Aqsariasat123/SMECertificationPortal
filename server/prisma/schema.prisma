@@ -1,0 +1,350 @@
+// Prisma Schema for SME Certification Portal
+// This schema defines all models for the certification and registry system
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  user
+  sme
+  admin
+}
+
+enum CertificationStatus {
+  draft
+  submitted
+  under_review
+  certified
+  rejected
+  revision_requested
+}
+
+enum RequestStatus {
+  pending
+  viewed
+  responded
+}
+
+enum SupportTicketStatus {
+  open
+  in_progress
+  resolved
+  closed
+}
+
+enum SupportTicketPriority {
+  low
+  medium
+  high
+}
+
+enum IndustrySector {
+  technology
+  healthcare
+  finance
+  retail
+  manufacturing
+  real_estate
+  hospitality
+  education
+  other
+}
+
+enum LegalStructure {
+  llc
+  partnership
+  sole_proprietorship
+  corporation
+  free_zone
+  branch
+  other
+}
+
+enum BusinessModel {
+  b2b
+  b2c
+  b2b2c
+  marketplace
+  saas
+  other
+}
+
+enum FundingStage {
+  bootstrapped
+  pre_seed
+  seed
+  series_a
+  series_b
+  series_c_plus
+  profitable
+  other
+}
+
+enum OfficeType {
+  own_premises
+  rented
+  shared_coworking
+  virtual
+  home_based
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+/// User model - Base user account for all roles
+model User {
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  password              String
+  role                  UserRole
+  fullName              String
+  phoneNumber           String?
+  profilePicture        String?
+  isVerified            Boolean   @default(false)
+  verificationToken     String?
+  resetPasswordToken    String?
+  resetPasswordExpires  DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  lastLogin             DateTime?
+
+  // Relations
+  userProfile           UserProfile?
+  smeProfile            SMEProfile?
+  reviewedApplications  SMEProfile[]          @relation("ReviewedBy")
+  introductionRequests  IntroductionRequest[] @relation("Requester")
+  auditLogs             AuditLog[]
+  sentMessages          ChatMessage[]         @relation("MessageSender")
+  supportTickets        SupportTicket[]       @relation("TicketCreator")
+  supportMessages       SupportMessage[]      @relation("SupportMessageSender")
+
+  @@map("users")
+}
+
+/// UserProfile model - Extended profile for regular users (registry visitors)
+model UserProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  company   String?
+  jobTitle  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+/// SMEProfile model - Company profile for SME certification
+model SMEProfile {
+  id                  String              @id @default(uuid())
+  userId              String              @unique
+
+  // ============ BASIC INFO (Existing + Enhanced) ============
+  companyName         String?
+  tradeLicenseNumber  String?
+  companyDescription  String?
+  industrySector      IndustrySector?
+  foundingDate        DateTime?
+  employeeCount       Int?
+  annualRevenue       Decimal?            @db.Decimal(15, 2)
+  website             String?
+  address             String?
+
+  // ============ LEGAL & REGISTRATION (Required) ============
+  registrationNumber  String?             // Company registration / CR number
+  vatNumber           String?             // VAT / Tax registration number
+  licenseExpiryDate   DateTime?           // Trade license expiry
+  legalStructure      LegalStructure?     // LLC, Partnership, etc.
+  registrationCountry String?             // Country of incorporation
+  registrationCity    String?             // City of registration
+
+  // ============ OWNERSHIP & MANAGEMENT (Required) ============
+  ownerName           String?             // Primary owner / CEO name
+  ownerNationality    String?             // Owner's nationality
+  ownerIdNumber       String?             // Emirates ID / National ID
+  shareholderStructure Json?              // Array of { name, nationality, percentage }
+  boardMembers        Json?               // Array of { name, position, nationality }
+
+  // ============ FINANCIAL INFO (Optional) ============
+  bankName            String?             // Company's primary bank
+  bankAccountNumber   String?             // Masked account number for verification
+  auditorName         String?             // External auditor name
+  lastAuditDate       DateTime?           // Date of last audit
+  profitMargin        Decimal?            @db.Decimal(5, 2) // Percentage
+  fundingStage        FundingStage?       // Bootstrapped, Seed, Series A, etc.
+
+  // ============ BUSINESS OPERATIONS (Optional) ============
+  businessModel       BusinessModel?      // B2B, B2C, etc.
+  operatingCountries  Json?               // Array of country names
+  majorClients        Json?               // Array of client names (optional)
+  officeType          OfficeType?         // Own premises, Virtual, etc.
+
+  // ============ COMPLIANCE & CERTIFICATIONS (Optional) ============
+  existingCertifications Json?            // Array of { name, issuedBy, validUntil }
+  regulatoryLicenses  Json?               // Array of { name, licenseNumber, validUntil }
+  complianceOfficerName String?           // Compliance officer name
+  complianceOfficerEmail String?          // Compliance officer email
+  hasAmlPolicy        Boolean             @default(false)
+  hasDataProtectionPolicy Boolean         @default(false)
+
+  // ============ CONTACT & SOCIAL (Optional) ============
+  linkedinUrl         String?
+  socialMedia         Json?               // { twitter, facebook, instagram }
+  headOfficeAddress   String?             // Detailed head office address
+  headOfficeLatitude  Decimal?            @db.Decimal(10, 8)
+  headOfficeLongitude Decimal?            @db.Decimal(11, 8)
+  secondaryContactName String?
+  secondaryContactPhone String?
+  secondaryContactEmail String?
+
+  // ============ SYSTEM FIELDS ============
+  documents           Json?               // Array of document file paths
+  certificationStatus CertificationStatus @default(draft)
+  submittedDate       DateTime?
+  reviewedById        String?
+  revisionNotes       String?
+  listingVisible      Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy           User?                 @relation("ReviewedBy", fields: [reviewedById], references: [id])
+  introductionRequests IntroductionRequest[]
+
+  @@map("sme_profiles")
+}
+
+/// IntroductionRequest model - Requests from users to connect with SMEs
+model IntroductionRequest {
+  id                 String        @id @default(uuid())
+  requesterId        String
+  smeProfileId       String
+  message            String
+  contactPreferences String?
+  status             RequestStatus @default(pending)
+  smeResponse        String?       // SME owner's response message
+  respondedAt        DateTime?     // When SME responded
+  requestedDate      DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  // Relations
+  requester  User          @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  smeProfile SMEProfile    @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  messages   ChatMessage[]
+
+  @@map("introduction_requests")
+}
+
+/// ChatMessage model - Messages in introduction request conversations
+model ChatMessage {
+  id                    String              @id @default(uuid())
+  introductionRequestId String
+  senderId              String
+  content               String?             // Text content (optional if file attached)
+  createdAt             DateTime            @default(now())
+  isRead                Boolean             @default(false)
+  isEdited              Boolean             @default(false)
+  editedAt              DateTime?
+  isDeletedForEveryone  Boolean             @default(false)
+  deletedForUsers       Json                @default("[]") // Array of user IDs who deleted for themselves
+
+  // Relations
+  introductionRequest IntroductionRequest @relation(fields: [introductionRequestId], references: [id], onDelete: Cascade)
+  sender              User                @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  attachments         ChatAttachment[]
+
+  @@index([introductionRequestId])
+  @@index([senderId])
+  @@map("chat_messages")
+}
+
+/// ChatAttachment model - File attachments in chat messages
+model ChatAttachment {
+  id           String      @id @default(uuid())
+  messageId    String
+  fileName     String
+  originalName String
+  filePath     String
+  fileSize     Int
+  mimeType     String
+  createdAt    DateTime    @default(now())
+
+  // Relations
+  message ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@map("chat_attachments")
+}
+
+/// AuditLog model - Immutable audit trail for all actions
+model AuditLog {
+  id                String   @id @default(uuid())
+  userId            String
+  actionType        String
+  actionDescription String
+  targetType        String?
+  targetId          String?
+  ipAddress         String?
+  timestamp         DateTime @default(now())
+  previousValue     String?  // JSON string
+  newValue          String?  // JSON string
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([actionType])
+  @@index([timestamp])
+  @@map("audit_logs")
+}
+
+/// SupportTicket model - Support conversations between users/SMEs and admin
+model SupportTicket {
+  id          String                 @id @default(uuid())
+  userId      String
+  subject     String
+  status      SupportTicketStatus    @default(open)
+  priority    SupportTicketPriority  @default(medium)
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  closedAt    DateTime?
+
+  // Relations
+  user        User                   @relation("TicketCreator", fields: [userId], references: [id], onDelete: Cascade)
+  messages    SupportMessage[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+/// SupportMessage model - Messages in support ticket conversations
+model SupportMessage {
+  id          String    @id @default(uuid())
+  ticketId    String
+  senderId    String
+  content     String
+  isRead      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender      User          @relation("SupportMessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([senderId])
+  @@map("support_messages")
+}
