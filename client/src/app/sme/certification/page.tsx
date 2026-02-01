@@ -44,7 +44,7 @@ export default function SMECertificationPage() {
   // Calculate completion status
   const profileCompletion = profile?.completionPercentage || 0;
   const docs = profile?.documents || {};
-  const uploadedFiles: Array<{ type: string; name: string }> = docs.uploadedFiles || [];
+  const uploadedFiles = (docs.uploadedFiles || []) as Array<{ type?: string; name: string; path?: string; uploadedAt?: string }>;
   const documentsCount = uploadedFiles.length;
   const requiredDocuments = requiredDocumentTypes.length;
 
