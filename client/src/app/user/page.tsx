@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { RegistrySME, RegistrySMEDetail, PaginationData, IndustrySector } from '@/types';
 
 export default function UserDashboardPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSector, setSelectedSector] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,19 +63,8 @@ export default function UserDashboardPage() {
     { label: 'Current Page', value: `${currentPage} of ${pagination?.pages || 1}`, icon: 'page', accent: 'stat-accent-graphite' },
   ];
 
-  const handleViewProfile = async (sme: RegistrySME) => {
-    // Set basic data immediately to avoid flash
-    setSelectedSME(sme as RegistrySMEDetail);
-    setShowProfileModal(true);
-
-    try {
-      const result = await api.getRegistrySMEDetail(sme.id);
-      if (result.success && result.data) {
-        setSelectedSME(result.data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch SME detail:', error);
-    }
+  const handleViewProfile = (sme: RegistrySME) => {
+    router.push(`/user/registry/${sme.id}`);
   };
 
   const handleRequestIntroduction = (sme: RegistrySME) => {
