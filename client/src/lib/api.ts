@@ -883,25 +883,22 @@ class ApiClient {
     }
   }
 
-  // Download support attachment
+  // Download support attachment (uses static URL)
   async downloadSupportAttachment(ticketId: string, filename: string, originalName: string): Promise<void> {
-    const token = this.getToken();
     try {
-      const response = await fetch(`${this.baseUrl}/support/tickets/${ticketId}/download/${filename}`, {
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const baseUrl = this.baseUrl.replace('/api', '');
+      const url = `${baseUrl}/uploads/support/${ticketId}/${filename}`;
 
+      const response = await fetch(url);
       if (response.ok) {
         const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        const blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
+        a.href = blobUrl;
         a.download = originalName;
         document.body.appendChild(a);
         a.click();
-        window.URL.revokeObjectURL(url);
+        window.URL.revokeObjectURL(blobUrl);
         document.body.removeChild(a);
       }
     } catch (error) {
@@ -910,7 +907,8 @@ class ApiClient {
   }
 
   getSupportAttachmentUrl(ticketId: string, filename: string): string {
-    return `${this.baseUrl}/support/tickets/${ticketId}/download/${filename}`;
+    const baseUrl = this.baseUrl.replace('/api', '');
+    return `${baseUrl}/uploads/support/${ticketId}/${filename}`;
   }
 }
 

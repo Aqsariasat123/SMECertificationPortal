@@ -143,8 +143,15 @@ export default function AdminSupportPage() {
     }
   };
 
+  // Get static image URL (uploads served directly)
+  const getImageUrl = (ticketId: string, fileName: string) => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5001';
+    return `${baseUrl}/uploads/support/${ticketId}/${fileName}`;
+  };
+
   // Parse attachment from message content
   const parseAttachment = (content: string) => {
+    // New format: [ATTACHMENT]{json}
     if (content.startsWith('[ATTACHMENT]')) {
       try {
         const jsonStr = content.substring('[ATTACHMENT]'.length);
@@ -153,18 +160,45 @@ export default function AdminSupportPage() {
         return null;
       }
     }
+    // Old format: [Attachment: filename]
+    const oldMatch = content.match(/^\[Attachment: (.+)\]$/);
+    if (oldMatch) {
+      const fileName = oldMatch[1];
+      const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+      return {
+        type: 'attachment',
+        fileName: fileName,
+        originalName: fileName,
+        mimeType: isImage ? 'image/png' : 'application/octet-stream',
+        size: 0,
+        isOldFormat: true
+      };
+    }
     return null;
   };
 
   // Check if attachment is an image
-  const isImageAttachment = (attachment: { mimeType: string }) => {
-    return attachment.mimeType?.startsWith('image/');
+  const isImageAttachment = (attachment: { mimeType?: string; originalName?: string }) => {
+    if (attachment.mimeType?.startsWith('image/')) return true;
+    if (attachment.originalName && /\.(jpg|jpeg|png|gif|webp)$/i.test(attachment.originalName)) return true;
+    return false;
   };
 
-  // Get full attachment URL
-  const getAttachmentUrl = (ticketId: string, fileName: string) => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-    return `${apiUrl}/support/tickets/${ticketId}/download/${fileName}`;
+  // Format preview text for ticket list (hide JSON, show friendly text)
+  const formatPreviewText = (content: string | undefined) => {
+    if (!content) return 'No messages yet';
+    if (content.startsWith('[ATTACHMENT]')) {
+      try {
+        const json = JSON.parse(content.substring('[ATTACHMENT]'.length));
+        return `📎 ${json.originalName || 'Attachment'}`;
+      } catch {
+        return '📎 Attachment';
+      }
+    }
+    if (content.match(/^\[Attachment: .+\]$/)) {
+      return content.replace('[Attachment: ', '📎 ').replace(']', '');
+    }
+    return content;
   };
 
   // Handle attachment download
@@ -373,7 +407,7 @@ export default function AdminSupportPage() {
                   </div>
                   <p className="text-xs font-medium truncate mb-1" style={{ color: 'var(--graphite-700)' }}>{ticket.subject}</p>
                   <p className="text-xs truncate mb-2" style={{ color: 'var(--graphite-500)' }}>
-                    {ticket.lastMessage?.content || 'No messages yet'}
+                    {formatPreviewText(ticket.lastMessage?.content)}
                   </p>
                   {getStatusBadge(ticket.status)}
                 </div>
@@ -469,11 +503,11 @@ export default function AdminSupportPage() {
                                   <div className="rounded-2xl rounded-tl-md overflow-hidden bg-white" style={{ border: '1px solid var(--graphite-200)', maxWidth: '280px' }}>
                                     <div className="relative group">
                                       <img
-                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
+                                        src={getImageUrl(selectedTicket.id, attachment.fileName)}
                                         alt={attachment.originalName}
                                         className="w-full object-cover cursor-pointer"
                                         style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                        onClick={() => window.open(getImageUrl(selectedTicket.id, attachment.fileName), '_blank')}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
@@ -532,11 +566,11 @@ export default function AdminSupportPage() {
                                   <div className="rounded-2xl rounded-tr-md overflow-hidden" style={{ backgroundColor: 'var(--teal-600)', maxWidth: '280px' }}>
                                     <div className="relative group">
                                       <img
-                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
+                                        src={getImageUrl(selectedTicket.id, attachment.fileName)}
                                         alt={attachment.originalName}
                                         className="w-full object-cover cursor-pointer"
                                         style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                        onClick={() => window.open(getImageUrl(selectedTicket.id, attachment.fileName), '_blank')}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
