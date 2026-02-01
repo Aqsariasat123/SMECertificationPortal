@@ -379,14 +379,12 @@ export default function SMESupportPage() {
             <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${getStatusColor(selectedTicket.status)}15` }}>
-                    <svg className="w-5 h-5" style={{ color: getStatusColor(selectedTicket.status) }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-600)' }}>
+                    <span className="text-white font-semibold text-lg">S</span>
                   </div>
                   <div>
-                    <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>{selectedTicket.subject}</h2>
-                    <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Created {formatDate(selectedTicket.createdAt)}</p>
+                    <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Support Team</h2>
+                    <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>{selectedTicket.subject}</p>
                   </div>
                 </div>
                 {getStatusBadge(selectedTicket.status)}
