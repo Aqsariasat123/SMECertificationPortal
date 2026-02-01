@@ -82,7 +82,12 @@ export default function InvestorSupportPage() {
   }, [activeTicket?.messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      const container = messagesEndRef.current.parentElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
   };
 
   const fetchTickets = async () => {
