@@ -213,7 +213,7 @@ export default function InvestorVerificationPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: '#E5E7EB', borderTopColor: '#7C3AED' }} />
+        <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: '#E5E7EB', borderTopColor: '#0D9488' }} />
       </div>
     );
   }
@@ -225,164 +225,316 @@ export default function InvestorVerificationPage() {
   if ((kycStatus === 'pending' || kycStatus === 'approved') && !showDetails) {
     const isApproved = kycStatus === 'approved';
     return (
-      <div className="max-w-3xl mx-auto pb-8">
-        {/* Header Card */}
+      <div className="pb-8">
+        {/* Header Card - Full Width */}
         <div className="rounded-2xl overflow-hidden shadow-lg mb-6" style={{ background: 'linear-gradient(135deg, #363c45 0%, #2a2f36 100%)' }}>
-          <div className="p-8">
-            <div className="flex items-start gap-6">
-              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 ${isApproved ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`}>
-                {isApproved ? (
-                  <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                ) : (
-                  <svg className="w-8 h-8 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                  </svg>
-                )}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-bold text-white">
-                    {isApproved ? 'Verification Complete' : 'KYC Under Review'}
-                  </h1>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isApproved ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
-                    {isApproved ? 'Verified' : 'Pending'}
-                  </span>
-                </div>
-                <p className="text-slate-300">
-                  {isApproved
-                    ? 'Your identity has been verified. You now have full access to all investment features.'
-                    : 'Our compliance team is reviewing your submitted documents and information.'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Timeline */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Verification Progress</h2>
-          <div className="flex items-center justify-between">
-            {/* Step 1: Submitted */}
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center mb-2">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-gray-900">Submitted</span>
-              <span className="text-xs text-gray-500">Complete</span>
-            </div>
-            {/* Connector */}
-            <div className={`h-1 flex-1 mx-2 rounded ${isApproved ? 'bg-emerald-500' : 'bg-emerald-500'}`} />
-            {/* Step 2: Under Review */}
-            <div className="flex flex-col items-center flex-1">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${isApproved ? 'bg-emerald-500' : 'bg-violet-500'}`}>
-                {isApproved ? (
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-                )}
-              </div>
-              <span className="text-sm font-medium text-gray-900">Under Review</span>
-              <span className="text-xs text-gray-500">{isApproved ? 'Complete' : 'In Progress'}</span>
-            </div>
-            {/* Connector */}
-            <div className={`h-1 flex-1 mx-2 rounded ${isApproved ? 'bg-emerald-500' : 'bg-gray-200'}`} />
-            {/* Step 3: Verified */}
-            <div className="flex flex-col items-center flex-1">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 ${isApproved ? 'bg-emerald-500' : 'bg-gray-200'}`}>
-                {isApproved ? (
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                )}
-              </div>
-              <span className="text-sm font-medium text-gray-900">Verified</span>
-              <span className="text-xs text-gray-500">{isApproved ? 'Complete' : 'Pending'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Application Summary */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Application Summary</h2>
-          </div>
-          <div className="divide-y divide-gray-100">
-            <div className="flex items-center justify-between px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Investor Type</p>
-                  <p className="text-sm text-gray-500">Account category</p>
-                </div>
-              </div>
-              <span className="font-semibold text-gray-900">
-                {investorType === 'individual' ? 'Individual' : 'Company'}
-              </span>
-            </div>
-            <div className="flex items-center justify-between px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Documents</p>
-                  <p className="text-sm text-gray-500">Uploaded files</p>
-                </div>
-              </div>
-              <span className="font-semibold text-gray-900">{kycDocuments.length} files</span>
-            </div>
-            <div className="flex items-center justify-between px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isApproved ? 'bg-emerald-100' : 'bg-amber-100'}`}>
+          <div className="p-6 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${isApproved ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`}>
                   {isApproved ? (
-                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   ) : (
-                    <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg className="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                   )}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{isApproved ? 'Status' : 'Review Time'}</p>
-                  <p className="text-sm text-gray-500">{isApproved ? 'Verification complete' : 'Estimated duration'}</p>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h1 className="text-xl md:text-2xl font-bold text-white">
+                      {isApproved ? 'Verification Complete' : 'KYC Under Review'}
+                    </h1>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isApproved ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
+                      {isApproved ? 'Verified' : 'Pending'}
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-sm">
+                    {isApproved
+                      ? 'Your identity has been verified. You now have full access to all investment features.'
+                      : 'Our compliance team is reviewing your submitted documents and information.'}
+                  </p>
                 </div>
               </div>
-              <span className={`font-semibold ${isApproved ? 'text-emerald-600' : 'text-gray-900'}`}>
-                {isApproved ? 'Verified' : '1-3 business days'}
-              </span>
+              {isApproved && (
+                <button
+                  onClick={() => router.push('/user')}
+                  className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-all flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Browse SMEs
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Action Button */}
-        <button
-          onClick={() => setShowDetails(true)}
-          className="w-full py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
-          View Application Details
-        </button>
+        {/* Two Column Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Progress Timeline */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">Verification Progress</h2>
+              <div className="flex items-center justify-between">
+                {/* Step 1: Submitted */}
+                <div className="flex flex-col items-center flex-1">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center mb-2 shadow-lg shadow-emerald-500/30">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Submitted</span>
+                  <span className="text-xs text-emerald-600">Complete</span>
+                </div>
+                {/* Connector */}
+                <div className="h-1 flex-1 mx-3 rounded-full bg-emerald-500" />
+                {/* Step 2: Under Review */}
+                <div className="flex flex-col items-center flex-1">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg ${isApproved ? 'bg-emerald-500 shadow-emerald-500/30' : 'bg-violet-500 shadow-violet-500/30'}`}>
+                    {isApproved ? (
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Under Review</span>
+                  <span className={`text-xs ${isApproved ? 'text-emerald-600' : 'text-violet-600'}`}>{isApproved ? 'Complete' : 'In Progress'}</span>
+                </div>
+                {/* Connector */}
+                <div className={`h-1 flex-1 mx-3 rounded-full ${isApproved ? 'bg-emerald-500' : 'bg-gray-200'}`} />
+                {/* Step 3: Verified */}
+                <div className="flex flex-col items-center flex-1">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${isApproved ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-gray-100'}`}>
+                    {isApproved ? (
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Verified</span>
+                  <span className={`text-xs ${isApproved ? 'text-emerald-600' : 'text-gray-500'}`}>{isApproved ? 'Complete' : 'Pending'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Application Summary */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-100">
+                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Application Summary</h2>
+              </div>
+              <div className="divide-y divide-gray-100">
+                <div className="flex items-center justify-between px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">Investor Type</p>
+                      <p className="text-sm text-gray-500">Account category</p>
+                    </div>
+                  </div>
+                  <span className="font-semibold text-gray-900">
+                    {investorType === 'individual' ? 'Individual' : 'Company'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">Documents</p>
+                      <p className="text-sm text-gray-500">Uploaded files</p>
+                    </div>
+                  </div>
+                  <span className="font-semibold text-gray-900">{kycDocuments.length} files</span>
+                </div>
+                <div className="flex items-center justify-between px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isApproved ? 'bg-emerald-100' : 'bg-amber-100'}`}>
+                      {isApproved ? (
+                        <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">{isApproved ? 'Status' : 'Review Time'}</p>
+                      <p className="text-sm text-gray-500">{isApproved ? 'Verification complete' : 'Estimated duration'}</p>
+                    </div>
+                  </div>
+                  <span className={`font-semibold ${isApproved ? 'text-emerald-600' : 'text-gray-900'}`}>
+                    {isApproved ? 'Verified' : '1-3 business days'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <button
+              onClick={() => setShowDetails(true)}
+              className="w-full py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              View Application Details
+            </button>
+          </div>
+
+          {/* Right Column - Sidebar */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Quick Actions</h2>
+              <div className="space-y-3">
+                <button
+                  onClick={() => router.push('/user')}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 text-sm">Browse SME Registry</p>
+                    <p className="text-xs text-gray-500">Discover investment opportunities</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => router.push('/user/messages')}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 text-sm">Messages</p>
+                    <p className="text-xs text-gray-500">View your conversations</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => router.push('/user/support')}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 text-sm">Support</p>
+                    <p className="text-xs text-gray-500">Get help with your account</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Need Help Card */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-white">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold">Need Help?</h3>
+              </div>
+              <p className="text-sm text-slate-300 mb-4">
+                {isApproved
+                  ? 'Have questions about investing? Our team is here to help you get started.'
+                  : 'Questions about the verification process? Our support team is here to help.'}
+              </p>
+              <button
+                onClick={() => router.push('/user/support')}
+                className="w-full py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors"
+              >
+                Contact Support
+              </button>
+            </div>
+
+            {/* Info Card */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                {isApproved ? 'Your Benefits' : 'What Happens Next?'}
+              </h2>
+              <div className="space-y-4">
+                {isApproved ? (
+                  <>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-gray-600">Browse and connect with verified SMEs</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-gray-600">Access detailed financial reports</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-gray-600">Make direct investment requests</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-violet-600">1</span>
+                      </div>
+                      <p className="text-sm text-gray-600">Our team reviews your documents</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-violet-600">2</span>
+                      </div>
+                      <p className="text-sm text-gray-600">Identity verification completed</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-violet-600">3</span>
+                      </div>
+                      <p className="text-sm text-gray-600">You&apos;ll receive email notification</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
