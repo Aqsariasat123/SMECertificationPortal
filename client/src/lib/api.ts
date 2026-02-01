@@ -18,6 +18,7 @@ import {
   RegistrySMEDetail,
   IntroductionRequest,
   AdminIntroductionRequest,
+  KycApplication,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -503,11 +504,12 @@ class ApiClient {
   }
 
   // Admin KYC endpoints
-  async getKycApplications(params?: { page?: number; limit?: number; status?: string }): Promise<ApiResponse<{ applications: unknown[]; pagination: PaginationData }>> {
+  async getKycApplications(params?: { page?: number; limit?: number; status?: string; search?: string }): Promise<ApiResponse<{ applications: KycApplication[]; pagination: PaginationData }>> {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set('page', params.page.toString());
     if (params?.limit) searchParams.set('limit', params.limit.toString());
     if (params?.status) searchParams.set('status', params.status);
+    if (params?.search) searchParams.set('search', params.search);
 
     const queryString = searchParams.toString();
     return this.request(`/admin/kyc-applications${queryString ? `?${queryString}` : ''}`, {
@@ -515,7 +517,7 @@ class ApiClient {
     });
   }
 
-  async getKycApplicationDetail(id: string): Promise<ApiResponse<unknown>> {
+  async getKycApplicationDetail(id: string): Promise<ApiResponse<{ application: KycApplication }>> {
     return this.request(`/admin/kyc-applications/${id}`, {
       method: 'GET',
     });
