@@ -315,13 +315,14 @@ export default function AdminSupportPage() {
                 onMouseOver={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                 onMouseOut={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
-                {/* Status Icon */}
-                <div className="flex-shrink-0 mt-0.5">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${getStatusColor(ticket.status)}15` }}>
-                    <svg className="w-5 h-5" style={{ color: getStatusColor(ticket.status) }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                {/* Avatar - User Initial */}
+                <div className="flex-shrink-0 mt-0.5 relative">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--graphite-600)' }}>
+                    <span className="text-white font-semibold text-sm">{ticket.user.fullName?.charAt(0)?.toUpperCase() || 'U'}</span>
                   </div>
+                  {ticket.status === 'open' && (
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white" style={{ backgroundColor: 'var(--success-500)' }}></div>
+                  )}
                 </div>
 
                 {/* Content */}
