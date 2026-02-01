@@ -52,6 +52,8 @@ export default function MessagesPage() {
   // Conversations state
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loadingConversations, setLoadingConversations] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'current' | 'archived'>('current');
 
   // Chat state
   const [messages, setMessages] = useState<Message[]>([]);
@@ -63,8 +65,28 @@ export default function MessagesPage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
 
+  // Edit/Delete states
+  const [showMessageMenu, setShowMessageMenu] = useState<string | null>(null);
+  const [editingMessage, setEditingMessage] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState<Message | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showChatMenu, setShowChatMenu] = useState(false);
+  const [showChatSearch, setShowChatSearch] = useState(false);
+  const [chatSearchTerm, setChatSearchTerm] = useState('');
+  const [favoriteChats, setFavoriteChats] = useState<Set<string>>(new Set());
+  const [showDeleteChatModal, setShowDeleteChatModal] = useState(false);
+  const [deletingChat, setDeletingChat] = useState(false);
+  const chatMenuRef = useRef<HTMLDivElement>(null);
+  const chatSearchRef = useRef<HTMLInputElement>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+  // Common emojis for quick access
+  const commonEmojis = ['😊', '😂', '❤️', '👍', '🙏', '😍', '🔥', '✨', '🎉', '💪', '👏', '😎', '🤔', '😢', '😮', '👋', '✅', '💡', '📌', '🚀'];
 
   // Fetch conversations
   useEffect(() => {
@@ -81,17 +103,111 @@ export default function MessagesPage() {
       setMessages([]);
       setOtherParty(null);
     }
+    // Reset chat search when changing conversations
+    setShowChatSearch(false);
+    setChatSearchTerm('');
   }, [activeRequestId]);
+
+  // Focus search input when it opens
+  useEffect(() => {
+    if (showChatSearch && chatSearchRef.current) {
+      chatSearchRef.current.focus();
+    }
+  }, [showChatSearch]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMessageMenu(null);
+      }
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+      if (chatMenuRef.current && !chatMenuRef.current.contains(e.target as Node)) {
+        setShowChatMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleArchiveChat = async () => {
+    if (!activeRequestId) return;
+    try {
+      // Toggle archive status
+      const currentConv = conversations.find(c => c.id === activeRequestId);
+      const newStatus = currentConv?.status === 'archived' ? 'accepted' : 'archived';
+
+      // Update local state
+      setConversations(prev => prev.map(c =>
+        c.id === activeRequestId ? { ...c, status: newStatus } : c
+      ));
+      setShowChatMenu(false);
+
+      // In production, call API to update status:
+      // await api.updateConversationStatus(activeRequestId, newStatus);
+    } catch (err) {
+      setError('Failed to archive conversation');
+    }
+  };
+
+  const handleToggleFavorite = () => {
+    if (!activeRequestId) return;
+    setFavoriteChats(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(activeRequestId)) {
+        newFavorites.delete(activeRequestId);
+      } else {
+        newFavorites.add(activeRequestId);
+      }
+      return newFavorites;
+    });
+    setShowChatMenu(false);
+    // In production, call API to save favorite status:
+    // await api.toggleFavoriteChat(activeRequestId);
+  };
+
+  const isChatFavorited = activeRequestId ? favoriteChats.has(activeRequestId) : false;
+
+  const handleDeleteChat = async () => {
+    if (!activeRequestId) return;
+    try {
+      setDeletingChat(true);
+      // Call API to delete conversation
+      const result = await api.deleteConversation(activeRequestId);
+      if (result.success) {
+        // Remove from local state
+        setConversations(prev => prev.filter(c => c.id !== activeRequestId));
+        // Clear active chat and navigate away
+        router.push('/user/messages');
+        setShowDeleteChatModal(false);
+      } else {
+        setError(result.message || 'Failed to delete conversation');
+      }
+    } catch (err) {
+      setError('Failed to delete conversation');
+    } finally {
+      setDeletingChat(false);
+    }
+  };
+
+  const insertEmoji = (emoji: string) => {
+    setNewMessage((prev) => prev + emoji);
+    setShowEmojiPicker(false);
+  };
 
   const fetchConversations = async () => {
     try {
       const result = await api.getChatConversations();
       if (result.success && result.data) {
         setConversations(result.data);
+      } else {
+        console.error('Failed to load conversations:', result.message);
       }
     } catch (err) {
       console.error('Failed to load conversations:', err);
@@ -132,7 +248,7 @@ export default function MessagesPage() {
       if (result.success && result.data) {
         setMessages((prev) => [...prev, result.data as Message]);
         setNewMessage('');
-        fetchConversations();
+        fetchConversations(); // Refresh conversation list
       } else {
         setError(result.message || 'Failed to send message');
       }
@@ -164,6 +280,45 @@ export default function MessagesPage() {
     }
   };
 
+  const handleEditMessage = async () => {
+    if (!editingMessage || !editContent.trim() || !activeRequestId) return;
+
+    try {
+      const result = await api.editChatMessage(activeRequestId, editingMessage, editContent.trim());
+      if (result.success) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === editingMessage
+              ? { ...msg, content: editContent.trim(), isEdited: true }
+              : msg
+          )
+        );
+        setEditingMessage(null);
+        setEditContent('');
+      } else {
+        setError(result.message || 'Failed to edit message');
+      }
+    } catch (err) {
+      setError('Failed to edit message');
+    }
+  };
+
+  const handleDeleteMessage = async (forEveryone: boolean) => {
+    if (!showDeleteModal || !activeRequestId) return;
+
+    try {
+      const result = await api.deleteChatMessage(activeRequestId, showDeleteModal.id, forEveryone);
+      if (result.success) {
+        setMessages((prev) => prev.filter((msg) => msg.id !== showDeleteModal.id));
+        setShowDeleteModal(null);
+      } else {
+        setError(result.message || 'Failed to delete message');
+      }
+    } catch (err) {
+      setError('Failed to delete message');
+    }
+  };
+
   const handleDownloadFile = async (att: Attachment) => {
     if (!activeRequestId) return;
     await api.downloadChatFile(activeRequestId, att.id, att.originalName);
@@ -185,7 +340,7 @@ export default function MessagesPage() {
 
     if (date.toDateString() === today.toDateString()) return 'Today';
     if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
-    return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
   const formatConversationTime = (dateString: string) => {
@@ -204,12 +359,25 @@ export default function MessagesPage() {
   };
 
   const isImageFile = (mimeType: string) => mimeType.startsWith('image/');
+  const isVideoFile = (mimeType: string) => mimeType.startsWith('video/');
   const isPdfFile = (mimeType: string) => mimeType === 'application/pdf';
 
-  // Group messages by date
+  // Filter messages by chat search term (must be defined before using)
+  const filteredMessages = chatSearchTerm.trim()
+    ? messages.filter(msg =>
+        msg.content?.toLowerCase().includes(chatSearchTerm.toLowerCase()) ||
+        msg.senderName?.toLowerCase().includes(chatSearchTerm.toLowerCase())
+      )
+    : messages;
+
+  // Get search result count
+  const searchResultCount = chatSearchTerm.trim() ? filteredMessages.length : 0;
+
+  // Group messages by date (use filtered messages if searching)
+  const messagesToShow = chatSearchTerm.trim() ? filteredMessages : messages;
   const groupedMessages: { date: string; messages: Message[] }[] = [];
   let currentDate = '';
-  messages.forEach((msg) => {
+  messagesToShow.forEach((msg) => {
     const msgDate = formatDate(msg.createdAt);
     if (msgDate !== currentDate) {
       currentDate = msgDate;
@@ -219,261 +387,423 @@ export default function MessagesPage() {
     }
   });
 
-  const totalUnread = conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+  // Helper function to highlight search term in text
+  const highlightSearchTerm = (text: string) => {
+    if (!chatSearchTerm.trim() || !text) return text;
+    const regex = new RegExp(`(${chatSearchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <mark key={i} style={{ backgroundColor: 'var(--warning-100)', color: 'var(--warning-700)', padding: '0 2px', borderRadius: '2px' }}>{part}</mark>
+      ) : part
+    );
+  };
+
+  // Filter conversations by search and tab
+  const filteredConversations = conversations.filter((c) => {
+    const matchesSearch = c.recipientName.toLowerCase().includes(searchTerm.toLowerCase());
+    const isArchived = c.status === 'archived' || c.status === 'ARCHIVED';
+    const matchesTab = activeTab === 'archived' ? isArchived : !isArchived;
+    return matchesSearch && matchesTab;
+  });
+
+  // Count for tabs - only show unread count (like WhatsApp)
+  const currentConversations = conversations.filter(c => c.status !== 'archived' && c.status !== 'ARCHIVED');
+  const totalUnreadCount = currentConversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+  const archivedCount = conversations.filter(c => c.status === 'archived' || c.status === 'ARCHIVED').length;
 
   return (
-    <div className="min-h-screen pb-8">
-      {/* Header Section */}
-      <div className="relative mb-8 rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 50%, #A78BFA 100%)' }}>
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full" />
-          <div className="absolute top-1/2 -left-12 w-32 h-32 bg-violet-400/20 rounded-full" />
-          <div className="absolute bottom-0 right-1/3 w-48 h-48 bg-purple-300/10 rounded-full blur-2xl" />
+    <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
+      {/* Left Panel - Conversations List */}
+      <div className="w-[380px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+        {/* Header */}
+        <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Messages</h1>
+          </div>
+
+          {/* Search */}
+          <div className="relative">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 border-0 rounded-xl text-sm transition-all"
+              style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
+              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+              onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
+            />
+          </div>
         </div>
 
-        <div className="relative px-8 py-10">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">Messages</h1>
-                  <p className="text-violet-200">Connect with certified SMEs</p>
-                </div>
-              </div>
+        {/* Tabs */}
+        <div className="flex" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+          <button
+            onClick={() => setActiveTab('current')}
+            className="flex-1 py-3 text-sm font-medium transition-colors relative"
+            style={{ color: activeTab === 'current' ? 'var(--graphite-900)' : 'var(--graphite-500)' }}
+          >
+            Current
+            {totalUnreadCount > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs rounded-full font-semibold" style={{ backgroundColor: 'var(--teal-500)', color: 'white' }}>
+                {totalUnreadCount > 99 ? '99+' : totalUnreadCount}
+              </span>
+            )}
+            {activeTab === 'current' && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: 'var(--graphite-900)' }}></div>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('archived')}
+            className="flex-1 py-3 text-sm font-medium transition-colors relative"
+            style={{ color: activeTab === 'archived' ? 'var(--graphite-900)' : 'var(--graphite-500)' }}
+          >
+            Archived
+            {archivedCount > 0 && (
+              <span className="ml-2 px-2 py-0.5 text-xs rounded-full" style={{ backgroundColor: 'var(--graphite-200)', color: 'var(--graphite-700)' }}>
+                {archivedCount}
+              </span>
+            )}
+            {activeTab === 'archived' && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: 'var(--graphite-900)' }}></div>
+            )}
+          </button>
+        </div>
 
-              {totalUnread > 0 && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur">
-                  <span className="w-2 h-2 bg-yellow-300 rounded-full animate-pulse" />
-                  <span className="text-white text-sm font-medium">{totalUnread} unread {totalUnread === 1 ? 'message' : 'messages'}</span>
+        {/* Conversations List */}
+        <div className="flex-1 overflow-y-auto">
+          {loadingConversations ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--teal-200)', borderTopColor: 'var(--teal-600)' }}></div>
+            </div>
+          ) : filteredConversations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-32" style={{ color: 'var(--graphite-500)' }}>
+              <svg className="w-12 h-12 mb-2" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <p className="text-sm">No conversations yet</p>
+            </div>
+          ) : (
+            filteredConversations.map((conv) => (
+              <div
+                key={conv.id}
+                onClick={() => selectConversation(conv.id)}
+                className="flex items-center gap-3 px-5 py-4 cursor-pointer transition-all"
+                style={{
+                  backgroundColor: activeRequestId === conv.id ? 'var(--teal-50)' : 'transparent',
+                  borderLeft: activeRequestId === conv.id ? '4px solid var(--teal-500)' : '4px solid transparent'
+                }}
+                onMouseOver={(e) => { if (activeRequestId !== conv.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
+                onMouseOut={(e) => { if (activeRequestId !== conv.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
+              >
+                {/* Avatar */}
+                <div className="relative flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-semibold text-lg">
+                      {conv.recipientName.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  {/* Online indicator */}
+                  <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-white rounded-full" style={{ backgroundColor: 'var(--teal-500)' }}></div>
                 </div>
-              )}
-            </div>
 
-            {/* Stats Cards */}
-            <div className="flex gap-4">
-              <div className="px-6 py-4 rounded-2xl bg-white/15 backdrop-blur text-center min-w-[100px]">
-                <p className="text-3xl font-bold text-white">{conversations.length}</p>
-                <p className="text-violet-200 text-sm">Conversations</p>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <h3 className="font-semibold truncate" style={{ color: 'var(--graphite-900)' }}>{conv.recipientName}</h3>
+                      {favoriteChats.has(conv.id) && (
+                        <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--warning-500)' }} fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-xs flex-shrink-0 ml-2" style={{ color: 'var(--graphite-500)' }}>
+                      {formatConversationTime(conv.lastMessageDate)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm truncate pr-2" style={{ color: 'var(--graphite-500)' }}>{conv.lastMessage}</p>
+                    {conv.unreadCount > 0 && (
+                      <span className="flex-shrink-0 w-6 h-6 text-white text-xs font-medium rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-500)' }}>
+                        {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="px-6 py-4 rounded-2xl bg-white/15 backdrop-blur text-center min-w-[100px]">
-                <p className="text-3xl font-bold text-white">{totalUnread}</p>
-                <p className="text-violet-200 text-sm">Unread</p>
-              </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm" style={{ height: 'calc(100vh - 340px)', minHeight: '500px' }}>
-        <div className="flex h-full">
-          {/* Conversations List */}
-          <div className="w-[350px] border-r border-gray-100 flex flex-col">
-            <div className="p-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800">Conversations</h2>
+      {/* Right Panel - Chat Area */}
+      <div className="flex-1 flex flex-col" style={{ backgroundColor: 'var(--graphite-50)' }}>
+        {!activeRequestId ? (
+          // No chat selected
+          <div className="flex-1 flex flex-col items-center justify-center" style={{ color: 'var(--graphite-400)' }}>
+            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--graphite-200)' }}>
+              <svg className="w-12 h-12" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
             </div>
-
-            <div className="flex-1 overflow-y-auto">
-              {loadingConversations ? (
-                <div className="flex items-center justify-center h-32">
-                  <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: '#E9D5FF', borderTopColor: '#8B5CF6' }} />
-                </div>
-              ) : conversations.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%)' }}>
-                    <svg className="w-8 h-8 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-500 text-sm">No conversations yet</p>
-                  <p className="text-gray-400 text-xs mt-1">Connect with SMEs from the Registry</p>
-                </div>
-              ) : (
-                conversations.map((conv) => (
-                  <button
-                    key={conv.id}
-                    onClick={() => selectConversation(conv.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-4 text-left transition-all hover:bg-violet-50 ${
-                      activeRequestId === conv.id ? 'bg-violet-50 border-l-4 border-violet-500' : 'border-l-4 border-transparent'
-                    }`}
-                  >
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}>
-                      <span className="text-white font-semibold text-lg">
-                        {conv.recipientName.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-gray-800 truncate">{conv.recipientName}</h3>
-                        <span className="text-xs text-gray-400 flex-shrink-0 ml-2">
-                          {formatConversationTime(conv.lastMessageDate)}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-500 truncate pr-2">{conv.lastMessage}</p>
-                        {conv.unreadCount > 0 && (
-                          <span className="flex-shrink-0 w-5 h-5 text-white text-xs font-bold rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}>
-                            {conv.unreadCount}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                ))
-              )}
-            </div>
+            <h3 className="text-lg font-medium mb-1" style={{ color: 'var(--graphite-600)' }}>Select a conversation</h3>
+            <p className="text-sm" style={{ color: 'var(--graphite-400)' }}>Choose from your existing conversations</p>
           </div>
-
-          {/* Chat Area */}
-          <div className="flex-1 flex flex-col" style={{ background: 'linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%)' }}>
-            {!activeRequestId ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
-                <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%)' }}>
-                  <svg className="w-12 h-12 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-600 mb-1">Select a conversation</h3>
-                <p className="text-sm text-gray-400">Choose from your existing conversations</p>
-              </div>
-            ) : loadingMessages && messages.length === 0 ? (
-              <div className="flex-1 flex items-center justify-center">
-                <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: '#E9D5FF', borderTopColor: '#8B5CF6' }} />
-              </div>
-            ) : (
-              <>
-                {/* Chat Header */}
-                <div className="flex-shrink-0 px-6 py-4 bg-white border-b border-gray-100">
-                  <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}>
-                      <span className="text-white font-bold text-lg">
-                        {otherParty?.name?.charAt(0)?.toUpperCase() || '?'}
-                      </span>
-                    </div>
-                    <div>
-                      <h2 className="font-semibold text-gray-800">{otherParty?.name || 'Unknown'}</h2>
-                      <p className="text-xs text-gray-500">{otherParty?.email}</p>
-                    </div>
+        ) : loadingMessages && messages.length === 0 ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--teal-200)', borderTopColor: 'var(--teal-600)' }}></div>
+          </div>
+        ) : (
+          <>
+            {/* Chat Header */}
+            <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-bold text-lg">
+                      {otherParty?.name?.charAt(0)?.toUpperCase() || '?'}
+                    </span>
+                  </div>
+                  <div>
+                    <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>{otherParty?.name || 'Unknown'}</h2>
+                    <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{otherParty?.email}</p>
                   </div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowChatSearch(!showChatSearch)}
+                    className="p-2.5 rounded-full transition-colors"
+                    style={{ backgroundColor: showChatSearch ? 'var(--teal-100)' : 'transparent', color: showChatSearch ? 'var(--teal-600)' : 'var(--graphite-500)' }}
+                    onMouseOver={(e) => { if (!showChatSearch) e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; }}
+                    onMouseOut={(e) => { if (!showChatSearch) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                  <div className="relative" ref={chatMenuRef}>
+                    <button
+                      onClick={() => setShowChatMenu(!showChatMenu)}
+                      className="p-2.5 rounded-full transition-colors"
+                      style={{ backgroundColor: 'transparent' }}
+                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
+                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
+                      <svg className="w-5 h-5" style={{ color: 'var(--graphite-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                      </svg>
+                    </button>
 
-                {/* Error */}
-                {error && (
-                  <div className="mx-4 mt-3 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2" style={{ background: '#EF4444' }}>
-                    <span>{error}</span>
-                    <button onClick={() => setError('')} className="ml-auto hover:bg-white/20 rounded p-1">
+                    {/* Chat Menu Dropdown */}
+                    {showChatMenu && (
+                      <div className="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-xl py-2 min-w-[180px] z-50" style={{ border: '1px solid var(--graphite-200)' }}>
+                        <button
+                          onClick={handleToggleFavorite}
+                          className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3"
+                          style={{ color: isChatFavorited ? 'var(--warning-600)' : 'var(--graphite-700)', backgroundColor: 'transparent' }}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-50)'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <svg className="w-4 h-4" fill={isChatFavorited ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                          </svg>
+                          {isChatFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+                        </button>
+                        <button
+                          onClick={handleArchiveChat}
+                          className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3"
+                          style={{ color: 'var(--graphite-700)', backgroundColor: 'transparent' }}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-50)'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                          </svg>
+                          {conversations.find(c => c.id === activeRequestId)?.status === 'archived' ? 'Unarchive' : 'Archive'} Chat
+                        </button>
+                        <button
+                          onClick={() => { setShowChatMenu(false); }}
+                          className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3"
+                          style={{ color: 'var(--graphite-700)', backgroundColor: 'transparent' }}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-50)'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.728-2.728" />
+                          </svg>
+                          Mute Notifications
+                        </button>
+                        <hr className="my-2" style={{ borderColor: 'var(--graphite-100)' }} />
+                        <button
+                          onClick={() => { setShowChatMenu(false); setShowDeleteChatModal(true); }}
+                          className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-3"
+                          style={{ color: 'var(--danger-600)', backgroundColor: 'transparent' }}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-50)'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Delete Chat
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Search Bar */}
+            {showChatSearch && (
+              <div className="bg-white px-6 py-3" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    ref={chatSearchRef}
+                    type="text"
+                    placeholder="Search in conversation..."
+                    value={chatSearchTerm}
+                    onChange={(e) => setChatSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm"
+                    style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-500)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  />
+                  {chatSearchTerm && (
+                    <button
+                      onClick={() => setChatSearchTerm('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors"
+                      style={{ color: 'var(--graphite-400)' }}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--graphite-600)'}
+                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--graphite-400)'}
+                    >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
-                  </div>
+                  )}
+                </div>
+                {chatSearchTerm && (
+                  <p className="text-xs mt-2" style={{ color: 'var(--graphite-500)' }}>
+                    {searchResultCount} {searchResultCount === 1 ? 'message' : 'messages'} found
+                  </p>
                 )}
+              </div>
+            )}
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-6 py-6">
-                  {/* Initial Introduction Message */}
-                  {initialMessage && (
-                    <div className="flex justify-end mb-6">
-                      <div className="max-w-[70%]">
-                        <div className="rounded-2xl px-5 py-4 text-white" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}>
-                          <p className="text-sm whitespace-pre-wrap">{initialMessage}</p>
-                        </div>
-                        <p className="text-xs mt-2 text-right text-gray-400">Introduction request</p>
+            {/* Error */}
+            {error && (
+              <div className="mx-4 mt-3 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2" style={{ backgroundColor: 'var(--danger-500)' }}>
+                <span>{error}</span>
+                <button onClick={() => setError('')} className="ml-auto hover:bg-white/20 rounded p-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto px-6 py-4">
+              {/* No search results */}
+              {chatSearchTerm.trim() && filteredMessages.length === 0 && (
+                <div className="flex flex-col items-center justify-center h-full" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-16 h-16 mb-3" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <h3 className="font-medium mb-1" style={{ color: 'var(--graphite-600)' }}>No messages found</h3>
+                  <p className="text-sm">Try a different search term</p>
+                </div>
+              )}
+
+              {/* Initial message - Your introduction request (right side) */}
+              {initialMessage && !chatSearchTerm.trim() && (
+                <div className="flex justify-end mb-6">
+                  <div className="flex items-start gap-3 max-w-[70%]">
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>Introduction request</span>
+                        <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>You</span>
+                      </div>
+                      <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--graphite-800)' }}>
+                        <p className="text-sm">{initialMessage}</p>
                       </div>
                     </div>
-                  )}
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--graphite-600), var(--graphite-800))' }}>
+                      <span className="text-white font-semibold text-sm">Y</span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-                  {groupedMessages.map((group, gi) => (
-                    <div key={gi}>
-                      {/* Date Divider */}
-                      <div className="flex items-center justify-center my-6">
-                        <span className="px-4 py-1.5 rounded-full bg-gray-100 text-xs text-gray-500 font-medium">
-                          {group.date}
-                        </span>
-                      </div>
+              {groupedMessages.map((group, gi) => (
+                <div key={gi}>
+                  {/* Date Divider */}
+                  <div className="flex justify-center my-6">
+                    <span className="bg-white text-xs px-4 py-1.5 rounded-full shadow-sm" style={{ color: 'var(--graphite-500)', border: '1px solid var(--graphite-200)' }}>
+                      {group.date}
+                    </span>
+                  </div>
 
-                      {group.messages.map((msg) => (
-                        <div key={msg.id} className={`flex mb-4 ${msg.isOwnMessage ? 'justify-end' : 'justify-start'}`}>
-                          <div className={`max-w-[70%] ${msg.isOwnMessage ? '' : ''}`}>
-                            {/* Sender info for received messages */}
-                            {!msg.isOwnMessage && (
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}>
-                                  <span className="text-white text-xs font-semibold">
-                                    {msg.senderName?.charAt(0)?.toUpperCase() || '?'}
-                                  </span>
-                                </div>
-                                <span className="text-sm font-semibold text-violet-700">{msg.senderName}</span>
-                              </div>
-                            )}
-
+                  {group.messages.map((msg) => (
+                    <div key={msg.id} className={`flex mb-4 ${msg.isOwnMessage ? 'justify-end' : 'justify-start'}`}>
+                      {/* Received Message */}
+                      {!msg.isOwnMessage && (
+                        <div className="flex items-start gap-3 max-w-[70%]">
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                            <span className="text-white font-semibold text-sm">
+                              {msg.senderName?.charAt(0)?.toUpperCase() || '?'}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.senderName}</span>
+                              <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
+                            </div>
                             {msg.isDeletedForEveryone ? (
-                              <div className="rounded-2xl px-5 py-4 bg-gray-100 border border-gray-200">
-                                <p className="text-sm italic text-gray-500 flex items-center gap-2">
+                              <div className="rounded-2xl rounded-tl-md px-4 py-2.5" style={{ backgroundColor: 'var(--graphite-100)', border: '1px solid var(--graphite-200)' }}>
+                                <p className="text-sm italic flex items-center gap-2" style={{ color: 'var(--graphite-500)' }}>
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                   </svg>
-                                  {msg.isOwnMessage ? 'You deleted this message' : 'This message was deleted'}
+                                  This message was deleted
                                 </p>
                               </div>
                             ) : (
                               <>
-                                <div
-                                  className={`rounded-2xl px-5 py-4 ${
-                                    msg.isOwnMessage
-                                      ? 'text-white'
-                                      : 'bg-white border border-gray-100 shadow-sm'
-                                  }`}
-                                  style={msg.isOwnMessage ? { background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' } : {}}
-                                >
-                                  {msg.content && <p className={`text-sm whitespace-pre-wrap ${msg.isOwnMessage ? '' : 'text-gray-800'}`}>{msg.content}</p>}
-
-                                  {/* Attachments */}
+                                <div className="rounded-2xl rounded-tl-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-900)' }}>
+                                  {msg.content && <p className="text-sm whitespace-pre-wrap">{highlightSearchTerm(msg.content)}</p>}
                                   {msg.attachments.map((att) => (
-                                    <div key={att.id} className="mt-3">
+                                    <div key={att.id} className="mt-2">
                                       {isImageFile(att.mimeType) ? (
-                                        <div className="relative">
-                                          <img
-                                            src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${att.filePath}`}
-                                            alt={att.originalName}
-                                            className="max-w-full rounded-xl cursor-pointer hover:opacity-90 transition"
-                                            onClick={() => handleDownloadFile(att)}
-                                          />
-                                          <button
-                                            onClick={() => handleDownloadFile(att)}
-                                            className="absolute bottom-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition"
-                                          >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                            </svg>
-                                          </button>
-                                        </div>
+                                        <img
+                                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${att.filePath}`}
+                                          alt={att.originalName}
+                                          className="max-w-full rounded-xl cursor-pointer hover:opacity-90 transition"
+                                          onClick={() => handleDownloadFile(att)}
+                                        />
                                       ) : (
                                         <button
                                           onClick={() => handleDownloadFile(att)}
-                                          className={`flex items-center gap-3 p-3 rounded-xl w-full transition ${
-                                            msg.isOwnMessage ? 'bg-white/20 hover:bg-white/30' : 'bg-gray-50 hover:bg-gray-100'
-                                          }`}
+                                          className="flex items-center gap-3 p-3 bg-white/50 hover:bg-white/80 rounded-xl w-full transition"
                                         >
-                                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isPdfFile(att.mimeType) ? 'bg-red-500' : 'bg-violet-500'}`}>
+                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-500)' }}>
                                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
                                           </div>
                                           <div className="flex-1 min-w-0 text-left">
-                                            <p className={`text-sm font-medium truncate ${msg.isOwnMessage ? 'text-white' : 'text-gray-700'}`}>
-                                              {att.originalName}
-                                            </p>
-                                            <p className={`text-xs ${msg.isOwnMessage ? 'text-white/70' : 'text-gray-500'}`}>
-                                              {formatFileSize(att.fileSize)}
-                                            </p>
+                                            <p className="text-sm font-medium truncate" style={{ color: 'var(--graphite-800)' }}>{att.originalName}</p>
+                                            <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{formatFileSize(att.fileSize)}</p>
                                           </div>
-                                          <svg className={`w-5 h-5 ${msg.isOwnMessage ? 'text-white' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <svg className="w-5 h-5" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                           </svg>
                                         </button>
@@ -481,80 +811,386 @@ export default function MessagesPage() {
                                     </div>
                                   ))}
                                 </div>
-
-                                {/* Time */}
-                                <p className={`text-xs mt-2 ${msg.isOwnMessage ? 'text-right' : ''} text-gray-400`}>
-                                  {msg.isEdited && <span className="italic mr-1">edited</span>}
-                                  {formatTime(msg.createdAt)}
-                                </p>
+                                {msg.isEdited && <span className="text-[10px] ml-2 italic" style={{ color: 'var(--graphite-400)' }}>edited</span>}
                               </>
                             )}
                           </div>
                         </div>
-                      ))}
+                      )}
+
+                      {/* Sent Message */}
+                      {msg.isOwnMessage && (
+                        <div className="flex items-start gap-3 max-w-[70%] group">
+                          <div className="flex flex-col items-end">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
+                              <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>You</span>
+                            </div>
+
+                            {/* Edit Mode */}
+                            {editingMessage === msg.id ? (
+                              <div className="bg-white rounded-2xl px-4 py-3 shadow-lg" style={{ border: '2px solid var(--teal-500)' }}>
+                                <textarea
+                                  value={editContent}
+                                  onChange={(e) => setEditContent(e.target.value)}
+                                  className="w-full text-sm border-0 focus:ring-0 resize-none min-w-[200px]"
+                                  rows={2}
+                                  autoFocus
+                                />
+                                <div className="flex justify-end gap-2 mt-2">
+                                  <button
+                                    onClick={() => { setEditingMessage(null); setEditContent(''); }}
+                                    className="px-3 py-1 text-xs rounded-full"
+                                    style={{ color: 'var(--graphite-600)', backgroundColor: 'transparent' }}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    onClick={handleEditMessage}
+                                    className="px-3 py-1 text-xs text-white rounded-full"
+                                    style={{ backgroundColor: 'var(--teal-600)' }}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-700)'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
+                                  >
+                                    Save
+                                  </button>
+                                </div>
+                              </div>
+                            ) : msg.isDeletedForEveryone ? (
+                              <div className="rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--graphite-200)', border: '1px solid var(--graphite-300)' }}>
+                                <p className="text-sm italic flex items-center gap-2" style={{ color: 'var(--graphite-500)' }}>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                  </svg>
+                                  You deleted this message
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="relative">
+                                {/* Message Menu Button */}
+                                <button
+                                  onClick={() => setShowMessageMenu(showMessageMenu === msg.id ? null : msg.id)}
+                                  className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full"
+                                  style={{ backgroundColor: 'transparent' }}
+                                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-200)'}
+                                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                >
+                                  <svg className="w-4 h-4" style={{ color: 'var(--graphite-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                  </svg>
+                                </button>
+
+                                {/* Message Menu Dropdown */}
+                                {showMessageMenu === msg.id && (
+                                  <div ref={menuRef} className="absolute right-full top-0 mr-2 bg-white rounded-xl shadow-xl py-2 min-w-[140px] z-50" style={{ border: '1px solid var(--graphite-200)' }}>
+                                    {msg.content && !msg.attachments.length && (
+                                      <button
+                                        onClick={() => {
+                                          setEditingMessage(msg.id);
+                                          setEditContent(msg.content || '');
+                                          setShowMessageMenu(null);
+                                        }}
+                                        className="w-full px-4 py-2 text-left text-sm flex items-center gap-3"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-50)'}
+                                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                      >
+                                        <svg className="w-4 h-4" style={{ color: 'var(--graphite-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => {
+                                        setShowDeleteModal(msg);
+                                        setShowMessageMenu(null);
+                                      }}
+                                      className="w-full px-4 py-2 text-left text-sm flex items-center gap-3"
+                                      style={{ color: 'var(--danger-600)', backgroundColor: 'transparent' }}
+                                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-50)'}
+                                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                      </svg>
+                                      Delete
+                                    </button>
+                                  </div>
+                                )}
+
+                                <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--graphite-800)' }}>
+                                  {msg.content && <p className="text-sm whitespace-pre-wrap">{highlightSearchTerm(msg.content)}</p>}
+                                  {msg.attachments.map((att) => (
+                                    <div key={att.id} className="mt-2">
+                                      {isImageFile(att.mimeType) ? (
+                                        <img
+                                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${att.filePath}`}
+                                          alt={att.originalName}
+                                          className="max-w-full rounded-xl cursor-pointer hover:opacity-90 transition"
+                                          onClick={() => handleDownloadFile(att)}
+                                        />
+                                      ) : (
+                                        <button
+                                          onClick={() => handleDownloadFile(att)}
+                                          className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl w-full transition"
+                                        >
+                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-500)' }}>
+                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                          </div>
+                                          <div className="flex-1 min-w-0 text-left">
+                                            <p className="text-sm font-medium text-white truncate">{att.originalName}</p>
+                                            <p className="text-xs" style={{ color: 'var(--graphite-300)' }}>{formatFileSize(att.fileSize)}</p>
+                                          </div>
+                                          <svg className="w-5 h-5" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                          </svg>
+                                        </button>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-1.5 mt-1 mr-1">
+                              {msg.isEdited && <span className="text-[10px] italic" style={{ color: 'var(--graphite-400)' }}>edited</span>}
+                              {/* Double tick - Blue when read, Gray when delivered */}
+                              <svg className="w-4 h-4" style={{ color: msg.isRead ? 'var(--teal-500)' : 'var(--graphite-400)' }} fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--graphite-600), var(--graphite-800))' }}>
+                            <span className="text-white font-semibold text-sm">Y</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
-                  <div ref={messagesEndRef} />
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="bg-white p-4" style={{ borderTop: '1px solid var(--graphite-200)' }}>
+              <form onSubmit={handleSendMessage} className="flex items-center gap-3">
+                <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar" />
+
+                <div className="flex-1 relative">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors"
+                    style={{ color: 'var(--graphite-400)' }}
+                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--graphite-600)'}
+                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--graphite-400)'}
+                  >
+                    {uploading ? (
+                      <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--graphite-300)', borderTopColor: 'var(--graphite-600)' }}></div>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                      </svg>
+                    )}
+                  </button>
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage(e);
+                      }
+                    }}
+                    placeholder="Your message..."
+                    className="w-full pl-12 pr-4 py-3.5 border-0 rounded-full text-sm transition-all"
+                    style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
+                    onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+                    onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  />
                 </div>
 
-                {/* Input Area */}
-                <div className="flex-shrink-0 bg-white border-t border-gray-100 px-6 py-4">
-                  <form onSubmit={handleSendMessage} className="flex gap-3 items-center">
-                    <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar" />
-
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploading}
-                      className="p-3 rounded-xl transition-colors hover:bg-violet-50 text-gray-500 hover:text-violet-600 disabled:opacity-50"
-                    >
-                      {uploading ? (
-                        <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: '#E9D5FF', borderTopColor: '#8B5CF6' }} />
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                        </svg>
-                      )}
-                    </button>
-
-                    <input
-                      type="text"
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage(e);
-                        }
-                      }}
-                      placeholder="Type your message..."
-                      className="flex-1 px-5 py-3.5 rounded-xl text-sm bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-400 transition-all"
-                    />
-
-                    <button
-                      type="submit"
-                      disabled={!newMessage.trim() || sending}
-                      className="px-6 py-3.5 rounded-xl font-medium text-sm text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
-                      style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
-                    >
-                      {sending ? (
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          Send
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                          </svg>
-                        </span>
-                      )}
-                    </button>
-                  </form>
+                <div className="relative" ref={emojiPickerRef}>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="p-3 rounded-full transition-colors"
+                    style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-600)' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-200)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-100)'}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
                 </div>
-              </>
-            )}
+
+                {/* Emoji Picker Popup - Outside overflow container */}
+                {showEmojiPicker && (
+                  <div
+                    ref={emojiPickerRef}
+                    className="fixed bottom-20 right-8 bg-white rounded-2xl shadow-xl p-3 z-[100]"
+                    style={{ border: '1px solid var(--graphite-200)' }}
+                  >
+                    <div className="grid grid-cols-5 gap-1">
+                      {commonEmojis.map((emoji, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => insertEmoji(emoji)}
+                          className="w-10 h-10 text-xl rounded-lg transition-colors flex items-center justify-center"
+                          style={{ backgroundColor: 'transparent' }}
+                          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
+                          onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="p-3 rounded-full transition-colors"
+                  style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-600)' }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-200)'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-100)'}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                  </svg>
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={!newMessage.trim() || sending}
+                  className="p-3 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: 'var(--teal-500)' }}
+                  onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-500)'}
+                >
+                  {sending ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  )}
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Delete Message Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Delete Message</h3>
+            <p className="text-sm mb-6" style={{ color: 'var(--graphite-600)' }}>How would you like to delete this message?</p>
+            <div className="space-y-3">
+              {showDeleteModal.isOwnMessage && (
+                <button
+                  onClick={() => handleDeleteMessage(true)}
+                  className="w-full py-3 px-4 text-white rounded-xl font-medium transition flex items-center justify-center gap-2"
+                  style={{ backgroundColor: 'var(--danger-500)' }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-600)'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-500)'}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Delete for Everyone
+                </button>
+              )}
+              <button
+                onClick={() => handleDeleteMessage(false)}
+                className="w-full py-3 px-4 rounded-xl font-medium transition flex items-center justify-center gap-2"
+                style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-200)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Delete for Me
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(null)}
+                className="w-full py-3 px-4 font-medium transition"
+                style={{ color: 'var(--graphite-500)' }}
+                onMouseOver={(e) => e.currentTarget.style.color = 'var(--graphite-700)'}
+                onMouseOut={(e) => e.currentTarget.style.color = 'var(--graphite-500)'}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Delete Chat Confirmation Modal */}
+      {showDeleteChatModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <div className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: 'var(--danger-100)' }}>
+              <svg className="w-7 h-7" style={{ color: 'var(--danger-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold mb-2 text-center" style={{ color: 'var(--graphite-900)' }}>Delete Conversation?</h3>
+            <p className="text-sm mb-6 text-center" style={{ color: 'var(--graphite-600)' }}>
+              This will permanently delete this conversation and all its messages. This action cannot be undone.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={handleDeleteChat}
+                disabled={deletingChat}
+                className="w-full py-3 px-4 text-white rounded-xl font-medium transition flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ backgroundColor: 'var(--danger-500)' }}
+                onMouseOver={(e) => { if (!deletingChat) e.currentTarget.style.backgroundColor = 'var(--danger-600)'; }}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-500)'}
+              >
+                {deletingChat ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Delete Conversation
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowDeleteChatModal(false)}
+                disabled={deletingChat}
+                className="w-full py-3 px-4 font-medium transition"
+                style={{ color: 'var(--graphite-500)' }}
+                onMouseOver={(e) => e.currentTarget.style.color = 'var(--graphite-700)'}
+                onMouseOut={(e) => e.currentTarget.style.color = 'var(--graphite-500)'}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
