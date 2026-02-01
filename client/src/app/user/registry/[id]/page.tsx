@@ -51,16 +51,20 @@ export default function SMEDetailPage() {
     return sector.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   };
 
-  const formatEmployeeCount = (count: string | null | undefined) => {
+  const formatEmployeeCount = (count: string | number | null | undefined) => {
     if (!count) return 'Not specified';
+    const countStr = String(count);
     const mapping: Record<string, string> = {
       '1-10': '1-10 employees',
+      '10-50': '10-50 employees',
       '11-50': '11-50 employees',
+      '50-200': '50-200 employees',
       '51-200': '51-200 employees',
+      '100-200': '100-200 employees',
       '201-500': '201-500 employees',
       '500+': '500+ employees',
     };
-    return mapping[count] || count;
+    return mapping[countStr] || countStr + ' employees';
   };
 
   const handleSendIntroduction = async () => {
