@@ -435,6 +435,23 @@ export interface RegistrySMEDetail extends RegistrySME {
     contactEmail: string | null;
     contactPhone: string | null;
   } | null;
+  // Additional public fields for crowdfunding-style display
+  legalStructure: LegalStructure | null;
+  registrationCountry: string | null;
+  registrationCity: string | null;
+  businessModel: BusinessModel | null;
+  operatingCountries: string[] | null;
+  majorClients: string[] | null;
+  officeType: OfficeType | null;
+  fundingStage: FundingStage | null;
+  existingCertifications: Certification[] | null;
+  regulatoryLicenses: RegulatoryLicense[] | null;
+  linkedinUrl: string | null;
+  socialMedia: SocialMedia | null;
+  headOfficeAddress: string | null;
+  submittedDate: string | null;
+  revenueRange: string | null;
+  revenueGrowth: string | null;
 }
 
 export type IntroductionRequestStatus = 'pending' | 'viewed' | 'responded';

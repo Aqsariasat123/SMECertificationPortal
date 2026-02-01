@@ -129,6 +129,22 @@ export const getSMEDetail = async (req: AuthenticatedRequest, res: Response) => 
         foundingDate: true,
         updatedAt: true,
         documents: true,
+        // Additional public fields for crowdfunding-style display
+        legalStructure: true,
+        registrationCountry: true,
+        registrationCity: true,
+        businessModel: true,
+        operatingCountries: true,
+        majorClients: true,
+        officeType: true,
+        fundingStage: true,
+        existingCertifications: true,
+        regulatoryLicenses: true,
+        linkedinUrl: true,
+        socialMedia: true,
+        headOfficeAddress: true,
+        // Certification date
+        submittedDate: true,
       },
     });
 
@@ -139,9 +155,11 @@ export const getSMEDetail = async (req: AuthenticatedRequest, res: Response) => 
       });
     }
 
-    // Extract public contact info and company logo from documents JSON if available
+    // Extract public contact info, company logo, and revenue info from documents JSON
     let contactInfo = null;
     let companyLogo = null;
+    let revenueRange = null;
+    let revenueGrowth = null;
     if (sme.documents && typeof sme.documents === 'object') {
       const docs = sme.documents as Record<string, unknown>;
       contactInfo = {
@@ -151,6 +169,8 @@ export const getSMEDetail = async (req: AuthenticatedRequest, res: Response) => 
         contactPhone: docs.contactPhone || null,
       };
       companyLogo = docs.companyLogo || null;
+      revenueRange = docs.revenueRange || null;
+      revenueGrowth = docs.revenueGrowth || null;
     }
 
     return res.json({
@@ -159,6 +179,8 @@ export const getSMEDetail = async (req: AuthenticatedRequest, res: Response) => 
         ...sme,
         contactInfo,
         companyLogo,
+        revenueRange,
+        revenueGrowth,
         documents: undefined, // Don't expose raw documents
       },
     });
