@@ -784,7 +784,7 @@ export default function MessagesPage() {
                                     <div key={att.id} className="mt-2">
                                       {isImageFile(att.mimeType) ? (
                                         <img
-                                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${att.filePath}`}
+                                          src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace('/api', '')}${att.filePath}`}
                                           alt={att.originalName}
                                           className="max-w-full rounded-xl cursor-pointer hover:opacity-90 transition"
                                           onClick={() => handleDownloadFile(att)}
@@ -927,7 +927,7 @@ export default function MessagesPage() {
                                     <div key={att.id} className="mt-2">
                                       {isImageFile(att.mimeType) ? (
                                         <img
-                                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}${att.filePath}`}
+                                          src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001').replace('/api', '')}${att.filePath}`}
                                           alt={att.originalName}
                                           className="max-w-full rounded-xl cursor-pointer hover:opacity-90 transition"
                                           onClick={() => handleDownloadFile(att)}
