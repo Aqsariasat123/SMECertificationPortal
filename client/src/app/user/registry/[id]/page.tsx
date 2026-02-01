@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { api, API_BASE_URL } from '@/lib/api';
+import { api } from '@/lib/api';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 import { RegistrySMEDetail } from '@/types';
 
 export default function SMEDetailPage() {
