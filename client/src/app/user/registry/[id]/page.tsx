@@ -767,19 +767,19 @@ export default function SMEDetailPage() {
                       onBlur={(e) => e.target.style.borderColor = 'var(--graphite-100)'}
                     />
                   </div>
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setShowIntroModal(false)}
-                      className="flex-1 py-3 rounded-xl font-semibold transition-all"
-                      style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                      className="py-3 rounded-xl font-semibold transition-all"
+                      style={{ background: '#e5e7eb', color: '#374151' }}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleSendIntroduction}
                       disabled={introSending}
-                      className="flex-1 py-3 rounded-xl font-semibold text-white transition-all disabled:opacity-50"
-                      style={{ background: 'linear-gradient(135deg, var(--teal) 0%, #0d9488 100%)' }}
+                      className="py-3 rounded-xl font-semibold text-white transition-all disabled:opacity-50"
+                      style={{ background: '#14b8a6' }}
                     >
                       {introSending ? 'Sending...' : 'Send Request'}
                     </button>
