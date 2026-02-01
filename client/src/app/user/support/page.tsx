@@ -58,11 +58,13 @@ export default function UserSupportPage() {
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(true);
   }, [selectedTicket?.messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (instant = false) => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
+    }, 100);
   };
 
   const fetchTickets = async () => {

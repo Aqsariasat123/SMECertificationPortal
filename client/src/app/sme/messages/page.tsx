@@ -118,7 +118,7 @@ export default function MessagesPage() {
   }, [showChatSearch]);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(true);
   }, [messages]);
 
   // Close menu when clicking outside
@@ -228,8 +228,10 @@ export default function MessagesPage() {
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (instant = false) => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
+    }, 100);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
