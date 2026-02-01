@@ -1,15 +1,24 @@
 import { Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, SupportTicketStatus, SupportTicketPriority, SupportTicket, SupportMessage, User } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 
 const prisma = new PrismaClient();
+
+// Type for ticket with relations
+type TicketWithRelations = SupportTicket & {
+  user: Pick<User, 'id' | 'fullName' | 'email' | 'role'>;
+  messages: (SupportMessage & {
+    sender: Pick<User, 'id' | 'fullName' | 'role'>;
+  })[];
+  _count: { messages: number };
+};
 
 // ============================================
 // USER ENDPOINTS (SME / Investor)
 // ============================================
 
 // POST /api/support/tickets - Create a new support ticket
-export const createTicket = async (req: AuthenticatedRequest, res: Response) => {
+export const createTicket = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.user?.userId;
     const { subject, message } = req.body;
@@ -48,19 +57,19 @@ export const createTicket = async (req: AuthenticatedRequest, res: Response) => 
       },
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: 'Support ticket created successfully',
       data: ticket,
     });
   } catch (error) {
     console.error('Error creating support ticket:', error);
-    res.status(500).json({ success: false, message: 'Failed to create support ticket' });
+    return res.status(500).json({ success: false, message: 'Failed to create support ticket' });
   }
 };
 
 // GET /api/support/tickets - Get user's support tickets
-export const getUserTickets = async (req: AuthenticatedRequest, res: Response) => {
+export const getUserTickets = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.user?.userId;
 
@@ -106,19 +115,19 @@ export const getUserTickets = async (req: AuthenticatedRequest, res: Response) =
       unreadCount: ticket._count.messages,
     }));
 
-    res.json({ success: true, data: formattedTickets });
+    return res.json({ success: true, data: formattedTickets });
   } catch (error) {
     console.error('Error fetching user tickets:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch tickets' });
+    return res.status(500).json({ success: false, message: 'Failed to fetch tickets' });
   }
 };
 
 // GET /api/support/tickets/:ticketId - Get ticket messages
-export const getTicketMessages = async (req: AuthenticatedRequest, res: Response) => {
+export const getTicketMessages = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.user?.userId;
     const userRole = req.user?.role;
-    const { ticketId } = req.params;
+    const ticketId = req.params.ticketId as string;
 
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
@@ -160,19 +169,19 @@ export const getTicketMessages = async (req: AuthenticatedRequest, res: Response
       data: { isRead: true },
     });
 
-    res.json({ success: true, data: ticket });
+    return res.json({ success: true, data: ticket });
   } catch (error) {
     console.error('Error fetching ticket messages:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch messages' });
+    return res.status(500).json({ success: false, message: 'Failed to fetch messages' });
   }
 };
 
 // POST /api/support/tickets/:ticketId/messages - Send a message in a ticket
-export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
+export const sendMessage = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.user?.userId;
     const userRole = req.user?.role;
-    const { ticketId } = req.params;
+    const ticketId = req.params.ticketId as string;
     const { content } = req.body;
 
     if (!userId) {
@@ -212,7 +221,7 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
     });
 
     // Update ticket's updatedAt and status if admin replies
-    const updateData: { updatedAt: Date; status?: 'in_progress' } = {
+    const updateData: { updatedAt: Date; status?: SupportTicketStatus } = {
       updatedAt: new Date(),
     };
 
@@ -225,10 +234,10 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
       data: updateData,
     });
 
-    res.status(201).json({ success: true, data: message });
+    return res.status(201).json({ success: true, data: message });
   } catch (error) {
     console.error('Error sending message:', error);
-    res.status(500).json({ success: false, message: 'Failed to send message' });
+    return res.status(500).json({ success: false, message: 'Failed to send message' });
   }
 };
 
@@ -237,7 +246,7 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
 // ============================================
 
 // GET /api/support/admin/tickets - Get all support tickets (admin only)
-export const getAllTickets = async (req: AuthenticatedRequest, res: Response) => {
+export const getAllTickets = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userRole = req.user?.role;
 
@@ -247,9 +256,9 @@ export const getAllTickets = async (req: AuthenticatedRequest, res: Response) =>
 
     const { status, priority } = req.query;
 
-    const where: { status?: string; priority?: string } = {};
-    if (status) where.status = status as string;
-    if (priority) where.priority = priority as string;
+    const where: { status?: SupportTicketStatus; priority?: SupportTicketPriority } = {};
+    if (status) where.status = status as SupportTicketStatus;
+    if (priority) where.priority = priority as SupportTicketPriority;
 
     const tickets = await prisma.supportTicket.findMany({
       where,
@@ -274,11 +283,11 @@ export const getAllTickets = async (req: AuthenticatedRequest, res: Response) =>
         { status: 'asc' }, // Open tickets first
         { updatedAt: 'desc' },
       ],
-    });
+    }) as TicketWithRelations[];
 
     // Count unread for admin (messages not from admin)
     const ticketsWithUnread = await Promise.all(
-      tickets.map(async (ticket) => {
+      tickets.map(async (ticket: TicketWithRelations) => {
         const unreadCount = await prisma.supportMessage.count({
           where: {
             ticketId: ticket.id,
@@ -302,30 +311,30 @@ export const getAllTickets = async (req: AuthenticatedRequest, res: Response) =>
       })
     );
 
-    res.json({ success: true, data: ticketsWithUnread });
+    return res.json({ success: true, data: ticketsWithUnread });
   } catch (error) {
     console.error('Error fetching all tickets:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch tickets' });
+    return res.status(500).json({ success: false, message: 'Failed to fetch tickets' });
   }
 };
 
 // PUT /api/support/admin/tickets/:ticketId/status - Update ticket status (admin only)
-export const updateTicketStatus = async (req: AuthenticatedRequest, res: Response) => {
+export const updateTicketStatus = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userRole = req.user?.role;
-    const { ticketId } = req.params;
+    const ticketId = req.params.ticketId as string;
     const { status } = req.body;
 
     if (userRole !== 'admin') {
       return res.status(403).json({ success: false, message: 'Admin access required' });
     }
 
-    const validStatuses = ['open', 'in_progress', 'resolved', 'closed'];
-    if (!validStatuses.includes(status)) {
+    const validStatuses: SupportTicketStatus[] = ['open', 'in_progress', 'resolved', 'closed'];
+    if (!validStatuses.includes(status as SupportTicketStatus)) {
       return res.status(400).json({ success: false, message: 'Invalid status' });
     }
 
-    const updateData: { status: string; closedAt?: Date | null } = { status };
+    const updateData: { status: SupportTicketStatus; closedAt?: Date | null } = { status: status as SupportTicketStatus };
     if (status === 'closed' || status === 'resolved') {
       updateData.closedAt = new Date();
     } else {
@@ -337,15 +346,15 @@ export const updateTicketStatus = async (req: AuthenticatedRequest, res: Respons
       data: updateData,
     });
 
-    res.json({ success: true, data: ticket });
+    return res.json({ success: true, data: ticket });
   } catch (error) {
     console.error('Error updating ticket status:', error);
-    res.status(500).json({ success: false, message: 'Failed to update ticket status' });
+    return res.status(500).json({ success: false, message: 'Failed to update ticket status' });
   }
 };
 
 // GET /api/support/admin/stats - Get support stats (admin only)
-export const getSupportStats = async (req: AuthenticatedRequest, res: Response) => {
+export const getSupportStats = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userRole = req.user?.role;
 
@@ -368,7 +377,7 @@ export const getSupportStats = async (req: AuthenticatedRequest, res: Response) 
       },
     });
 
-    res.json({
+    return res.json({
       success: true,
       data: {
         open: openCount,
@@ -380,6 +389,6 @@ export const getSupportStats = async (req: AuthenticatedRequest, res: Response) 
     });
   } catch (error) {
     console.error('Error fetching support stats:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch stats' });
+    return res.status(500).json({ success: false, message: 'Failed to fetch stats' });
   }
 };

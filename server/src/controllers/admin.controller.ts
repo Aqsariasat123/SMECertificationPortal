@@ -929,7 +929,7 @@ export const getKycApplications = async (req: AuthenticatedRequest, res: Respons
         where,
         skip,
         take: limit,
-        orderBy: { kycSubmittedAt: 'desc' },
+        orderBy: { kycSubmittedAt: 'desc' } as any,
         include: {
           user: {
             select: {
@@ -949,7 +949,8 @@ export const getKycApplications = async (req: AuthenticatedRequest, res: Respons
     return res.json({
       success: true,
       data: {
-        applications: applications.map((app) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        applications: applications.map((app: any) => ({
           id: app.id,
           userId: app.userId,
           user: app.user,
@@ -1099,13 +1100,14 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
 
     const updatedProfile = await prisma.userProfile.update({
       where: { id },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: {
-        kycStatus: newStatus as 'approved' | 'rejected' | 'revision_requested',
+        kycStatus: newStatus,
         kycReviewedAt: new Date(),
         kycReviewedBy: adminId,
         kycRejectionReason: action === 'reject' ? notesStr : null,
         kycRevisionNotes: action === 'request_revision' ? notesStr : null,
-      },
+      } as any,
     });
 
     // If approved, also verify the user account

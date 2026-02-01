@@ -1096,7 +1096,7 @@ export const getIntroductionRequests = async (req: AuthenticatedRequest, res: Re
 export const respondToIntroductionRequest = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId } = req.params;
+    const requestId = req.params.requestId as string;
     const { response } = req.body;
 
     if (!userId) {

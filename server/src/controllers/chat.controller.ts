@@ -1,8 +1,14 @@
 import { Response } from 'express';
-import { PrismaClient, RequestStatus } from '@prisma/client';
+import { PrismaClient, RequestStatus, ChatMessage, ChatAttachment, User } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import fs from 'fs';
 import path from 'path';
+
+// Type for message with relations
+type MessageWithRelations = ChatMessage & {
+  sender: Pick<User, 'id' | 'fullName' | 'email'>;
+  attachments: ChatAttachment[];
+};
 
 const prisma = new PrismaClient();
 
@@ -41,7 +47,7 @@ async function checkConversationAccess(requestId: string, userId: string) {
 export const getMessages = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId } = req.params;
+    const requestId = req.params.requestId as string;
 
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
@@ -66,10 +72,10 @@ export const getMessages = async (req: AuthenticatedRequest, res: Response) => {
         attachments: true,
       },
       orderBy: { createdAt: 'asc' },
-    });
+    }) as MessageWithRelations[];
 
     // Filter out messages deleted for this user
-    const filteredMessages = messages.filter((msg) => {
+    const filteredMessages = messages.filter((msg: MessageWithRelations) => {
       const deletedFor = (msg.deletedForUsers as string[]) || [];
       return !deletedFor.includes(userId);
     });
@@ -106,18 +112,18 @@ export const getMessages = async (req: AuthenticatedRequest, res: Response) => {
         initialResponse: introRequest.smeResponse,
         otherParty,
         currentUserId: userId,
-        messages: filteredMessages.map((msg) => ({
+        messages: filteredMessages.map((msg: MessageWithRelations) => ({
           id: msg.id,
           content: msg.isDeletedForEveryone ? null : msg.content,
           senderId: msg.senderId,
-          senderName: msg.sender.fullName,
+          senderName: msg.sender?.fullName || 'Unknown',
           isOwnMessage: msg.senderId === userId,
           createdAt: msg.createdAt.toISOString(),
           isRead: msg.isRead,
           isEdited: msg.isEdited,
           editedAt: msg.editedAt?.toISOString() || null,
           isDeletedForEveryone: msg.isDeletedForEveryone,
-          attachments: msg.isDeletedForEveryone ? [] : msg.attachments.map((att) => ({
+          attachments: msg.isDeletedForEveryone ? [] : msg.attachments.map((att: ChatAttachment) => ({
             id: att.id,
             fileName: att.fileName,
             originalName: att.originalName,
@@ -138,7 +144,7 @@ export const getMessages = async (req: AuthenticatedRequest, res: Response) => {
 export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId } = req.params;
+    const requestId = req.params.requestId as string;
     const { content } = req.body;
 
     if (!userId) {
@@ -162,7 +168,7 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
         sender: { select: { id: true, fullName: true } },
         attachments: true,
       },
-    });
+    }) as MessageWithRelations;
 
     // Update status if SME is responding to pending request
     if (isSMEOwner && introRequest.status === RequestStatus.pending) {
@@ -179,7 +185,7 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
         id: message.id,
         content: message.content,
         senderId: message.senderId,
-        senderName: message.sender.fullName,
+        senderName: message.sender?.fullName || 'Unknown',
         isOwnMessage: true,
         createdAt: message.createdAt.toISOString(),
         isRead: false,
@@ -198,7 +204,8 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
 export const editMessage = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId, messageId } = req.params;
+    const requestId = req.params.requestId as string;
+    const messageId = req.params.messageId as string;
     const { content } = req.body;
 
     if (!userId) {
@@ -243,7 +250,7 @@ export const editMessage = async (req: AuthenticatedRequest, res: Response) => {
         sender: { select: { id: true, fullName: true } },
         attachments: true,
       },
-    });
+    }) as MessageWithRelations;
 
     return res.json({
       success: true,
@@ -252,13 +259,13 @@ export const editMessage = async (req: AuthenticatedRequest, res: Response) => {
         id: updatedMessage.id,
         content: updatedMessage.content,
         senderId: updatedMessage.senderId,
-        senderName: updatedMessage.sender.fullName,
+        senderName: updatedMessage.sender?.fullName || 'Unknown',
         isOwnMessage: true,
         createdAt: updatedMessage.createdAt.toISOString(),
         isRead: updatedMessage.isRead,
         isEdited: updatedMessage.isEdited,
         editedAt: updatedMessage.editedAt?.toISOString() || null,
-        attachments: updatedMessage.attachments.map((att) => ({
+        attachments: updatedMessage.attachments.map((att: ChatAttachment) => ({
           id: att.id,
           fileName: att.fileName,
           originalName: att.originalName,
@@ -278,7 +285,8 @@ export const editMessage = async (req: AuthenticatedRequest, res: Response) => {
 export const deleteMessage = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId, messageId } = req.params;
+    const requestId = req.params.requestId as string;
+    const messageId = req.params.messageId as string;
     const { deleteForEveryone } = req.body;
 
     if (!userId) {
@@ -339,7 +347,7 @@ export const deleteMessage = async (req: AuthenticatedRequest, res: Response) =>
 };
 
 // DELETE /api/chat/:requestId - Delete entire conversation
-export const deleteConversation = async (req: AuthenticatedRequest, res: Response) => {
+export const deleteConversation = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
   try {
     const userId = req.user?.userId;
     const requestId = req.params.requestId as string;
@@ -398,7 +406,7 @@ export const deleteConversation = async (req: AuthenticatedRequest, res: Respons
 export const uploadAttachment = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user?.userId;
-    const { requestId } = req.params;
+    const requestId = req.params.requestId as string;
     const { content } = req.body;
 
     if (!userId) {
@@ -437,7 +445,7 @@ export const uploadAttachment = async (req: AuthenticatedRequest, res: Response)
         sender: { select: { id: true, fullName: true } },
         attachments: true,
       },
-    });
+    }) as MessageWithRelations;
 
     if (isSMEOwner && introRequest.status === RequestStatus.pending) {
       await prisma.introductionRequest.update({
@@ -453,13 +461,13 @@ export const uploadAttachment = async (req: AuthenticatedRequest, res: Response)
         id: message.id,
         content: message.content,
         senderId: message.senderId,
-        senderName: message.sender.fullName,
+        senderName: message.sender?.fullName || 'Unknown',
         isOwnMessage: true,
         createdAt: message.createdAt.toISOString(),
         isRead: false,
         isEdited: false,
         editedAt: null,
-        attachments: message.attachments.map((att) => ({
+        attachments: message.attachments.map((att: ChatAttachment) => ({
           id: att.id,
           fileName: att.fileName,
           originalName: att.originalName,
@@ -479,10 +487,11 @@ export const uploadAttachment = async (req: AuthenticatedRequest, res: Response)
 };
 
 // GET /api/chat/:requestId/download/:attachmentId - Download attachment
-export const downloadAttachment = async (req: AuthenticatedRequest, res: Response) => {
+export const downloadAttachment = async (req: AuthenticatedRequest, res: Response): Promise<Response | void> => {
   try {
     const userId = req.user?.userId;
-    const { requestId, attachmentId } = req.params;
+    const requestId = req.params.requestId as string;
+    const attachmentId = req.params.attachmentId as string;
 
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
@@ -498,7 +507,16 @@ export const downloadAttachment = async (req: AuthenticatedRequest, res: Respons
       include: { message: { select: { introductionRequestId: true } } },
     });
 
-    if (!attachment || attachment.message.introductionRequestId !== requestId) {
+    if (!attachment) {
+      return res.status(404).json({ success: false, message: 'File not found' });
+    }
+
+    // Use type assertion for the include
+    const attachmentWithMessage = attachment as typeof attachment & {
+      message: { introductionRequestId: string };
+    };
+
+    if (attachmentWithMessage.message.introductionRequestId !== requestId) {
       return res.status(404).json({ success: false, message: 'File not found' });
     }
 

@@ -19,7 +19,7 @@ const router = Router();
 // Configure multer for chat file uploads
 const chatStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const requestId = req.params.requestId;
+    const requestId = req.params.requestId as string;
     const uploadDir = path.join(__dirname, '../../uploads/chat', requestId);
 
     // Create directory if it doesn't exist
