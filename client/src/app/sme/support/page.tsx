@@ -3,6 +3,48 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from '@/lib/api';
 
+// Component to display image with authentication
+function AuthImage({ ticketId, fileName, originalName, onClick }: { ticketId: string; fileName: string; originalName: string; onClick?: () => void }) {
+  const [src, setSrc] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const token = localStorage.getItem('auth_token');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+        const response = await fetch(`${apiUrl}/support/tickets/${ticketId}/download/${fileName}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const blob = await response.blob();
+          setSrc(URL.createObjectURL(blob));
+        }
+      } catch (e) {
+        console.error('Failed to load image:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchImage();
+    return () => { if (src) URL.revokeObjectURL(src); };
+  }, [ticketId, fileName]);
+
+  if (loading) {
+    return (
+      <div className="w-full h-32 flex items-center justify-center bg-gray-100 rounded">
+        <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--graphite-300)', borderTopColor: 'var(--teal-600)' }}></div>
+      </div>
+    );
+  }
+
+  return src ? (
+    <img src={src} alt={originalName} className="w-full object-cover cursor-pointer" style={{ maxHeight: '200px' }} onClick={onClick} />
+  ) : (
+    <div className="w-full h-32 flex items-center justify-center bg-gray-100 rounded text-gray-400 text-sm">Failed to load</div>
+  );
+}
+
 interface SupportTicket {
   id: string;
   subject: string;
@@ -169,12 +211,6 @@ export default function SMESupportPage() {
     return false;
   };
 
-  // Get full attachment URL with auth token
-  const getAttachmentUrl = (ticketId: string, fileName: string) => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-    const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : '';
-    return `${apiUrl}/support/tickets/${ticketId}/download/${fileName}?token=${token}`;
-  };
 
   // Handle attachment download
   const handleDownloadAttachment = async (ticketId: string, attachment: { fileName: string; originalName: string }) => {
@@ -496,12 +532,11 @@ export default function SMESupportPage() {
                                 isImageAttachment(attachment) ? (
                                   <div className="rounded-2xl rounded-tl-md overflow-hidden bg-white" style={{ border: '1px solid var(--graphite-200)', maxWidth: '280px' }}>
                                     <div className="relative group">
-                                      <img
-                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
-                                        alt={attachment.originalName}
-                                        className="w-full object-cover cursor-pointer"
-                                        style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                      <AuthImage
+                                        ticketId={selectedTicket.id}
+                                        fileName={attachment.fileName}
+                                        originalName={attachment.originalName}
+                                        onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
@@ -559,12 +594,11 @@ export default function SMESupportPage() {
                                 isImageAttachment(attachment) ? (
                                   <div className="rounded-2xl rounded-tr-md overflow-hidden" style={{ backgroundColor: 'var(--teal-600)', maxWidth: '280px' }}>
                                     <div className="relative group">
-                                      <img
-                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
-                                        alt={attachment.originalName}
-                                        className="w-full object-cover cursor-pointer"
-                                        style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                      <AuthImage
+                                        ticketId={selectedTicket.id}
+                                        fileName={attachment.fileName}
+                                        originalName={attachment.originalName}
+                                        onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
