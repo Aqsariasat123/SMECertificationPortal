@@ -75,21 +75,45 @@ export default function UserDashboardPage() {
     setShowIntroModal(true);
   };
 
+  const [alreadyConnected, setAlreadyConnected] = useState(false);
+  const [existingConversationId, setExistingConversationId] = useState<string | null>(null);
+
   const handleSendIntroduction = async () => {
     if (!selectedSME) return;
 
     setIntroSending(true);
     setIntroError('');
+    setAlreadyConnected(false);
+    setExistingConversationId(null);
 
     try {
       const result = await api.requestIntroduction(selectedSME.id, introMessage);
 
       if (result.success) {
-        setIntroSent(true);
-        setTimeout(() => {
-          setShowIntroModal(false);
-          setIntroSent(false);
-        }, 2000);
+        const data = result.data as { id: string; existing?: boolean } | undefined;
+
+        // If already connected, redirect to messages
+        if (data?.existing && data?.id) {
+          setAlreadyConnected(true);
+          setExistingConversationId(data.id);
+
+          // If user typed a message, send it to existing conversation
+          if (introMessage.trim()) {
+            try {
+              await api.sendChatMessage(data.id, introMessage.trim());
+            } catch (e) {
+              // Silent fail - user can still go to messages
+            }
+          }
+        } else {
+          // New request created
+          setIntroSent(true);
+          setTimeout(() => {
+            setShowIntroModal(false);
+            setIntroSent(false);
+            setIntroMessage('');
+          }, 2000);
+        }
       } else {
         setIntroError(result.message || 'Failed to send introduction request');
       }
@@ -97,6 +121,14 @@ export default function UserDashboardPage() {
       setIntroError('An error occurred. Please try again.');
     } finally {
       setIntroSending(false);
+    }
+  };
+
+  const handleGoToMessages = () => {
+    if (existingConversationId) {
+      router.push(`/user/messages?chat=${existingConversationId}`);
+    } else {
+      router.push('/user/messages');
     }
   };
 
@@ -695,7 +727,53 @@ export default function UserDashboardPage() {
               </p>
             </div>
             <div className="p-5">
-              {introSent ? (
+              {alreadyConnected ? (
+                <div className="text-center py-6">
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3"
+                    style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
+                  >
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Already Connected!</h3>
+                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>
+                    You already have a conversation with this company.
+                  </p>
+                  {introMessage.trim() && (
+                    <p className="text-sm mt-2" style={{ color: '#10b981' }}>
+                      <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Your message has been sent!
+                    </p>
+                  )}
+                  <div className="flex gap-3 mt-5">
+                    <button
+                      onClick={() => {
+                        setShowIntroModal(false);
+                        setAlreadyConnected(false);
+                        setExistingConversationId(null);
+                        setIntroMessage('');
+                      }}
+                      className="btn-secondary flex-1 h-10 text-sm font-medium rounded"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={handleGoToMessages}
+                      className="flex-1 h-10 text-sm font-medium rounded text-white flex items-center justify-center gap-2"
+                      style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      Go to Messages
+                    </button>
+                  </div>
+                </div>
+              ) : introSent ? (
                 <div className="text-center py-6">
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3"
