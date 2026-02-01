@@ -81,7 +81,7 @@ export default function SMEDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-12 h-12 rounded-full animate-spin" style={{ border: '3px solid var(--graphite-200)', borderTopColor: 'var(--teal)' }} />
+        <div className="w-12 h-12 rounded-full animate-spin" style={{ border: '3px solid #e5e7eb', borderTopColor: '#14b8a6' }} />
       </div>
     );
   }
@@ -89,13 +89,13 @@ export default function SMEDetailPage() {
   if (error || !sme) {
     return (
       <div className="max-w-2xl mx-auto py-16 text-center">
-        <div className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ background: 'var(--danger-100)' }}>
-          <svg className="w-10 h-10" style={{ color: 'var(--danger-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ background: '#fee2e2' }}>
+          <svg className="w-10 h-10" style={{ color: '#ef4444' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--graphite-900)' }}>Company Not Found</h2>
-        <p className="mb-6" style={{ color: 'var(--graphite-500)' }}>{error}</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: '#111827' }}>Company Not Found</h2>
+        <p className="mb-6" style={{ color: '#6b7280' }}>{error}</p>
         <button onClick={() => router.push('/user')} className="btn-teal px-6 py-3 rounded-xl font-semibold">
           Back to Registry
         </button>
@@ -116,7 +116,7 @@ export default function SMEDetailPage() {
       <button
         onClick={() => router.push('/user')}
         className="mb-6 flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
-        style={{ color: 'var(--graphite-500)' }}
+        style={{ color: '#6b7280' }}
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -127,8 +127,8 @@ export default function SMEDetailPage() {
       {/* Hero Section */}
       <div className="relative rounded-2xl overflow-hidden mb-6" style={{ background: 'linear-gradient(135deg, #1a1f2e 0%, #2d3748 50%, #1a1f2e 100%)' }}>
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, var(--teal) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
+          <div className="absolute top-0 right-0 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, #14b8a6 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
         </div>
 
         <div className="relative p-8">
@@ -144,13 +144,13 @@ export default function SMEDetailPage() {
                     onError={(e) => {
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
-                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%); color: white;">${getInitials(sme.companyName)}</div>`;
+                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%); color: white;">${getInitials(sme.companyName)}</div>`;
                       }
                     }}
                   />
                 </div>
               ) : (
-                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%)', color: 'white' }}>
+                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)', color: 'white' }}>
                   {getInitials(sme.companyName)}
                 </div>
               )}
@@ -208,7 +208,7 @@ export default function SMEDetailPage() {
               <button
                 onClick={() => setShowIntroModal(true)}
                 className="w-full md:w-auto px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-3"
-                style={{ background: 'linear-gradient(135deg, var(--teal) 0%, #0d9488 100%)', boxShadow: '0 10px 30px -10px rgba(13, 148, 136, 0.5)' }}
+                style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', boxShadow: '0 10px 30px -10px rgba(13, 148, 136, 0.5)' }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -221,13 +221,13 @@ export default function SMEDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: 'var(--graphite-100)' }}>
+      <div className="flex gap-1 mb-6 p-1 rounded-xl overflow-x-auto" style={{ background: '#f3f4f6' }}>
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all whitespace-nowrap ${activeTab === tab.id ? 'shadow-sm' : ''}`}
-            style={activeTab === tab.id ? { background: 'white', color: 'var(--graphite-800)' } : { color: 'var(--graphite-500)' }}
+            style={activeTab === tab.id ? { background: 'white', color: '#1f2937' } : { color: '#6b7280' }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tab.icon} />
@@ -241,118 +241,118 @@ export default function SMEDetailPage() {
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* About Section */}
-          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%)' }}>
+          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #e5e7eb' }}>
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)' }}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
               About Company
             </h2>
-            <p className="leading-relaxed text-base" style={{ color: 'var(--graphite-600)' }}>
+            <p className="leading-relaxed text-base" style={{ color: '#4b5563' }}>
               {sme.companyDescription || 'No company description available. Request an introduction to learn more about this certified SME.'}
             </p>
           </div>
 
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: 'rgba(59, 130, 246, 0.1)' }}>
                 <svg className="w-6 h-6" style={{ color: '#3b82f6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--graphite-800)' }}>{formatEmployeeCount(sme.employeeCount)}</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--graphite-500)' }}>Employees</p>
+              <p className="text-2xl font-bold" style={{ color: '#1f2937' }}>{formatEmployeeCount(sme.employeeCount)}</p>
+              <p className="text-xs mt-1" style={{ color: '#6b7280' }}>Employees</p>
             </div>
 
-            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
                 <svg className="w-6 h-6" style={{ color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--graphite-800)' }}>{sme.foundingDate ? new Date(sme.foundingDate).getFullYear() : 'N/A'}</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--graphite-500)' }}>Founded</p>
+              <p className="text-2xl font-bold" style={{ color: '#1f2937' }}>{sme.foundingDate ? new Date(sme.foundingDate).getFullYear() : 'N/A'}</p>
+              <p className="text-xs mt-1" style={{ color: '#6b7280' }}>Founded</p>
             </div>
 
-            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: 'rgba(139, 92, 246, 0.1)' }}>
                 <svg className="w-6 h-6" style={{ color: '#8b5cf6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--graphite-800)' }}>{sme.operatingCountries?.length || 1}</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--graphite-500)' }}>Countries</p>
+              <p className="text-2xl font-bold" style={{ color: '#1f2937' }}>{sme.operatingCountries?.length || 1}</p>
+              <p className="text-xs mt-1" style={{ color: '#6b7280' }}>Countries</p>
             </div>
 
-            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+            <div className="rounded-xl p-5 text-center" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: 'rgba(245, 158, 11, 0.1)' }}>
                 <svg className="w-6 h-6" style={{ color: '#f59e0b' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
               </div>
               <p className="text-2xl font-bold" style={{ color: '#10b981' }}>Verified</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--graphite-500)' }}>Status</p>
+              <p className="text-xs mt-1" style={{ color: '#6b7280' }}>Status</p>
             </div>
           </div>
 
           {/* Company Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sme.legalStructure && (
-              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--graphite-100)' }}>
-                  <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#f3f4f6' }}>
+                  <svg className="w-5 h-5" style={{ color: '#4b5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Legal Structure</p>
-                  <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{formatEnumValue(sme.legalStructure)}</p>
+                  <p className="text-xs" style={{ color: '#6b7280' }}>Legal Structure</p>
+                  <p className="font-semibold" style={{ color: '#1f2937' }}>{formatEnumValue(sme.legalStructure)}</p>
                 </div>
               </div>
             )}
 
             {sme.businessModel && (
-              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--graphite-100)' }}>
-                  <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#f3f4f6' }}>
+                  <svg className="w-5 h-5" style={{ color: '#4b5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Business Model</p>
-                  <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{formatEnumValue(sme.businessModel)}</p>
+                  <p className="text-xs" style={{ color: '#6b7280' }}>Business Model</p>
+                  <p className="font-semibold" style={{ color: '#1f2937' }}>{formatEnumValue(sme.businessModel)}</p>
                 </div>
               </div>
             )}
 
             {sme.officeType && (
-              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--graphite-100)' }}>
-                  <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#f3f4f6' }}>
+                  <svg className="w-5 h-5" style={{ color: '#4b5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Office Type</p>
-                  <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{formatEnumValue(sme.officeType)}</p>
+                  <p className="text-xs" style={{ color: '#6b7280' }}>Office Type</p>
+                  <p className="font-semibold" style={{ color: '#1f2937' }}>{formatEnumValue(sme.officeType)}</p>
                 </div>
               </div>
             )}
 
             {(sme.address || sme.headOfficeAddress) && (
-              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--graphite-100)' }}>
-                  <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-4 rounded-xl p-4" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#f3f4f6' }}>
+                  <svg className="w-5 h-5" style={{ color: '#4b5563' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Address</p>
-                  <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{sme.headOfficeAddress || sme.address}</p>
+                  <p className="text-xs" style={{ color: '#6b7280' }}>Address</p>
+                  <p className="font-semibold" style={{ color: '#1f2937' }}>{sme.headOfficeAddress || sme.address}</p>
                 </div>
               </div>
             )}
@@ -364,8 +364,8 @@ export default function SMEDetailPage() {
       {activeTab === 'business' && (
         <div className="space-y-6">
           {/* Financial Highlights */}
-          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
+          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -375,33 +375,33 @@ export default function SMEDetailPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {sme.fundingStage && (
-                <div className="rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
-                  <p className="text-xs mb-1" style={{ color: 'var(--graphite-500)' }}>Funding Stage</p>
-                  <p className="font-bold text-lg" style={{ color: 'var(--graphite-800)' }}>{formatEnumValue(sme.fundingStage)}</p>
+                <div className="rounded-xl p-4" style={{ background: '#f9fafb' }}>
+                  <p className="text-xs mb-1" style={{ color: '#6b7280' }}>Funding Stage</p>
+                  <p className="font-bold text-lg" style={{ color: '#1f2937' }}>{formatEnumValue(sme.fundingStage)}</p>
                 </div>
               )}
               {sme.revenueRange && (
-                <div className="rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
-                  <p className="text-xs mb-1" style={{ color: 'var(--graphite-500)' }}>Revenue Range</p>
-                  <p className="font-bold text-lg" style={{ color: 'var(--graphite-800)' }}>{sme.revenueRange}</p>
+                <div className="rounded-xl p-4" style={{ background: '#f9fafb' }}>
+                  <p className="text-xs mb-1" style={{ color: '#6b7280' }}>Revenue Range</p>
+                  <p className="font-bold text-lg" style={{ color: '#1f2937' }}>{sme.revenueRange}</p>
                 </div>
               )}
               {sme.revenueGrowth && (
-                <div className="rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
-                  <p className="text-xs mb-1" style={{ color: 'var(--graphite-500)' }}>Revenue Growth</p>
+                <div className="rounded-xl p-4" style={{ background: '#f9fafb' }}>
+                  <p className="text-xs mb-1" style={{ color: '#6b7280' }}>Revenue Growth</p>
                   <p className="font-bold text-lg" style={{ color: '#10b981' }}>{sme.revenueGrowth}</p>
                 </div>
               )}
             </div>
             {!sme.fundingStage && !sme.revenueRange && !sme.revenueGrowth && (
-              <p className="text-center py-6" style={{ color: 'var(--graphite-400)' }}>Financial information not disclosed</p>
+              <p className="text-center py-6" style={{ color: '#9ca3af' }}>Financial information not disclosed</p>
             )}
           </div>
 
           {/* Operating Countries */}
           {sme.operatingCountries && sme.operatingCountries.length > 0 && (
-            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
+            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' }}>
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -411,7 +411,7 @@ export default function SMEDetailPage() {
               </h2>
               <div className="flex flex-wrap gap-2">
                 {sme.operatingCountries.map((country, index) => (
-                  <span key={index} className="px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}>
+                  <span key={index} className="px-4 py-2 rounded-full text-sm font-medium" style={{ background: '#f3f4f6', color: '#374151' }}>
                     {country}
                   </span>
                 ))}
@@ -421,8 +421,8 @@ export default function SMEDetailPage() {
 
           {/* Major Clients */}
           {sme.majorClients && sme.majorClients.length > 0 && (
-            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
+            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -446,8 +446,8 @@ export default function SMEDetailPage() {
       {activeTab === 'credentials' && (
         <div className="space-y-6">
           {/* Certifications */}
-          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
+          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -458,28 +458,28 @@ export default function SMEDetailPage() {
             {sme.existingCertifications && sme.existingCertifications.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {sme.existingCertifications.map((cert, index) => (
-                  <div key={index} className="flex items-start gap-4 rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
+                  <div key={index} className="flex items-start gap-4 rounded-xl p-4" style={{ background: '#f9fafb' }}>
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>
                       <svg className="w-5 h-5" style={{ color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{cert.name}</p>
-                      <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>Issued by {cert.issuedBy}</p>
-                      <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Valid until {new Date(cert.validUntil).toLocaleDateString()}</p>
+                      <p className="font-semibold" style={{ color: '#1f2937' }}>{cert.name}</p>
+                      <p className="text-sm" style={{ color: '#6b7280' }}>Issued by {cert.issuedBy}</p>
+                      <p className="text-xs mt-1" style={{ color: '#9ca3af' }}>Valid until {new Date(cert.validUntil).toLocaleDateString()}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center py-6" style={{ color: 'var(--graphite-400)' }}>No additional certifications listed</p>
+              <p className="text-center py-6" style={{ color: '#9ca3af' }}>No additional certifications listed</p>
             )}
           </div>
 
           {/* Regulatory Licenses */}
-          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
+          <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' }}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -490,22 +490,22 @@ export default function SMEDetailPage() {
             {sme.regulatoryLicenses && sme.regulatoryLicenses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {sme.regulatoryLicenses.map((license, index) => (
-                  <div key={index} className="flex items-start gap-4 rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
+                  <div key={index} className="flex items-start gap-4 rounded-xl p-4" style={{ background: '#f9fafb' }}>
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
                       <svg className="w-5 h-5" style={{ color: '#3b82f6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
                     <div>
-                      <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{license.name}</p>
-                      <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>License #{license.licenseNumber}</p>
-                      <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Valid until {new Date(license.validUntil).toLocaleDateString()}</p>
+                      <p className="font-semibold" style={{ color: '#1f2937' }}>{license.name}</p>
+                      <p className="text-sm" style={{ color: '#6b7280' }}>License #{license.licenseNumber}</p>
+                      <p className="text-xs mt-1" style={{ color: '#9ca3af' }}>Valid until {new Date(license.validUntil).toLocaleDateString()}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center py-6" style={{ color: 'var(--graphite-400)' }}>No regulatory licenses listed</p>
+              <p className="text-center py-6" style={{ color: '#9ca3af' }}>No regulatory licenses listed</p>
             )}
           </div>
 
@@ -516,10 +516,10 @@ export default function SMEDetailPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--graphite-800)' }}>SME Certification Portal Verified</h3>
-            <p className="text-sm mb-2" style={{ color: 'var(--graphite-600)' }}>This company has been verified and certified by the SME Certification Portal</p>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#1f2937' }}>SME Certification Portal Verified</h3>
+            <p className="text-sm mb-2" style={{ color: '#4b5563' }}>This company has been verified and certified by the SME Certification Portal</p>
             {sme.submittedDate && (
-              <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>Certified since {new Date(sme.submittedDate).toLocaleDateString()}</p>
+              <p className="text-xs" style={{ color: '#9ca3af' }}>Certified since {new Date(sme.submittedDate).toLocaleDateString()}</p>
             )}
           </div>
         </div>
@@ -530,9 +530,9 @@ export default function SMEDetailPage() {
         <div className="space-y-6">
           {/* Contact Person */}
           {sme.contactInfo && (sme.contactInfo.contactName || sme.contactInfo.contactEmail) && (
-            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: 'var(--graphite-900)' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%)' }}>
+            <div className="rounded-2xl p-6" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-3" style={{ color: '#111827' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)' }}>
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
@@ -540,13 +540,13 @@ export default function SMEDetailPage() {
                 Contact Person
               </h2>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold" style={{ background: 'linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%)', color: 'white' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)', color: 'white' }}>
                   {getInitials(sme.contactInfo.contactName)}
                 </div>
                 <div>
-                  <p className="font-bold text-lg" style={{ color: 'var(--graphite-800)' }}>{sme.contactInfo.contactName || 'Contact Person'}</p>
+                  <p className="font-bold text-lg" style={{ color: '#1f2937' }}>{sme.contactInfo.contactName || 'Contact Person'}</p>
                   {sme.contactInfo.contactPosition && (
-                    <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>{sme.contactInfo.contactPosition}</p>
+                    <p className="text-sm" style={{ color: '#6b7280' }}>{sme.contactInfo.contactPosition}</p>
                   )}
                 </div>
               </div>
@@ -556,7 +556,7 @@ export default function SMEDetailPage() {
           {/* Contact Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sme.contactInfo?.contactEmail && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -564,15 +564,15 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Email Address</p>
-                    <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{sme.contactInfo.contactEmail}</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Email Address</p>
+                    <p className="font-semibold" style={{ color: '#1f2937' }}>{sme.contactInfo.contactEmail}</p>
                   </div>
                 </div>
               </div>
             )}
 
             {sme.contactInfo?.contactPhone && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -580,15 +580,15 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Phone Number</p>
-                    <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>{sme.contactInfo.contactPhone}</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Phone Number</p>
+                    <p className="font-semibold" style={{ color: '#1f2937' }}>{sme.contactInfo.contactPhone}</p>
                   </div>
                 </div>
               </div>
             )}
 
             {sme.website && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -596,7 +596,7 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Website</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Website</p>
                     <a
                       href={sme.website.startsWith('http') ? sme.website : `https://${sme.website}`}
                       target="_blank"
@@ -612,7 +612,7 @@ export default function SMEDetailPage() {
             )}
 
             {sme.linkedinUrl && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0077b5 0%, #005582 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -620,7 +620,7 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>LinkedIn</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>LinkedIn</p>
                     <a
                       href={sme.linkedinUrl.startsWith('http') ? sme.linkedinUrl : `https://${sme.linkedinUrl}`}
                       target="_blank"
@@ -636,7 +636,7 @@ export default function SMEDetailPage() {
             )}
 
             {sme.socialMedia?.twitter && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #1da1f2 0%, #0c85d0 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -644,7 +644,7 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Twitter / X</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Twitter / X</p>
                     <a href={sme.socialMedia.twitter.startsWith('http') ? sme.socialMedia.twitter : `https://twitter.com/${sme.socialMedia.twitter}`} target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline" style={{ color: '#1da1f2' }}>
                       {sme.socialMedia.twitter}
                     </a>
@@ -654,7 +654,7 @@ export default function SMEDetailPage() {
             )}
 
             {sme.socialMedia?.instagram && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -662,7 +662,7 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Instagram</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Instagram</p>
                     <a href={sme.socialMedia.instagram.startsWith('http') ? sme.socialMedia.instagram : `https://instagram.com/${sme.socialMedia.instagram}`} target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline" style={{ color: '#e1306c' }}>
                       {sme.socialMedia.instagram}
                     </a>
@@ -672,7 +672,7 @@ export default function SMEDetailPage() {
             )}
 
             {sme.socialMedia?.facebook && (
-              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid var(--graphite-100)' }}>
+              <div className="rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #1877f2 0%, #0c5dc7 100%)' }}>
                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -680,7 +680,7 @@ export default function SMEDetailPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: 'var(--graphite-500)' }}>Facebook</p>
+                    <p className="text-sm mb-1" style={{ color: '#6b7280' }}>Facebook</p>
                     <a href={sme.socialMedia.facebook.startsWith('http') ? sme.socialMedia.facebook : `https://facebook.com/${sme.socialMedia.facebook}`} target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline" style={{ color: '#1877f2' }}>
                       {sme.socialMedia.facebook}
                     </a>
@@ -692,14 +692,14 @@ export default function SMEDetailPage() {
 
           {/* No Contact Info Message */}
           {!sme.contactInfo?.contactEmail && !sme.contactInfo?.contactPhone && !sme.website && !sme.linkedinUrl && !sme.socialMedia?.twitter && !sme.socialMedia?.instagram && !sme.socialMedia?.facebook && (
-            <div className="rounded-2xl p-12 text-center" style={{ background: 'var(--graphite-50)' }}>
-              <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'var(--graphite-200)' }}>
-                <svg className="w-8 h-8" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="rounded-2xl p-12 text-center" style={{ background: '#f9fafb' }}>
+              <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: '#e5e7eb' }}>
+                <svg className="w-8 h-8" style={{ color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <h3 className="font-semibold mb-2" style={{ color: 'var(--graphite-700)' }}>Contact Info Not Public</h3>
-              <p className="text-sm mb-4" style={{ color: 'var(--graphite-500)' }}>Request an introduction to get in touch with this company.</p>
+              <h3 className="font-semibold mb-2" style={{ color: '#374151' }}>Contact Info Not Public</h3>
+              <p className="text-sm mb-4" style={{ color: '#6b7280' }}>Request an introduction to get in touch with this company.</p>
               <button
                 onClick={() => setShowIntroModal(true)}
                 className="btn-teal px-6 py-2.5 rounded-xl font-semibold"
@@ -722,7 +722,7 @@ export default function SMEDetailPage() {
                     <img src={`${STATIC_BASE_URL}${sme.companyLogo}`} alt="" className="w-full h-full object-contain p-2" />
                   </div>
                 ) : (
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%)' }}>
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-white" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)' }}>
                     {getInitials(sme.companyName)}
                   </div>
                 )}
@@ -741,30 +741,30 @@ export default function SMEDetailPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--graphite-900)' }}>Request Sent!</h3>
-                  <p style={{ color: 'var(--graphite-500)' }}>Your introduction request has been sent successfully.</p>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#111827' }}>Request Sent!</h3>
+                  <p style={{ color: '#6b7280' }}>Your introduction request has been sent successfully.</p>
                 </div>
               ) : (
                 <>
                   {introError && (
-                    <div className="mb-4 rounded-xl p-4 flex items-center gap-3" style={{ background: 'var(--danger-50)', border: '1px solid var(--danger-100)' }}>
-                      <svg className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--danger-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="mb-4 rounded-xl p-4 flex items-center gap-3" style={{ background: '#fef2f2', border: '1px solid #fee2e2' }}>
+                      <svg className="w-5 h-5 flex-shrink-0" style={{ color: '#ef4444' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <p className="text-sm" style={{ color: 'var(--danger-600)' }}>{introError}</p>
+                      <p className="text-sm" style={{ color: '#dc2626' }}>{introError}</p>
                     </div>
                   )}
                   <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--graphite-700)' }}>Message (Optional)</label>
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>Message (Optional)</label>
                     <textarea
                       value={introMessage}
                       onChange={(e) => setIntroMessage(e.target.value)}
                       placeholder="Introduce yourself and explain why you'd like to connect..."
                       rows={4}
                       className="w-full px-4 py-3 rounded-xl resize-none transition-all outline-none"
-                      style={{ background: 'var(--graphite-50)', border: '2px solid var(--graphite-100)' }}
-                      onFocus={(e) => e.target.style.borderColor = 'var(--teal)'}
-                      onBlur={(e) => e.target.style.borderColor = 'var(--graphite-100)'}
+                      style={{ background: '#f9fafb', border: '2px solid #f3f4f6' }}
+                      onFocus={(e) => e.target.style.borderColor = '#14b8a6'}
+                      onBlur={(e) => e.target.style.borderColor = '#f3f4f6'}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
