@@ -362,6 +362,12 @@ export default function MessagesPage() {
   const isVideoFile = (mimeType: string) => mimeType.startsWith('video/');
   const isPdfFile = (mimeType: string) => mimeType === 'application/pdf';
 
+  // Format preview text for conversation list
+  const formatPreviewText = (text: string | undefined) => {
+    if (!text || text === 'No messages yet') return '📎 Attachment';
+    return text;
+  };
+
   // Filter messages by chat search term (must be defined before using)
   const filteredMessages = chatSearchTerm.trim()
     ? messages.filter(msg =>
@@ -527,7 +533,7 @@ export default function MessagesPage() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-sm truncate pr-2" style={{ color: 'var(--graphite-500)' }}>{conv.lastMessage}</p>
+                    <p className="text-sm truncate pr-2" style={{ color: 'var(--graphite-500)' }}>{formatPreviewText(conv.lastMessage)}</p>
                     {conv.unreadCount > 0 && (
                       <span className="flex-shrink-0 w-6 h-6 text-white text-xs font-medium rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-600)' }}>
                         {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
