@@ -64,7 +64,7 @@ export default function AdminUsersPage() {
     const labels: Record<string, string> = {
       admin: 'Administrator',
       sme: 'SME Owner',
-      user: 'User',
+      user: 'Investor',
     };
     return (
       <span className={`badge ${style.className}`}>
@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
             background: role === 'admin' ? 'var(--graphite-500)' : 'var(--teal-500)'
           }}
         />
-        {labels[role] || 'User'}
+        {labels[role] || 'Investor'}
       </span>
     );
   };

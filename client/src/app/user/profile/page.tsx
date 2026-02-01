@@ -361,7 +361,7 @@ export default function UserProfilePage() {
               </button>
             </div>
             <div className="mt-3 space-y-1">
-              <h2 className="text-xl font-bold text-white">{fullName || 'User'}</h2>
+              <h2 className="text-xl font-bold text-white">{fullName || 'Investor'}</h2>
               <p className="text-sm" style={{ color: 'var(--graphite-300)' }}>{user?.email || 'No email'}</p>
               <div className="flex items-center justify-center gap-2 flex-wrap pt-2">
                 {user?.isVerified && (
@@ -410,7 +410,7 @@ export default function UserProfilePage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <h2 className="text-xl font-bold text-white truncate">{fullName || 'User'}</h2>
+                  <h2 className="text-xl font-bold text-white truncate">{fullName || 'Investor'}</h2>
                   <p className="truncate" style={{ color: 'var(--graphite-300)' }}>{user?.email || 'No email'}</p>
                   <div className="flex items-center gap-3 mt-2 flex-wrap">
                     {user?.isVerified && (
