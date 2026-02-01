@@ -66,8 +66,21 @@ export default function SMEDetailPage() {
     try {
       const result = await api.requestIntroduction(sme.id, introMessage);
       if (result.success) {
+        // If existing conversation, redirect to chat
+        if (result.data?.existing && result.data?.id) {
+          router.push(`/user/chat/${result.data.id}`);
+          return;
+        }
+        // New request created
         setIntroSent(true);
-        setTimeout(() => { setShowIntroModal(false); setIntroSent(false); }, 2000);
+        setTimeout(() => {
+          setShowIntroModal(false);
+          setIntroSent(false);
+          // Redirect to chat with new request
+          if (result.data?.id) {
+            router.push(`/user/chat/${result.data.id}`);
+          }
+        }, 1500);
       } else {
         setIntroError(result.message || 'Failed to send request');
       }

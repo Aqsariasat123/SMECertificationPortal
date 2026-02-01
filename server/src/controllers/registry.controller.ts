@@ -228,23 +228,37 @@ export const requestIntroduction = async (req: AuthenticatedRequest, res: Respon
       });
     }
 
-    // Check if user already requested introduction to this SME
+    // Check if user already has ANY introduction request to this SME (regardless of status)
     const existingRequest = await prisma.introductionRequest.findFirst({
       where: {
         requesterId: userId,
         smeProfileId: profileId,
-        status: 'pending',
+      },
+      include: {
+        smeProfile: {
+          select: {
+            companyName: true,
+          },
+        },
       },
     });
 
+    // If existing request found, return it instead of creating duplicate
     if (existingRequest) {
-      return res.status(400).json({
-        success: false,
-        message: 'You already have an active introduction request to this SME',
+      return res.json({
+        success: true,
+        message: 'You already have a conversation with this SME',
+        data: {
+          id: existingRequest.id,
+          smeCompanyName: existingRequest.smeProfile.companyName,
+          status: existingRequest.status,
+          createdAt: existingRequest.requestedDate,
+          existing: true,
+        },
       });
     }
 
-    // Create introduction request
+    // Create introduction request only if no existing one
     const introRequest = await prisma.introductionRequest.create({
       data: {
         requesterId: userId,
