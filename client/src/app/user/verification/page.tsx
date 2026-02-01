@@ -115,24 +115,10 @@ export default function InvestorVerificationPage() {
     }
   };
 
-  const handleSelectInvestorType = async (type: 'individual' | 'company') => {
-    try {
-      setSaving(true);
-      setError(null);
-      const result = await api.setInvestorType(type);
-      if (result.success) {
-        setInvestorType(type);
-        setKycStatus('not_submitted');
-        setSuccess('Investor type selected successfully');
-        setTimeout(() => setSuccess(null), 3000);
-      } else {
-        setError(result.message || 'Failed to set investor type');
-      }
-    } catch (err) {
-      setError('An error occurred');
-    } finally {
-      setSaving(false);
-    }
+  const handleSelectInvestorType = (type: 'individual' | 'company') => {
+    // Only set local state - type will be saved when KYC is submitted
+    setInvestorType(type);
+    setError(null);
   };
 
   const handleInputChange = (field: string, value: string | number) => {
@@ -143,7 +129,8 @@ export default function InvestorVerificationPage() {
     try {
       setSaving(true);
       setError(null);
-      const result = await api.submitKyc(formData);
+      // Include investor type with form data
+      const result = await api.submitKyc({ ...formData, investorType });
       if (result.success) {
         setKycStatus('pending');
         setSuccess('KYC submitted successfully! Our team will review your application.');

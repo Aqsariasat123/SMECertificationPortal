@@ -391,12 +391,14 @@ export const submitKyc = async (req: AuthenticatedRequest, res: Response) => {
       });
     }
 
-    // Get current profile to check investor type
+    // Get investor type from request body or existing profile
     const profile = await prisma.userProfile.findUnique({
       where: { userId },
     });
 
-    if (!profile?.investorType) {
+    const investorType = kycData.investorType || profile?.investorType;
+
+    if (!investorType || !['individual', 'company'].includes(investorType)) {
       return res.status(400).json({
         success: false,
         message: 'Please select investor type first',
@@ -405,13 +407,14 @@ export const submitKyc = async (req: AuthenticatedRequest, res: Response) => {
 
     // Prepare update data based on investor type
     const updateData: Record<string, unknown> = {
+      investorType, // Save investor type with KYC submission
       kycStatus: 'pending',
       kycSubmittedAt: new Date(),
       kycRejectionReason: null,
       kycRevisionNotes: null,
     };
 
-    if (profile.investorType === 'individual') {
+    if (investorType === 'individual') {
       // Individual investor KYC fields
       updateData.nationality = kycData.nationality || null;
       updateData.dateOfBirth = kycData.dateOfBirth ? new Date(kycData.dateOfBirth) : null;
@@ -459,16 +462,17 @@ export const submitKyc = async (req: AuthenticatedRequest, res: Response) => {
     if (kycData.investmentBudget) updateData.investmentBudget = kycData.investmentBudget;
     if (kycData.riskTolerance) updateData.riskTolerance = kycData.riskTolerance;
 
-    await prisma.userProfile.update({
+    await prisma.userProfile.upsert({
       where: { userId },
-      data: updateData,
+      create: { userId, ...updateData },
+      update: updateData,
     });
 
     await prisma.auditLog.create({
       data: {
         userId,
         actionType: 'KYC_SUBMITTED',
-        actionDescription: `Submitted ${profile.investorType} investor KYC`,
+        actionDescription: `Submitted ${investorType} investor KYC`,
         targetType: 'UserProfile',
         targetId: userId,
         ipAddress: req.ip || 'unknown',
