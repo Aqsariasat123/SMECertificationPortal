@@ -83,7 +83,7 @@ export default function SMESupportPage() {
       setLoading(true);
       const result = await api.getSupportTickets();
       if (result.success && result.data) {
-        setTickets(result.data);
+        setTickets(result.data as SupportTicket[]);
       }
     } catch (error) {
       console.error('Failed to fetch tickets:', error);
