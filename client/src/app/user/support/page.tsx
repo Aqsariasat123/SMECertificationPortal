@@ -117,19 +117,46 @@ export default function UserSupportPage() {
 
     try {
       setUploading(true);
-      // For now, just show the file name in message
-      // TODO: Implement actual file upload API
-      const result = await api.sendSupportMessage(selectedTicket.id, `[Attachment: ${file.name}]`);
+      const result = await api.uploadSupportAttachment(selectedTicket.id, file);
       if (result.success) {
         fetchTicketMessages(selectedTicket.id);
         fetchTickets();
+      } else {
+        console.error('Upload failed:', result.message);
+        alert(result.message || 'Failed to upload file');
       }
     } catch (error) {
       console.error('Failed to upload file:', error);
+      alert('Failed to upload file. Please try again.');
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  // Parse attachment from message content
+  const parseAttachment = (content: string) => {
+    if (content.startsWith('[ATTACHMENT]')) {
+      try {
+        const jsonStr = content.substring('[ATTACHMENT]'.length);
+        return JSON.parse(jsonStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  // Handle attachment download
+  const handleDownloadAttachment = async (ticketId: string, attachment: { fileName: string; originalName: string }) => {
+    await api.downloadSupportAttachment(ticketId, attachment.fileName, attachment.originalName);
+  };
+
+  // Format file size
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   const handleCreateTicket = async () => {
@@ -405,6 +432,7 @@ export default function UserSupportPage() {
                   {group.messages.map((msg) => {
                     const isSupport = msg.sender.role === 'admin';
                     const senderInitial = msg.sender.fullName?.charAt(0)?.toUpperCase() || (isSupport ? 'A' : 'U');
+                    const attachment = parseAttachment(msg.content);
                     return (
                       <div key={msg.id} className={`flex mb-4 ${isSupport ? 'justify-start' : 'justify-end'}`}>
                         {/* Support Message */}
@@ -418,9 +446,32 @@ export default function UserSupportPage() {
                                 <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'Support'}</span>
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                               </div>
-                              <div className="rounded-2xl rounded-tl-md px-4 py-2.5 bg-white" style={{ border: '1px solid var(--graphite-200)' }}>
-                                <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--graphite-800)' }}>{msg.content}</p>
-                              </div>
+                              {attachment ? (
+                                <div
+                                  className="rounded-2xl rounded-tl-md px-4 py-3 bg-white cursor-pointer hover:bg-gray-50 transition-colors"
+                                  style={{ border: '1px solid var(--graphite-200)' }}
+                                  onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--teal-100)' }}>
+                                      <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                      </svg>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>{attachment.originalName}</p>
+                                      <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{formatFileSize(attachment.size)}</p>
+                                    </div>
+                                    <svg className="w-5 h-5 ml-auto" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="rounded-2xl rounded-tl-md px-4 py-2.5 bg-white" style={{ border: '1px solid var(--graphite-200)' }}>
+                                  <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--graphite-800)' }}>{msg.content}</p>
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}
@@ -433,9 +484,32 @@ export default function UserSupportPage() {
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                                 <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'You'}</span>
                               </div>
-                              <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
-                                <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                              </div>
+                              {attachment ? (
+                                <div
+                                  className="rounded-2xl rounded-tr-md px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
+                                  style={{ backgroundColor: 'var(--teal-600)' }}
+                                  onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
+                                >
+                                  <div className="flex items-center gap-3 text-white">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/20">
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                      </svg>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium">{attachment.originalName}</p>
+                                      <p className="text-xs opacity-80">{formatFileSize(attachment.size)}</p>
+                                    </div>
+                                    <svg className="w-5 h-5 ml-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
+                                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                                </div>
+                              )}
                             </div>
                             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--graphite-700)' }}>
                               <span className="text-white font-semibold text-sm">{senderInitial}</span>

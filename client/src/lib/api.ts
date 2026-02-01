@@ -836,6 +836,82 @@ class ApiClient {
       body: JSON.stringify({ status }),
     });
   }
+
+  // Upload attachment in support ticket
+  async uploadSupportAttachment(ticketId: string, file: File): Promise<ApiResponse<{
+    id: string;
+    content: string;
+    createdAt: string;
+    sender: { id: string; fullName: string; role: string };
+    attachment: {
+      fileName: string;
+      originalName: string;
+      mimeType: string;
+      size: number;
+      path: string;
+    };
+  }>> {
+    const token = this.getToken();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch(`${this.baseUrl}/support/tickets/${ticketId}/upload`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          message: data.message || 'Upload failed',
+        };
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      return {
+        success: false,
+        message: 'Network error. Please check your connection.',
+      };
+    }
+  }
+
+  // Download support attachment
+  async downloadSupportAttachment(ticketId: string, filename: string, originalName: string): Promise<void> {
+    const token = this.getToken();
+    try {
+      const response = await fetch(`${this.baseUrl}/support/tickets/${ticketId}/download/${filename}`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = originalName;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  }
+
+  getSupportAttachmentUrl(ticketId: string, filename: string): string {
+    return `${this.baseUrl}/support/tickets/${ticketId}/download/${filename}`;
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);
