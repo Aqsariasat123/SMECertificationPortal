@@ -328,9 +328,9 @@ export default function SMESupportPage() {
                 onMouseOut={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 {/* Avatar - Support Team */}
-                <div className="flex-shrink-0 mt-0.5 relative">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-600)' }}>
-                    <span className="text-white font-semibold text-sm">S</span>
+                <div className="flex-shrink-0 relative">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-semibold text-lg">S</span>
                   </div>
                   {ticket.status === 'open' && (
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white" style={{ backgroundColor: 'var(--success-500)' }}></div>
@@ -379,8 +379,8 @@ export default function SMESupportPage() {
             <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-600)' }}>
-                    <span className="text-white font-semibold text-lg">S</span>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-bold text-lg">S</span>
                   </div>
                   <div>
                     <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Support Team</h2>
