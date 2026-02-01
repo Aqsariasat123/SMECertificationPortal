@@ -125,8 +125,8 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
             </div>
             <button
               onClick={logout}
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors"
-              style={{ background: 'var(--graphite-700)', color: 'var(--graphite-400)' }}
+              className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-xs font-medium transition-all hover:bg-red-600"
+              style={{ background: 'var(--graphite-600)', color: 'white' }}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
