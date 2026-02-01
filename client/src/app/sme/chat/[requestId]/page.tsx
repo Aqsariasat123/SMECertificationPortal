@@ -107,7 +107,7 @@ export default function ChatPage() {
       setSending(true);
       const result = await api.sendChatMessage(requestId, newMessage.trim());
       if (result.success && result.data) {
-        setMessages((prev) => [...prev, result.data]);
+        setMessages((prev) => [...prev, result.data as Message]);
         setNewMessage('');
       } else {
         setError(result.message || 'Failed to send message');
@@ -127,7 +127,7 @@ export default function ChatPage() {
       setUploading(true);
       const result = await api.uploadChatFile(requestId, file);
       if (result.success && result.data) {
-        setMessages((prev) => [...prev, result.data]);
+        setMessages((prev) => [...prev, result.data as Message]);
       } else {
         setError(result.message || 'Failed to upload file');
       }
