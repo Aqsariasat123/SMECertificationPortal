@@ -268,7 +268,7 @@ export default function InvestorSupportPage() {
         <button
           onClick={() => setShowNewTicket(true)}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm transition-all hover:shadow-lg"
-          style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
+          style={{ background: 'var(--teal-600)' }}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -289,12 +289,12 @@ export default function InvestorSupportPage() {
             <div className="flex-1 overflow-y-auto">
               {loading ? (
                 <div className="flex items-center justify-center h-32">
-                  <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: '#CCFBF1', borderTopColor: '#14B8A6' }} />
+                  <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--teal-200)', borderTopColor: 'var(--teal-600)' }} />
                 </div>
               ) : tickets.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%)' }}>
-                    <svg className="w-8 h-8" style={{ color: '#14B8A6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'var(--teal-100)' }}>
+                    <svg className="w-8 h-8" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </div>
@@ -308,12 +308,12 @@ export default function InvestorSupportPage() {
                     <button
                       key={ticket.id}
                       onClick={() => selectTicket(ticket.id)}
-                      className={`w-full flex items-start gap-3 px-4 py-4 text-left transition-all hover:bg-teal-50 ${
-                        activeTicketId === ticket.id ? 'bg-teal-50 border-l-4' : 'border-l-4 border-transparent'
+                      className={`w-full flex items-start gap-3 px-4 py-4 text-left transition-all hover:bg-[var(--teal-50)] ${
+                        activeTicketId === ticket.id ? 'bg-[var(--teal-50)] border-l-4' : 'border-l-4 border-transparent'
                       }`}
-                      style={{ borderLeftColor: activeTicketId === ticket.id ? '#14B8A6' : 'transparent' }}
+                      style={{ borderLeftColor: activeTicketId === ticket.id ? 'var(--teal-600)' : 'transparent' }}
                     >
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--teal-600)' }}>
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
@@ -322,7 +322,7 @@ export default function InvestorSupportPage() {
                         <div className="flex items-center justify-between mb-1">
                           <h4 className="font-semibold text-gray-800 truncate text-sm">{ticket.subject}</h4>
                           {ticket.unreadCount > 0 && (
-                            <span className="flex-shrink-0 w-5 h-5 text-white text-xs font-bold rounded-full flex items-center justify-center ml-2" style={{ background: '#14B8A6' }}>
+                            <span className="flex-shrink-0 w-5 h-5 text-white text-xs font-bold rounded-full flex items-center justify-center ml-2" style={{ background: 'var(--teal-600)' }}>
                               {ticket.unreadCount}
                             </span>
                           )}
@@ -353,11 +353,11 @@ export default function InvestorSupportPage() {
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 flex flex-col" style={{ background: 'linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%)' }}>
+          <div className="flex-1 flex flex-col" style={{ background: 'linear-gradient(180deg, var(--teal-50) 0%, #FFFFFF 100%)' }}>
             {!activeTicketId ? (
               <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
-                <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%)' }}>
-                  <svg className="w-12 h-12" style={{ color: '#14B8A6' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4" style={{ background: 'var(--teal-100)' }}>
+                  <svg className="w-12 h-12" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
@@ -366,7 +366,7 @@ export default function InvestorSupportPage() {
               </div>
             ) : loadingMessages ? (
               <div className="flex-1 flex items-center justify-center">
-                <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: '#CCFBF1', borderTopColor: '#14B8A6' }} />
+                <div className="w-10 h-10 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--teal-200)', borderTopColor: 'var(--teal-600)' }} />
               </div>
             ) : activeTicket ? (
               <>
@@ -425,12 +425,12 @@ export default function InvestorSupportPage() {
                               {/* Sender info for admin messages */}
                               {isAdmin && (
                                 <div className="flex items-center gap-2 mb-2">
-                                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}>
+                                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-600)' }}>
                                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
                                     </svg>
                                   </div>
-                                  <span className="text-sm font-semibold" style={{ color: '#0D9488' }}>Support Team</span>
+                                  <span className="text-sm font-semibold" style={{ color: 'var(--teal-600)' }}>Support Team</span>
                                 </div>
                               )}
 
@@ -471,13 +471,13 @@ export default function InvestorSupportPage() {
                           }
                         }}
                         placeholder="Type your message..."
-                        className="flex-1 px-5 py-3.5 rounded-xl text-sm bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400 transition-all"
+                        className="flex-1 px-5 py-3.5 rounded-xl text-sm bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--teal-500)]/20 focus:border-[var(--teal-500)] transition-all"
                       />
                       <button
                         onClick={sendMessage}
                         disabled={!newMessage.trim() || sending}
                         className="px-6 py-3.5 rounded-xl font-medium text-sm text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
-                        style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
+                        style={{ background: 'var(--teal-600)' }}
                       >
                         {sending ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -499,7 +499,7 @@ export default function InvestorSupportPage() {
                       <button
                         onClick={() => setShowNewTicket(true)}
                         className="font-medium hover:underline"
-                        style={{ color: '#14B8A6' }}
+                        style={{ color: 'var(--teal-600)' }}
                       >
                         Create a new request
                       </button>
@@ -522,7 +522,7 @@ export default function InvestorSupportPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
               {/* Modal Header */}
-              <div className="p-8 text-center" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}>
+              <div className="p-8 text-center" style={{ background: 'var(--teal-600)' }}>
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/20 backdrop-blur mb-4">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -542,7 +542,7 @@ export default function InvestorSupportPage() {
                     onChange={(e) => setNewTicketForm(prev => ({ ...prev, subject: e.target.value }))}
                     placeholder="What do you need help with?"
                     required
-                    className="w-full px-4 py-3.5 rounded-xl text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400"
+                    className="w-full px-4 py-3.5 rounded-xl text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--teal-500)]/20 focus:border-[var(--teal-500)]"
                   />
                 </div>
 
@@ -555,7 +555,7 @@ export default function InvestorSupportPage() {
                     placeholder="Please provide details about your issue or question..."
                     required
                     rows={4}
-                    className="w-full px-4 py-3.5 rounded-xl text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400 resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--teal-500)]/20 focus:border-[var(--teal-500)] resize-none"
                   />
                 </div>
 
@@ -572,7 +572,7 @@ export default function InvestorSupportPage() {
                     type="submit"
                     disabled={creatingTicket || !newTicketForm.subject.trim() || !newTicketForm.message.trim()}
                     className="flex-1 px-4 py-3.5 rounded-xl font-medium text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
+                    style={{ background: 'var(--teal-600)' }}
                   >
                     {creatingTicket ? (
                       <span className="flex items-center justify-center gap-2">
