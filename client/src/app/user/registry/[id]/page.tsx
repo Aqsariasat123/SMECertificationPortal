@@ -59,29 +59,46 @@ export default function SMEDetailPage() {
     return value.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   };
 
+  const [alreadyConnected, setAlreadyConnected] = useState(false);
+  const [existingConversationId, setExistingConversationId] = useState<string | null>(null);
+  const [messageSentToExisting, setMessageSentToExisting] = useState(false);
+
   const handleSendIntroduction = async () => {
     if (!sme) return;
     setIntroSending(true);
     setIntroError('');
+    setAlreadyConnected(false);
+    setExistingConversationId(null);
+    setMessageSentToExisting(false);
     try {
       const result = await api.requestIntroduction(sme.id, introMessage);
       if (result.success) {
         const data = result.data as { id: string; existing?: boolean } | undefined;
-        // If existing conversation, redirect to chat
+        // If existing conversation exists
         if (data?.existing && data?.id) {
-          router.push(`/user/chat/${data.id}`);
-          return;
-        }
-        // New request created
-        setIntroSent(true);
-        setTimeout(() => {
-          setShowIntroModal(false);
-          setIntroSent(false);
-          // Redirect to chat with new request
-          if (data?.id) {
-            router.push(`/user/chat/${data.id}`);
+          setAlreadyConnected(true);
+          setExistingConversationId(data.id);
+
+          // If user typed a message, send it to the existing conversation
+          if (introMessage.trim()) {
+            try {
+              const msgResult = await api.sendChatMessage(data.id, introMessage.trim());
+              if (msgResult.success) {
+                setMessageSentToExisting(true);
+              }
+            } catch (e) {
+              // Message sending failed silently - user can still go to messages
+            }
           }
-        }, 1500);
+        } else {
+          // New request created
+          setIntroSent(true);
+          setTimeout(() => {
+            setShowIntroModal(false);
+            setIntroSent(false);
+            setIntroMessage('');
+          }, 2500);
+        }
       } else {
         setIntroError(result.message || 'Failed to send request');
       }
@@ -89,6 +106,14 @@ export default function SMEDetailPage() {
       setIntroError('Failed to send introduction request');
     } finally {
       setIntroSending(false);
+    }
+  };
+
+  const handleGoToMessages = () => {
+    if (existingConversationId) {
+      router.push(`/user/messages?chat=${existingConversationId}`);
+    } else {
+      router.push('/user/messages');
     }
   };
 
@@ -748,7 +773,50 @@ export default function SMEDetailPage() {
             </div>
 
             <div className="p-6">
-              {introSent ? (
+              {alreadyConnected ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' }}>
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#111827' }}>Already Connected!</h3>
+                  <p style={{ color: '#6b7280' }}>You already have a conversation with this company.</p>
+                  {messageSentToExisting && (
+                    <p className="text-sm mt-2" style={{ color: '#10b981' }}>
+                      <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Your message has been sent!
+                    </p>
+                  )}
+                  <div className="grid grid-cols-2 gap-3 mt-6">
+                    <button
+                      onClick={() => {
+                        setShowIntroModal(false);
+                        setAlreadyConnected(false);
+                        setExistingConversationId(null);
+                        setMessageSentToExisting(false);
+                        setIntroMessage('');
+                      }}
+                      className="py-3 rounded-xl font-semibold transition-all"
+                      style={{ background: '#e5e7eb', color: '#374151' }}
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={handleGoToMessages}
+                      className="py-3 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2"
+                      style={{ background: '#14b8a6' }}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      Go to Messages
+                    </button>
+                  </div>
+                </div>
+              ) : introSent ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
                     <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
