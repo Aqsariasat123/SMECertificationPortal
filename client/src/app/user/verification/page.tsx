@@ -60,8 +60,14 @@ export default function InvestorVerificationPage() {
       const result = await api.getUserProfile();
       if (result.success && result.data) {
         const data = result.data;
-        setInvestorType(data.investorType as InvestorType);
-        setKycStatus((data.kycStatus as KycStatus) || 'not_submitted');
+        const status = (data.kycStatus as KycStatus) || 'not_submitted';
+        setKycStatus(status);
+
+        // Only load investor type from DB if KYC has been submitted
+        // Otherwise, always show type selection first
+        if (status !== 'not_submitted') {
+          setInvestorType(data.investorType as InvestorType);
+        }
         setKycDocuments((data.kycDocuments as KycDocument[]) || []);
         setRejectionReason(data.kycRejectionReason as string | null);
         setRevisionNotes(data.kycRevisionNotes as string | null);
