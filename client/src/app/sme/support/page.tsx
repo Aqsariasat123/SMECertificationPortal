@@ -147,6 +147,17 @@ export default function SMESupportPage() {
     return null;
   };
 
+  // Check if attachment is an image
+  const isImageAttachment = (attachment: { mimeType: string }) => {
+    return attachment.mimeType?.startsWith('image/');
+  };
+
+  // Get full attachment URL
+  const getAttachmentUrl = (ticketId: string, fileName: string) => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+    return `${apiUrl}/support/tickets/${ticketId}/download/${fileName}`;
+  };
+
   // Handle attachment download
   const handleDownloadAttachment = async (ticketId: string, attachment: { fileName: string; originalName: string }) => {
     await api.downloadSupportAttachment(ticketId, attachment.fileName, attachment.originalName);
@@ -447,26 +458,51 @@ export default function SMESupportPage() {
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                               </div>
                               {attachment ? (
-                                <div
-                                  className="rounded-2xl rounded-tl-md px-4 py-3 bg-white cursor-pointer hover:bg-gray-50 transition-colors"
-                                  style={{ border: '1px solid var(--graphite-200)' }}
-                                  onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--teal-100)' }}>
-                                      <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                isImageAttachment(attachment) ? (
+                                  <div className="rounded-2xl rounded-tl-md overflow-hidden bg-white" style={{ border: '1px solid var(--graphite-200)', maxWidth: '280px' }}>
+                                    <div className="relative group">
+                                      <img
+                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
+                                        alt={attachment.originalName}
+                                        className="w-full object-cover cursor-pointer"
+                                        style={{ maxHeight: '200px' }}
+                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                      />
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
+                                        className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                      <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>{attachment.originalName}</p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="rounded-2xl rounded-tl-md px-4 py-3 bg-white cursor-pointer hover:bg-gray-50 transition-colors"
+                                    style={{ border: '1px solid var(--graphite-200)' }}
+                                    onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'var(--teal-100)' }}>
+                                        <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>{attachment.originalName}</p>
+                                        <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{formatFileSize(attachment.size)}</p>
+                                      </div>
+                                      <svg className="w-5 h-5 ml-auto" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                       </svg>
                                     </div>
-                                    <div>
-                                      <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>{attachment.originalName}</p>
-                                      <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{formatFileSize(attachment.size)}</p>
-                                    </div>
-                                    <svg className="w-5 h-5 ml-auto" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
                                   </div>
-                                </div>
+                                )
                               ) : (
                                 <div className="rounded-2xl rounded-tl-md px-4 py-2.5 bg-white" style={{ border: '1px solid var(--graphite-200)' }}>
                                   <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--graphite-800)' }}>{msg.content}</p>
@@ -485,26 +521,51 @@ export default function SMESupportPage() {
                                 <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'You'}</span>
                               </div>
                               {attachment ? (
-                                <div
-                                  className="rounded-2xl rounded-tr-md px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
-                                  style={{ backgroundColor: 'var(--teal-600)' }}
-                                  onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
-                                >
-                                  <div className="flex items-center gap-3 text-white">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/20">
-                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                isImageAttachment(attachment) ? (
+                                  <div className="rounded-2xl rounded-tr-md overflow-hidden" style={{ backgroundColor: 'var(--teal-600)', maxWidth: '280px' }}>
+                                    <div className="relative group">
+                                      <img
+                                        src={getAttachmentUrl(selectedTicket.id, attachment.fileName)}
+                                        alt={attachment.originalName}
+                                        className="w-full object-cover cursor-pointer"
+                                        style={{ maxHeight: '200px' }}
+                                        onClick={() => window.open(getAttachmentUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                      />
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
+                                        className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                    <div className="px-3 py-2">
+                                      <p className="text-xs truncate text-white/80">{attachment.originalName}</p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="rounded-2xl rounded-tr-md px-4 py-3 cursor-pointer hover:opacity-90 transition-opacity"
+                                    style={{ backgroundColor: 'var(--teal-600)' }}
+                                    onClick={() => handleDownloadAttachment(selectedTicket.id, attachment)}
+                                  >
+                                    <div className="flex items-center gap-3 text-white">
+                                      <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/20">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium">{attachment.originalName}</p>
+                                        <p className="text-xs opacity-80">{formatFileSize(attachment.size)}</p>
+                                      </div>
+                                      <svg className="w-5 h-5 ml-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                       </svg>
                                     </div>
-                                    <div>
-                                      <p className="text-sm font-medium">{attachment.originalName}</p>
-                                      <p className="text-xs opacity-80">{formatFileSize(attachment.size)}</p>
-                                    </div>
-                                    <svg className="w-5 h-5 ml-auto opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
                                   </div>
-                                </div>
+                                )
                               ) : (
                                 <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
                                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
