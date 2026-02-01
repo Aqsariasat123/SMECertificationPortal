@@ -136,6 +136,7 @@ export default function SMESupportPage() {
 
   // Parse attachment from message content
   const parseAttachment = (content: string) => {
+    // New format: [ATTACHMENT]{json}
     if (content.startsWith('[ATTACHMENT]')) {
       try {
         const jsonStr = content.substring('[ATTACHMENT]'.length);
@@ -144,18 +145,35 @@ export default function SMESupportPage() {
         return null;
       }
     }
+    // Old format: [Attachment: filename]
+    const oldMatch = content.match(/^\[Attachment: (.+)\]$/);
+    if (oldMatch) {
+      const fileName = oldMatch[1];
+      const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+      return {
+        type: 'attachment',
+        fileName: fileName,
+        originalName: fileName,
+        mimeType: isImage ? 'image/png' : 'application/octet-stream',
+        size: 0,
+        isOldFormat: true
+      };
+    }
     return null;
   };
 
   // Check if attachment is an image
-  const isImageAttachment = (attachment: { mimeType: string }) => {
-    return attachment.mimeType?.startsWith('image/');
+  const isImageAttachment = (attachment: { mimeType?: string; originalName?: string }) => {
+    if (attachment.mimeType?.startsWith('image/')) return true;
+    if (attachment.originalName && /\.(jpg|jpeg|png|gif|webp)$/i.test(attachment.originalName)) return true;
+    return false;
   };
 
-  // Get full attachment URL
+  // Get full attachment URL with auth token
   const getAttachmentUrl = (ticketId: string, fileName: string) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-    return `${apiUrl}/support/tickets/${ticketId}/download/${fileName}`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : '';
+    return `${apiUrl}/support/tickets/${ticketId}/download/${fileName}?token=${token}`;
   };
 
   // Handle attachment download
@@ -168,6 +186,23 @@ export default function SMESupportPage() {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  // Format preview text for ticket list (hide JSON, show friendly text)
+  const formatPreviewText = (content: string | undefined) => {
+    if (!content) return 'No messages yet';
+    if (content.startsWith('[ATTACHMENT]')) {
+      try {
+        const json = JSON.parse(content.substring('[ATTACHMENT]'.length));
+        return `📎 ${json.originalName || 'Attachment'}`;
+      } catch {
+        return '📎 Attachment';
+      }
+    }
+    if (content.match(/^\[Attachment: .+\]$/)) {
+      return content.replace('[Attachment: ', '📎 ').replace(']', '');
+    }
+    return content;
   };
 
   const handleCreateTicket = async () => {
@@ -384,7 +419,7 @@ export default function SMESupportPage() {
                     </span>
                   </div>
                   <p className="text-xs truncate mb-2" style={{ color: 'var(--graphite-500)' }}>
-                    {ticket.lastMessage?.content || 'No messages yet'}
+                    {formatPreviewText(ticket.lastMessage?.content)}
                   </p>
                   {getStatusBadge(ticket.status)}
                 </div>
