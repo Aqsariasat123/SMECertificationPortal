@@ -988,7 +988,7 @@ export const getKycApplications = async (req: AuthenticatedRequest, res: Respons
 // GET /api/admin/kyc-applications/:id - Get KYC application detail
 export const getKycApplicationDetail = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const profile = await prisma.userProfile.findUnique({
       where: { id },
@@ -1016,7 +1016,9 @@ export const getKycApplicationDetail = async (req: AuthenticatedRequest, res: Re
 
     return res.json({
       success: true,
-      data: profile,
+      data: {
+        application: profile,
+      },
     });
   } catch (error) {
     console.error('Get KYC application detail error:', error);
@@ -1030,7 +1032,7 @@ export const getKycApplicationDetail = async (req: AuthenticatedRequest, res: Re
 // POST /api/admin/kyc-applications/:id/review - Review KYC application
 export const reviewKycApplication = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { action, notes } = req.body;
     const adminId = req.user?.userId;
 
@@ -1057,13 +1059,14 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
       });
     }
 
+    const userName = profile.user?.fullName || 'Unknown';
     let newStatus: string;
     let actionDescription: string;
 
     switch (action) {
       case 'approve':
         newStatus = 'approved';
-        actionDescription = `Approved KYC for investor ${profile.user.fullName}`;
+        actionDescription = `Approved KYC for investor ${userName}`;
         break;
       case 'reject':
         if (!notes) {
@@ -1073,7 +1076,7 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
           });
         }
         newStatus = 'rejected';
-        actionDescription = `Rejected KYC for investor ${profile.user.fullName}`;
+        actionDescription = `Rejected KYC for investor ${userName}`;
         break;
       case 'request_revision':
         if (!notes) {
@@ -1083,7 +1086,7 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
           });
         }
         newStatus = 'revision_requested';
-        actionDescription = `Requested KYC revision for investor ${profile.user.fullName}`;
+        actionDescription = `Requested KYC revision for investor ${userName}`;
         break;
       default:
         return res.status(400).json({
@@ -1092,14 +1095,16 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
         });
     }
 
+    const notesStr = typeof notes === 'string' ? notes : null;
+
     const updatedProfile = await prisma.userProfile.update({
       where: { id },
       data: {
         kycStatus: newStatus as 'approved' | 'rejected' | 'revision_requested',
         kycReviewedAt: new Date(),
         kycReviewedBy: adminId,
-        kycRejectionReason: action === 'reject' ? notes : null,
-        kycRevisionNotes: action === 'request_revision' ? notes : null,
+        kycRejectionReason: action === 'reject' ? notesStr : null,
+        kycRevisionNotes: action === 'request_revision' ? notesStr : null,
       },
     });
 
@@ -1119,7 +1124,7 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
         targetType: 'UserProfile',
         targetId: id,
         ipAddress: req.ip || 'unknown',
-        newValue: JSON.stringify({ status: newStatus, notes }),
+        newValue: JSON.stringify({ status: newStatus, notes: notesStr }),
       },
     });
 
