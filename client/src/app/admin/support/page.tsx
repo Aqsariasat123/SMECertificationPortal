@@ -441,14 +441,14 @@ export default function AdminSupportPage() {
                             <div className="flex flex-col items-end">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
-                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>You (Admin)</span>
+                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'Admin'}</span>
                               </div>
                               <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
                                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                               </div>
                             </div>
                             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--teal-600)' }}>
-                              <span className="text-white font-semibold text-sm">A</span>
+                              <span className="text-white font-semibold text-sm">{msg.sender.fullName?.charAt(0)?.toUpperCase() || 'A'}</span>
                             </div>
                           </div>
                         )}

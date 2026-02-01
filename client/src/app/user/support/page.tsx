@@ -405,17 +405,18 @@ export default function UserSupportPage() {
 
                   {group.messages.map((msg) => {
                     const isSupport = msg.sender.role === 'admin';
+                    const senderInitial = msg.sender.fullName?.charAt(0)?.toUpperCase() || (isSupport ? 'A' : 'U');
                     return (
                       <div key={msg.id} className={`flex mb-4 ${isSupport ? 'justify-start' : 'justify-end'}`}>
                         {/* Support Message */}
                         {isSupport && (
                           <div className="flex items-start gap-3 max-w-[70%]">
                             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--teal-600)' }}>
-                              <span className="text-white font-semibold text-sm">S</span>
+                              <span className="text-white font-semibold text-sm">{senderInitial}</span>
                             </div>
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>Support Team</span>
+                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'Support'}</span>
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                               </div>
                               <div className="rounded-2xl rounded-tl-md px-4 py-2.5 bg-white" style={{ border: '1px solid var(--graphite-200)' }}>
@@ -431,14 +432,14 @@ export default function UserSupportPage() {
                             <div className="flex flex-col items-end">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
-                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>You</span>
+                                <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{msg.sender.fullName || 'You'}</span>
                               </div>
                               <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
                                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                               </div>
                             </div>
                             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--graphite-700)' }}>
-                              <span className="text-white font-semibold text-sm">Y</span>
+                              <span className="text-white font-semibold text-sm">{senderInitial}</span>
                             </div>
                           </div>
                         )}
