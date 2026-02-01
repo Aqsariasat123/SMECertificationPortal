@@ -218,7 +218,7 @@ export default function UserSupportPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border-0 rounded-xl text-sm transition-all"
               style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
               onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
@@ -270,7 +270,7 @@ export default function UserSupportPage() {
                 className="flex items-center gap-3 px-5 py-4 cursor-pointer transition-all"
                 style={{
                   backgroundColor: selectedTicket?.id === ticket.id ? 'var(--teal-50)' : 'transparent',
-                  borderLeft: selectedTicket?.id === ticket.id ? '4px solid var(--teal-500)' : '4px solid transparent'
+                  borderLeft: selectedTicket?.id === ticket.id ? '4px solid var(--teal-600)' : '4px solid transparent'
                 }}
                 onMouseOver={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                 onMouseOut={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
@@ -422,7 +422,7 @@ export default function UserSupportPage() {
                       placeholder="Type your message..."
                       className="w-full px-4 py-3.5 border-0 rounded-full text-sm transition-all"
                       style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-                      onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+                      onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
                       onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
                     />
                   </div>
@@ -430,9 +430,9 @@ export default function UserSupportPage() {
                     type="submit"
                     disabled={!newMessage.trim() || sending}
                     className="p-3 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: 'var(--teal-500)' }}
+                    style={{ backgroundColor: 'var(--teal-600)' }}
                     onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-500)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
                   >
                     {sending ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -475,7 +475,7 @@ export default function UserSupportPage() {
                   onChange={(e) => setNewTicketForm({ ...newTicketForm, subject: e.target.value })}
                   className="w-full h-11 px-4 rounded-xl text-sm transition-all"
                   style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-500)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
                   placeholder="What do you need help with?"
                 />
@@ -487,7 +487,7 @@ export default function UserSupportPage() {
                   onChange={(e) => setNewTicketForm({ ...newTicketForm, message: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl resize-none text-sm transition-all"
                   style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-500)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
                   rows={4}
                   placeholder="Describe your issue in detail..."
@@ -508,9 +508,9 @@ export default function UserSupportPage() {
                 onClick={handleCreateTicket}
                 disabled={creatingTicket || !newTicketForm.subject.trim() || !newTicketForm.message.trim()}
                 className="px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
-                style={{ backgroundColor: 'var(--teal-500)' }}
+                style={{ backgroundColor: 'var(--teal-600)' }}
                 onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-500)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
               >
                 {creatingTicket ? 'Submitting...' : 'Submit'}
               </button>

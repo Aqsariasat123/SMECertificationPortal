@@ -237,7 +237,7 @@ export default function SMECertificationPage() {
                   <div
                     className="absolute top-5 right-1/2 h-0.5 w-full -translate-y-1/2"
                     style={{
-                      background: prevComplete ? 'var(--teal-500)' : 'var(--graphite-200)',
+                      background: prevComplete ? 'var(--teal-600)' : 'var(--graphite-200)',
                     }}
                   />
                 )}
@@ -246,9 +246,9 @@ export default function SMECertificationPage() {
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all relative z-10"
                   style={{
-                    background: isComplete ? 'var(--teal-500)' : isLocked ? 'var(--graphite-100)' : 'white',
+                    background: isComplete ? 'var(--teal-600)' : isLocked ? 'var(--graphite-100)' : 'white',
                     color: isComplete ? 'white' : isLocked ? 'var(--graphite-400)' : 'var(--teal-600)',
-                    border: !isComplete && !isLocked ? '2px solid var(--teal-500)' : 'none',
+                    border: !isComplete && !isLocked ? '2px solid var(--teal-600)' : 'none',
                     boxShadow: isComplete ? '0 4px 12px rgba(74,143,135,0.3)' : 'none'
                   }}
                 >
@@ -394,7 +394,7 @@ export default function SMECertificationPage() {
                     </>
                   ) : (
                     <>
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: isDocumentsComplete ? 'var(--success-500)' : 'var(--teal-500)' }} />
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: isDocumentsComplete ? 'var(--success-500)' : 'var(--teal-600)' }} />
                       {isDocumentsComplete ? 'Complete' : 'In Progress'}
                     </>
                   )}
@@ -412,7 +412,7 @@ export default function SMECertificationPage() {
                 <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
                   <div
                     className="h-full rounded-full transition-all"
-                    style={{ width: `${(uploadedRequiredCount / requiredDocuments) * 100}%`, background: isDocumentsComplete ? 'var(--success-500)' : 'var(--teal-500)' }}
+                    style={{ width: `${(uploadedRequiredCount / requiredDocuments) * 100}%`, background: isDocumentsComplete ? 'var(--success-500)' : 'var(--teal-600)' }}
                   />
                 </div>
               </div>

@@ -49,7 +49,7 @@ export default function AdminUsersPage() {
   const getAvatarStyle = (role: UserRole) => {
     switch (role) {
       case 'admin': return { background: 'linear-gradient(135deg, var(--graphite-500) 0%, var(--graphite-700) 100%)' };
-      case 'sme': return { background: 'linear-gradient(135deg, var(--teal-500) 0%, var(--teal-700) 100%)' };
+      case 'sme': return { background: 'linear-gradient(135deg, var(--teal-600) 0%, var(--teal-700) 100%)' };
       default: return { background: 'linear-gradient(135deg, var(--teal-400) 0%, var(--teal-600) 100%)' };
     }
   };
@@ -71,7 +71,7 @@ export default function AdminUsersPage() {
         <span
           className="w-1.5 h-1.5 rounded-full"
           style={{
-            background: role === 'admin' ? 'var(--graphite-500)' : 'var(--teal-500)'
+            background: role === 'admin' ? 'var(--graphite-500)' : 'var(--teal-600)'
           }}
         />
         {labels[role] || 'Investor'}

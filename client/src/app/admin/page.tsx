@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
           background: status === 'certified' ? 'var(--success-500)' :
                      status === 'rejected' ? 'var(--danger-500)' :
                      status === 'submitted' || status === 'revision_requested' ? 'var(--warning-500)' :
-                     status === 'under_review' ? 'var(--teal-500)' : 'var(--graphite-400)'
+                     status === 'under_review' ? 'var(--teal-600)' : 'var(--graphite-400)'
         }} />
         {labels[status] || status}
       </span>

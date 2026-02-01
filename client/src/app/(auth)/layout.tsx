@@ -37,7 +37,7 @@ export default function AuthLayout({
 
           <div className="space-y-4 pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-500)' }}>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-600)' }}>
                 <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
@@ -45,7 +45,7 @@ export default function AuthLayout({
               <span className="text-base text-white">Verified certification process</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-500)' }}>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-600)' }}>
                 <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
@@ -53,7 +53,7 @@ export default function AuthLayout({
               <span className="text-base text-white">Public registry listing</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-500)' }}>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'var(--teal-600)' }}>
                 <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>

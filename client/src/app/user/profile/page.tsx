@@ -265,7 +265,7 @@ export default function UserProfilePage() {
       viewed: {
         bgStyle: { backgroundColor: 'var(--teal-50)' },
         textStyle: { color: 'var(--teal-700)' },
-        dotStyle: { backgroundColor: 'var(--teal-500)' },
+        dotStyle: { backgroundColor: 'var(--teal-600)' },
         label: 'Viewed'
       },
       responded: {

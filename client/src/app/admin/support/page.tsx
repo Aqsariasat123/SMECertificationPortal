@@ -217,7 +217,7 @@ export default function AdminSupportPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border-0 rounded-xl text-sm transition-all"
               style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
               onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
@@ -243,7 +243,7 @@ export default function AdminSupportPage() {
               {tab.label}
               {tab.count > 0 && (
                 <span className="px-1.5 py-0.5 text-[10px] rounded-full" style={{
-                  backgroundColor: statusFilter === tab.value ? 'var(--teal-500)' : 'var(--graphite-200)',
+                  backgroundColor: statusFilter === tab.value ? 'var(--teal-600)' : 'var(--graphite-200)',
                   color: statusFilter === tab.value ? 'white' : 'var(--graphite-600)',
                 }}>
                   {tab.count}
@@ -274,7 +274,7 @@ export default function AdminSupportPage() {
                 className="flex items-center gap-3 px-5 py-4 cursor-pointer transition-all"
                 style={{
                   backgroundColor: selectedTicket?.id === ticket.id ? 'var(--teal-50)' : 'transparent',
-                  borderLeft: selectedTicket?.id === ticket.id ? '4px solid var(--teal-500)' : '4px solid transparent'
+                  borderLeft: selectedTicket?.id === ticket.id ? '4px solid var(--teal-600)' : '4px solid transparent'
                 }}
                 onMouseOver={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                 onMouseOut={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
@@ -365,7 +365,7 @@ export default function AdminSupportPage() {
                     color: 'var(--graphite-700)',
                     outline: 'none'
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-500)'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; }}
                 >
                   <option value="open">Open</option>
@@ -448,7 +448,7 @@ export default function AdminSupportPage() {
                       placeholder="Type your response..."
                       className="w-full px-4 py-3.5 border-0 rounded-full text-sm transition-all"
                       style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-                      onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+                      onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
                       onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
                     />
                   </div>
@@ -456,9 +456,9 @@ export default function AdminSupportPage() {
                     type="submit"
                     disabled={!newMessage.trim() || sending}
                     className="p-3 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: 'var(--teal-500)' }}
+                    style={{ backgroundColor: 'var(--teal-600)' }}
                     onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-500)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
                   >
                     {sending ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

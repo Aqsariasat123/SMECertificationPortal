@@ -64,7 +64,7 @@ export default function AdminApplicationsPage() {
     const config: Record<CertificationStatus, { badgeClass: string; dotColor: string; label: string }> = {
       draft: { badgeClass: 'badge badge-neutral', dotColor: 'var(--graphite-400)', label: 'Draft' },
       submitted: { badgeClass: 'badge badge-warning', dotColor: 'var(--warning-500)', label: 'Pending Review' },
-      under_review: { badgeClass: 'badge badge-teal', dotColor: 'var(--teal-500)', label: 'Under Review' },
+      under_review: { badgeClass: 'badge badge-teal', dotColor: 'var(--teal-600)', label: 'Under Review' },
       certified: { badgeClass: 'badge badge-success', dotColor: 'var(--success-500)', label: 'Certified' },
       rejected: { badgeClass: 'badge badge-danger', dotColor: 'var(--danger-500)', label: 'Rejected' },
       revision_requested: { badgeClass: 'badge badge-warning', dotColor: 'var(--warning-500)', label: 'Revision Needed' },
@@ -226,7 +226,7 @@ export default function AdminApplicationsPage() {
       {/* Applications List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-500)' }}></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-600)' }}></div>
         </div>
       ) : applications.length === 0 ? (
         <div className="solid-card rounded-xl p-12 text-center">
@@ -317,7 +317,7 @@ export default function AdminApplicationsPage() {
                 <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--graphite-100)' }}>
                   <div
                     className="h-full rounded-full transition-all"
-                    style={{ width: `${app.completionPercentage}%`, backgroundColor: 'var(--teal-500)' }}
+                    style={{ width: `${app.completionPercentage}%`, backgroundColor: 'var(--teal-600)' }}
                   />
                 </div>
               </div>

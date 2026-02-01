@@ -217,7 +217,7 @@ export default function AdminKycPage() {
       {/* Applications List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-500)' }}></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-600)' }}></div>
         </div>
       ) : applications.length === 0 ? (
         <div className="solid-card rounded-xl p-12 text-center">

@@ -170,7 +170,7 @@ export default function RegisterPage() {
                 border: '1px solid var(--graphite-200)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-500)';
+                e.currentTarget.style.borderColor = 'var(--teal-600)';
                 e.currentTarget.style.background = 'var(--teal-50)';
               }}
               onMouseLeave={(e) => {
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                 border: '1px solid var(--graphite-200)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-500)';
+                e.currentTarget.style.borderColor = 'var(--teal-600)';
                 e.currentTarget.style.background = 'var(--teal-50)';
               }}
               onMouseLeave={(e) => {

@@ -434,7 +434,7 @@ export default function MessagesPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 border-0 rounded-xl text-sm transition-all"
               style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
               onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
@@ -449,7 +449,7 @@ export default function MessagesPage() {
           >
             Current
             {totalUnreadCount > 0 && (
-              <span className="ml-2 px-2 py-0.5 text-xs rounded-full font-semibold" style={{ backgroundColor: 'var(--teal-500)', color: 'white' }}>
+              <span className="ml-2 px-2 py-0.5 text-xs rounded-full font-semibold" style={{ backgroundColor: 'var(--teal-600)', color: 'white' }}>
                 {totalUnreadCount > 99 ? '99+' : totalUnreadCount}
               </span>
             )}
@@ -495,7 +495,7 @@ export default function MessagesPage() {
                 className="flex items-center gap-3 px-5 py-4 cursor-pointer transition-all"
                 style={{
                   backgroundColor: activeRequestId === conv.id ? 'var(--teal-50)' : 'transparent',
-                  borderLeft: activeRequestId === conv.id ? '4px solid var(--teal-500)' : '4px solid transparent'
+                  borderLeft: activeRequestId === conv.id ? '4px solid var(--teal-600)' : '4px solid transparent'
                 }}
                 onMouseOver={(e) => { if (activeRequestId !== conv.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                 onMouseOut={(e) => { if (activeRequestId !== conv.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
@@ -508,7 +508,7 @@ export default function MessagesPage() {
                     </span>
                   </div>
                   {/* Online indicator */}
-                  <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-white rounded-full" style={{ backgroundColor: 'var(--teal-500)' }}></div>
+                  <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-white rounded-full" style={{ backgroundColor: 'var(--teal-600)' }}></div>
                 </div>
 
                 {/* Content */}
@@ -529,7 +529,7 @@ export default function MessagesPage() {
                   <div className="flex items-center justify-between">
                     <p className="text-sm truncate pr-2" style={{ color: 'var(--graphite-500)' }}>{conv.lastMessage}</p>
                     {conv.unreadCount > 0 && (
-                      <span className="flex-shrink-0 w-6 h-6 text-white text-xs font-medium rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-500)' }}>
+                      <span className="flex-shrink-0 w-6 h-6 text-white text-xs font-medium rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-600)' }}>
                         {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
                       </span>
                     )}
@@ -673,7 +673,7 @@ export default function MessagesPage() {
                     onChange={(e) => setChatSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-10 py-2.5 rounded-lg text-sm"
                     style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-500)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
                   />
                   {chatSearchTerm && (
@@ -794,7 +794,7 @@ export default function MessagesPage() {
                                           onClick={() => handleDownloadFile(att)}
                                           className="flex items-center gap-3 p-3 bg-white/50 hover:bg-white/80 rounded-xl w-full transition"
                                         >
-                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-500)' }}>
+                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-600)' }}>
                                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
@@ -829,7 +829,7 @@ export default function MessagesPage() {
 
                             {/* Edit Mode */}
                             {editingMessage === msg.id ? (
-                              <div className="bg-white rounded-2xl px-4 py-3 shadow-lg" style={{ border: '2px solid var(--teal-500)' }}>
+                              <div className="bg-white rounded-2xl px-4 py-3 shadow-lg" style={{ border: '2px solid var(--teal-600)' }}>
                                 <textarea
                                   value={editContent}
                                   onChange={(e) => setEditContent(e.target.value)}
@@ -937,7 +937,7 @@ export default function MessagesPage() {
                                           onClick={() => handleDownloadFile(att)}
                                           className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-xl w-full transition"
                                         >
-                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-500)' }}>
+                                          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: isPdfFile(att.mimeType) ? 'var(--danger-500)' : isVideoFile(att.mimeType) ? 'var(--graphite-500)' : 'var(--teal-600)' }}>
                                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
@@ -960,7 +960,7 @@ export default function MessagesPage() {
                             <div className="flex items-center gap-1.5 mt-1 mr-1">
                               {msg.isEdited && <span className="text-[10px] italic" style={{ color: 'var(--graphite-400)' }}>edited</span>}
                               {/* Double tick - Blue when read, Gray when delivered */}
-                              <svg className="w-4 h-4" style={{ color: msg.isRead ? 'var(--teal-500)' : 'var(--graphite-400)' }} fill="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4" style={{ color: msg.isRead ? 'var(--teal-600)' : 'var(--graphite-400)' }} fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
                               </svg>
                             </div>
@@ -1013,7 +1013,7 @@ export default function MessagesPage() {
                     placeholder="Your message..."
                     className="w-full pl-12 pr-4 py-3.5 border-0 rounded-full text-sm transition-all"
                     style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-                    onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-500)'; }}
+                    onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
                     onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
                   />
                 </div>
@@ -1076,9 +1076,9 @@ export default function MessagesPage() {
                   type="submit"
                   disabled={!newMessage.trim() || sending}
                   className="p-3 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: 'var(--teal-500)' }}
+                  style={{ backgroundColor: 'var(--teal-600)' }}
                   onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
-                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-500)'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
                 >
                   {sending ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

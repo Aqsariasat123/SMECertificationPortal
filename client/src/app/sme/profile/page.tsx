@@ -854,7 +854,7 @@ export default function SMEProfilePage() {
               <div className="h-3 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
                 <div
                   className="h-full rounded-full transition-all duration-500"
-                  style={{ width: `${completionPercentage}%`, background: 'var(--teal-500)' }}
+                  style={{ width: `${completionPercentage}%`, background: 'var(--teal-600)' }}
                 />
               </div>
             </div>
@@ -1611,7 +1611,7 @@ export default function SMEProfilePage() {
                   </svg>
                   <div>
                     <p className="font-semibold" style={{ color: 'var(--teal-600)' }}>Compliance Information</p>
-                    <p className="text-sm mt-0.5" style={{ color: 'var(--teal-500)' }}>Add your compliance policies and certifications to build trust</p>
+                    <p className="text-sm mt-0.5" style={{ color: 'var(--teal-600)' }}>Add your compliance policies and certifications to build trust</p>
                   </div>
                 </div>
               </div>

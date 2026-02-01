@@ -115,7 +115,7 @@ export default function UserDashboard() {
       {/* Stats Cards - Modern with colored left accent */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-teal-500" />
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-teal-600" />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-3xl font-bold text-slate-900">{stats.totalRequests}</p>
@@ -167,7 +167,7 @@ export default function UserDashboard() {
           className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-200 transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-teal-600/20 group-hover:scale-105 transition-transform">
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
@@ -176,7 +176,7 @@ export default function UserDashboard() {
               <h3 className="font-semibold text-slate-900 group-hover:text-teal-600 transition-colors">Browse Registry</h3>
               <p className="text-sm text-slate-500 mt-0.5">Find and connect with certified SMEs</p>
             </div>
-            <svg className="w-5 h-5 text-slate-300 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-slate-300 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </div>
@@ -220,7 +220,7 @@ export default function UserDashboard() {
 
         {loading ? (
           <div className="p-8 text-center">
-            <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderColor: 'var(--teal-500)', borderTopColor: 'transparent' }} />
+            <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderColor: 'var(--teal-600)', borderTopColor: 'transparent' }} />
             <p className="mt-3 text-sm" style={{ color: 'var(--graphite-500)' }}>Loading...</p>
           </div>
         ) : introductionRequests.length > 0 ? (

@@ -221,7 +221,7 @@ export default function SMEDashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-500)' }}></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-600)' }}></div>
       </div>
     );
   }
@@ -420,7 +420,7 @@ export default function SMEDashboardPage() {
                 <p className="text-2xl font-bold text-slate-900">{profileCompletion}%</p>
                 <p className="text-xs text-slate-500">Complete</p>
               </div>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: `conic-gradient(var(--teal-500) ${profileCompletion * 3.6}deg, var(--graphite-100) 0deg)` }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: `conic-gradient(var(--teal-600) ${profileCompletion * 3.6}deg, var(--graphite-100) 0deg)` }}>
                 <div className="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center">
                   <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -434,7 +434,7 @@ export default function SMEDashboardPage() {
           <div className="mb-6">
             <div className="h-2 rounded-full overflow-hidden bg-slate-100">
               <div
-                className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-500 to-cyan-500"
+                className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-teal-600 to-cyan-500"
                 style={{ width: `${profileCompletion}%` }}
               />
             </div>
@@ -507,7 +507,7 @@ export default function SMEDashboardPage() {
             <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-teal-400 to-cyan-500" />
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-teal-600/20">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>

@@ -80,7 +80,7 @@ export default function UserRequestsPage() {
       viewed: {
         bgStyle: { backgroundColor: 'var(--teal-50)' },
         textStyle: { color: 'var(--teal-700)' },
-        dotStyle: { backgroundColor: 'var(--teal-500)' },
+        dotStyle: { backgroundColor: 'var(--teal-600)' },
         label: 'Seen'
       },
       responded: {
@@ -98,7 +98,7 @@ export default function UserRequestsPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div
           className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2"
-          style={{ borderColor: 'var(--teal-500)' }}
+          style={{ borderColor: 'var(--teal-600)' }}
         ></div>
       </div>
     );

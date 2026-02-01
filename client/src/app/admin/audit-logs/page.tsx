@@ -124,7 +124,7 @@ export default function AdminAuditLogsPage() {
   const getRoleColor = (role: UserRole): React.CSSProperties => {
     switch (role) {
       case 'admin': return { background: `linear-gradient(to bottom right, var(--graphite-600), var(--graphite-800))` };
-      case 'sme': return { background: `linear-gradient(to bottom right, var(--teal-500), var(--teal-700))` };
+      case 'sme': return { background: `linear-gradient(to bottom right, var(--teal-600), var(--teal-700))` };
       default: return { background: `linear-gradient(to bottom right, var(--teal-400), var(--teal-600))` };
     }
   };

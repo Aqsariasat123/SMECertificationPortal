@@ -90,7 +90,7 @@ export default function ApplicationDetailPage() {
     const configs: Record<CertificationStatus, { bg: string; text: string; dot: string; label: string }> = {
       draft: { bg: 'var(--graphite-100)', text: 'var(--graphite-700)', dot: 'var(--graphite-500)', label: 'Draft' },
       submitted: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Pending Review' },
-      under_review: { bg: 'var(--teal-50)', text: 'var(--teal-700)', dot: 'var(--teal-500)', label: 'Under Review' },
+      under_review: { bg: 'var(--teal-50)', text: 'var(--teal-700)', dot: 'var(--teal-600)', label: 'Under Review' },
       certified: { bg: 'var(--success-50)', text: 'var(--success-700)', dot: 'var(--success-500)', label: 'Certified' },
       rejected: { bg: 'var(--danger-50)', text: 'var(--danger-700)', dot: 'var(--danger-500)', label: 'Rejected' },
       revision_requested: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Revision Requested' },
@@ -135,7 +135,7 @@ export default function ApplicationDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-500)' }}></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-600)' }}></div>
       </div>
     );
   }
@@ -274,7 +274,7 @@ export default function ApplicationDetailPage() {
                 <label className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Profile Completion</label>
                 <div className="mt-2 flex items-center gap-3">
                   <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
-                    <div className="h-full rounded-full" style={{ width: `${application.completionPercentage}%`, background: 'var(--teal-500)' }} />
+                    <div className="h-full rounded-full" style={{ width: `${application.completionPercentage}%`, background: 'var(--teal-600)' }} />
                   </div>
                   <span className="text-sm font-bold" style={{ color: 'var(--teal-600)' }}>{application.completionPercentage}%</span>
                 </div>
