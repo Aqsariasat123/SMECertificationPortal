@@ -731,7 +731,7 @@ export default function UserDashboardPage() {
                 <div className="text-center py-6">
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3"
-                    style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
                   >
                     <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -764,7 +764,7 @@ export default function UserDashboardPage() {
                     <button
                       onClick={handleGoToMessages}
                       className="flex-1 h-10 text-sm font-medium rounded text-white flex items-center justify-center gap-2"
-                      style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
