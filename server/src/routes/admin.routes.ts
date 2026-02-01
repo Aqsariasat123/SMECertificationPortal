@@ -10,6 +10,9 @@ import {
   updateVisibility,
   getIntroductionRequests,
   exportAuditLogs,
+  getKycApplications,
+  getKycApplicationDetail,
+  reviewKycApplication,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -38,5 +41,10 @@ router.get('/introduction-requests', getIntroductionRequests);
 // Audit logs
 router.get('/audit-logs', getAuditLogs);
 router.get('/audit-logs/export', exportAuditLogs);
+
+// Investor KYC management
+router.get('/kyc-applications', getKycApplications);
+router.get('/kyc-applications/:id', getKycApplicationDetail);
+router.post('/kyc-applications/:id/review', reviewKycApplication);
 
 export default router;

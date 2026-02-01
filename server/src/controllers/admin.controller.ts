@@ -904,3 +904,235 @@ export const approveUpdateRequest = async (req: AuthenticatedRequest, res: Respo
     });
   }
 };
+
+// GET /api/admin/kyc-applications - Get all investor KYC applications
+export const getKycApplications = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const status = req.query.status as string || '';
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const skip = (page - 1) * limit;
+
+    const where: Record<string, unknown> = {
+      investorType: { not: null },
+    };
+
+    if (status && status !== 'all') {
+      where.kycStatus = status;
+    } else {
+      // Exclude not_submitted by default unless specifically requested
+      where.kycStatus = { not: 'not_submitted' };
+    }
+
+    const [applications, total] = await Promise.all([
+      prisma.userProfile.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { kycSubmittedAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              phoneNumber: true,
+              isVerified: true,
+              createdAt: true,
+            },
+          },
+        },
+      }),
+      prisma.userProfile.count({ where }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        applications: applications.map((app) => ({
+          id: app.id,
+          userId: app.userId,
+          user: app.user,
+          investorType: app.investorType,
+          kycStatus: app.kycStatus,
+          kycSubmittedAt: app.kycSubmittedAt,
+          kycReviewedAt: app.kycReviewedAt,
+          // Individual fields
+          nationality: app.nationality,
+          emiratesId: app.emiratesId,
+          passportNumber: app.passportNumber,
+          // Company fields
+          companyName: app.companyName,
+          tradeLicenseNumber: app.tradeLicenseNumber,
+          registrationNumber: app.registrationNumber,
+          // Documents
+          kycDocuments: app.kycDocuments,
+        })),
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get KYC applications error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch KYC applications',
+    });
+  }
+};
+
+// GET /api/admin/kyc-applications/:id - Get KYC application detail
+export const getKycApplicationDetail = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const profile = await prisma.userProfile.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phoneNumber: true,
+            profilePicture: true,
+            isVerified: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: 'KYC application not found',
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: profile,
+    });
+  } catch (error) {
+    console.error('Get KYC application detail error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch KYC application detail',
+    });
+  }
+};
+
+// POST /api/admin/kyc-applications/:id/review - Review KYC application
+export const reviewKycApplication = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { action, notes } = req.body;
+    const adminId = req.user?.userId;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    const profile = await prisma.userProfile.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: 'KYC application not found',
+      });
+    }
+
+    let newStatus: string;
+    let actionDescription: string;
+
+    switch (action) {
+      case 'approve':
+        newStatus = 'approved';
+        actionDescription = `Approved KYC for investor ${profile.user.fullName}`;
+        break;
+      case 'reject':
+        if (!notes) {
+          return res.status(400).json({
+            success: false,
+            message: 'Rejection reason is required',
+          });
+        }
+        newStatus = 'rejected';
+        actionDescription = `Rejected KYC for investor ${profile.user.fullName}`;
+        break;
+      case 'request_revision':
+        if (!notes) {
+          return res.status(400).json({
+            success: false,
+            message: 'Revision notes are required',
+          });
+        }
+        newStatus = 'revision_requested';
+        actionDescription = `Requested KYC revision for investor ${profile.user.fullName}`;
+        break;
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid action. Must be approve, reject, or request_revision',
+        });
+    }
+
+    const updatedProfile = await prisma.userProfile.update({
+      where: { id },
+      data: {
+        kycStatus: newStatus as 'approved' | 'rejected' | 'revision_requested',
+        kycReviewedAt: new Date(),
+        kycReviewedBy: adminId,
+        kycRejectionReason: action === 'reject' ? notes : null,
+        kycRevisionNotes: action === 'request_revision' ? notes : null,
+      },
+    });
+
+    // If approved, also verify the user account
+    if (action === 'approve') {
+      await prisma.user.update({
+        where: { id: profile.userId },
+        data: { isVerified: true },
+      });
+    }
+
+    await prisma.auditLog.create({
+      data: {
+        userId: adminId,
+        actionType: `KYC_${action.toUpperCase()}`,
+        actionDescription,
+        targetType: 'UserProfile',
+        targetId: id,
+        ipAddress: req.ip || 'unknown',
+        newValue: JSON.stringify({ status: newStatus, notes }),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `KYC ${action.replace('_', ' ')} successfully`,
+      data: updatedProfile,
+    });
+  } catch (error) {
+    console.error('Review KYC application error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to review KYC application',
+    });
+  }
+};

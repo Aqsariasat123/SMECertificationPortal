@@ -8,6 +8,10 @@ import {
   changePassword,
   uploadProfilePicture,
   removeProfilePicture,
+  setInvestorType,
+  submitKyc,
+  uploadKycDocument,
+  removeKycDocument,
 } from '../controllers/user.controller';
 
 const router = Router();
@@ -33,5 +37,17 @@ router.put('/profile', updateUserProfile);
 
 // GET /api/user/requests - Get user's introduction requests
 router.get('/requests', getUserRequests);
+
+// PUT /api/user/investor-type - Set investor type
+router.put('/investor-type', setInvestorType);
+
+// PUT /api/user/kyc - Submit KYC information
+router.put('/kyc', submitKyc);
+
+// POST /api/user/kyc/documents - Upload KYC document
+router.post('/kyc/documents', upload.single('document'), uploadKycDocument);
+
+// DELETE /api/user/kyc/documents/:type - Remove KYC document
+router.delete('/kyc/documents/:type', removeKycDocument);
 
 export default router;

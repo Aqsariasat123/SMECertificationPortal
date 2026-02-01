@@ -183,6 +183,61 @@ class ApiClient {
     });
   }
 
+  // Investor KYC endpoints
+  async setInvestorType(investorType: 'individual' | 'company'): Promise<ApiResponse> {
+    return this.request('/user/investor-type', {
+      method: 'PUT',
+      body: JSON.stringify({ investorType }),
+    });
+  }
+
+  async submitKyc(kycData: Record<string, unknown>): Promise<ApiResponse> {
+    return this.request('/user/kyc', {
+      method: 'PUT',
+      body: JSON.stringify(kycData),
+    });
+  }
+
+  async uploadKycDocument(file: File, documentType: string): Promise<ApiResponse> {
+    const token = this.getToken();
+    const formData = new FormData();
+    formData.append('document', file);
+    formData.append('documentType', documentType);
+
+    try {
+      const response = await fetch(`${this.baseUrl}/user/kyc/documents`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          message: data.message || 'Upload failed',
+        };
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Upload failed:', error);
+      return {
+        success: false,
+        message: 'Network error. Please check your connection.',
+      };
+    }
+  }
+
+  async removeKycDocument(documentType: string): Promise<ApiResponse> {
+    return this.request(`/user/kyc/documents/${documentType}`, {
+      method: 'DELETE',
+    });
+  }
+
   // SME Profile endpoints
   async getSMEProfile(): Promise<ApiResponse<SMEProfileData>> {
     return this.request<SMEProfileData>('/sme/profile', {
@@ -445,6 +500,32 @@ class ApiClient {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     }
+  }
+
+  // Admin KYC endpoints
+  async getKycApplications(params?: { page?: number; limit?: number; status?: string }): Promise<ApiResponse<{ applications: unknown[]; pagination: PaginationData }>> {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.status) searchParams.set('status', params.status);
+
+    const queryString = searchParams.toString();
+    return this.request(`/admin/kyc-applications${queryString ? `?${queryString}` : ''}`, {
+      method: 'GET',
+    });
+  }
+
+  async getKycApplicationDetail(id: string): Promise<ApiResponse<unknown>> {
+    return this.request(`/admin/kyc-applications/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async reviewKycApplication(id: string, action: 'approve' | 'reject' | 'request_revision', notes?: string): Promise<ApiResponse> {
+    return this.request(`/admin/kyc-applications/${id}/review`, {
+      method: 'POST',
+      body: JSON.stringify({ action, notes }),
+    });
   }
 
   // Chat endpoints
