@@ -466,7 +466,7 @@ class ApiClient {
         unreadCount: conv.unreadCount || 0,
         status: conv.status,
       }));
-      return { success: true, data: transformed };
+      return { success: true, data: transformed, message: '' };
     }
     return { success: false, message: result.message || 'Failed to load conversations' };
   }
