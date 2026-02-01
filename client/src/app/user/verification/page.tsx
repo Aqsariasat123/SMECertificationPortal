@@ -227,7 +227,7 @@ export default function InvestorVerificationPage() {
     return (
       <div className="pb-8">
         {/* Header Card - Full Width */}
-        <div className="rounded-2xl overflow-hidden shadow-lg mb-6" style={{ background: 'linear-gradient(135deg, #363c45 0%, #2a2f36 100%)' }}>
+        <div className="rounded-2xl overflow-hidden shadow-lg mb-6" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 50%, #2DD4BF 100%)' }}>
           <div className="p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-start gap-4">
@@ -454,23 +454,23 @@ export default function InvestorVerificationPage() {
             </div>
 
             {/* Need Help Card */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-white">
+            <div className="rounded-2xl p-6 text-white" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <h3 className="font-semibold">Need Help?</h3>
               </div>
-              <p className="text-sm text-slate-300 mb-4">
+              <p className="text-sm text-white/80 mb-4">
                 {isApproved
                   ? 'Have questions about investing? Our team is here to help you get started.'
                   : 'Questions about the verification process? Our support team is here to help.'}
               </p>
               <button
                 onClick={() => router.push('/user/support')}
-                className="w-full py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors"
+                className="w-full py-2.5 rounded-lg bg-white/20 hover:bg-white/30 text-sm font-medium transition-colors"
               >
                 Contact Support
               </button>
