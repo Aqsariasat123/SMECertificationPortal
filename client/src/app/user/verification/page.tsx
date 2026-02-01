@@ -349,17 +349,25 @@ export default function InvestorVerificationPage() {
             </div>
             <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isApproved ? 'bg-emerald-100' : 'bg-amber-100'}`}>
+                  {isApproved ? (
+                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">Review Time</p>
-                  <p className="text-sm text-gray-500">Estimated duration</p>
+                  <p className="font-medium text-gray-900">{isApproved ? 'Status' : 'Review Time'}</p>
+                  <p className="text-sm text-gray-500">{isApproved ? 'Verification complete' : 'Estimated duration'}</p>
                 </div>
               </div>
-              <span className="font-semibold text-gray-900">1-3 business days</span>
+              <span className={`font-semibold ${isApproved ? 'text-emerald-600' : 'text-gray-900'}`}>
+                {isApproved ? 'Verified' : '1-3 business days'}
+              </span>
             </div>
           </div>
         </div>
