@@ -184,6 +184,13 @@ class ApiClient {
     });
   }
 
+  // User profile (investor) endpoints
+  async getUserProfile(): Promise<ApiResponse<Record<string, unknown>>> {
+    return this.request('/user/profile', {
+      method: 'GET',
+    });
+  }
+
   // Investor KYC endpoints
   async setInvestorType(investorType: 'individual' | 'company'): Promise<ApiResponse> {
     return this.request('/user/investor-type', {

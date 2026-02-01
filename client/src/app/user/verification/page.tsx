@@ -55,7 +55,7 @@ export default function InvestorVerificationPage() {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const result = await api.request<Record<string, unknown>>('/user/profile', { method: 'GET' });
+      const result = await api.getUserProfile();
       if (result.success && result.data) {
         const data = result.data;
         setInvestorType(data.investorType as InvestorType);
