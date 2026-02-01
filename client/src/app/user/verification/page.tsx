@@ -832,13 +832,8 @@ export default function InvestorVerificationPage() {
                 className="w-full py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
               >
-                {saving ? 'Submitting...' : 'Submit for Verification'}
+                {saving ? 'Saving...' : 'Save and Continue'}
               </button>
-              {uploadedRequiredCount < totalRequiredCount && (
-                <p className="text-center text-sm text-gray-500 mt-2">
-                  Please upload all required documents before submitting
-                </p>
-              )}
             </div>
           )}
 
@@ -852,17 +847,6 @@ export default function InvestorVerificationPage() {
         </div>
       )}
 
-      {/* Change Investor Type */}
-      {investorType && kycStatus === 'not_submitted' && (
-        <div className="mt-4 text-center">
-          <button
-            onClick={() => setInvestorType(null)}
-            className="text-sm text-gray-500 hover:text-violet-600 transition-colors"
-          >
-            Change investor type
-          </button>
-        </div>
-      )}
     </div>
   );
 }
