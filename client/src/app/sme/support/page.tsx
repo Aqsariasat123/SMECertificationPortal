@@ -48,7 +48,10 @@ export default function SMESupportPage() {
   const [newTicketForm, setNewTicketForm] = useState({ subject: '', message: '' });
   const [creatingTicket, setCreatingTicket] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchTickets();
@@ -108,6 +111,27 @@ export default function SMESupportPage() {
     }
   };
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedTicket) return;
+
+    try {
+      setUploading(true);
+      // For now, just show the file name in message
+      // TODO: Implement actual file upload API
+      const result = await api.sendSupportMessage(selectedTicket.id, `[Attachment: ${file.name}]`);
+      if (result.success) {
+        fetchTicketMessages(selectedTicket.id);
+        fetchTickets();
+      }
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   const handleCreateTicket = async () => {
     if (!newTicketForm.subject.trim() || !newTicketForm.message.trim()) return;
     setCreatingTicket(true);
@@ -141,6 +165,16 @@ export default function SMESupportPage() {
     );
   };
 
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      open: 'var(--warning-500)',
+      in_progress: 'var(--teal-500)',
+      resolved: 'var(--success-500)',
+      closed: 'var(--graphite-500)',
+    };
+    return colors[status] || colors.open;
+  };
+
   const formatTime = (dateStr: string) => {
     return new Date(dateStr).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   };
@@ -165,10 +199,12 @@ export default function SMESupportPage() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  // Filter tickets by search
-  const filteredTickets = tickets.filter(t =>
-    t.subject.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter tickets by search and status
+  const filteredTickets = tickets.filter(t => {
+    const matchesSearch = t.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = !statusFilter || t.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Group messages by date
   const groupedMessages: { date: string; messages: Message[] }[] = [];
@@ -184,6 +220,7 @@ export default function SMESupportPage() {
   });
 
   const openCount = tickets.filter(t => t.status === 'open').length;
+  const inProgressCount = tickets.filter(t => t.status === 'in_progress').length;
 
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
@@ -195,10 +232,10 @@ export default function SMESupportPage() {
             <h1 className="text-xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Support</h1>
             <button
               onClick={() => setShowNewTicket(true)}
-              className="p-2 rounded-full transition-colors"
-              style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-600)' }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-200)'}
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-100)'}
+              className="p-2.5 rounded-xl transition-colors"
+              style={{ backgroundColor: 'var(--teal-600)', color: 'white' }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-700)'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -208,38 +245,49 @@ export default function SMESupportPage() {
 
           {/* Search */}
           <div className="relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
-              placeholder="Search tickets"
+              placeholder="Search tickets..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border-0 rounded-xl text-sm transition-all"
-              style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-              onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
-              onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all"
+              style={{ backgroundColor: 'var(--graphite-50)', border: '1px solid var(--graphite-200)', outline: 'none' }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.backgroundColor = 'white'; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
             />
           </div>
         </div>
 
-        {/* Stats Bar */}
-        <div className="flex px-5 py-3" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
-          <div className="flex items-center gap-2">
-            <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>All Tickets</span>
-            <span className="px-2 py-0.5 text-xs rounded-full font-medium" style={{ backgroundColor: 'var(--graphite-200)', color: 'var(--graphite-700)' }}>
-              {tickets.length}
-            </span>
-          </div>
-          {openCount > 0 && (
-            <div className="flex items-center gap-2 ml-4">
-              <span className="text-sm" style={{ color: 'var(--warning-600)' }}>Open</span>
-              <span className="px-2 py-0.5 text-xs rounded-full font-medium" style={{ backgroundColor: 'var(--warning-100)', color: 'var(--warning-700)' }}>
-                {openCount}
-              </span>
-            </div>
-          )}
+        {/* Filter Tabs */}
+        <div className="flex px-4 py-3 gap-2" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+          {[
+            { value: '', label: 'All', count: tickets.length },
+            { value: 'open', label: 'Open', count: openCount },
+            { value: 'in_progress', label: 'In Progress', count: inProgressCount },
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setStatusFilter(tab.value)}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2"
+              style={{
+                backgroundColor: statusFilter === tab.value ? 'var(--teal-600)' : 'var(--graphite-100)',
+                color: statusFilter === tab.value ? 'white' : 'var(--graphite-600)',
+              }}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span className="px-1.5 py-0.5 text-[10px] rounded-full font-semibold" style={{
+                  backgroundColor: statusFilter === tab.value ? 'rgba(255,255,255,0.2)' : 'var(--graphite-200)',
+                  color: statusFilter === tab.value ? 'white' : 'var(--graphite-600)',
+                }}>
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
 
         {/* Tickets List */}
@@ -249,17 +297,20 @@ export default function SMESupportPage() {
               <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--teal-200)', borderTopColor: 'var(--teal-600)' }}></div>
             </div>
           ) : filteredTickets.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32" style={{ color: 'var(--graphite-500)' }}>
-              <svg className="w-12 h-12 mb-2" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-sm">No support tickets yet</p>
+            <div className="flex flex-col items-center justify-center py-16" style={{ color: 'var(--graphite-500)' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--graphite-100)' }}>
+                <svg className="w-8 h-8" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <p className="text-sm font-medium">No tickets found</p>
+              <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Create a new support request</p>
               <button
                 onClick={() => setShowNewTicket(true)}
-                className="mt-2 text-sm font-medium"
-                style={{ color: 'var(--teal-600)' }}
+                className="mt-4 px-4 py-2 rounded-lg text-sm font-medium text-white"
+                style={{ backgroundColor: 'var(--teal-600)' }}
               >
-                Create your first ticket
+                New Ticket
               </button>
             </div>
           ) : (
@@ -267,42 +318,36 @@ export default function SMESupportPage() {
               <div
                 key={ticket.id}
                 onClick={() => fetchTicketMessages(ticket.id)}
-                className="flex items-center gap-3 px-5 py-4 cursor-pointer transition-all"
+                className="flex items-start gap-3 px-4 py-4 cursor-pointer transition-all border-b"
                 style={{
                   backgroundColor: selectedTicket?.id === ticket.id ? 'var(--teal-50)' : 'transparent',
-                  borderLeft: selectedTicket?.id === ticket.id ? '4px solid var(--teal-600)' : '4px solid transparent'
+                  borderColor: 'var(--graphite-100)',
+                  borderLeft: selectedTicket?.id === ticket.id ? '3px solid var(--teal-600)' : '3px solid transparent'
                 }}
                 onMouseOver={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                 onMouseOut={(e) => { if (selectedTicket?.id !== ticket.id) e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
-                {/* Icon */}
-                <div className="relative flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{
-                    background: ticket.status === 'open' ? 'linear-gradient(to bottom right, var(--warning-400), var(--warning-600))' :
-                               ticket.status === 'in_progress' ? 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' :
-                               ticket.status === 'resolved' ? 'linear-gradient(to bottom right, var(--success-400), var(--success-600))' :
-                               'linear-gradient(to bottom right, var(--graphite-400), var(--graphite-600))'
-                  }}>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                {/* Status Icon */}
+                <div className="flex-shrink-0 mt-0.5">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${getStatusColor(ticket.status)}15` }}>
+                    <svg className="w-5 h-5" style={{ color: getStatusColor(ticket.status) }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-semibold truncate" style={{ color: 'var(--graphite-900)' }}>{ticket.subject}</h3>
-                    <span className="text-xs flex-shrink-0 ml-2" style={{ color: 'var(--graphite-500)' }}>
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--graphite-900)' }}>{ticket.subject}</h3>
+                    <span className="text-[11px] flex-shrink-0" style={{ color: 'var(--graphite-400)' }}>
                       {formatConversationTime(ticket.updatedAt)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm truncate pr-2" style={{ color: 'var(--graphite-500)' }}>
-                      {ticket.lastMessage?.content || 'No messages yet'}
-                    </p>
-                    {getStatusBadge(ticket.status)}
-                  </div>
+                  <p className="text-xs truncate mb-2" style={{ color: 'var(--graphite-500)' }}>
+                    {ticket.lastMessage?.content || 'No messages yet'}
+                  </p>
+                  {getStatusBadge(ticket.status)}
                 </div>
               </div>
             ))
@@ -315,9 +360,9 @@ export default function SMESupportPage() {
         {!selectedTicket ? (
           // No ticket selected
           <div className="flex-1 flex flex-col items-center justify-center" style={{ color: 'var(--graphite-400)' }}>
-            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--graphite-200)' }}>
-              <svg className="w-12 h-12" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--graphite-200)' }}>
+              <svg className="w-10 h-10" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
             <h3 className="text-lg font-medium mb-1" style={{ color: 'var(--graphite-600)' }}>Select a ticket</h3>
@@ -333,14 +378,9 @@ export default function SMESupportPage() {
             <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{
-                    background: selectedTicket.status === 'open' ? 'linear-gradient(to bottom right, var(--warning-400), var(--warning-600))' :
-                               selectedTicket.status === 'in_progress' ? 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' :
-                               selectedTicket.status === 'resolved' ? 'linear-gradient(to bottom right, var(--success-400), var(--success-600))' :
-                               'linear-gradient(to bottom right, var(--graphite-400), var(--graphite-600))'
-                  }}>
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${getStatusColor(selectedTicket.status)}15` }}>
+                    <svg className="w-5 h-5" style={{ color: getStatusColor(selectedTicket.status) }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
                   <div>
@@ -370,7 +410,7 @@ export default function SMESupportPage() {
                         {/* Support Message */}
                         {isSupport && (
                           <div className="flex items-start gap-3 max-w-[70%]">
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--teal-600)' }}>
                               <span className="text-white font-semibold text-sm">S</span>
                             </div>
                             <div>
@@ -378,8 +418,8 @@ export default function SMESupportPage() {
                                 <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>Support Team</span>
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                               </div>
-                              <div className="rounded-2xl rounded-tl-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-900)' }}>
-                                <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                              <div className="rounded-2xl rounded-tl-md px-4 py-2.5 bg-white" style={{ border: '1px solid var(--graphite-200)' }}>
+                                <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--graphite-800)' }}>{msg.content}</p>
                               </div>
                             </div>
                           </div>
@@ -393,11 +433,11 @@ export default function SMESupportPage() {
                                 <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
                                 <span className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>You</span>
                               </div>
-                              <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--graphite-800)' }}>
+                              <div className="text-white rounded-2xl rounded-tr-md px-4 py-2.5" style={{ backgroundColor: 'var(--teal-600)' }}>
                                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                               </div>
                             </div>
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--graphite-600), var(--graphite-800))' }}>
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--graphite-700)' }}>
                               <span className="text-white font-semibold text-sm">Y</span>
                             </div>
                           </div>
@@ -414,24 +454,45 @@ export default function SMESupportPage() {
             {selectedTicket.status !== 'closed' && selectedTicket.status !== 'resolved' && (
               <div className="bg-white p-4" style={{ borderTop: '1px solid var(--graphite-200)' }}>
                 <form onSubmit={handleSendMessage} className="flex items-center gap-3">
-                  <div className="flex-1 relative">
+                  <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,.pdf,.doc,.docx,.txt" />
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="p-3 rounded-xl transition-colors"
+                    style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-500)' }}
+                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-200)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; }}
+                  >
+                    {uploading ? (
+                      <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--graphite-300)', borderTopColor: 'var(--graphite-600)' }}></div>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                      </svg>
+                    )}
+                  </button>
+
+                  <div className="flex-1">
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type your message..."
-                      className="w-full px-4 py-3.5 border-0 rounded-full text-sm transition-all"
-                      style={{ backgroundColor: 'var(--graphite-100)', outline: 'none' }}
-                      onFocus={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.boxShadow = '0 0 0 2px var(--teal-600)'; }}
-                      onBlur={(e) => { e.currentTarget.style.backgroundColor = 'var(--graphite-100)'; e.currentTarget.style.boxShadow = 'none'; }}
+                      className="w-full px-4 py-3 rounded-xl text-sm transition-all"
+                      style={{ backgroundColor: 'var(--graphite-50)', border: '1px solid var(--graphite-200)', outline: 'none' }}
+                      onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.backgroundColor = 'white'; }}
+                      onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.backgroundColor = 'var(--graphite-50)'; }}
                     />
                   </div>
+
                   <button
                     type="submit"
                     disabled={!newMessage.trim() || sending}
-                    className="p-3 text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-3 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ backgroundColor: 'var(--teal-600)' }}
-                    onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
+                    onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-700)'; }}
                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
                   >
                     {sending ? (
@@ -475,8 +536,8 @@ export default function SMESupportPage() {
                   onChange={(e) => setNewTicketForm({ ...newTicketForm, subject: e.target.value })}
                   className="w-full h-11 px-4 rounded-xl text-sm transition-all"
                   style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; }}
                   placeholder="What do you need help with?"
                 />
               </div>
@@ -487,8 +548,8 @@ export default function SMESupportPage() {
                   onChange={(e) => setNewTicketForm({ ...newTicketForm, message: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl resize-none text-sm transition-all"
                   style={{ border: '1px solid var(--graphite-200)', outline: 'none' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 143, 135, 0.1)'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--teal-600)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-200)'; }}
                   rows={4}
                   placeholder="Describe your issue in detail..."
                 />
@@ -498,9 +559,9 @@ export default function SMESupportPage() {
               <button
                 onClick={() => setShowNewTicket(false)}
                 className="px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
-                style={{ color: 'var(--graphite-600)' }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-600)' }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-200)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--graphite-100)'}
               >
                 Cancel
               </button>
@@ -509,7 +570,7 @@ export default function SMESupportPage() {
                 disabled={creatingTicket || !newTicketForm.subject.trim() || !newTicketForm.message.trim()}
                 className="px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
                 style={{ backgroundColor: 'var(--teal-600)' }}
-                onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-600)'; }}
+                onMouseOver={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--teal-700)'; }}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-600)'}
               >
                 {creatingTicket ? 'Submitting...' : 'Submit'}

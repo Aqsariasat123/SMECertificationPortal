@@ -197,16 +197,16 @@ input:focus, textarea:focus, select:focus {
 .status-dot-danger { background: var(--danger-500); }
 .status-dot-neutral { background: var(--graphite-400); }
 
-/* Button - Primary (Graphite) */
+/* Button - Primary (Teal) */
 .btn-primary {
-  background: var(--graphite-800);
+  background: var(--teal-600);
   color: white;
   border: none;
   font-weight: 500;
 }
 
 .btn-primary:hover {
-  background: var(--graphite-700);
+  background: var(--teal-700);
 }
 
 /* Button - Secondary */

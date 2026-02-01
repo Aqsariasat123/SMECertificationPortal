@@ -668,8 +668,8 @@ export default function SMEProfilePage() {
           <div className="flex items-center gap-3">
             <Link
               href="/sme"
-              className="btn-secondary px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors shadow-lg"
-              style={{ color: 'var(--graphite-700)' }}
+              className="px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors shadow-lg"
+              style={{ background: 'var(--teal-600)', color: 'white' }}
             >
               Back to Dashboard
             </Link>

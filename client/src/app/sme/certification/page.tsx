@@ -149,7 +149,7 @@ export default function SMECertificationPage() {
           <Link
             href="/sme"
             className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors"
-            style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+            style={{ background: 'var(--teal-600)', color: 'white' }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -526,9 +526,9 @@ export default function SMECertificationPage() {
               Our certification team is available to assist you throughout the process. Contact us for any questions or guidance.
             </p>
           </div>
-          <button className="btn-primary px-5 py-2.5 rounded-xl whitespace-nowrap">
+          <Link href="/sme/support" className="px-5 py-2.5 rounded-xl whitespace-nowrap font-semibold transition-colors" style={{ background: 'var(--teal-600)', color: 'white' }}>
             Contact Support
-          </button>
+          </Link>
         </div>
       </div>
     </div>
