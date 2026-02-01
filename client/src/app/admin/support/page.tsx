@@ -78,7 +78,7 @@ export default function AdminSupportPage() {
 
   const fetchTicketMessages = async (ticketId: string) => {
     try {
-      const result = await api.getAdminSupportTicketMessages(ticketId);
+      const result = await api.getSupportTicketMessages(ticketId);
       if (result.success && result.data) {
         setSelectedTicket(result.data as TicketDetail);
         setShowTicketModal(true);
@@ -92,7 +92,7 @@ export default function AdminSupportPage() {
     if (!newMessage.trim() || !selectedTicket) return;
     setSending(true);
     try {
-      const result = await api.sendAdminSupportMessage(selectedTicket.id, newMessage.trim());
+      const result = await api.sendSupportMessage(selectedTicket.id, newMessage.trim());
       if (result.success) {
         setNewMessage('');
         fetchTicketMessages(selectedTicket.id);
@@ -107,7 +107,7 @@ export default function AdminSupportPage() {
 
   const handleUpdateStatus = async (ticketId: string, newStatus: string) => {
     try {
-      const result = await api.updateSupportTicketStatus(ticketId, newStatus);
+      const result = await api.updateSupportTicketStatus(ticketId, newStatus as 'open' | 'in_progress' | 'resolved' | 'closed');
       if (result.success) {
         fetchTickets();
         if (selectedTicket?.id === ticketId) {
