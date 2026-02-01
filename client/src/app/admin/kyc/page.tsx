@@ -312,7 +312,7 @@ export default function AdminKycPage() {
                 <div className="flex items-center gap-4">
                   {getStatusBadge(app.kycStatus)}
                   <button
-                    onClick={() => router.push(`/admin/kyc/${app.userId}`)}
+                    onClick={() => router.push(`/admin/kyc/${app.id}`)}
                     className="btn-teal px-5 py-2.5 text-sm font-semibold rounded-xl"
                   >
                     Review
