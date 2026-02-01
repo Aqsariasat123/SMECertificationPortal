@@ -229,21 +229,23 @@ export default function InvestorVerificationPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
-          <button
-            onClick={() => router.push('/user/dashboard')}
-            className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors hover:bg-gray-100"
-            style={{ background: 'var(--graphite-100)' }}
-          >
-            <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+          {investorType && kycStatus === 'not_submitted' && (
+            <button
+              onClick={() => setInvestorType(null)}
+              className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors hover:bg-gray-100"
+              style={{ background: 'var(--graphite-100)' }}
+            >
+              <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
           <div className="flex-1 flex items-center justify-between">
             <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>KYC Verification</h1>
             {getStatusBadge()}
           </div>
         </div>
-        <p className="text-sm ml-14" style={{ color: 'var(--foreground-muted)' }}>
+        <p className={`text-sm ${investorType && kycStatus === 'not_submitted' ? 'ml-14' : ''}`} style={{ color: 'var(--foreground-muted)' }}>
           Complete your verification to unlock full investment capabilities
         </p>
       </div>
@@ -364,14 +366,6 @@ export default function InvestorVerificationPage() {
                 </p>
               </div>
             </div>
-            {kycStatus === 'not_submitted' && (
-              <button
-                onClick={() => setInvestorType(null)}
-                className="text-sm text-violet-600 hover:text-violet-700 font-medium"
-              >
-                Change Type
-              </button>
-            )}
           </div>
 
           {/* Tabs */}
