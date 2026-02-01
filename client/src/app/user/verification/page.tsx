@@ -48,6 +48,7 @@ export default function InvestorVerificationPage() {
   const [formData, setFormData] = useState<Record<string, string | number | null>>({});
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
@@ -220,8 +221,83 @@ export default function InvestorVerificationPage() {
   // Fields are read-only after KYC is submitted
   const isReadOnly = kycStatus === 'pending' || kycStatus === 'approved';
 
+  // Show status page for pending/approved KYC
+  if ((kycStatus === 'pending' || kycStatus === 'approved') && !showDetails) {
+    return (
+      <div className="max-w-2xl mx-auto pb-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          {/* Status Header */}
+          <div className={`p-8 text-center ${kycStatus === 'approved' ? 'bg-emerald-50' : 'bg-amber-50'}`}>
+            <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${kycStatus === 'approved' ? 'bg-emerald-100' : 'bg-amber-100'}`}>
+              {kycStatus === 'approved' ? (
+                <svg className="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+            </div>
+            <h1 className={`text-2xl font-bold mb-2 ${kycStatus === 'approved' ? 'text-emerald-800' : 'text-amber-800'}`}>
+              {kycStatus === 'approved' ? 'KYC Verified!' : 'Application Under Review'}
+            </h1>
+            <p className={`${kycStatus === 'approved' ? 'text-emerald-600' : 'text-amber-600'}`}>
+              {kycStatus === 'approved'
+                ? 'Your identity has been successfully verified. You now have full access to investment features.'
+                : 'Our team is reviewing your application. This usually takes 1-3 business days.'}
+            </p>
+          </div>
+
+          {/* Status Info */}
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center justify-between py-3">
+              <span className="text-gray-500">Status</span>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${kycStatus === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                {kycStatus === 'approved' ? 'Verified' : 'Under Review'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <span className="text-gray-500">Investor Type</span>
+              <span className="font-medium text-gray-900">
+                {investorType === 'individual' ? 'Individual Investor' : 'Company / Institution'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <span className="text-gray-500">Documents</span>
+              <span className="font-medium text-gray-900">{kycDocuments.length} uploaded</span>
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <div className="p-6">
+            <button
+              onClick={() => setShowDetails(true)}
+              className="w-full py-3 rounded-xl font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              View Application Details
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto pb-8">
+      {/* Back button for details view */}
+      {(kycStatus === 'pending' || kycStatus === 'approved') && showDetails && (
+        <button
+          onClick={() => setShowDetails(false)}
+          className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Status
+        </button>
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">
@@ -815,7 +891,7 @@ export default function InvestorVerificationPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {uploaded && (
+                        {uploaded && !isReadOnly && (
                           <button
                             onClick={() => handleRemoveDocument(doc.type)}
                             disabled={uploadingDoc === doc.type}
@@ -836,18 +912,20 @@ export default function InvestorVerificationPage() {
                           accept=".pdf,.jpg,.jpeg,.png"
                           className="hidden"
                         />
-                        <button
-                          onClick={() => fileInputRefs.current[doc.type]?.click()}
-                          disabled={uploadingDoc === doc.type}
-                          className="px-4 py-2 text-sm font-medium rounded-lg bg-violet-50 text-violet-600 hover:bg-violet-100 transition-colors disabled:opacity-50"
-                        >
-                          {uploadingDoc === doc.type ? (
-                            <span className="flex items-center gap-2">
-                              <div className="w-4 h-4 border-2 border-violet-300 border-t-violet-600 rounded-full animate-spin" />
-                              Uploading...
-                            </span>
-                          ) : uploaded ? 'Replace' : 'Upload'}
-                        </button>
+                        {!isReadOnly && (
+                          <button
+                            onClick={() => fileInputRefs.current[doc.type]?.click()}
+                            disabled={uploadingDoc === doc.type}
+                            className="px-4 py-2 text-sm font-medium rounded-lg bg-violet-50 text-violet-600 hover:bg-violet-100 transition-colors disabled:opacity-50"
+                          >
+                            {uploadingDoc === doc.type ? (
+                              <span className="flex items-center gap-2">
+                                <div className="w-4 h-4 border-2 border-violet-300 border-t-violet-600 rounded-full animate-spin" />
+                                Uploading...
+                              </span>
+                            ) : uploaded ? 'Replace' : 'Upload'}
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
