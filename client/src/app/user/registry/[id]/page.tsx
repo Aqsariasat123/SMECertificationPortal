@@ -66,9 +66,10 @@ export default function SMEDetailPage() {
     try {
       const result = await api.requestIntroduction(sme.id, introMessage);
       if (result.success) {
+        const data = result.data as { id: string; existing?: boolean } | undefined;
         // If existing conversation, redirect to chat
-        if (result.data?.existing && result.data?.id) {
-          router.push(`/user/chat/${result.data.id}`);
+        if (data?.existing && data?.id) {
+          router.push(`/user/chat/${data.id}`);
           return;
         }
         // New request created
@@ -77,8 +78,8 @@ export default function SMEDetailPage() {
           setShowIntroModal(false);
           setIntroSent(false);
           // Redirect to chat with new request
-          if (result.data?.id) {
-            router.push(`/user/chat/${result.data.id}`);
+          if (data?.id) {
+            router.push(`/user/chat/${data.id}`);
           }
         }, 1500);
       } else {
