@@ -41,7 +41,7 @@ const userNavItems = [
     ),
   },
   {
-    label: 'Verification',
+    label: 'KYC Verification',
     href: '/user/verification',
     icon: (
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
