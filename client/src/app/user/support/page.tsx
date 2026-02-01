@@ -217,11 +217,11 @@ export default function InvestorSupportPage() {
   return (
     <div className="min-h-screen pb-8">
       {/* Header Section - Teal theme */}
-      <div className="relative mb-8 rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 50%, #2DD4BF 100%)' }}>
+      <div className="relative mb-8 rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #363c45 0%, #2a2f36 100%)' }}>
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full" />
-          <div className="absolute top-1/2 -left-12 w-32 h-32 bg-teal-400/20 rounded-full" />
-          <div className="absolute bottom-0 right-1/3 w-48 h-48 bg-teal-300/10 rounded-full blur-2xl" />
+          <div className="absolute top-1/2 -left-12 w-32 h-32 bg-white/5 rounded-full" />
+          <div className="absolute bottom-0 right-1/3 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
         </div>
 
         <div className="relative px-8 py-10">
@@ -235,7 +235,7 @@ export default function InvestorSupportPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white">Support</h1>
-                  <p className="text-teal-100">Priority assistance for your investment journey</p>
+                  <p className="text-slate-300">Priority assistance for your investment journey</p>
                 </div>
               </div>
 
@@ -251,11 +251,11 @@ export default function InvestorSupportPage() {
             <div className="flex gap-4">
               <div className="px-6 py-4 rounded-2xl bg-white/15 backdrop-blur text-center min-w-[100px]">
                 <p className="text-3xl font-bold text-white">{activeTickets}</p>
-                <p className="text-teal-100 text-sm">Active</p>
+                <p className="text-slate-300 text-sm">Active</p>
               </div>
               <div className="px-6 py-4 rounded-2xl bg-white/15 backdrop-blur text-center min-w-[100px]">
                 <p className="text-3xl font-bold text-white">{tickets.length}</p>
-                <p className="text-teal-100 text-sm">Total</p>
+                <p className="text-slate-300 text-sm">Total</p>
               </div>
             </div>
           </div>

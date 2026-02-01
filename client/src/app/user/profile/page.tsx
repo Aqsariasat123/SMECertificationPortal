@@ -327,7 +327,7 @@ export default function UserProfilePage() {
       </div>
 
       {/* Profile Card */}
-      <div className="solid-card overflow-hidden">
+      <div className="solid-card overflow-hidden rounded-2xl">
         {/* Header with user info */}
         <div className="px-4 sm:px-6 pt-6 pb-16 sm:pb-6" style={{ backgroundColor: 'var(--graphite-800)' }}>
           {/* Mobile: Centered layout */}
