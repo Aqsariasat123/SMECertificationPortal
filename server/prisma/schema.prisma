@@ -48,6 +48,19 @@ enum SupportTicketPriority {
   high
 }
 
+enum InvestorType {
+  individual
+  company
+}
+
+enum KycStatus {
+  not_submitted
+  pending
+  approved
+  rejected
+  revision_requested
+}
+
 enum IndustrySector {
   technology
   healthcare
@@ -132,14 +145,91 @@ model User {
   @@map("users")
 }
 
-/// UserProfile model - Extended profile for regular users (registry visitors)
+/// UserProfile model - Extended profile for Investors (Individual or Company)
 model UserProfile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  company   String?
-  jobTitle  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String        @id @default(uuid())
+  userId            String        @unique
+
+  // ============ INVESTOR TYPE ============
+  investorType      InvestorType? // individual or company (optional selection)
+
+  // ============ INDIVIDUAL INVESTOR KYC ============
+  // Personal Info
+  nationality       String?
+  dateOfBirth       DateTime?
+  gender            String?       // male, female, other
+  residencyStatus   String?       // citizen, resident, visitor
+
+  // Identification
+  emiratesId        String?       // Emirates ID number
+  emiratesIdExpiry  DateTime?
+  passportNumber    String?
+  passportExpiry    DateTime?
+  passportCountry   String?       // Country of passport issuance
+
+  // Address
+  residentialAddress String?
+  city              String?
+  country           String?
+  poBox             String?
+
+  // Employment / Source of Funds
+  employmentStatus  String?       // employed, self_employed, retired, student, other
+  employerName      String?
+  occupation        String?
+  annualIncome      String?       // income range
+  sourceOfFunds     String?       // salary, business, inheritance, investments, other
+
+  // ============ COMPANY INVESTOR KYC ============
+  // Company Info
+  companyName       String?
+  companyType       String?       // llc, corporation, partnership, free_zone, other
+  tradeLicenseNumber String?
+  tradeLicenseExpiry DateTime?
+  registrationNumber String?      // Commercial registration number
+  registrationDate  DateTime?
+  registrationAuthority String?   // DED, JAFZA, etc.
+
+  // Company Address
+  companyAddress    String?
+  companyCity       String?
+  companyCountry    String?
+  companyPoBox      String?
+
+  // Authorized Representative
+  authRepName       String?       // Authorized representative name
+  authRepPosition   String?       // Position/title
+  authRepEmiratesId String?
+  authRepEmail      String?
+  authRepPhone      String?
+
+  // Beneficial Owners (UBO)
+  beneficialOwners  Json?         // Array of { name, nationality, ownershipPercent, emiratesId }
+
+  // Company Financials
+  companyAnnualRevenue String?    // Revenue range
+  companyEmployeeCount Int?
+
+  // ============ KYC STATUS & DOCUMENTS ============
+  kycStatus         KycStatus     @default(not_submitted)
+  kycDocuments      Json?         // Array of { type, name, path, uploadedAt }
+  kycSubmittedAt    DateTime?
+  kycReviewedAt     DateTime?
+  kycReviewedBy     String?       // Admin user ID
+  kycRejectionReason String?
+  kycRevisionNotes  String?
+
+  // ============ INVESTMENT PREFERENCES (Optional) ============
+  investmentInterests Json?       // Array of sector preferences
+  investmentBudget  String?       // Budget range
+  riskTolerance     String?       // low, medium, high
+
+  // Legacy fields (keeping for compatibility)
+  company           String?       // Deprecated - use companyName
+  jobTitle          String?
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
