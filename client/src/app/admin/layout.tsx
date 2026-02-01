@@ -23,7 +23,7 @@ const adminNavItems = [
     ),
   },
   {
-    label: 'Applications',
+    label: 'SME Applications',
     href: '/admin/applications',
     icon: (
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
