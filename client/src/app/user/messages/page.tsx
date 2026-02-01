@@ -246,7 +246,7 @@ export default function MessagesPage() {
       setSending(true);
       const result = await api.sendChatMessage(activeRequestId, newMessage.trim());
       if (result.success && result.data) {
-        setMessages((prev) => [...prev, result.data]);
+        setMessages((prev) => [...prev, result.data as Message]);
         setNewMessage('');
         fetchConversations(); // Refresh conversation list
       } else {
@@ -267,7 +267,7 @@ export default function MessagesPage() {
       setUploading(true);
       const result = await api.uploadChatFile(activeRequestId, file);
       if (result.success && result.data) {
-        setMessages((prev) => [...prev, result.data]);
+        setMessages((prev) => [...prev, result.data as Message]);
         fetchConversations();
       } else {
         setError(result.message || 'Failed to upload file');
