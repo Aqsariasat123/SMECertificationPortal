@@ -79,7 +79,7 @@ export default function AdminSupportPage() {
       setLoading(true);
       const result = await api.getAdminSupportTickets(statusFilter ? { status: statusFilter } : undefined);
       if (result.success && result.data) {
-        setTickets(result.data);
+        setTickets(result.data as SupportTicket[]);
       }
     } catch (error) {
       console.error('Failed to fetch tickets:', error);
