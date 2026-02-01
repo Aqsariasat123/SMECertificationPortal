@@ -217,6 +217,9 @@ export default function InvestorVerificationPage() {
     );
   }
 
+  // Fields are read-only after KYC is submitted
+  const isReadOnly = kycStatus === 'pending' || kycStatus === 'approved';
+
   return (
     <div className="max-w-4xl mx-auto pb-8">
       {/* Header */}
@@ -394,7 +397,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.nationality as string || ''}
                         onChange={(e) => handleInputChange('nationality', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. UAE, British, Indian"
                       />
                     </div>
@@ -404,7 +408,8 @@ export default function InvestorVerificationPage() {
                         type="date"
                         value={formData.dateOfBirth as string || ''}
                         onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -412,7 +417,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.gender as string || ''}
                         onChange={(e) => handleInputChange('gender', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="male">Male</option>
@@ -425,7 +431,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.residencyStatus as string || ''}
                         onChange={(e) => handleInputChange('residencyStatus', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="citizen">UAE Citizen</option>
@@ -446,7 +453,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.emiratesId as string || ''}
                         onChange={(e) => handleInputChange('emiratesId', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="784-XXXX-XXXXXXX-X"
                       />
                     </div>
@@ -456,7 +464,8 @@ export default function InvestorVerificationPage() {
                         type="date"
                         value={formData.emiratesIdExpiry as string || ''}
                         onChange={(e) => handleInputChange('emiratesIdExpiry', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -465,7 +474,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.passportNumber as string || ''}
                         onChange={(e) => handleInputChange('passportNumber', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -474,7 +484,8 @@ export default function InvestorVerificationPage() {
                         type="date"
                         value={formData.passportExpiry as string || ''}
                         onChange={(e) => handleInputChange('passportExpiry', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -483,7 +494,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.passportCountry as string || ''}
                         onChange={(e) => handleInputChange('passportCountry', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -499,7 +511,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.residentialAddress as string || ''}
                         onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -508,7 +521,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.city as string || ''}
                         onChange={(e) => handleInputChange('city', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -517,7 +531,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.country as string || ''}
                         onChange={(e) => handleInputChange('country', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -532,7 +547,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.employmentStatus as string || ''}
                         onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="employed">Employed</option>
@@ -549,7 +565,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.occupation as string || ''}
                         onChange={(e) => handleInputChange('occupation', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -557,7 +574,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.annualIncome as string || ''}
                         onChange={(e) => handleInputChange('annualIncome', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="below_100k">Below AED 100,000</option>
@@ -572,7 +590,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.sourceOfFunds as string || ''}
                         onChange={(e) => handleInputChange('sourceOfFunds', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="salary">Salary / Employment Income</option>
@@ -600,7 +619,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.companyName as string || ''}
                         onChange={(e) => handleInputChange('companyName', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -608,7 +628,8 @@ export default function InvestorVerificationPage() {
                       <select
                         value={formData.companyType as string || ''}
                         onChange={(e) => handleInputChange('companyType', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="llc">LLC</option>
@@ -625,7 +646,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.tradeLicenseNumber as string || ''}
                         onChange={(e) => handleInputChange('tradeLicenseNumber', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -634,7 +656,8 @@ export default function InvestorVerificationPage() {
                         type="date"
                         value={formData.tradeLicenseExpiry as string || ''}
                         onChange={(e) => handleInputChange('tradeLicenseExpiry', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -643,7 +666,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.registrationAuthority as string || ''}
                         onChange={(e) => handleInputChange('registrationAuthority', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. DED Dubai, JAFZA, DMCC"
                       />
                     </div>
@@ -653,7 +677,8 @@ export default function InvestorVerificationPage() {
                         type="date"
                         value={formData.registrationDate as string || ''}
                         onChange={(e) => handleInputChange('registrationDate', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -669,7 +694,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.companyAddress as string || ''}
                         onChange={(e) => handleInputChange('companyAddress', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -678,7 +704,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.companyCity as string || ''}
                         onChange={(e) => handleInputChange('companyCity', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -687,7 +714,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.companyCountry as string || ''}
                         onChange={(e) => handleInputChange('companyCountry', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -703,7 +731,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.authRepName as string || ''}
                         onChange={(e) => handleInputChange('authRepName', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -712,7 +741,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.authRepPosition as string || ''}
                         onChange={(e) => handleInputChange('authRepPosition', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. CEO, Managing Director"
                       />
                     </div>
@@ -722,7 +752,8 @@ export default function InvestorVerificationPage() {
                         type="text"
                         value={formData.authRepEmiratesId as string || ''}
                         onChange={(e) => handleInputChange('authRepEmiratesId', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -731,7 +762,8 @@ export default function InvestorVerificationPage() {
                         type="email"
                         value={formData.authRepEmail as string || ''}
                         onChange={(e) => handleInputChange('authRepEmail', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -740,7 +772,8 @@ export default function InvestorVerificationPage() {
                         type="tel"
                         value={formData.authRepPhone as string || ''}
                         onChange={(e) => handleInputChange('authRepPhone', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>

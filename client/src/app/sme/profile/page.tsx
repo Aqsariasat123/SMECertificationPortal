@@ -1002,6 +1002,7 @@ export default function SMEProfilePage() {
                       name="tradeLicenseNumber"
                       value={formData.tradeLicenseNumber}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Enter license number"
                     />
@@ -1017,6 +1018,7 @@ export default function SMEProfilePage() {
                   name="companyDescription"
                   value={formData.companyDescription}
                   onChange={handleInputChange}
+                  disabled={!canEdit}
                   rows={4}
                   className="w-full px-4 py-3 rounded-xl transition-all resize-none"
                   style={{
@@ -1039,6 +1041,7 @@ export default function SMEProfilePage() {
                       name="industrySector"
                       value={formData.industrySector}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1055,6 +1058,7 @@ export default function SMEProfilePage() {
                       name="website"
                       value={formData.website}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="https://example.com"
                     />
@@ -1072,6 +1076,7 @@ export default function SMEProfilePage() {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
+                    disabled={!canEdit}
                     rows={2}
                     className="w-full px-4 py-3 rounded-xl transition-all resize-none"
                     style={{
@@ -1100,6 +1105,7 @@ export default function SMEProfilePage() {
                       name="registrationNumber"
                       value={formData.registrationNumber}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Company registration number"
                     />
@@ -1113,6 +1119,7 @@ export default function SMEProfilePage() {
                       name="vatNumber"
                       value={formData.vatNumber}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="VAT registration number"
                     />
@@ -1128,6 +1135,7 @@ export default function SMEProfilePage() {
                       name="licenseExpiryDate"
                       value={formData.licenseExpiryDate}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                     />
                   </div>
@@ -1139,6 +1147,7 @@ export default function SMEProfilePage() {
                       name="legalStructure"
                       value={formData.legalStructure}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1163,6 +1172,7 @@ export default function SMEProfilePage() {
                       name="registrationCountry"
                       value={formData.registrationCountry}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="e.g. United Arab Emirates"
                     />
@@ -1176,6 +1186,7 @@ export default function SMEProfilePage() {
                       name="registrationCity"
                       value={formData.registrationCity}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="e.g. Dubai"
                     />
@@ -1200,6 +1211,7 @@ export default function SMEProfilePage() {
                       name="ownerName"
                       value={formData.ownerName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Full name of owner or CEO"
                     />
@@ -1213,6 +1225,7 @@ export default function SMEProfilePage() {
                       name="ownerNationality"
                       value={formData.ownerNationality}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="e.g. Emirati, Indian, British"
                     />
@@ -1228,6 +1241,7 @@ export default function SMEProfilePage() {
                       name="ownerIdNumber"
                       value={formData.ownerIdNumber}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="ID number (kept confidential)"
                     />
@@ -1247,6 +1261,7 @@ export default function SMEProfilePage() {
                       name="contactName"
                       value={formData.contactName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Full name of primary contact"
                     />
@@ -1260,6 +1275,7 @@ export default function SMEProfilePage() {
                       name="contactPosition"
                       value={formData.contactPosition}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="e.g. CEO, Managing Director"
                     />
@@ -1275,6 +1291,7 @@ export default function SMEProfilePage() {
                       name="contactEmail"
                       value={formData.contactEmail}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="contact@company.ae"
                     />
@@ -1288,6 +1305,7 @@ export default function SMEProfilePage() {
                       name="contactPhone"
                       value={formData.contactPhone}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="+971 50 123 4567"
                     />
@@ -1305,6 +1323,7 @@ export default function SMEProfilePage() {
                       name="secondaryContactName"
                       value={formData.secondaryContactName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Secondary contact name"
                     />
@@ -1316,6 +1335,7 @@ export default function SMEProfilePage() {
                       name="secondaryContactEmail"
                       value={formData.secondaryContactEmail}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="secondary@company.ae"
                     />
@@ -1327,6 +1347,7 @@ export default function SMEProfilePage() {
                       name="secondaryContactPhone"
                       value={formData.secondaryContactPhone}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="+971 50 123 4567"
                     />
@@ -1365,6 +1386,7 @@ export default function SMEProfilePage() {
                       name="revenueRange"
                       value={formData.revenueRange}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1383,6 +1405,7 @@ export default function SMEProfilePage() {
                       name="revenueGrowth"
                       value={formData.revenueGrowth}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1407,6 +1430,7 @@ export default function SMEProfilePage() {
                       name="fundingStage"
                       value={formData.fundingStage}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1423,6 +1447,7 @@ export default function SMEProfilePage() {
                       name="bankName"
                       value={formData.bankName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="e.g. Emirates NBD, ADCB"
                     />
@@ -1440,6 +1465,7 @@ export default function SMEProfilePage() {
                       name="auditorName"
                       value={formData.auditorName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Auditing firm name"
                     />
@@ -1451,6 +1477,7 @@ export default function SMEProfilePage() {
                       name="lastAuditDate"
                       value={formData.lastAuditDate}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                     />
                   </div>
@@ -1471,6 +1498,7 @@ export default function SMEProfilePage() {
                       name="businessModel"
                       value={formData.businessModel}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1486,6 +1514,7 @@ export default function SMEProfilePage() {
                       name="officeType"
                       value={formData.officeType}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1508,6 +1537,7 @@ export default function SMEProfilePage() {
                       name="foundingDate"
                       value={formData.foundingDate}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                     />
                   </div>
@@ -1517,6 +1547,7 @@ export default function SMEProfilePage() {
                       name="employeeCount"
                       value={formData.employeeCount || ''}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       style={{ color: 'var(--graphite-700)' }}
                     >
@@ -1542,6 +1573,7 @@ export default function SMEProfilePage() {
                       name="linkedinUrl"
                       value={formData.linkedinUrl}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="https://linkedin.com/company/..."
                     />
@@ -1553,6 +1585,7 @@ export default function SMEProfilePage() {
                       name="headOfficeAddress"
                       value={formData.headOfficeAddress}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Full office address"
                     />
@@ -1592,6 +1625,7 @@ export default function SMEProfilePage() {
                       name="hasAmlPolicy"
                       checked={formData.hasAmlPolicy}
                       onChange={(e) => setFormData({ ...formData, hasAmlPolicy: e.target.checked })}
+                      disabled={!canEdit}
                       className="w-5 h-5 rounded"
                     />
                     <div>
@@ -1605,6 +1639,7 @@ export default function SMEProfilePage() {
                       name="hasDataProtectionPolicy"
                       checked={formData.hasDataProtectionPolicy}
                       onChange={(e) => setFormData({ ...formData, hasDataProtectionPolicy: e.target.checked })}
+                      disabled={!canEdit}
                       className="w-5 h-5 rounded"
                     />
                     <div>
@@ -1625,6 +1660,7 @@ export default function SMEProfilePage() {
                       name="complianceOfficerName"
                       value={formData.complianceOfficerName}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="Full name"
                     />
@@ -1636,6 +1672,7 @@ export default function SMEProfilePage() {
                       name="complianceOfficerEmail"
                       value={formData.complianceOfficerEmail}
                       onChange={handleInputChange}
+                      disabled={!canEdit}
                       className="input-field w-full h-12"
                       placeholder="compliance@company.ae"
                     />
