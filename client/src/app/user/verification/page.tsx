@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
 
@@ -33,6 +34,7 @@ const COMPANY_DOCUMENTS = [
 ];
 
 export default function InvestorVerificationPage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -226,11 +228,22 @@ export default function InvestorVerificationPage() {
     <div className="max-w-4xl mx-auto pb-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>KYC Verification</h1>
-          {getStatusBadge()}
+        <div className="flex items-center gap-4 mb-2">
+          <button
+            onClick={() => router.push('/user/dashboard')}
+            className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors hover:bg-gray-100"
+            style={{ background: 'var(--graphite-100)' }}
+          >
+            <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div className="flex-1 flex items-center justify-between">
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>KYC Verification</h1>
+            {getStatusBadge()}
+          </div>
         </div>
-        <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>
+        <p className="text-sm ml-14" style={{ color: 'var(--foreground-muted)' }}>
           Complete your verification to unlock full investment capabilities
         </p>
       </div>
