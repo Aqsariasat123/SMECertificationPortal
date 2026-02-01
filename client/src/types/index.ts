@@ -439,6 +439,73 @@ export interface RegistrySMEDetail extends RegistrySME {
 
 export type IntroductionRequestStatus = 'pending' | 'viewed' | 'responded';
 
+// Investor KYC Types
+export type InvestorType = 'individual' | 'company';
+export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected' | 'revision_requested';
+
+export interface KycApplication {
+  id: string;
+  userId: string;
+  investorType: InvestorType | null;
+  kycStatus: KycStatus;
+  kycSubmittedDate: string | null;
+  kycReviewedDate: string | null;
+  kycNotes: string | null;
+
+  // Individual KYC fields
+  nationality: string | null;
+  dateOfBirth: string | null;
+  emiratesId: string | null;
+  passportNumber: string | null;
+  passportExpiry: string | null;
+  residentialAddress: string | null;
+  city: string | null;
+  country: string | null;
+  postalCode: string | null;
+  employmentStatus: string | null;
+  employerName: string | null;
+  jobTitle: string | null;
+  annualIncome: string | null;
+  sourceOfFunds: string | null;
+  investmentExperience: string | null;
+  riskTolerance: string | null;
+
+  // Company KYC fields
+  companyNameKyc: string | null;
+  companyTradeLicense: string | null;
+  companyRegistrationNumber: string | null;
+  companyIncorporationDate: string | null;
+  companyJurisdiction: string | null;
+  companyAddress: string | null;
+  companyCity: string | null;
+  companyCountry: string | null;
+  authorizedRepName: string | null;
+  authorizedRepTitle: string | null;
+  authorizedRepEmail: string | null;
+  authorizedRepPhone: string | null;
+  beneficialOwners: Array<{
+    name: string;
+    nationality: string;
+    ownershipPercentage: number;
+    idNumber: string;
+  }> | null;
+  companyBankName: string | null;
+  companyBankAccountNumber: string | null;
+  companySourceOfFunds: string | null;
+  companyAnnualRevenue: string | null;
+
+  // Documents
+  kycDocuments: Record<string, string> | null;
+
+  // User info
+  user: {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string | null;
+  };
+}
+
 export interface IntroductionRequest {
   id: string;
   smeId: string;
