@@ -227,7 +227,7 @@ export default function InvestorVerificationPage() {
     return (
       <div className="max-w-3xl mx-auto pb-8">
         {/* Header Card */}
-        <div className="rounded-2xl overflow-hidden shadow-lg mb-6" style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}>
+        <div className="rounded-2xl overflow-hidden shadow-lg mb-6" style={{ background: 'linear-gradient(135deg, #363c45 0%, #2a2f36 100%)' }}>
           <div className="p-8">
             <div className="flex items-start gap-6">
               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 ${isApproved ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`}>
