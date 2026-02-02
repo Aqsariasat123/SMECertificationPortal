@@ -164,13 +164,8 @@ export default function SMEDetailPage() {
       </button>
 
       {/* Hero Section */}
-      <div className="relative rounded-2xl overflow-hidden mb-6" style={{ background: 'linear-gradient(135deg, #1a1f2e 0%, #2d3748 50%, #1a1f2e 100%)' }}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, #14b8a6 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
-          <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
-        </div>
-
-        <div className="relative p-8">
+      <div className="rounded-2xl p-6 mb-6" style={{ background: 'linear-gradient(135deg, var(--graphite-800) 0%, var(--graphite-900) 100%)' }}>
+        <div className="relative">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             {/* Logo */}
             <div className="relative">
