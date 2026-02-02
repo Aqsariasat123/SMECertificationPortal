@@ -237,7 +237,7 @@ export default function AdminDashboardPage() {
               <p style={{ color: 'var(--foreground-muted)' }}>No applications yet</p>
             </div>
           ) : (
-            <div className="divide-y" style={{ borderColor: 'var(--graphite-100)' }}>
+            <div className="divide-y divide-slate-100">
               {recentApplications.map((app) => (
                 <div key={app.id} className="p-4 table-row-hover transition-colors">
                   <div className="flex items-center gap-4">
