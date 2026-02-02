@@ -564,3 +564,16 @@ input:focus, textarea:focus, select:focus {
 .swipe-hint {
   animation: swipeHint 1s ease-in-out 2;
 }
+
+/* Floating gradient animation for auth sidebar */
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(10px, -15px) scale(1.05);
+  }
+  66% {
+    transform: translate(-5px, 10px) scale(0.95);
+  }
+}

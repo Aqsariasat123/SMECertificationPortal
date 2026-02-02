@@ -14,18 +14,55 @@ export default function AuthLayout({
           background: 'var(--sidebar-bg)',
         }}
       >
-        {/* Mesh gradient - soft blurred shapes */}
+        {/* Mesh gradient - soft blurred shapes with animation */}
         <div
           className="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full blur-3xl opacity-20"
-          style={{ background: 'var(--teal-500)' }}
+          style={{
+            background: 'var(--teal-500)',
+            animation: 'float 8s ease-in-out infinite',
+          }}
         />
         <div
           className="absolute top-1/3 -left-20 w-[250px] h-[250px] rounded-full blur-3xl opacity-10"
-          style={{ background: 'var(--teal-400)' }}
+          style={{
+            background: 'var(--teal-400)',
+            animation: 'float 10s ease-in-out infinite reverse',
+          }}
         />
         <div
           className="absolute -bottom-20 right-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-15"
-          style={{ background: 'var(--teal-600)' }}
+          style={{
+            background: 'var(--teal-600)',
+            animation: 'float 12s ease-in-out infinite',
+          }}
+        />
+        {/* Additional blobs */}
+        <div
+          className="absolute top-1/2 right-10 w-[200px] h-[200px] rounded-full blur-3xl opacity-10"
+          style={{
+            background: 'var(--teal-300)',
+            animation: 'float 9s ease-in-out infinite reverse',
+          }}
+        />
+        <div
+          className="absolute bottom-1/3 left-1/4 w-[180px] h-[180px] rounded-full blur-3xl opacity-8"
+          style={{
+            background: 'var(--teal-500)',
+            animation: 'float 11s ease-in-out infinite',
+          }}
+        />
+        {/* Glowing border on right edge */}
+        <div
+          className="absolute top-0 right-0 w-[2px] h-full opacity-30"
+          style={{
+            background: 'linear-gradient(to bottom, transparent, var(--teal-400), var(--teal-500), var(--teal-400), transparent)',
+          }}
+        />
+        <div
+          className="absolute top-0 right-0 w-8 h-full opacity-20"
+          style={{
+            background: 'linear-gradient(to left, var(--teal-500), transparent)',
+          }}
         />
         {/* Content - above texture */}
         <div className="relative z-10">
