@@ -200,8 +200,8 @@ export default function RegisterPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>I&apos;m an Investor / Partner</h3>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Browse certified SMEs and request introductions</p>
+                  <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Browse SME Registry</h3>
+                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Access the certified SME directory and request introductions</p>
                 </div>
                 <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -237,10 +237,10 @@ export default function RegisterPage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>I&apos;m an SME Owner</h3>
+                    <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Register Your SME</h3>
                     <span className="badge badge-teal text-xs">Recommended</span>
                   </div>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Get your business certified and listed in the registry</p>
+                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors</p>
                 </div>
                 <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
