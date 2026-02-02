@@ -107,7 +107,7 @@ export default function ApplicationDetailPage() {
       app.registrationNumber,
       app.vatNumber,
       app.legalStructure,
-      app.licenseExpiry,
+      app.licenseExpiryDate,
       app.registrationCountry,
       app.registrationCity,
     ];
