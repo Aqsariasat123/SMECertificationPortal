@@ -25,8 +25,7 @@ export default function LandingPage() {
           <nav className="flex items-center gap-3">
             <Link
               href="/login"
-              className="px-4 py-2 text-sm font-medium transition-colors"
-              style={{ color: 'var(--graphite-600)' }}
+              className="btn-primary px-4 py-2 text-sm font-medium rounded-lg"
             >
               Sign In
             </Link>
@@ -85,7 +84,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/login"
-                className="btn-secondary px-6 py-3 text-sm font-medium rounded-lg"
+                className="btn-primary px-6 py-3 text-sm font-medium rounded-lg"
               >
                 Sign In to Dashboard
               </Link>
