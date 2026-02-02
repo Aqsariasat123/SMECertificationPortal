@@ -1228,48 +1228,56 @@ export default function MessagesPage() {
       {/* Image Lightbox Modal */}
       {lightboxImage && (
         <div
-          className="fixed inset-0 bg-black/90 flex items-center justify-center z-[100] p-4"
+          className="fixed inset-0 bg-black flex items-center justify-center z-[100]"
           onClick={() => setLightboxImage(null)}
         >
-          {/* Close button */}
-          <button
-            onClick={() => setLightboxImage(null)}
-            className="absolute top-4 right-4 p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/10"
-          >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {/* Top toolbar - WhatsApp style */}
+          <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/70 to-transparent">
+            {/* Left side - Image name */}
+            <div className="text-white text-sm font-medium truncate max-w-[60%]">
+              {lightboxImage.name}
+            </div>
 
-          {/* Download button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              const link = document.createElement('a');
-              link.href = lightboxImage.url;
-              link.download = lightboxImage.name;
-              link.click();
-            }}
-            className="absolute top-4 left-4 p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-white/10 flex items-center gap-2"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            <span className="text-sm">Download</span>
-          </button>
+            {/* Right side - Action buttons */}
+            <div className="flex items-center gap-1">
+              {/* Download button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const link = document.createElement('a');
+                  link.href = lightboxImage.url;
+                  link.download = lightboxImage.name;
+                  link.click();
+                }}
+                className="p-3 text-white hover:bg-white/20 transition-colors rounded-full"
+                title="Download"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+
+              {/* Close button */}
+              <button
+                onClick={() => setLightboxImage(null)}
+                className="p-3 text-white hover:bg-white/20 transition-colors rounded-full"
+                title="Close"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
 
           {/* Image */}
           <img
             src={lightboxImage.url}
             alt={lightboxImage.name}
-            className="max-w-full max-h-full object-contain rounded-lg"
+            className="max-w-full max-h-full object-contain"
+            style={{ maxHeight: 'calc(100vh - 100px)' }}
             onClick={(e) => e.stopPropagation()}
           />
-
-          {/* Image name */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm bg-black/50 px-4 py-2 rounded-full">
-            {lightboxImage.name}
-          </div>
         </div>
       )}
     </div>
