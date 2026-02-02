@@ -88,14 +88,31 @@ export default function ApplicationDetailPage() {
 
   const getStatusConfig = (status: CertificationStatus) => {
     const configs: Record<CertificationStatus, { bg: string; text: string; dot: string; label: string }> = {
-      draft: { bg: 'var(--graphite-100)', text: 'var(--graphite-700)', dot: 'var(--graphite-500)', label: 'Draft' },
-      submitted: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Pending Review' },
-      under_review: { bg: 'var(--teal-50)', text: 'var(--teal-700)', dot: 'var(--teal-600)', label: 'Under Review' },
-      certified: { bg: 'var(--success-50)', text: 'var(--success-700)', dot: 'var(--success-500)', label: 'Certified' },
-      rejected: { bg: 'var(--danger-50)', text: 'var(--danger-700)', dot: 'var(--danger-500)', label: 'Rejected' },
-      revision_requested: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Revision Requested' },
+      draft: { bg: '#f3f4f6', text: '#374151', dot: '#6b7280', label: 'Draft' },
+      submitted: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b', label: 'Pending Review' },
+      under_review: { bg: '#e0efed', text: '#3a736d', dot: '#4a8f87', label: 'Under Review' },
+      certified: { bg: '#d1fae5', text: '#065f46', dot: '#10b981', label: 'Certified' },
+      rejected: { bg: '#fee2e2', text: '#991b1b', dot: '#ef4444', label: 'Rejected' },
+      revision_requested: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b', label: 'Revision Requested' },
     };
     return configs[status];
+  };
+
+  const calculateCompletion = (app: AdminApplication) => {
+    const fields = [
+      app.companyName,
+      app.tradeLicenseNumber,
+      app.industrySector,
+      app.companyDescription,
+      app.registrationNumber,
+      app.vatNumber,
+      app.legalStructure,
+      app.licenseExpiry,
+      app.registrationCountry,
+      app.registrationCity,
+    ];
+    const filled = fields.filter(f => f !== null && f !== undefined && f !== '').length;
+    return Math.round((filled / fields.length) * 100);
   };
 
   const formatDate = (dateString: string | null) => {
@@ -270,6 +287,15 @@ export default function ApplicationDetailPage() {
               <InfoField label="Company Name" value={application.companyName} />
               <InfoField label="Trade License" value={application.tradeLicenseNumber} />
               <InfoField label="Industry Sector" value={formatSector(application.industrySector)} />
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Profile Completion</label>
+                <div className="mt-2 flex items-center gap-3">
+                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
+                    <div className="h-full rounded-full" style={{ width: `${calculateCompletion(application)}%`, background: 'var(--teal-600)' }} />
+                  </div>
+                  <span className="text-sm font-bold" style={{ color: 'var(--teal-600)' }}>{calculateCompletion(application)}%</span>
+                </div>
+              </div>
               <div className="md:col-span-2">
                 <InfoField label="Description" value={application.companyDescription} />
               </div>

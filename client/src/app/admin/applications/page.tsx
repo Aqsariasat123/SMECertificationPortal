@@ -78,6 +78,18 @@ export default function AdminApplicationsPage() {
     );
   };
 
+  const calculateCompletion = (app: AdminApplication) => {
+    const fields = [
+      app.companyName,
+      app.industrySector,
+      app.user?.fullName,
+      app.user?.email,
+      app.submittedDate,
+    ];
+    const filled = fields.filter(f => f !== null && f !== undefined && f !== '').length;
+    return Math.round((filled / fields.length) * 100);
+  };
+
   const getStatIcon = (icon: string) => {
     const icons: Record<string, React.ReactNode> = {
       folder: (
@@ -308,7 +320,20 @@ export default function AdminApplicationsPage() {
                 </div>
               </div>
 
-                          </div>
+              {/* Progress bar for completion */}
+              <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--graphite-100)' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium" style={{ color: 'var(--graphite-700)' }}>Profile Completion</span>
+                  <span className="text-sm font-semibold" style={{ color: 'var(--teal-600)' }}>{calculateCompletion(app)}%</span>
+                </div>
+                <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--graphite-100)' }}>
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${calculateCompletion(app)}%`, backgroundColor: 'var(--teal-600)' }}
+                  />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}
