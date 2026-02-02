@@ -234,7 +234,7 @@ export default function UserDashboard() {
                   className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))' }}>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}>
                       {getInitials(request.smeName)}
                     </div>
                     <div>
