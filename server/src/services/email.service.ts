@@ -55,25 +55,25 @@ class EmailService {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
+          .header { background: #3a736d; color: white; padding: 20px; text-align: center; }
           .content { padding: 30px; background: #f9fafb; }
-          .button { display: inline-block; padding: 12px 30px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+          .button { display: inline-block; padding: 12px 30px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           .footer { padding: 20px; text-align: center; color: #6b7280; font-size: 12px; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>SME Certification Portal</h1>
+            <h1>SME Readiness Portal</h1>
           </div>
           <div class="content">
             <h2>Welcome, ${fullName}!</h2>
-            <p>Thank you for registering with SME Certification Portal. Please verify your email address to complete your registration.</p>
+            <p>Thank you for registering with SME Readiness Portal. Please verify your email address to complete your registration.</p>
             <p style="text-align: center;">
               <a href="${verifyUrl}" class="button">Verify Email Address</a>
             </p>
             <p>Or copy and paste this link in your browser:</p>
-            <p style="word-break: break-all; color: #2563eb;">${verifyUrl}</p>
+            <p style="word-break: break-all; color: #3a736d;">${verifyUrl}</p>
             <p>This link will expire in 24 hours.</p>
           </div>
           <div class="footer">
@@ -86,7 +86,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Verify your email - SME Certification Portal',
+      subject: 'Verify your email - SME Readiness Portal',
       html,
     });
   }
@@ -102,9 +102,9 @@ class EmailService {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
+          .header { background: #3a736d; color: white; padding: 20px; text-align: center; }
           .content { padding: 30px; background: #f9fafb; }
-          .button { display: inline-block; padding: 12px 30px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+          .button { display: inline-block; padding: 12px 30px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; margin: 20px 0; }
           .footer { padding: 20px; text-align: center; color: #6b7280; font-size: 12px; }
           .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 6px; margin: 20px 0; }
         </style>
@@ -112,7 +112,7 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>SME Certification Portal</h1>
+            <h1>SME Readiness Portal</h1>
           </div>
           <div class="content">
             <h2>Password Reset Request</h2>
@@ -122,7 +122,7 @@ class EmailService {
               <a href="${resetUrl}" class="button">Reset Password</a>
             </p>
             <p>Or copy and paste this link in your browser:</p>
-            <p style="word-break: break-all; color: #2563eb;">${resetUrl}</p>
+            <p style="word-break: break-all; color: #3a736d;">${resetUrl}</p>
             <div class="warning">
               <strong>Important:</strong> This link will expire in 1 hour for security reasons.
             </div>
@@ -137,7 +137,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Reset your password - SME Certification Portal',
+      subject: 'Reset your password - SME Readiness Portal',
       html,
     });
   }
