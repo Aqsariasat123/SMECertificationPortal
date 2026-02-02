@@ -668,7 +668,7 @@ export default function UserProfilePage() {
                         style={{ backgroundColor: 'var(--graphite-50)', borderWidth: '1px', borderColor: 'var(--graphite-200)' }}
                       >
                         <div className="flex items-center gap-3 sm:gap-4">
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-md flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}>
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-md flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))' }}>
                             {getInitials(request.smeName)}
                           </div>
                           <div className="min-w-0 flex-1">
