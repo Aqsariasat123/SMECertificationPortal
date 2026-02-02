@@ -194,23 +194,9 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
         </header>
 
         {/* Content */}
-        <main className="p-4 lg:p-6 pb-24 lg:pb-6">
+        <main className="p-4 lg:p-6">
           {children}
         </main>
-
-        {/* Mobile Bottom Navigation */}
-        <nav className="bottom-nav lg:hidden">
-          {navItems.slice(0, 5).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`bottom-nav-item ${isActive(item.href) ? 'active' : ''}`}
-            >
-              <span className="w-5 h-5">{item.icon}</span>
-              <span>{item.label.length > 8 ? item.label.slice(0, 8) : item.label}</span>
-            </Link>
-          ))}
-        </nav>
       </div>
     </div>
   );
