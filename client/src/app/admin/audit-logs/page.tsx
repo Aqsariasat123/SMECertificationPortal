@@ -337,7 +337,8 @@ export default function AdminAuditLogsPage() {
                 placeholder="Search by user, action, or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field w-full pl-12 pr-4 h-12 rounded-xl"
+                className="input-field w-full pr-4 h-12 rounded-xl"
+                style={{ paddingLeft: '3.5rem' }}
               />
             </div>
           </div>
