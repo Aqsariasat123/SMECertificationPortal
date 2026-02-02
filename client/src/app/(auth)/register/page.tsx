@@ -222,7 +222,7 @@ export default function RegisterPage() {
                   <path d="M32 8L42 12L32 16" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am an SME</h3>
+              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am a SME</h3>
               <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors.</p>
               <button
                 onClick={() => handleRoleSelect('sme')}
