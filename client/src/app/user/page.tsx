@@ -302,7 +302,7 @@ export default function UserDashboardPage() {
                 onClick={() => setViewMode('grid')}
                 className="h-10 w-10 flex items-center justify-center transition-colors"
                 style={{
-                  background: viewMode === 'grid' ? 'var(--graphite-800)' : 'white',
+                  background: viewMode === 'grid' ? 'var(--teal-600)' : 'white',
                   color: viewMode === 'grid' ? 'white' : 'var(--graphite-600)'
                 }}
                 title="Grid View"
@@ -316,7 +316,7 @@ export default function UserDashboardPage() {
                 onClick={() => setViewMode('list')}
                 className="h-10 w-10 flex items-center justify-center transition-colors"
                 style={{
-                  background: viewMode === 'list' ? 'var(--graphite-800)' : 'white',
+                  background: viewMode === 'list' ? 'var(--teal-600)' : 'white',
                   color: viewMode === 'list' ? 'white' : 'var(--graphite-600)'
                 }}
                 title="List View"
@@ -382,7 +382,7 @@ export default function UserDashboardPage() {
                 ) : (
                   <div
                     className="w-12 h-12 rounded flex items-center justify-center text-white text-base font-semibold flex-shrink-0"
-                    style={{ background: 'var(--graphite-700)' }}
+                    style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))' }}
                   >
                     {getInitials(sme.companyName)}
                   </div>
@@ -472,7 +472,7 @@ export default function UserDashboardPage() {
                       ) : (
                         <div
                           className="w-9 h-9 rounded flex items-center justify-center text-white text-xs font-semibold flex-shrink-0"
-                          style={{ background: 'var(--graphite-700)' }}
+                          style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))' }}
                         >
                           {getInitials(sme.companyName)}
                         </div>
@@ -566,7 +566,7 @@ export default function UserDashboardPage() {
                   onClick={() => handlePageChange(pageNum)}
                   className="px-3 py-1.5 text-xs font-medium rounded min-w-[32px] transition-colors"
                   style={{
-                    background: currentPage === pageNum ? 'var(--graphite-800)' : 'transparent',
+                    background: currentPage === pageNum ? 'var(--teal-600)' : 'transparent',
                     color: currentPage === pageNum ? 'white' : 'var(--graphite-600)'
                   }}
                 >
