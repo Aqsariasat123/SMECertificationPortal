@@ -81,10 +81,15 @@ export default function AdminApplicationsPage() {
   const calculateCompletion = (app: AdminApplication) => {
     const fields = [
       app.companyName,
+      app.tradeLicenseNumber,
       app.industrySector,
-      app.user?.fullName,
-      app.user?.email,
-      app.submittedDate,
+      app.companyDescription,
+      app.registrationNumber,
+      app.vatNumber,
+      app.legalStructure,
+      app.licenseExpiryDate,
+      app.registrationCountry,
+      app.registrationCity,
     ];
     const filled = fields.filter(f => f !== null && f !== undefined && f !== '').length;
     return Math.round((filled / fields.length) * 100);
