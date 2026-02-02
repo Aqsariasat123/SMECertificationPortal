@@ -153,8 +153,8 @@ export default function AdminApplicationsPage() {
   };
 
   const getInitials = (name: string | null) => {
-    if (!name) return '??';
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    if (!name) return '?';
+    return name.charAt(0).toUpperCase();
   };
 
   return (
