@@ -49,8 +49,7 @@ export default function AdminUsersPage() {
   const getAvatarStyle = (role: UserRole) => {
     switch (role) {
       case 'admin': return { background: 'linear-gradient(135deg, var(--graphite-500) 0%, var(--graphite-700) 100%)' };
-      case 'sme': return { background: 'linear-gradient(135deg, var(--teal-600) 0%, var(--teal-700) 100%)' };
-      default: return { background: 'linear-gradient(135deg, var(--teal-400) 0%, var(--teal-600) 100%)' };
+      default: return { background: 'linear-gradient(135deg, var(--teal-600) 0%, var(--teal-700) 100%)' };
     }
   };
 
