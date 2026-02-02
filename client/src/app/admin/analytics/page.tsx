@@ -271,30 +271,109 @@ export default function AdminAnalyticsPage() {
         })}
       </div>
 
-      {/* Activity Chart */}
+      {/* Activity Chart - Line Graph */}
       <div className="solid-card rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-6" style={{ color: 'var(--graphite-900)' }}>
-          Activity Over Time
-        </h2>
-        <div className="h-48 flex items-end gap-1 sm:gap-2">
-          {analytics.activityByDay.slice(-30).map((day, i) => (
-            <div key={day.date} className="flex-1 flex flex-col items-center gap-2">
-              <div
-                className="w-full rounded-t transition-all hover:opacity-80"
-                style={{
-                  height: `${Math.max((day.count / getMaxActivity()) * 100, 4)}%`,
-                  background: day.count > 0 ? 'var(--teal-500)' : 'var(--graphite-200)',
-                  minHeight: '4px',
-                }}
-                title={`${formatDate(day.date)}: ${day.count} actions`}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--graphite-900)' }}>
+            Activity Over Time
+          </h2>
+          <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--graphite-500)' }}>
+            <div className="w-3 h-3 rounded-full" style={{ background: 'var(--teal-500)' }} />
+            <span>Actions</span>
+          </div>
+        </div>
+        <div className="relative h-64">
+          {/* Y-axis labels */}
+          <div className="absolute left-0 top-0 bottom-8 w-10 flex flex-col justify-between text-xs" style={{ color: 'var(--graphite-400)' }}>
+            <span>{getMaxActivity()}</span>
+            <span>{Math.round(getMaxActivity() * 0.75)}</span>
+            <span>{Math.round(getMaxActivity() * 0.5)}</span>
+            <span>{Math.round(getMaxActivity() * 0.25)}</span>
+            <span>0</span>
+          </div>
+          {/* Chart area */}
+          <div className="ml-12 h-full">
+            <svg className="w-full h-56" viewBox="0 0 800 200" preserveAspectRatio="none">
+              {/* Grid lines */}
+              <defs>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="var(--teal-500)" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="var(--teal-500)" stopOpacity="0.05" />
+                </linearGradient>
+              </defs>
+              {[0, 25, 50, 75, 100].map((y) => (
+                <line
+                  key={y}
+                  x1="0"
+                  y1={200 - (y * 2)}
+                  x2="800"
+                  y2={200 - (y * 2)}
+                  stroke="var(--graphite-200)"
+                  strokeWidth="1"
+                  strokeDasharray={y === 0 ? "0" : "4 4"}
+                />
+              ))}
+              {/* Area fill */}
+              <path
+                d={(() => {
+                  const data = analytics.activityByDay.slice(-30);
+                  const maxVal = getMaxActivity();
+                  const points = data.map((d, i) => {
+                    const x = (i / (data.length - 1)) * 800;
+                    const y = 200 - (d.count / maxVal) * 180;
+                    return `${x},${y}`;
+                  });
+                  return `M0,200 L${points.join(' L')} L800,200 Z`;
+                })()}
+                fill="url(#areaGradient)"
               />
-              {i % Math.ceil(analytics.activityByDay.slice(-30).length / 7) === 0 && (
-                <span className="text-xs hidden sm:block" style={{ color: 'var(--graphite-400)' }}>
-                  {formatDate(day.date)}
-                </span>
-              )}
+              {/* Line */}
+              <path
+                d={(() => {
+                  const data = analytics.activityByDay.slice(-30);
+                  const maxVal = getMaxActivity();
+                  const points = data.map((d, i) => {
+                    const x = (i / (data.length - 1)) * 800;
+                    const y = 200 - (d.count / maxVal) * 180;
+                    return `${i === 0 ? 'M' : 'L'}${x},${y}`;
+                  });
+                  return points.join(' ');
+                })()}
+                fill="none"
+                stroke="var(--teal-500)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              {/* Data points */}
+              {analytics.activityByDay.slice(-30).map((d, i) => {
+                const data = analytics.activityByDay.slice(-30);
+                const maxVal = getMaxActivity();
+                const x = (i / (data.length - 1)) * 800;
+                const y = 200 - (d.count / maxVal) * 180;
+                return (
+                  <g key={d.date}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="5"
+                      fill="white"
+                      stroke="var(--teal-500)"
+                      strokeWidth="2"
+                      className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                    />
+                    <title>{`${formatDate(d.date)}: ${d.count} actions`}</title>
+                  </g>
+                );
+              })}
+            </svg>
+            {/* X-axis labels */}
+            <div className="flex justify-between mt-2 text-xs" style={{ color: 'var(--graphite-400)' }}>
+              {analytics.activityByDay.slice(-30).filter((_, i) => i % Math.ceil(30 / 6) === 0 || i === analytics.activityByDay.slice(-30).length - 1).map((day) => (
+                <span key={day.date}>{formatDate(day.date)}</span>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
