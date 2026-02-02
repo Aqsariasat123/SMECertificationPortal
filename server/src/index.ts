@@ -64,7 +64,7 @@ app.use(cors({
 // Rate Limiting (more permissive in development)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isProduction ? 100 : 1000, // 100 in prod, 1000 in dev
+  max: isProduction ? 500 : 1000, // 500 in prod, 1000 in dev
   message: { error: 'Too many requests, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
@@ -75,7 +75,7 @@ app.use(limiter);
 // Auth-specific rate limiting (stricter, but skipped in dev)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isProduction ? 10 : 100, // 10 in prod, 100 in dev
+  max: isProduction ? 50 : 100, // 50 in prod, 100 in dev
   message: { error: 'Too many authentication attempts, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
