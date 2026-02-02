@@ -197,7 +197,8 @@ export default function AdminRequestsPage() {
     {
       label: 'Total Requests',
       value: pagination?.total || 0,
-      borderColor: 'var(--teal-400)',
+      accent: 'teal',
+      iconBg: 'var(--teal-50)',
       iconColor: 'var(--teal-600)',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,8 +209,9 @@ export default function AdminRequestsPage() {
     {
       label: 'Pending',
       value: requests.filter(r => r.status === 'pending').length,
-      borderColor: '#fbbf24',
-      iconColor: '#d97706',
+      accent: 'warning',
+      iconBg: 'var(--warning-50)',
+      iconColor: 'var(--warning-600)',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -219,8 +221,9 @@ export default function AdminRequestsPage() {
     {
       label: 'Responded',
       value: requests.filter(r => r.status === 'responded').length,
-      borderColor: '#6ee7b7',
-      iconColor: '#059669',
+      accent: 'success',
+      iconBg: 'var(--success-50)',
+      iconColor: 'var(--success-600)',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -242,21 +245,16 @@ export default function AdminRequestsPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-white rounded-xl border border-slate-200/60 p-6"
-            style={{ borderLeft: `4px solid ${stat.borderColor}` }}
+            className={`glass-card rounded-lg p-5 stat-accent-${stat.accent}`}
           >
-            <div className="flex items-center gap-4">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ background: '#f8fafc', color: stat.iconColor }}
-              >
-                {stat.icon}
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-                <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
-              </div>
+            <div
+              className="w-11 h-11 rounded-lg flex items-center justify-center mb-3"
+              style={{ background: stat.iconBg, color: stat.iconColor }}
+            >
+              {stat.icon}
             </div>
+            <p className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--foreground-muted)' }}>{stat.label}</p>
           </div>
         ))}
       </div>
