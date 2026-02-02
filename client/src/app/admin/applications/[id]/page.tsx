@@ -270,9 +270,9 @@ export default function ApplicationDetailPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
-        <div className="xl:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* Company Information */}
           <div className="solid-card rounded-xl p-6">
             <h3 className="font-semibold mb-5 flex items-center gap-2" style={{ color: 'var(--graphite-900)' }}>

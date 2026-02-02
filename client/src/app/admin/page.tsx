@@ -171,7 +171,7 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="glass-card rounded-lg p-5 animate-pulse">
               <div className="h-10 w-10 rounded-lg mb-3" style={{ background: 'var(--graphite-200)' }}></div>
@@ -187,7 +187,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -213,9 +213,9 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Applications */}
-        <div className="xl:col-span-2 glass-card rounded-lg overflow-hidden">
+        <div className="lg:col-span-2 glass-card rounded-lg overflow-hidden">
           <div className="p-5 border-b" style={{ borderColor: 'var(--graphite-100)' }}>
             <div className="flex items-center justify-between">
               <div>
@@ -240,22 +240,24 @@ export default function AdminDashboardPage() {
             <div className="divide-y divide-slate-100">
               {recentApplications.map((app) => (
                 <div key={app.id} className="p-4 table-row-hover transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'var(--graphite-800)' }}
-                    >
-                      <span className="text-xs font-semibold text-white">{getInitials(app.companyName)}</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{ background: 'var(--graphite-800)' }}
+                      >
+                        <span className="text-xs font-semibold text-white">{getInitials(app.companyName)}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate" style={{ color: 'var(--graphite-900)' }}>
+                          {app.companyName || 'Unnamed Company'}
+                        </p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--foreground-muted)' }}>
+                          {app.industrySector?.replace('_', ' ') || 'No sector'} &bull; {formatTimeAgo(app.updatedAt)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate" style={{ color: 'var(--graphite-900)' }}>
-                        {app.companyName || 'Unnamed Company'}
-                      </p>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--foreground-muted)' }}>
-                        {app.industrySector?.replace('_', ' ') || 'No sector'} &bull; {formatTimeAgo(app.updatedAt)}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 ml-0 sm:ml-auto">
                       {getStatusBadge(app.certificationStatus)}
                       <button
                         onClick={() => router.push(`/admin/applications/${app.id}`)}

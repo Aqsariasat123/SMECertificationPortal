@@ -407,9 +407,9 @@ export default function SMEDashboardPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Completion */}
-        <div className="xl:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">Profile Completion</h2>
@@ -540,7 +540,7 @@ export default function SMEDashboardPage() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 xl:grid-cols-1 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
             {/* Introduction Requests Card */}
             <Link
               href="/sme/messages"

@@ -209,7 +209,7 @@ export default function UserDashboardPage() {
         </div>
 
         {/* Cards skeleton */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="solid-card rounded-lg p-4 animate-pulse">
               <div className="flex items-start gap-3">
@@ -365,7 +365,7 @@ export default function UserDashboardPage() {
         </div>
       ) : viewMode === 'grid' ? (
         /* Grid View */
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {smes.map((sme) => (
             <div
               key={sme.id}
