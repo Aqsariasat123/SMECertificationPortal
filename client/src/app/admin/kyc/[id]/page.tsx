@@ -71,11 +71,11 @@ export default function KycDetailPage() {
 
   const getStatusConfig = (status: KycStatus) => {
     const configs: Record<KycStatus, { bg: string; text: string; dot: string; label: string }> = {
-      not_submitted: { bg: 'var(--graphite-100)', text: 'var(--graphite-700)', dot: 'var(--graphite-500)', label: 'Not Submitted' },
-      pending: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Pending Review' },
-      approved: { bg: 'var(--success-50)', text: 'var(--success-700)', dot: 'var(--success-500)', label: 'Approved' },
-      rejected: { bg: 'var(--danger-50)', text: 'var(--danger-700)', dot: 'var(--danger-500)', label: 'Rejected' },
-      revision_requested: { bg: 'var(--warning-50)', text: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'Revision Requested' },
+      not_submitted: { bg: '#f3f4f6', text: '#374151', dot: '#6b7280', label: 'Not Submitted' },
+      pending: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b', label: 'Pending Review' },
+      approved: { bg: '#d1fae5', text: '#065f46', dot: '#10b981', label: 'Approved' },
+      rejected: { bg: '#fee2e2', text: '#991b1b', dot: '#ef4444', label: 'Rejected' },
+      revision_requested: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b', label: 'Revision Requested' },
     };
     return configs[status];
   };
