@@ -117,11 +117,8 @@ export default function AdminRequestsPage() {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-            i === page
-              ? 'text-white bg-blue-600'
-              : 'text-slate-600 hover:bg-slate-50'
-          }`}
+          className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+          style={i === page ? { background: 'var(--teal-600)', color: 'white' } : {}}
         >
           {i}
         </button>
@@ -200,7 +197,6 @@ export default function AdminRequestsPage() {
     {
       label: 'Total Requests',
       value: pagination?.total || 0,
-      color: 'blue',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -210,7 +206,6 @@ export default function AdminRequestsPage() {
     {
       label: 'Pending',
       value: requests.filter(r => r.status === 'pending').length,
-      color: 'amber',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -220,7 +215,6 @@ export default function AdminRequestsPage() {
     {
       label: 'Responded',
       value: requests.filter(r => r.status === 'responded').length,
-      color: 'emerald',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -242,18 +236,14 @@ export default function AdminRequestsPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className={`bg-white rounded-xl border border-slate-200/60 border-l-4 ${
-              stat.color === 'blue' ? 'border-l-blue-500' :
-              stat.color === 'amber' ? 'border-l-amber-500' :
-              'border-l-emerald-500'
-            } p-6`}
+            className="bg-white rounded-xl border border-slate-200/60 p-6"
+            style={{ borderLeft: '4px solid var(--teal-500)' }}
           >
             <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                stat.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                stat.color === 'amber' ? 'bg-amber-100 text-amber-600' :
-                'bg-emerald-100 text-emerald-600'
-              }`}>
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
+              >
                 {stat.icon}
               </div>
               <div>
@@ -274,7 +264,7 @@ export default function AdminRequestsPage() {
               setStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="h-12 px-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-slate-50/50 text-slate-700 font-medium min-w-[160px]"
+            className="h-12 px-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-slate-50/50 text-slate-700 font-medium min-w-[160px]"
           >
             <option value="">All Statuses</option>
             <option value="pending">Pending</option>
@@ -324,7 +314,7 @@ export default function AdminRequestsPage() {
                   <tr key={request.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white text-sm font-bold" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))' }}>
                           {request.requester.fullName.charAt(0).toUpperCase()}
                         </div>
                         <div>
