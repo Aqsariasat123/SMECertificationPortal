@@ -150,7 +150,7 @@ export default function SMEDetailPage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto pb-8">
+    <div className="pb-8">
       {/* Back Button */}
       <button
         onClick={() => router.push('/user')}
@@ -247,7 +247,7 @@ export default function SMEDetailPage() {
               <button
                 onClick={() => setShowIntroModal(true)}
                 className="w-full md:w-auto px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-3"
-                style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', boxShadow: '0 10px 30px -10px rgba(13, 148, 136, 0.5)' }}
+                style={{ background: 'linear-gradient(135deg, var(--teal-500) 0%, var(--teal-600) 100%)', boxShadow: '0 10px 30px -10px rgba(74, 143, 135, 0.5)' }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
