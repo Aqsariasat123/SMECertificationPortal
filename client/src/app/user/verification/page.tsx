@@ -1200,17 +1200,27 @@ export default function InvestorVerificationPage() {
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Action Buttons */}
           {(kycStatus === 'not_submitted' || kycStatus === 'rejected' || kycStatus === 'revision_requested') && (
             <div className="p-6 border-t border-gray-100">
-              <button
-                onClick={handleSubmitKyc}
-                disabled={saving || uploadedRequiredCount < totalRequiredCount}
-                className="w-full py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: 'var(--teal-600)' }}
-              >
-                {saving ? 'Saving...' : 'Save and Continue'}
-              </button>
+              {activeTab === 'info' ? (
+                <button
+                  onClick={() => setActiveTab('documents')}
+                  className="w-full py-3 rounded-xl text-white font-medium transition-all"
+                  style={{ background: 'var(--teal-600)' }}
+                >
+                  Save and Continue
+                </button>
+              ) : (
+                <button
+                  onClick={handleSubmitKyc}
+                  disabled={saving || uploadedRequiredCount < totalRequiredCount}
+                  className="w-full py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: 'var(--teal-600)' }}
+                >
+                  {saving ? 'Submitting...' : `Submit KYC (${uploadedRequiredCount}/${totalRequiredCount} documents)`}
+                </button>
+              )}
             </div>
           )}
 
