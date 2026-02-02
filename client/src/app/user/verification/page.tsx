@@ -231,13 +231,13 @@ export default function InvestorVerificationPage() {
           <div className="p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${isApproved ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${isApproved ? 'bg-emerald-500/20' : 'bg-teal-500/20'}`}>
                   {isApproved ? (
                     <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   ) : (
-                    <svg className="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-7 h-7 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                   )}
@@ -295,7 +295,7 @@ export default function InvestorVerificationPage() {
                 <div className="h-1 flex-1 mx-3 rounded-full bg-emerald-500" />
                 {/* Step 2: Under Review */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg ${isApproved ? 'bg-emerald-500 shadow-emerald-500/30' : 'bg-violet-500 shadow-violet-500/30'}`}>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg ${isApproved ? 'bg-emerald-500 shadow-emerald-500/30' : 'bg-teal-500 shadow-teal-500/30'}`}>
                     {isApproved ? (
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -305,7 +305,7 @@ export default function InvestorVerificationPage() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900">Under Review</span>
-                  <span className={`text-xs ${isApproved ? 'text-emerald-600' : 'text-violet-600'}`}>{isApproved ? 'Complete' : 'In Progress'}</span>
+                  <span className={`text-xs ${isApproved ? 'text-emerald-600' : 'text-teal-600'}`}>{isApproved ? 'Complete' : 'In Progress'}</span>
                 </div>
                 {/* Connector */}
                 <div className={`h-1 flex-1 mx-3 rounded-full ${isApproved ? 'bg-emerald-500' : 'bg-gray-200'}`} />
@@ -336,8 +336,8 @@ export default function InvestorVerificationPage() {
               <div className="divide-y divide-gray-100">
                 <div className="flex items-center justify-between px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
@@ -352,8 +352,8 @@ export default function InvestorVerificationPage() {
                 </div>
                 <div className="flex items-center justify-between px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
@@ -426,8 +426,8 @@ export default function InvestorVerificationPage() {
                   onClick={() => router.push('/user/messages')}
                   className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
@@ -440,8 +440,8 @@ export default function InvestorVerificationPage() {
                   onClick={() => router.push('/user/support')}
                   className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
@@ -512,20 +512,20 @@ export default function InvestorVerificationPage() {
                 ) : (
                   <>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs font-semibold text-violet-600">1</span>
+                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-teal-600">1</span>
                       </div>
                       <p className="text-sm text-gray-600">Our team reviews your documents</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs font-semibold text-violet-600">2</span>
+                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-teal-600">2</span>
                       </div>
                       <p className="text-sm text-gray-600">Identity verification completed</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs font-semibold text-violet-600">3</span>
+                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-semibold text-teal-600">3</span>
                       </div>
                       <p className="text-sm text-gray-600">You&apos;ll receive email notification</p>
                     </div>
@@ -640,10 +640,10 @@ export default function InvestorVerificationPage() {
             <button
               onClick={() => handleSelectInvestorType('individual')}
               disabled={saving}
-              className="p-6 rounded-xl border-2 border-gray-200 hover:border-violet-500 hover:bg-violet-50 transition-all text-left group"
+              className="p-6 rounded-xl border-2 border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition-all text-left group"
             >
-              <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4 group-hover:bg-violet-200 transition-colors">
-                <svg className="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4 group-hover:bg-teal-200 transition-colors">
+                <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
@@ -654,10 +654,10 @@ export default function InvestorVerificationPage() {
             <button
               onClick={() => handleSelectInvestorType('company')}
               disabled={saving}
-              className="p-6 rounded-xl border-2 border-gray-200 hover:border-violet-500 hover:bg-violet-50 transition-all text-left group"
+              className="p-6 rounded-xl border-2 border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition-all text-left group"
             >
-              <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4 group-hover:bg-violet-200 transition-colors">
-                <svg className="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4 group-hover:bg-teal-200 transition-colors">
+                <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
@@ -674,13 +674,13 @@ export default function InvestorVerificationPage() {
           {/* Investor Type Header */}
           <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center">
                 {investorType === 'individual' ? (
-                  <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 ) : (
-                  <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                 )}
@@ -701,7 +701,7 @@ export default function InvestorVerificationPage() {
             <button
               onClick={() => setActiveTab('info')}
               className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
-                activeTab === 'info' ? 'text-violet-600 border-b-2 border-violet-600' : 'text-gray-500 hover:text-gray-700'
+                activeTab === 'info' ? 'text-teal-600 border-b-2 border-teal-600' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               Personal Information
@@ -709,7 +709,7 @@ export default function InvestorVerificationPage() {
             <button
               onClick={() => setActiveTab('documents')}
               className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
-                activeTab === 'documents' ? 'text-violet-600 border-b-2 border-violet-600' : 'text-gray-500 hover:text-gray-700'
+                activeTab === 'documents' ? 'text-teal-600 border-b-2 border-teal-600' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               Documents ({uploadedRequiredCount}/{totalRequiredCount})
@@ -730,7 +730,7 @@ export default function InvestorVerificationPage() {
                         value={formData.nationality as string || ''}
                         onChange={(e) => handleInputChange('nationality', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. UAE, British, Indian"
                       />
                     </div>
@@ -741,7 +741,7 @@ export default function InvestorVerificationPage() {
                         value={formData.dateOfBirth as string || ''}
                         onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -750,7 +750,7 @@ export default function InvestorVerificationPage() {
                         value={formData.gender as string || ''}
                         onChange={(e) => handleInputChange('gender', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="male">Male</option>
@@ -764,7 +764,7 @@ export default function InvestorVerificationPage() {
                         value={formData.residencyStatus as string || ''}
                         onChange={(e) => handleInputChange('residencyStatus', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="citizen">UAE Citizen</option>
@@ -786,7 +786,7 @@ export default function InvestorVerificationPage() {
                         value={formData.emiratesId as string || ''}
                         onChange={(e) => handleInputChange('emiratesId', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="784-XXXX-XXXXXXX-X"
                       />
                     </div>
@@ -797,7 +797,7 @@ export default function InvestorVerificationPage() {
                         value={formData.emiratesIdExpiry as string || ''}
                         onChange={(e) => handleInputChange('emiratesIdExpiry', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -807,7 +807,7 @@ export default function InvestorVerificationPage() {
                         value={formData.passportNumber as string || ''}
                         onChange={(e) => handleInputChange('passportNumber', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -817,7 +817,7 @@ export default function InvestorVerificationPage() {
                         value={formData.passportExpiry as string || ''}
                         onChange={(e) => handleInputChange('passportExpiry', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -827,7 +827,7 @@ export default function InvestorVerificationPage() {
                         value={formData.passportCountry as string || ''}
                         onChange={(e) => handleInputChange('passportCountry', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -844,7 +844,7 @@ export default function InvestorVerificationPage() {
                         value={formData.residentialAddress as string || ''}
                         onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -854,7 +854,7 @@ export default function InvestorVerificationPage() {
                         value={formData.city as string || ''}
                         onChange={(e) => handleInputChange('city', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -864,7 +864,7 @@ export default function InvestorVerificationPage() {
                         value={formData.country as string || ''}
                         onChange={(e) => handleInputChange('country', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -880,7 +880,7 @@ export default function InvestorVerificationPage() {
                         value={formData.employmentStatus as string || ''}
                         onChange={(e) => handleInputChange('employmentStatus', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="employed">Employed</option>
@@ -898,7 +898,7 @@ export default function InvestorVerificationPage() {
                         value={formData.occupation as string || ''}
                         onChange={(e) => handleInputChange('occupation', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -907,7 +907,7 @@ export default function InvestorVerificationPage() {
                         value={formData.annualIncome as string || ''}
                         onChange={(e) => handleInputChange('annualIncome', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="below_100k">Below AED 100,000</option>
@@ -923,7 +923,7 @@ export default function InvestorVerificationPage() {
                         value={formData.sourceOfFunds as string || ''}
                         onChange={(e) => handleInputChange('sourceOfFunds', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="salary">Salary / Employment Income</option>
@@ -952,7 +952,7 @@ export default function InvestorVerificationPage() {
                         value={formData.companyName as string || ''}
                         onChange={(e) => handleInputChange('companyName', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -961,7 +961,7 @@ export default function InvestorVerificationPage() {
                         value={formData.companyType as string || ''}
                         onChange={(e) => handleInputChange('companyType', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       >
                         <option value="">Select...</option>
                         <option value="llc">LLC</option>
@@ -979,7 +979,7 @@ export default function InvestorVerificationPage() {
                         value={formData.tradeLicenseNumber as string || ''}
                         onChange={(e) => handleInputChange('tradeLicenseNumber', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -989,7 +989,7 @@ export default function InvestorVerificationPage() {
                         value={formData.tradeLicenseExpiry as string || ''}
                         onChange={(e) => handleInputChange('tradeLicenseExpiry', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -999,7 +999,7 @@ export default function InvestorVerificationPage() {
                         value={formData.registrationAuthority as string || ''}
                         onChange={(e) => handleInputChange('registrationAuthority', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. DED Dubai, JAFZA, DMCC"
                       />
                     </div>
@@ -1010,7 +1010,7 @@ export default function InvestorVerificationPage() {
                         value={formData.registrationDate as string || ''}
                         onChange={(e) => handleInputChange('registrationDate', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -1027,7 +1027,7 @@ export default function InvestorVerificationPage() {
                         value={formData.companyAddress as string || ''}
                         onChange={(e) => handleInputChange('companyAddress', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -1037,7 +1037,7 @@ export default function InvestorVerificationPage() {
                         value={formData.companyCity as string || ''}
                         onChange={(e) => handleInputChange('companyCity', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -1047,7 +1047,7 @@ export default function InvestorVerificationPage() {
                         value={formData.companyCountry as string || ''}
                         onChange={(e) => handleInputChange('companyCountry', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -1064,7 +1064,7 @@ export default function InvestorVerificationPage() {
                         value={formData.authRepName as string || ''}
                         onChange={(e) => handleInputChange('authRepName', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -1074,7 +1074,7 @@ export default function InvestorVerificationPage() {
                         value={formData.authRepPosition as string || ''}
                         onChange={(e) => handleInputChange('authRepPosition', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                         placeholder="e.g. CEO, Managing Director"
                       />
                     </div>
@@ -1085,7 +1085,7 @@ export default function InvestorVerificationPage() {
                         value={formData.authRepEmiratesId as string || ''}
                         onChange={(e) => handleInputChange('authRepEmiratesId', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -1095,7 +1095,7 @@ export default function InvestorVerificationPage() {
                         value={formData.authRepEmail as string || ''}
                         onChange={(e) => handleInputChange('authRepEmail', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                     <div>
@@ -1105,7 +1105,7 @@ export default function InvestorVerificationPage() {
                         value={formData.authRepPhone as string || ''}
                         onChange={(e) => handleInputChange('authRepPhone', e.target.value)}
                         disabled={isReadOnly}
-                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
+                        className={`w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 ${isReadOnly ? "bg-gray-100 cursor-not-allowed" : ""}`}
                       />
                     </div>
                   </div>
@@ -1172,11 +1172,11 @@ export default function InvestorVerificationPage() {
                           <button
                             onClick={() => fileInputRefs.current[doc.type]?.click()}
                             disabled={uploadingDoc === doc.type}
-                            className="px-4 py-2 text-sm font-medium rounded-lg bg-violet-50 text-violet-600 hover:bg-violet-100 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-medium rounded-lg bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors disabled:opacity-50"
                           >
                             {uploadingDoc === doc.type ? (
                               <span className="flex items-center gap-2">
-                                <div className="w-4 h-4 border-2 border-violet-300 border-t-violet-600 rounded-full animate-spin" />
+                                <div className="w-4 h-4 border-2 border-teal-300 border-t-teal-600 rounded-full animate-spin" />
                                 Uploading...
                               </span>
                             ) : uploaded ? 'Replace' : 'Upload'}
@@ -1197,7 +1197,7 @@ export default function InvestorVerificationPage() {
                 onClick={handleSubmitKyc}
                 disabled={saving || uploadedRequiredCount < totalRequiredCount}
                 className="w-full py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #0D9488 0%, #14B8A6 100%)' }}
               >
                 {saving ? 'Saving...' : 'Save and Continue'}
               </button>
