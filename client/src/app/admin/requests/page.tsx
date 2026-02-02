@@ -197,7 +197,8 @@ export default function AdminRequestsPage() {
     {
       label: 'Total Requests',
       value: pagination?.total || 0,
-      borderColor: 'var(--teal-500)',
+      borderColor: 'var(--teal-400)',
+      iconColor: 'var(--teal-600)',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -207,7 +208,8 @@ export default function AdminRequestsPage() {
     {
       label: 'Pending',
       value: requests.filter(r => r.status === 'pending').length,
-      borderColor: '#f59e0b',
+      borderColor: '#fbbf24',
+      iconColor: '#d97706',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -217,7 +219,8 @@ export default function AdminRequestsPage() {
     {
       label: 'Responded',
       value: requests.filter(r => r.status === 'responded').length,
-      borderColor: '#10b981',
+      borderColor: '#6ee7b7',
+      iconColor: '#059669',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -245,7 +248,7 @@ export default function AdminRequestsPage() {
             <div className="flex items-center gap-4">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
+                style={{ background: '#f8fafc', color: stat.iconColor }}
               >
                 {stat.icon}
               </div>
