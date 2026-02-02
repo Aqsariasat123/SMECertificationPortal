@@ -58,13 +58,24 @@ export default function SMESupportPage() {
   const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isInitialLoadRef = useRef(true);
+  const shouldScrollRef = useRef(false);
 
   useEffect(() => {
     fetchTickets();
   }, []);
 
+  // Scroll to bottom only on initial load or when user sends a message
   useEffect(() => {
-    scrollToBottom(true);
+    if (selectedTicket?.messages) {
+      if (isInitialLoadRef.current) {
+        scrollToBottom(true);
+        isInitialLoadRef.current = false;
+      } else if (shouldScrollRef.current) {
+        scrollToBottom(true);
+        shouldScrollRef.current = false;
+      }
+    }
   }, [selectedTicket?.messages]);
 
   const scrollToBottom = (instant = false) => {
@@ -87,9 +98,12 @@ export default function SMESupportPage() {
     }
   };
 
-  const fetchTicketMessages = async (ticketId: string) => {
+  const fetchTicketMessages = async (ticketId: string, isNewTicket = false) => {
     try {
       setLoadingMessages(true);
+      if (isNewTicket) {
+        isInitialLoadRef.current = true; // Reset for new ticket selection
+      }
       const result = await api.getSupportTicketMessages(ticketId);
       if (result.success && result.data) {
         setSelectedTicket(result.data as TicketDetail);
@@ -109,6 +123,7 @@ export default function SMESupportPage() {
       const result = await api.sendSupportMessage(selectedTicket.id, newMessage.trim());
       if (result.success) {
         setNewMessage('');
+        shouldScrollRef.current = true; // Scroll to bottom after sending
         fetchTicketMessages(selectedTicket.id);
         fetchTickets();
       }
@@ -127,6 +142,7 @@ export default function SMESupportPage() {
       setUploading(true);
       const result = await api.uploadSupportAttachment(selectedTicket.id, file);
       if (result.success) {
+        shouldScrollRef.current = true; // Scroll to bottom after upload
         fetchTicketMessages(selectedTicket.id);
         fetchTickets();
       } else {
@@ -392,7 +408,7 @@ export default function SMESupportPage() {
             filteredTickets.map((ticket) => (
               <div
                 key={ticket.id}
-                onClick={() => fetchTicketMessages(ticket.id)}
+                onClick={() => fetchTicketMessages(ticket.id, true)}
                 className="flex items-start gap-3 px-4 py-4 cursor-pointer transition-all border-b"
                 style={{
                   backgroundColor: selectedTicket?.id === ticket.id ? 'var(--teal-50)' : 'transparent',

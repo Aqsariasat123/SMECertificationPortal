@@ -81,9 +81,12 @@ export default function MessagesPage() {
   const chatSearchRef = useRef<HTMLInputElement>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const isInitialLoadRef = useRef(true);
+  const shouldScrollRef = useRef(true);
 
   // Common emojis for quick access
   const commonEmojis = ['😊', '😂', '❤️', '👍', '🙏', '😍', '🔥', '✨', '🎉', '💪', '👏', '😎', '🤔', '😢', '😮', '👋', '✅', '💡', '📌', '🚀'];
@@ -96,6 +99,7 @@ export default function MessagesPage() {
   // Fetch messages when active chat changes
   useEffect(() => {
     if (activeRequestId) {
+      isInitialLoadRef.current = true; // Reset for new conversation
       fetchMessages();
       const interval = setInterval(fetchMessages, 5000);
       return () => clearInterval(interval);
@@ -115,8 +119,15 @@ export default function MessagesPage() {
     }
   }, [showChatSearch]);
 
+  // Scroll to bottom only on initial load or when user sends a message
   useEffect(() => {
-    scrollToBottom(true);
+    if (isInitialLoadRef.current && messages.length > 0) {
+      scrollToBottom(true);
+      isInitialLoadRef.current = false;
+    } else if (shouldScrollRef.current) {
+      scrollToBottom(true);
+      shouldScrollRef.current = false;
+    }
   }, [messages]);
 
   // Close menu when clicking outside
@@ -248,6 +259,7 @@ export default function MessagesPage() {
       setSending(true);
       const result = await api.sendChatMessage(activeRequestId, newMessage.trim());
       if (result.success && result.data) {
+        shouldScrollRef.current = true; // Scroll to bottom after sending
         setMessages((prev) => [...prev, result.data as Message]);
         setNewMessage('');
         fetchConversations(); // Refresh conversation list
@@ -269,6 +281,7 @@ export default function MessagesPage() {
       setUploading(true);
       const result = await api.uploadChatFile(activeRequestId, file);
       if (result.success && result.data) {
+        shouldScrollRef.current = true; // Scroll to bottom after upload
         setMessages((prev) => [...prev, result.data as Message]);
         fetchConversations();
       } else {
