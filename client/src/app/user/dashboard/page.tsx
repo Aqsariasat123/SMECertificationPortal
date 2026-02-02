@@ -184,19 +184,19 @@ export default function UserDashboard() {
 
         <Link
           href="/user/messages"
-          className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-violet-200 transition-all"
+          className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-200 transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.2)' }}>
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-slate-900 group-hover:text-violet-600 transition-colors">Messages</h3>
+              <h3 className="font-semibold text-slate-900 transition-colors" style={{ color: 'var(--graphite-900)' }}>Messages</h3>
               <p className="text-sm text-slate-500 mt-0.5">View your conversations with SMEs</p>
             </div>
-            <svg className="w-5 h-5 text-slate-300 group-hover:text-violet-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-slate-300 group-hover:translate-x-1 transition-all" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </div>
