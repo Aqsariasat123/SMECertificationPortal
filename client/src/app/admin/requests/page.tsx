@@ -241,22 +241,22 @@ export default function AdminRequestsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className={`glass-card rounded-lg p-4 stat-accent-${stat.accent}`}
+            className={`glass-card rounded-xl p-6 stat-accent-${stat.accent}`}
           >
             <div className="flex items-center gap-4">
               <div
-                className="w-11 h-11 rounded-lg flex items-center justify-center"
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
                 style={{ background: stat.iconBg, color: stat.iconColor }}
               >
                 {stat.icon}
               </div>
               <div>
-                <p className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
-                <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>{stat.label}</p>
+                <p className="text-2xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--foreground-muted)' }}>{stat.label}</p>
               </div>
             </div>
           </div>
