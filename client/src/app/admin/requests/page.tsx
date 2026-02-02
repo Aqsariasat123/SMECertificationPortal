@@ -38,14 +38,17 @@ export default function AdminRequestsPage() {
 
   const getStatusBadge = (status: IntroductionRequestStatus) => {
     const config: Record<IntroductionRequestStatus, { bg: string; text: string; dot: string; label: string }> = {
-      pending: { bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500', label: 'Pending' },
-      viewed: { bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500', label: 'Viewed' },
-      responded: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500', label: 'Responded' },
+      pending: { bg: '#fef3c7', text: '#92400e', dot: '#f59e0b', label: 'Pending' },
+      viewed: { bg: '#dbeafe', text: '#1e40af', dot: '#3b82f6', label: 'Viewed' },
+      responded: { bg: '#d1fae5', text: '#065f46', dot: '#10b981', label: 'Responded' },
     };
     const { bg, text, dot, label } = config[status];
     return (
-      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${bg} ${text}`}>
-        <span className={`w-2 h-2 rounded-full ${dot}`} />
+      <span
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+        style={{ backgroundColor: bg, color: text }}
+      >
+        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: dot }} />
         {label}
       </span>
     );
