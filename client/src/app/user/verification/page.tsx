@@ -283,19 +283,19 @@ export default function InvestorVerificationPage() {
               <div className="flex items-center justify-between">
                 {/* Step 1: Submitted */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: 'var(--teal-500)', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.3)' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: 'var(--graphite-600)', boxShadow: '0 10px 15px -3px rgba(54, 60, 69, 0.3)' }}>
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <span className="text-sm font-medium text-gray-900">Submitted</span>
-                  <span className="text-xs" style={{ color: 'var(--teal-600)' }}>Complete</span>
+                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>Complete</span>
                 </div>
                 {/* Connector */}
-                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: 'var(--teal-500)' }} />
+                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: 'var(--graphite-600)' }} />
                 {/* Step 2: Under Review */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? '#10b981' : 'var(--teal-500)', boxShadow: isApproved ? '0 10px 15px -3px rgba(16, 185, 129, 0.3)' : '0 10px 15px -3px rgba(74, 143, 135, 0.3)' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-600)', boxShadow: '0 10px 15px -3px rgba(54, 60, 69, 0.3)' }}>
                     {isApproved ? (
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -305,25 +305,25 @@ export default function InvestorVerificationPage() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900">Under Review</span>
-                  <span className="text-xs" style={{ color: isApproved ? '#059669' : 'var(--teal-600)' }}>{isApproved ? 'Complete' : 'In Progress'}</span>
+                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>{isApproved ? 'Complete' : 'In Progress'}</span>
                 </div>
                 {/* Connector */}
-                <div className={`h-1 flex-1 mx-3 rounded-full ${isApproved ? 'bg-emerald-500' : 'bg-gray-200'}`} />
+                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-200)' }} />
                 {/* Step 3: Verified */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${isApproved ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-gray-100'}`}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-100)', boxShadow: isApproved ? '0 10px 15px -3px rgba(54, 60, 69, 0.3)' : 'none' }}>
                     {isApproved ? (
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900">Verified</span>
-                  <span className={`text-xs ${isApproved ? 'text-emerald-600' : 'text-gray-500'}`}>{isApproved ? 'Complete' : 'Pending'}</span>
+                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>{isApproved ? 'Complete' : 'Pending'}</span>
                 </div>
               </div>
             </div>
