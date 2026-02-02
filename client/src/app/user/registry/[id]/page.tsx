@@ -749,7 +749,7 @@ export default function SMEDetailPage() {
       {showIntroModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
           <div className="rounded-2xl max-w-md w-full shadow-2xl overflow-hidden" style={{ background: 'white' }}>
-            <div className="p-6" style={{ background: 'linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%)' }}>
+            <div className="p-6" style={{ background: 'linear-gradient(135deg, var(--graphite-800) 0%, var(--graphite-900) 100%)' }}>
               <div className="flex items-center gap-4">
                 {sme.companyLogo ? (
                   <div className="w-14 h-14 rounded-xl overflow-hidden bg-white">
