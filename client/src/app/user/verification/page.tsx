@@ -470,7 +470,10 @@ export default function InvestorVerificationPage() {
               </p>
               <button
                 onClick={() => router.push('/user/support')}
-                className="w-full py-2.5 rounded-lg bg-white/20 hover:bg-white/30 text-sm font-medium transition-colors"
+                className="w-full py-2.5 rounded-lg text-sm font-medium transition-colors"
+                style={{ background: 'var(--teal-600)' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-500)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
               >
                 Contact Support
               </button>
