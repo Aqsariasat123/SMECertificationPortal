@@ -126,7 +126,7 @@ export default function AuthLayout({
         className="w-full lg:w-7/12 flex items-center justify-center p-6 min-h-screen"
         style={{ background: 'var(--background)' }}
       >
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-xl">
           {children}
         </div>
       </div>

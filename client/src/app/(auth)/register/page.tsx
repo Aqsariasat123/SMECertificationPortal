@@ -182,85 +182,104 @@ export default function RegisterPage() {
       {step === 1 ? (
         <>
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Get Started</h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>What would you like to do?</p>
+            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Choose Your Account Type</h1>
+            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select the type of account you want to create to get started.</p>
           </div>
 
-          <div className="space-y-3">
-            {/* User Option */}
-            <button
-              onClick={() => handleRoleSelect('user')}
-              className="w-full p-5 rounded-lg transition-all duration-200 text-left group"
-              style={{
-                background: 'white',
-                border: '1px solid var(--graphite-200)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-600)';
-                e.currentTarget.style.background = 'var(--teal-50)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--graphite-200)';
-                e.currentTarget.style.background = 'white';
-              }}
-            >
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'var(--teal-500)' }}
-                >
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Browse SME Registry</h3>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Access the certified SME directory and request introductions</p>
-                </div>
-                <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </button>
-
+          <div className="grid grid-cols-2 gap-5">
             {/* SME Option */}
-            <button
-              onClick={() => handleRoleSelect('sme')}
-              className="w-full p-5 rounded-lg transition-all duration-200 text-left group"
+            <div
+              className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
               style={{
                 background: 'white',
                 border: '1px solid var(--graphite-200)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-600)';
-                e.currentTarget.style.background = 'var(--teal-50)';
+                e.currentTarget.style.borderColor = 'var(--teal-300)';
+                e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(58, 115, 109, 0.15)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = 'var(--graphite-200)';
-                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'var(--teal-600)' }}
-                >
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Register Your SME</h3>
-                    <span className="badge badge-teal text-xs">Recommended</span>
-                  </div>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors</p>
-                </div>
-                <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              {/* SME Icon - Shop/Store */}
+              <div className="flex justify-center mb-5">
+                <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Store building */}
+                  <rect x="12" y="28" width="40" height="28" rx="2" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2"/>
+                  {/* Awning */}
+                  <path d="M8 28L12 16H52L56 28" stroke="#3a736d" strokeWidth="2" fill="#3a736d"/>
+                  <path d="M8 28C8 28 12 34 18 28C24 22 26 28 32 28C38 28 40 22 46 28C52 34 56 28 56 28" stroke="#3a736d" strokeWidth="2" fill="#5eb6af"/>
+                  {/* Door */}
+                  <rect x="26" y="40" width="12" height="16" rx="1" fill="#3a736d"/>
+                  <circle cx="35" cy="48" r="1.5" fill="white"/>
+                  {/* Windows */}
+                  <rect x="16" y="34" width="8" height="8" rx="1" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
+                  <rect x="40" y="34" width="8" height="8" rx="1" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
+                  {/* Flag */}
+                  <line x1="32" y1="8" x2="32" y2="16" stroke="#3a736d" strokeWidth="2"/>
+                  <path d="M32 8L42 12L32 16" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
                 </svg>
               </div>
-            </button>
+              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am an SME</h3>
+              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors.</p>
+              <button
+                onClick={() => handleRoleSelect('sme')}
+                className="w-full py-2.5 px-4 rounded-lg font-medium text-white transition-all duration-200 mt-6"
+                style={{ background: 'var(--teal-600)' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+              >
+                Create SME Account
+              </button>
+            </div>
+
+            {/* Investor Option */}
+            <div
+              className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
+              style={{
+                background: 'white',
+                border: '1px solid var(--graphite-200)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--teal-300)';
+                e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(58, 115, 109, 0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--graphite-200)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              {/* Investor Icon */}
+              <div className="flex justify-center mb-5">
+                <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Person */}
+                  <circle cx="24" cy="16" r="8" fill="#3a736d"/>
+                  <path d="M10 44C10 34 16 28 24 28C32 28 38 34 38 44" fill="#3a736d"/>
+                  {/* Growth chart */}
+                  <rect x="36" y="24" width="22" height="32" rx="2" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2"/>
+                  {/* Chart bars */}
+                  <rect x="40" y="44" width="4" height="8" fill="#5eb6af"/>
+                  <rect x="46" y="38" width="4" height="14" fill="#5eb6af"/>
+                  <rect x="52" y="32" width="4" height="20" fill="#3a736d"/>
+                  {/* Arrow up */}
+                  <path d="M42 36L47 28L52 32" stroke="#3a736d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M47 28L47 32L51 30" fill="#3a736d"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am an Investor / Partner</h3>
+              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Browse SMEs and request introductions.</p>
+              <button
+                onClick={() => handleRoleSelect('user')}
+                className="w-full py-2.5 px-4 rounded-lg font-medium text-white transition-all duration-200 mt-6"
+                style={{ background: 'var(--teal-600)' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+              >
+                Create Investor Account
+              </button>
+            </div>
           </div>
         </>
       ) : (
