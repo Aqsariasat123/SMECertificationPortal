@@ -127,37 +127,49 @@ export default function RegisterPage() {
         </Link>
       </div>
 
-      {/* Progress Steps */}
-      <div className="flex items-center justify-center gap-3 mb-8">
-        <div
-          className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-          style={{
-            background: step >= 1 ? 'var(--graphite-800)' : 'var(--graphite-200)',
-            color: step >= 1 ? 'white' : 'var(--graphite-500)'
-          }}
-        >
-          1
-        </div>
-        <div
-          className="w-12 h-1 rounded-full"
-          style={{ background: step >= 2 ? 'var(--graphite-800)' : 'var(--graphite-200)' }}
-        />
-        <div
-          className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-          style={{
-            background: step >= 2 ? 'var(--graphite-800)' : 'var(--graphite-200)',
-            color: step >= 2 ? 'white' : 'var(--graphite-500)'
-          }}
-        >
-          2
+      {/* Progress Steps with Labels */}
+      <div className="mb-8">
+        <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-col items-center">
+            <div
+              className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
+              style={{
+                background: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-200)',
+                color: step >= 1 ? 'white' : 'var(--graphite-500)'
+              }}
+            >
+              1
+            </div>
+            <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
+              Account Type
+            </span>
+          </div>
+          <div
+            className="w-12 h-1 rounded-full mb-5"
+            style={{ background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)' }}
+          />
+          <div className="flex flex-col items-center">
+            <div
+              className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
+              style={{
+                background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
+                color: step >= 2 ? 'white' : 'var(--graphite-500)'
+              }}
+            >
+              2
+            </div>
+            <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
+              Your Details
+            </span>
+          </div>
         </div>
       </div>
 
       {step === 1 ? (
         <>
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Create your account</h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select your account type to get started</p>
+            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Get Started</h1>
+            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>What would you like to do?</p>
           </div>
 
           <div className="space-y-3">
@@ -181,15 +193,15 @@ export default function RegisterPage() {
               <div className="flex items-start gap-4">
                 <div
                   className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'var(--graphite-800)' }}
+                  style={{ background: 'var(--teal-500)' }}
                 >
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Browse SME Registry</h3>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Access the certified SME directory and request introductions</p>
+                  <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>I&apos;m an Investor / Partner</h3>
+                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Browse certified SMEs and request introductions</p>
                 </div>
                 <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -225,10 +237,10 @@ export default function RegisterPage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>Register Your SME</h3>
+                    <h3 className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>I&apos;m an SME Owner</h3>
                     <span className="badge badge-teal text-xs">Recommended</span>
                   </div>
-                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors</p>
+                  <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Get your business certified and listed in the registry</p>
                 </div>
                 <svg className="w-5 h-5 mt-1" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -251,9 +263,13 @@ export default function RegisterPage() {
               Back to account type
             </button>
             <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              {role === 'sme' ? 'Register Your SME' : 'Create Account'}
+              {role === 'sme' ? 'Create Your Account' : 'Create Your Account'}
             </h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Fill in your details to get started</p>
+            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
+              {role === 'sme'
+                ? 'Set up your login credentials. Company details will be added during certification.'
+                : 'Enter your details to access the SME registry'}
+            </p>
           </div>
 
           {error && (
@@ -431,7 +447,7 @@ export default function RegisterPage() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  {role === 'sme' ? 'Register & Start Certification' : 'Create Account'}
+                  {role === 'sme' ? 'Create Account & Continue' : 'Create Account'}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

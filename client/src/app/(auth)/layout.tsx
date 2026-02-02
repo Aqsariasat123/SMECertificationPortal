@@ -9,10 +9,34 @@ export default function AuthLayout({
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
       <div
-        className="hidden lg:flex lg:w-5/12 text-white flex-col justify-between p-10 relative"
-        style={{ background: 'var(--sidebar-bg)' }}
+        className="hidden lg:flex lg:w-5/12 text-white flex-col justify-between p-10 relative overflow-hidden"
+        style={{
+          background: 'var(--sidebar-bg)',
+        }}
       >
-        <div>
+        {/* Subtle texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 0)`,
+            backgroundSize: '24px 24px',
+          }}
+        />
+        {/* Subtle gradient accent */}
+        <div
+          className="absolute top-0 right-0 w-96 h-96 opacity-10"
+          style={{
+            background: 'radial-gradient(circle at top right, var(--teal-500), transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-64 h-64 opacity-5"
+          style={{
+            background: 'radial-gradient(circle at bottom left, var(--teal-400), transparent 70%)',
+          }}
+        />
+        {/* Content - above texture */}
+        <div className="relative z-10">
           <Link href="/" className="flex items-center gap-2.5">
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -26,7 +50,7 @@ export default function AuthLayout({
           </Link>
         </div>
 
-        <div className="space-y-6">
+        <div className="relative z-10 space-y-6">
           <h1 className="text-3xl font-bold leading-tight text-white">
             Trusted certification
             <span className="block" style={{ color: 'var(--teal-400)' }}>for UAE businesses</span>
@@ -63,7 +87,7 @@ export default function AuthLayout({
           </div>
         </div>
 
-        <p className="text-sm text-white opacity-50">
+        <p className="relative z-10 text-sm text-white opacity-50">
           500+ businesses certified across UAE
         </p>
       </div>
