@@ -112,49 +112,46 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Stats Cards - Modern with colored left accent */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: 'linear-gradient(to bottom, var(--teal-400), var(--teal-600))' }} />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-3xl font-bold text-slate-900">{stats.totalRequests}</p>
-              <p className="text-sm text-slate-500 mt-1">Total Requests</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-100)' }}>
-              <svg className="w-6 h-6" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Stats Cards - Match Admin Dashboard Style */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="glass-card rounded-xl p-6 stat-accent-teal">
+          <div className="flex items-center gap-6">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-50)', color: 'var(--teal-600)' }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
               </svg>
             </div>
+            <div>
+              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.totalRequests}</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Total Requests</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: 'linear-gradient(to bottom, var(--teal-400), var(--teal-600))' }} />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-3xl font-bold text-slate-900">{stats.pendingRequests}</p>
-              <p className="text-sm text-slate-500 mt-1">Pending</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-100)' }}>
-              <svg className="w-6 h-6" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="glass-card rounded-xl p-6 stat-accent-warning">
+          <div className="flex items-center gap-6">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--warning-50)', color: 'var(--warning-600)' }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
+            <div>
+              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.pendingRequests}</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Pending</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-1" style={{ background: 'linear-gradient(to bottom, var(--teal-400), var(--teal-600))' }} />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-3xl font-bold text-slate-900">{stats.respondedRequests}</p>
-              <p className="text-sm text-slate-500 mt-1">Responded</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-100)' }}>
-              <svg className="w-6 h-6" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="glass-card rounded-xl p-6 stat-accent-success">
+          <div className="flex items-center gap-6">
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--success-50)', color: 'var(--success-600)' }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
+            </div>
+            <div>
+              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.respondedRequests}</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Responded</p>
             </div>
           </div>
         </div>

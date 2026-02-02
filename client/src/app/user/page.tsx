@@ -58,9 +58,9 @@ export default function UserDashboardPage() {
   }, [searchQuery, selectedSector]);
 
   const stats = [
-    { label: 'Certified SMEs', value: pagination?.total.toString() || '0', icon: 'shield', accent: 'stat-accent-gold' },
-    { label: 'Industry Sectors', value: sectors.length.toString(), icon: 'building', accent: 'stat-accent-teal' },
-    { label: 'Current Page', value: `${currentPage} of ${pagination?.pages || 1}`, icon: 'page', accent: 'stat-accent-graphite' },
+    { label: 'Certified SMEs', value: pagination?.total.toString() || '0', icon: 'shield', accent: 'stat-accent-teal', iconBg: 'var(--teal-50)', iconColor: 'var(--teal-600)' },
+    { label: 'Industry Sectors', value: sectors.length.toString(), icon: 'building', accent: 'stat-accent-warning', iconBg: 'var(--warning-50)', iconColor: 'var(--warning-600)' },
+    { label: 'Current Page', value: `${currentPage} of ${pagination?.pages || 1}`, icon: 'page', accent: 'stat-accent-success', iconBg: 'var(--success-50)', iconColor: 'var(--success-600)' },
   ];
 
   const handleViewProfile = (sme: RegistrySME) => {
@@ -229,23 +229,23 @@ export default function UserDashboardPage() {
 
   return (
     <div className="space-y-5">
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {/* Stats - Match Admin Users Style */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className={`solid-card rounded-lg ${stat.accent} p-4`}
+            className={`glass-card rounded-xl p-6 ${stat.accent}`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div
-                className="w-10 h-10 rounded flex items-center justify-center"
-                style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                style={{ background: stat.iconBg, color: stat.iconColor }}
               >
                 {getStatIcon(stat.icon)}
               </div>
               <div>
-                <p className="text-xl font-semibold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
-                <p className="text-xs" style={{ color: 'var(--foreground-muted)' }}>{stat.label}</p>
+                <p className="text-2xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>{stat.label}</p>
               </div>
             </div>
           </div>
