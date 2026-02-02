@@ -239,7 +239,7 @@ export default function UserDashboardPage() {
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded flex items-center justify-center"
-                style={{ background: 'var(--graphite-100)', color: 'var(--graphite-600)' }}
+                style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
               >
                 {getStatIcon(stat.icon)}
               </div>
