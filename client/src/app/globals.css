@@ -383,3 +383,184 @@ input:focus, textarea:focus, select:focus {
   color: var(--foreground-muted);
   margin-top: 0.25rem;
 }
+
+/* ============================================
+   MOBILE RESPONSIVENESS (Phase 3.1)
+   ============================================ */
+
+/* Touch-friendly buttons - minimum 44px touch target */
+@media (max-width: 768px) {
+  button,
+  a.btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-teal,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Larger input fields on mobile */
+  .input-field,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  textarea,
+  select {
+    min-height: 48px;
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+
+  /* Page title smaller on mobile */
+  .page-title {
+    font-size: 1.125rem;
+  }
+
+  /* Stat cards stack on mobile */
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Table responsive - hide on mobile, show cards instead */
+  .data-table {
+    display: none;
+  }
+
+  .mobile-card-list {
+    display: block;
+  }
+
+  /* Modal full width on mobile */
+  .modal-glass {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Bottom safe area for iOS */
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Add padding for bottom nav */
+  .has-bottom-nav {
+    padding-bottom: 80px;
+  }
+}
+
+/* Show table on desktop, hide mobile cards */
+@media (min-width: 769px) {
+  .mobile-card-list {
+    display: none;
+  }
+
+  .data-table {
+    display: table;
+  }
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--graphite-200);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  z-index: 50;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  min-width: 64px;
+  min-height: 48px;
+  border-radius: 8px;
+  color: var(--graphite-500);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.bottom-nav-item:hover,
+.bottom-nav-item:active {
+  background: var(--graphite-100);
+}
+
+.bottom-nav-item.active {
+  color: var(--teal-600);
+}
+
+.bottom-nav-item svg {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 2px;
+}
+
+.bottom-nav-item span {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+/* Mobile card for tables */
+.mobile-card {
+  background: white;
+  border: 1px solid var(--graphite-200);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.mobile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.mobile-card-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--graphite-900);
+}
+
+.mobile-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--graphite-100);
+}
+
+.mobile-card-label {
+  font-size: 0.75rem;
+  color: var(--graphite-500);
+}
+
+.mobile-card-value {
+  font-size: 0.8125rem;
+  color: var(--graphite-800);
+  font-weight: 500;
+}
+
+/* Swipe hint animation */
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-5px); }
+}
+
+.swipe-hint {
+  animation: swipeHint 1s ease-in-out 2;
+}
