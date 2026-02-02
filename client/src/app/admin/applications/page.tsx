@@ -308,20 +308,7 @@ export default function AdminApplicationsPage() {
                 </div>
               </div>
 
-              {/* Progress bar for completion */}
-              <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--graphite-100)' }}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium" style={{ color: 'var(--graphite-700)' }}>Profile Completion</span>
-                  <span className="text-sm font-semibold" style={{ color: 'var(--teal-600)' }}>{app.completionPercentage ?? 0}%</span>
-                </div>
-                <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--graphite-100)' }}>
-                  <div
-                    className="h-full rounded-full transition-all"
-                    style={{ width: `${app.completionPercentage ?? 0}%`, backgroundColor: 'var(--teal-600)' }}
-                  />
-                </div>
-              </div>
-            </div>
+                          </div>
           ))}
         </div>
       )}

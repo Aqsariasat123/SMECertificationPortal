@@ -270,15 +270,6 @@ export default function ApplicationDetailPage() {
               <InfoField label="Company Name" value={application.companyName} />
               <InfoField label="Trade License" value={application.tradeLicenseNumber} />
               <InfoField label="Industry Sector" value={formatSector(application.industrySector)} />
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Profile Completion</label>
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
-                    <div className="h-full rounded-full" style={{ width: `${application.completionPercentage ?? 0}%`, background: 'var(--teal-600)' }} />
-                  </div>
-                  <span className="text-sm font-bold" style={{ color: 'var(--teal-600)' }}>{application.completionPercentage ?? 0}%</span>
-                </div>
-              </div>
               <div className="md:col-span-2">
                 <InfoField label="Description" value={application.companyDescription} />
               </div>
