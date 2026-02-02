@@ -407,7 +407,7 @@ export default function AdminUsersPage() {
               <option value="">All Roles</option>
               <option value="admin">Administrator</option>
               <option value="sme">SME Owner</option>
-              <option value="user">User</option>
+              <option value="user">Investor</option>
             </select>
             <button
               onClick={fetchUsers}
