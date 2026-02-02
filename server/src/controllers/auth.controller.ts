@@ -20,6 +20,8 @@ interface RegisterRequest {
   fullName: string;
   role: 'user' | 'sme';
   companyName?: string;
+  tradeLicenseNumber?: string;
+  industrySector?: string;
 }
 
 const prisma = new PrismaClient();
@@ -49,7 +51,7 @@ function sanitizeUser(user: {
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
-    const { email, password, fullName, role, companyName } = req.body as RegisterRequest;
+    const { email, password, fullName, role, companyName, tradeLicenseNumber, industrySector } = req.body as RegisterRequest;
 
     // Validation
     if (!email || !password || !fullName || !role) {
@@ -76,12 +78,28 @@ export async function register(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    if (role === 'sme' && !companyName) {
-      res.status(400).json({
-        success: false,
-        message: 'Company name is required for SME registration',
-      } as ApiResponse);
-      return;
+    if (role === 'sme') {
+      if (!companyName) {
+        res.status(400).json({
+          success: false,
+          message: 'Company name is required for SME registration',
+        } as ApiResponse);
+        return;
+      }
+      if (!tradeLicenseNumber) {
+        res.status(400).json({
+          success: false,
+          message: 'Trade license number is required for SME registration',
+        } as ApiResponse);
+        return;
+      }
+      if (!industrySector) {
+        res.status(400).json({
+          success: false,
+          message: 'Industry sector is required for SME registration',
+        } as ApiResponse);
+        return;
+      }
     }
 
     // Check if user already exists
@@ -113,12 +131,14 @@ export async function register(req: Request, res: Response): Promise<void> {
       },
     });
 
-    // If SME, create SME profile
+    // If SME, create SME profile with company details
     if (role === 'sme' && companyName) {
       await prisma.sMEProfile.create({
         data: {
           userId: user.id,
           companyName,
+          tradeLicenseNumber: tradeLicenseNumber || null,
+          industrySector: industrySector as any || null,
           certificationStatus: 'draft',
         },
       });

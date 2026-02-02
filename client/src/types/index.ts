@@ -44,6 +44,8 @@ export interface RegisterData {
   fullName: string;
   role: 'user' | 'sme';
   companyName?: string;
+  tradeLicenseNumber?: string;
+  industrySector?: string;
 }
 
 // SME Profile Types
