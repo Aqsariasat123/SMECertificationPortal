@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { PrismaClient, SupportTicketStatus, SupportTicketPriority, SupportTicket, SupportMessage, User } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -390,5 +391,93 @@ export const getSupportStats = async (req: AuthenticatedRequest, res: Response):
   } catch (error) {
     console.error('Error fetching support stats:', error);
     return res.status(500).json({ success: false, message: 'Failed to fetch stats' });
+  }
+};
+
+// POST /api/support/tickets/:ticketId/upload - Upload attachment in support ticket
+export const uploadAttachment = async (req: AuthenticatedRequest, res: Response): Promise<Response> => {
+  try {
+    const userId = req.user?.userId;
+    const userRole = req.user?.role;
+    const ticketId = req.params.ticketId as string;
+
+    if (!userId) {
+      if (req.file) fs.unlinkSync(req.file.path);
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    // Verify ticket exists and user has access
+    const ticket = await prisma.supportTicket.findUnique({
+      where: { id: ticketId },
+    });
+
+    if (!ticket) {
+      fs.unlinkSync(req.file.path);
+      return res.status(404).json({ success: false, message: 'Ticket not found' });
+    }
+
+    // Check access - user can only upload to their own tickets, admin can upload to all
+    if (userRole !== 'admin' && ticket.userId !== userId) {
+      fs.unlinkSync(req.file.path);
+      return res.status(403).json({ success: false, message: 'Access denied' });
+    }
+
+    // Create attachment content in JSON format
+    const attachmentContent = JSON.stringify({
+      type: 'attachment',
+      fileName: req.file.filename,
+      originalName: req.file.originalname,
+      mimeType: req.file.mimetype,
+      size: req.file.size,
+      path: `/api/support/tickets/${ticketId}/download/${req.file.filename}`,
+    });
+
+    // Create message with attachment
+    const message = await prisma.supportMessage.create({
+      data: {
+        ticketId,
+        senderId: userId,
+        content: `[ATTACHMENT]${attachmentContent}`,
+      },
+      include: {
+        sender: {
+          select: { id: true, fullName: true, role: true },
+        },
+      },
+    });
+
+    // Update ticket's updatedAt
+    await prisma.supportTicket.update({
+      where: { id: ticketId },
+      data: { updatedAt: new Date() },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'File uploaded successfully',
+      data: {
+        id: message.id,
+        content: message.content,
+        createdAt: message.createdAt,
+        sender: message.sender,
+        attachment: {
+          fileName: req.file.filename,
+          originalName: req.file.originalname,
+          mimeType: req.file.mimetype,
+          size: req.file.size,
+          path: `/api/support/tickets/${ticketId}/download/${req.file.filename}`,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error uploading attachment:', error);
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    return res.status(500).json({ success: false, message: 'Failed to upload file' });
   }
 };
