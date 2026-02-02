@@ -424,11 +424,15 @@ export default function KycDetailPage() {
               </div>
               KYC Documents
             </h3>
-            {application.kycDocuments && Object.keys(application.kycDocuments).length > 0 ? (
+            {application.kycDocuments && (Array.isArray(application.kycDocuments) ? application.kycDocuments.length > 0 : Object.keys(application.kycDocuments).length > 0) ? (
               <div className="space-y-3">
-                {Object.entries(application.kycDocuments).map(([type, path]) => (
+                {(Array.isArray(application.kycDocuments) ? application.kycDocuments : Object.entries(application.kycDocuments).map(([type, path]) => ({ type, path: path as string }))).map((doc) => {
+                  const docType = typeof doc === 'object' && 'type' in doc ? doc.type : '';
+                  const docPath = typeof doc === 'object' && 'path' in doc ? doc.path : '';
+                  const docName = typeof doc === 'object' && 'name' in doc ? (doc as { name: string }).name : '';
+                  return (
                   <div
-                    key={type}
+                    key={docType}
                     className="flex items-center justify-between p-4 rounded-xl transition-colors"
                     style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
                   >
@@ -439,12 +443,13 @@ export default function KycDetailPage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium" style={{ color: 'var(--graphite-900)' }}>{getDocumentLabel(type)}</p>
+                        <p className="font-medium" style={{ color: 'var(--graphite-900)' }}>{getDocumentLabel(docType)}</p>
+                        {docName && <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{docName}</p>}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href={`${API_BASE_URL}${path}`}
+                        href={`${API_BASE_URL}${docPath}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
@@ -457,8 +462,8 @@ export default function KycDetailPage() {
                         View
                       </a>
                       <a
-                        href={`${API_BASE_URL}${path}`}
-                        download
+                        href={`${API_BASE_URL}${docPath}`}
+                        download={docName || true}
                         className="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
                         style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
                       >
@@ -469,7 +474,8 @@ export default function KycDetailPage() {
                       </a>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-8 rounded-xl" style={{ background: 'var(--graphite-50)' }}>
