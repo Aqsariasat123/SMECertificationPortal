@@ -59,6 +59,7 @@ export default function AdminSupportPage() {
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<{ url: string; name: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isInitialLoadRef = useRef(true);
@@ -200,6 +201,10 @@ export default function AdminSupportPage() {
     if (attachment.mimeType?.startsWith('image/')) return true;
     if (attachment.originalName && /\.(jpg|jpeg|png|gif|webp)$/i.test(attachment.originalName)) return true;
     return false;
+  };
+
+  const openImageLightbox = (url: string, name: string) => {
+    setLightboxImage({ url, name });
   };
 
   // Format preview text for ticket list (hide JSON, show friendly text)
@@ -525,7 +530,7 @@ export default function AdminSupportPage() {
                                         alt={attachment.originalName}
                                         className="w-full object-cover cursor-pointer"
                                         style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getImageUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                        onClick={() => openImageLightbox(getImageUrl(selectedTicket.id, attachment.fileName), attachment.originalName)}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
@@ -588,7 +593,7 @@ export default function AdminSupportPage() {
                                         alt={attachment.originalName}
                                         className="w-full object-cover cursor-pointer"
                                         style={{ maxHeight: '200px' }}
-                                        onClick={() => window.open(getImageUrl(selectedTicket.id, attachment.fileName), '_blank')}
+                                        onClick={() => openImageLightbox(getImageUrl(selectedTicket.id, attachment.fileName), attachment.originalName)}
                                       />
                                       <button
                                         onClick={(e) => { e.stopPropagation(); handleDownloadAttachment(selectedTicket.id, attachment); }}
@@ -712,6 +717,62 @@ export default function AdminSupportPage() {
           </>
         )}
       </div>
+
+      {/* Image Lightbox Modal */}
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 bg-black flex items-center justify-center z-[100]"
+          onClick={() => setLightboxImage(null)}
+        >
+          {/* Top toolbar - WhatsApp style */}
+          <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/70 to-transparent">
+            {/* Left side - Image name */}
+            <div className="text-white text-sm font-medium truncate max-w-[60%]">
+              {lightboxImage.name}
+            </div>
+
+            {/* Right side - Action buttons */}
+            <div className="flex items-center gap-1">
+              {/* Download button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const link = document.createElement('a');
+                  link.href = lightboxImage.url;
+                  link.download = lightboxImage.name;
+                  link.click();
+                }}
+                className="p-3 text-white hover:bg-white/20 transition-colors rounded-full"
+                title="Download"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+
+              {/* Close button */}
+              <button
+                onClick={() => setLightboxImage(null)}
+                className="p-3 text-white hover:bg-white/20 transition-colors rounded-full"
+                title="Close"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Image */}
+          <img
+            src={lightboxImage.url}
+            alt={lightboxImage.name}
+            className="max-w-full max-h-full object-contain"
+            style={{ maxHeight: 'calc(100vh - 100px)' }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
