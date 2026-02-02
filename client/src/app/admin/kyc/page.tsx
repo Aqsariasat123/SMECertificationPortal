@@ -134,26 +134,25 @@ export default function AdminKycPage() {
   return (
     <div className="space-y-8">
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((stat) => {
           const style = getStatStyles(stat.color);
           return (
             <div
               key={stat.label}
-              className={`solid-card card-hover rounded-xl ${style.accentClass} p-6`}
+              className={`solid-card card-hover rounded-xl ${style.accentClass} p-4`}
             >
-              <div className="flex items-start justify-between">
+              <div className="flex items-center gap-4">
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  className="w-11 h-11 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: style.iconBg, color: style.iconColor }}
                 >
                   {getStatIcon(stat.icon)}
                 </div>
-              </div>
-              <div className="mt-4">
-                <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
-                <p className="text-sm mt-1 font-medium" style={{ color: 'var(--graphite-500)' }}>{stat.label}</p>
-                <p className="text-xs mt-2" style={{ color: 'var(--graphite-400)' }}>{stat.change}</p>
+                <div>
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>{stat.value}</p>
+                  <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>{stat.label}</p>
+                </div>
               </div>
             </div>
           );
