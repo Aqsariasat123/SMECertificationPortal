@@ -283,19 +283,19 @@ export default function InvestorVerificationPage() {
               <div className="flex items-center justify-between">
                 {/* Step 1: Submitted */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: 'var(--graphite-600)', boxShadow: '0 10px 15px -3px rgba(54, 60, 69, 0.3)' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: 'var(--teal-500)', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.3)' }}>
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <span className="text-sm font-medium text-gray-900">Submitted</span>
-                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>Complete</span>
+                  <span className="text-xs" style={{ color: 'var(--teal-600)' }}>Complete</span>
                 </div>
                 {/* Connector */}
-                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: 'var(--graphite-600)' }} />
+                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: 'var(--teal-500)' }} />
                 {/* Step 2: Under Review */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-600)', boxShadow: '0 10px 15px -3px rgba(54, 60, 69, 0.3)' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: 'var(--teal-500)', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.3)' }}>
                     {isApproved ? (
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -305,13 +305,13 @@ export default function InvestorVerificationPage() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900">Under Review</span>
-                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>{isApproved ? 'Complete' : 'In Progress'}</span>
+                  <span className="text-xs" style={{ color: 'var(--teal-600)' }}>{isApproved ? 'Complete' : 'In Progress'}</span>
                 </div>
                 {/* Connector */}
-                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-200)' }} />
+                <div className="h-1 flex-1 mx-3 rounded-full" style={{ background: isApproved ? 'var(--teal-500)' : 'var(--graphite-200)' }} />
                 {/* Step 3: Verified */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? 'var(--graphite-600)' : 'var(--graphite-100)', boxShadow: isApproved ? '0 10px 15px -3px rgba(54, 60, 69, 0.3)' : 'none' }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 shadow-lg" style={{ background: isApproved ? 'var(--teal-500)' : 'var(--graphite-100)', boxShadow: isApproved ? '0 10px 15px -3px rgba(74, 143, 135, 0.3)' : 'none' }}>
                     {isApproved ? (
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -323,7 +323,7 @@ export default function InvestorVerificationPage() {
                     )}
                   </div>
                   <span className="text-sm font-medium text-gray-900">Verified</span>
-                  <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>{isApproved ? 'Complete' : 'Pending'}</span>
+                  <span className="text-xs" style={{ color: isApproved ? 'var(--teal-600)' : 'var(--graphite-500)' }}>{isApproved ? 'Complete' : 'Pending'}</span>
                 </div>
               </div>
             </div>
