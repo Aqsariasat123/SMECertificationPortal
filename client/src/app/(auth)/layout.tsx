@@ -10,45 +10,26 @@ export default function AuthLayout({
       {/* Left Panel - Branding */}
       <div
         className="hidden lg:flex lg:w-5/12 text-white flex-col justify-between p-10 relative overflow-hidden"
-        style={{
-          background: 'var(--sidebar-bg)',
-        }}
       >
-        {/* Mesh gradient - soft blurred shapes with animation */}
+        {/* Background Image */}
         <div
-          className="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full blur-3xl opacity-20"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            background: 'var(--teal-500)',
-            animation: 'float 8s ease-in-out infinite',
+            backgroundImage: 'url(/auth-bg.jpg)',
           }}
         />
+        {/* Dark Overlay for text readability */}
         <div
-          className="absolute top-1/3 -left-20 w-[250px] h-[250px] rounded-full blur-3xl opacity-10"
+          className="absolute inset-0"
           style={{
-            background: 'var(--teal-400)',
-            animation: 'float 10s ease-in-out infinite reverse',
+            background: 'linear-gradient(to right, rgba(45, 55, 60, 0.92) 0%, rgba(45, 55, 60, 0.85) 100%)',
           }}
         />
+        {/* Subtle teal tint overlay */}
         <div
-          className="absolute -bottom-20 right-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-15"
+          className="absolute inset-0 opacity-30"
           style={{
-            background: 'var(--teal-600)',
-            animation: 'float 12s ease-in-out infinite',
-          }}
-        />
-        {/* Additional blobs */}
-        <div
-          className="absolute top-1/2 right-10 w-[200px] h-[200px] rounded-full blur-3xl opacity-10"
-          style={{
-            background: 'var(--teal-300)',
-            animation: 'float 9s ease-in-out infinite reverse',
-          }}
-        />
-        <div
-          className="absolute bottom-1/3 left-1/4 w-[180px] h-[180px] rounded-full blur-3xl opacity-8"
-          style={{
-            background: 'var(--teal-500)',
-            animation: 'float 11s ease-in-out infinite',
+            background: 'linear-gradient(135deg, var(--teal-900) 0%, transparent 50%, var(--teal-800) 100%)',
           }}
         />
         {/* Glowing border on right edge */}
