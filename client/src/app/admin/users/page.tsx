@@ -396,7 +396,7 @@ export default function AdminUsersPage() {
                 placeholder="Search by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field w-full pl-12 pr-4 h-12 rounded-xl"
+                className="input-field w-full pl-14 pr-4 h-12 rounded-xl"
                 style={{ background: 'var(--graphite-50)' }}
               />
             </div>

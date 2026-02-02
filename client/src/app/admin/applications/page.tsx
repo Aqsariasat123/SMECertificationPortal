@@ -182,7 +182,7 @@ export default function AdminApplicationsPage() {
                 placeholder="Search applications..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field w-full pl-12 pr-4 h-12 rounded-xl"
+                className="input-field w-full pl-14 pr-4 h-12 rounded-xl"
                 style={{ backgroundColor: 'var(--graphite-50)' }}
               />
             </div>
