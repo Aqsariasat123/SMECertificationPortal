@@ -104,7 +104,7 @@ export default function AuthLayout({
 
       {/* Right Panel - Form */}
       <div
-        className="w-full lg:w-7/12 flex items-center justify-center p-6 min-h-screen"
+        className="w-full lg:w-7/12 flex items-start lg:items-center justify-center p-6 py-10 lg:min-h-screen overflow-y-auto"
         style={{ background: 'var(--background)' }}
       >
         <div className="w-full max-w-xl">
