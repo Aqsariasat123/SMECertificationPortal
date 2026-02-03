@@ -152,7 +152,7 @@ export default function KycDetailPage() {
             <div>
               <h1 className="text-2xl font-bold">{application.user.fullName}</h1>
               <p style={{ color: 'rgba(255,255,255,0.7)' }}>
-                {application.investorType === 'individual' ? 'Individual Investor' : 'Company Investor'} KYC
+                {application.investorType === 'individual' ? 'Individual' : 'Company'} KYC
               </p>
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function KycDetailPage() {
               <InfoField label="Full Name" value={application.user.fullName} />
               <InfoField label="Email" value={application.user.email} />
               <InfoField label="Phone" value={application.user.phoneNumber} />
-              <InfoField label="Investor Type" value={application.investorType === 'individual' ? 'Individual' : 'Company'} />
+              <InfoField label="Account Type" value={application.investorType === 'individual' ? 'Individual' : 'Company'} />
             </div>
           </div>
 
@@ -517,7 +517,7 @@ export default function KycDetailPage() {
             <h3 className="font-semibold mb-4" style={{ color: 'var(--graphite-900)' }}>Quick Info</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 px-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
-                <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>Investor Type</span>
+                <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>Account Type</span>
                 <span className="text-sm font-semibold" style={{ color: 'var(--graphite-900)' }}>
                   {application.investorType === 'individual' ? 'Individual' : 'Company'}
                 </span>
@@ -568,7 +568,7 @@ export default function KycDetailPage() {
       {showApproveModal && (
         <Modal title="Approve KYC" onClose={() => setShowApproveModal(false)}>
           <p style={{ color: 'var(--graphite-600)' }} className="mb-6">
-            Are you sure you want to approve the KYC for <strong>{application.user.fullName}</strong>? This will grant them verified investor status.
+            Are you sure you want to approve the KYC for <strong>{application.user.fullName}</strong>? This will grant them verified user status.
           </p>
           <div className="flex justify-end gap-3">
             <button onClick={() => setShowApproveModal(false)} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>

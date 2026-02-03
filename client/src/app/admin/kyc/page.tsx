@@ -113,7 +113,7 @@ export default function AdminKycPage() {
   const stats = [
     { label: 'Total Applications', value: pagination?.total?.toString() || '0', icon: 'folder', color: 'teal', change: 'All KYC submissions' },
     { label: 'Pending Review', value: statusCounts.pending.toString(), icon: 'clock', color: 'warning', change: 'Requires attention' },
-    { label: 'Approved', value: statusCounts.approved.toString(), icon: 'check', color: 'success', change: 'Verified investors' },
+    { label: 'Approved', value: statusCounts.approved.toString(), icon: 'check', color: 'success', change: 'Verified users' },
     { label: 'Rejected', value: statusCounts.rejected.toString(), icon: 'x', color: 'danger', change: 'Failed verification' },
   ];
 
@@ -169,7 +169,7 @@ export default function AdminKycPage() {
               </svg>
               <input
                 type="text"
-                placeholder="Search investors..."
+                placeholder="Search users..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="input-field w-full h-12 rounded-xl"
@@ -224,7 +224,7 @@ export default function AdminKycPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
           <p className="font-medium" style={{ color: 'var(--graphite-500)' }}>No KYC applications found</p>
-          <p className="text-sm mt-1" style={{ color: 'var(--graphite-400)' }}>Applications will appear here once investors submit their KYC</p>
+          <p className="text-sm mt-1" style={{ color: 'var(--graphite-400)' }}>Applications will appear here once users submit their KYC</p>
         </div>
       ) : (
         <div className="space-y-4">
