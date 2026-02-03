@@ -82,7 +82,7 @@ export default function SMESupportPage() {
   const scrollToBottom = (instant = false) => {
     setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
-    }, 100);
+    }, 300);
   };
 
   const fetchTickets = async () => {

@@ -242,7 +242,7 @@ export default function MessagesPage() {
   const scrollToBottom = (instant = false) => {
     setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
-    }, 100);
+    }, 300);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
