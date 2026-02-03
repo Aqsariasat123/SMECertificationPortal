@@ -141,7 +141,6 @@ class EmailService {
       html,
     });
   }
-}
 
   // Welcome email - sent after account is verified
   async sendWelcomeEmail(email: string, fullName: string, role: string): Promise<boolean> {
