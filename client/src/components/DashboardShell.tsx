@@ -36,7 +36,7 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
     switch (user?.role) {
       case 'admin': return 'Administrator';
       case 'sme': return 'SME Owner';
-      default: return 'Investor';
+      default: return 'User';
     }
   };
 
@@ -105,7 +105,7 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
               {user?.profilePicture ? (
                 <img
                   src={`${API_BASE_URL}${user.profilePicture}`}
-                  alt={user.fullName || 'Investor'}
+                  alt={user.fullName || 'User'}
                   className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
                 />
               ) : (
@@ -175,7 +175,7 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
                 {user?.profilePicture ? (
                   <img
                     src={`${API_BASE_URL}${user.profilePicture}`}
-                    alt={user.fullName || 'Investor'}
+                    alt={user.fullName || 'User'}
                     className="w-8 h-8 rounded-lg object-cover"
                   />
                 ) : (
