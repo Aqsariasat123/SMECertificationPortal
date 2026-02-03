@@ -9,6 +9,7 @@ type UserRole = 'user' | 'sme';
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [smeSubStep, setSmeSubStep] = useState(1); // 1 = Company Info, 2 = Personal Info
   const [role, setRole] = useState<UserRole | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -28,6 +29,24 @@ export default function RegisterPage() {
   const handleRoleSelect = (selectedRole: UserRole) => {
     setRole(selectedRole);
     setStep(2);
+    setSmeSubStep(1);
+  };
+
+  const handleCompanyInfoContinue = () => {
+    setError('');
+    if (!formData.companyName) {
+      setError('Please enter your company name');
+      return;
+    }
+    if (!formData.tradeLicenseNumber) {
+      setError('Please enter your trade license number');
+      return;
+    }
+    if (!formData.industrySector) {
+      setError('Please select your industry sector');
+      return;
+    }
+    setSmeSubStep(2);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,21 +71,6 @@ export default function RegisterPage() {
     if (!formData.agreeTerms) {
       setError('Please agree to the terms and conditions');
       return;
-    }
-
-    if (role === 'sme') {
-      if (!formData.companyName) {
-        setError('Please enter your company name');
-        return;
-      }
-      if (!formData.tradeLicenseNumber) {
-        setError('Please enter your trade license number');
-        return;
-      }
-      if (!formData.industrySector) {
-        setError('Please select your industry sector');
-        return;
-      }
     }
 
     setIsLoading(true);
@@ -143,7 +147,8 @@ export default function RegisterPage() {
 
       {/* Progress Steps with Labels */}
       <div className="mb-8">
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-2">
+          {/* Step 1 - Account Type */}
           <div className="flex flex-col items-center">
             <div
               className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
@@ -155,27 +160,70 @@ export default function RegisterPage() {
               1
             </div>
             <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-              Account Type
+              Account
             </span>
           </div>
           <div
-            className="w-12 h-1 rounded-full mb-5"
+            className="w-8 h-1 rounded-full mb-5"
             style={{ background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)' }}
           />
-          <div className="flex flex-col items-center">
-            <div
-              className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-              style={{
-                background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
-                color: step >= 2 ? 'white' : 'var(--graphite-500)'
-              }}
-            >
-              2
+
+          {/* Step 2 - Company Info (SME only) or Personal (Investor) */}
+          {role === 'sme' || step === 1 ? (
+            <>
+              <div className="flex flex-col items-center">
+                <div
+                  className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
+                  style={{
+                    background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
+                    color: step >= 2 ? 'white' : 'var(--graphite-500)'
+                  }}
+                >
+                  2
+                </div>
+                <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
+                  {role === 'sme' ? 'Company' : 'Details'}
+                </span>
+              </div>
+              {(role === 'sme' || step === 1) && (
+                <>
+                  <div
+                    className="w-8 h-1 rounded-full mb-5"
+                    style={{ background: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-200)' }}
+                  />
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
+                      style={{
+                        background: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-200)',
+                        color: (step === 2 && smeSubStep >= 2) ? 'white' : 'var(--graphite-500)'
+                      }}
+                    >
+                      3
+                    </div>
+                    <span className="text-xs mt-1.5 font-medium" style={{ color: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
+                      {role === 'sme' ? 'Personal' : 'Details'}
+                    </span>
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div
+                className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
+                style={{
+                  background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
+                  color: step >= 2 ? 'white' : 'var(--graphite-500)'
+                }}
+              >
+                2
+              </div>
+              <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
+                Details
+              </span>
             </div>
-            <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-              Your Details
-            </span>
-          </div>
+          )}
         </div>
       </div>
 
@@ -288,7 +336,8 @@ export default function RegisterPage() {
             </button>
           </div>
         </>
-      ) : (
+      ) : role === 'sme' && smeSubStep === 1 ? (
+        /* SME Step 2a - Company Information */
         <>
           <div className="mb-8">
             <button
@@ -302,11 +351,136 @@ export default function RegisterPage() {
               Back to account type
             </button>
             <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              {role === 'sme' ? 'Create Your Account' : 'Create Your Account'}
+              Company Information
+            </h1>
+            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
+              Enter your business details to get started with certification.
+            </p>
+          </div>
+
+          {error && (
+            <div
+              className="mb-6 p-4 rounded-lg flex items-center gap-3"
+              style={{ background: 'var(--danger-50)', border: '1px solid var(--danger-100)' }}
+            >
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'var(--danger-100)' }}
+              >
+                <svg className="w-4 h-4" style={{ color: 'var(--danger-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-sm font-medium" style={{ color: 'var(--danger-600)' }}>{error}</p>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label className="input-label block">Company Name</label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  value={formData.companyName}
+                  onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                  className="input-field w-full"
+                  style={{ paddingLeft: '2.5rem' }}
+                  placeholder="Enter your company name"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="input-label block">Trade License Number</label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  value={formData.tradeLicenseNumber}
+                  onChange={(e) => setFormData({ ...formData, tradeLicenseNumber: e.target.value })}
+                  className="input-field w-full"
+                  style={{ paddingLeft: '2.5rem' }}
+                  placeholder="Enter trade license number"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="input-label block">Industry Sector</label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <select
+                  value={formData.industrySector}
+                  onChange={(e) => setFormData({ ...formData, industrySector: e.target.value })}
+                  className="input-field w-full appearance-none cursor-pointer"
+                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                >
+                  <option value="">Select industry sector</option>
+                  <option value="technology">Technology</option>
+                  <option value="healthcare">Healthcare</option>
+                  <option value="finance">Finance</option>
+                  <option value="retail">Retail</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="real_estate">Real Estate</option>
+                  <option value="hospitality">Hospitality</option>
+                  <option value="education">Education</option>
+                  <option value="other">Other</option>
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCompanyInfoContinue}
+              className="w-full h-11 font-medium rounded-lg transition-all duration-200 btn-teal"
+            >
+              <span className="flex items-center justify-center gap-2">
+                Save & Continue
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </>
+      ) : (
+        /* SME Step 2b (Personal) or Investor Step 2 */
+        <>
+          <div className="mb-8">
+            <button
+              onClick={() => role === 'sme' ? setSmeSubStep(1) : setStep(1)}
+              className="flex items-center gap-2 text-sm mb-4 transition-colors"
+              style={{ color: 'var(--foreground-muted)' }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              {role === 'sme' ? 'Back to company info' : 'Back to account type'}
+            </button>
+            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
+              {role === 'sme' ? 'Personal Details' : 'Create Your Account'}
             </h1>
             <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
               {role === 'sme'
-                ? 'Set up your login credentials. Company details will be added during certification.'
+                ? 'Set up your login credentials to complete registration.'
                 : 'Enter your details to access the SME registry'}
             </p>
           </div>
@@ -329,84 +503,6 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {role === 'sme' && (
-              <>
-                <div>
-                  <label className="input-label block">Company Name</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      className="input-field w-full"
-                      style={{ paddingLeft: '2.5rem' }}
-                      placeholder="Enter your company name"
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="input-label block">Trade License Number</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      value={formData.tradeLicenseNumber}
-                      onChange={(e) => setFormData({ ...formData, tradeLicenseNumber: e.target.value })}
-                      className="input-field w-full"
-                      style={{ paddingLeft: '2.5rem' }}
-                      placeholder="Enter trade license number"
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="input-label block">Industry Sector</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <select
-                      value={formData.industrySector}
-                      onChange={(e) => setFormData({ ...formData, industrySector: e.target.value })}
-                      className="input-field w-full appearance-none cursor-pointer"
-                      style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                      disabled={isLoading}
-                    >
-                      <option value="">Select industry sector</option>
-                      <option value="technology">Technology</option>
-                      <option value="healthcare">Healthcare</option>
-                      <option value="finance">Finance</option>
-                      <option value="retail">Retail</option>
-                      <option value="manufacturing">Manufacturing</option>
-                      <option value="real_estate">Real Estate</option>
-                      <option value="hospitality">Hospitality</option>
-                      <option value="education">Education</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="input-label block">First Name</label>
@@ -542,7 +638,7 @@ export default function RegisterPage() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  {role === 'sme' ? 'Create Account & Continue' : 'Create Account'}
+                  Create Account
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
