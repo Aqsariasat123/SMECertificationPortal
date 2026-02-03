@@ -324,30 +324,4 @@ SME certification, UAE business, business certification, SME registry, registry 
 
 ---
 
-## Client Feedback Summary
-
-### Approved Elements
-- Intent-based framing (Certify a Business / Browse Certified Businesses)
-- Copy, icons, and CTA hierarchy aligned with certification-first positioning
-- Layout hierarchy (hero → credibility → value → how it works → CTA)
-- Visual tone (authoritative and coherent)
-- Company Information step (already aligned)
-- Hero subtext reference to official UAE SME registry
-
-### Phase 1 Scope
-- Focus on certification, verification, credibility, registry access
-- No fundraising, investing, or deal-making features
-- Browser path is read-only access
-- Investor-specific onboarding flows reserved for later phases
-
----
-
-## Version History
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | Feb 2026 | Initial Phase 1 terminology guide |
-| 1.1 | Feb 2026 | Added comprehensive client guidelines, system emails, visual tone rules |
-
----
-
 *This document should be referenced when creating any new screens or updating existing copy.*
