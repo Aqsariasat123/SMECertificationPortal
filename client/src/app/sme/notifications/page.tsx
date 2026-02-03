@@ -33,7 +33,7 @@ export default function NotificationsPage() {
       id: '3',
       type: 'message',
       title: 'New Introduction Request',
-      message: 'You have received a new introduction request from an investor.',
+      message: 'You have received a new introduction request from a registry user.',
       timestamp: '2 hours ago',
       read: true,
     },

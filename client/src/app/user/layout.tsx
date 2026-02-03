@@ -63,7 +63,7 @@ const userNavItems = [
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute allowedRoles={['user']}>
-      <DashboardShell navItems={userNavItems} title="Investor Portal">
+      <DashboardShell navItems={userNavItems} title="Registry Portal">
         {children}
       </DashboardShell>
     </ProtectedRoute>

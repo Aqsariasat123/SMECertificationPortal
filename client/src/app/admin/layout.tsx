@@ -32,7 +32,7 @@ const adminNavItems = [
     ),
   },
   {
-    label: 'Investor KYC',
+    label: 'User KYC',
     href: '/admin/kyc',
     icon: (
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

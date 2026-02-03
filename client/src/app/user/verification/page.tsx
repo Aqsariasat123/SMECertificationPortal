@@ -253,7 +253,7 @@ export default function InvestorVerificationPage() {
                   </div>
                   <p className="text-slate-400 text-sm">
                     {isApproved
-                      ? 'Your identity has been verified. You now have full access to all investment features.'
+                      ? 'Your identity has been verified. You now have full access to all registry features.'
                       : 'Our compliance team is reviewing your submitted documents and information.'}
                   </p>
                 </div>
@@ -342,7 +342,7 @@ export default function InvestorVerificationPage() {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Investor Type</p>
+                      <p className="font-medium text-gray-900">Account Type</p>
                       <p className="text-sm text-gray-500">Account category</p>
                     </div>
                   </div>
@@ -419,7 +419,7 @@ export default function InvestorVerificationPage() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 text-sm">Browse SME Registry</p>
-                    <p className="text-xs text-gray-500">Discover investment opportunities</p>
+                    <p className="text-xs text-gray-500">Discover certified businesses</p>
                   </div>
                 </button>
                 <button
@@ -465,7 +465,7 @@ export default function InvestorVerificationPage() {
               </div>
               <p className="text-sm text-white/80 mb-4">
                 {isApproved
-                  ? 'Have questions about investing? Our team is here to help you get started.'
+                  ? 'Have questions? Our team is here to help you get started.'
                   : 'Questions about the verification process? Our support team is here to help.'}
               </p>
               <button
@@ -509,7 +509,7 @@ export default function InvestorVerificationPage() {
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600">Make direct investment requests</p>
+                      <p className="text-sm text-gray-600">Make direct introduction requests</p>
                     </div>
                   </>
                 ) : (
@@ -577,7 +577,7 @@ export default function InvestorVerificationPage() {
           </div>
         </div>
         <p className={`text-sm ${investorType && kycStatus === 'not_submitted' ? 'ml-14' : ''}`} style={{ color: 'var(--foreground-muted)' }}>
-          Complete your verification to unlock full investment capabilities
+          Complete your verification to unlock full registry access
         </p>
       </div>
 
@@ -616,7 +616,7 @@ export default function InvestorVerificationPage() {
             <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            <p className="font-medium text-emerald-800">Your account is verified! You have full access to investment features.</p>
+            <p className="font-medium text-emerald-800">Your account is verified! You have full access to registry features.</p>
           </div>
         </div>
       )}
@@ -633,10 +633,10 @@ export default function InvestorVerificationPage() {
         </div>
       )}
 
-      {/* Step 1: Investor Type Selection */}
+      {/* Step 1: Account Type Selection */}
       {!investorType && (
         <div className="bg-white rounded-2xl border border-gray-100 p-8">
-          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Select Investor Type</h2>
+          <h2 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Select Account Type</h2>
           <p className="text-sm mb-6" style={{ color: 'var(--foreground-muted)' }}>Choose the type that best describes you</p>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -653,8 +653,8 @@ export default function InvestorVerificationPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-lg mb-1">Individual Investor</h3>
-              <p className="text-sm text-gray-500">Personal investment account for individuals</p>
+              <h3 className="font-semibold text-lg mb-1">Individual</h3>
+              <p className="text-sm text-gray-500">Personal account for individuals</p>
             </button>
 
             <button
@@ -670,7 +670,7 @@ export default function InvestorVerificationPage() {
                 </svg>
               </div>
               <h3 className="font-semibold text-lg mb-1">Company / Institution</h3>
-              <p className="text-sm text-gray-500">Business or institutional investment account</p>
+              <p className="text-sm text-gray-500">Business or institutional account</p>
             </button>
           </div>
         </div>
@@ -679,7 +679,7 @@ export default function InvestorVerificationPage() {
       {/* Step 2: KYC Form */}
       {investorType && kycStatus !== 'approved' && (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          {/* Investor Type Header */}
+          {/* Account Type Header */}
           <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--teal-100)' }}>
@@ -695,10 +695,10 @@ export default function InvestorVerificationPage() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">
-                  {investorType === 'individual' ? 'Individual Investor' : 'Company / Institution'}
+                  {investorType === 'individual' ? 'Individual' : 'Company / Institution'}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {investorType === 'individual' ? 'Personal investment account' : 'Business investment account'}
+                  {investorType === 'individual' ? 'Personal account' : 'Business account'}
                 </p>
               </div>
             </div>

@@ -83,7 +83,7 @@ export default function UserDashboard() {
     return name.charAt(0).toUpperCase();
   };
 
-  const firstName = user?.fullName?.split(' ')[0] || 'Investor';
+  const firstName = user?.fullName?.split(' ')[0] || 'User';
   const greeting = new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 18 ? 'Good afternoon' : 'Good evening';
 
   return (
