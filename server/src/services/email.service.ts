@@ -150,7 +150,7 @@ class EmailService {
 
     const roleMessage = role === 'sme'
       ? 'You can now complete your company profile and submit for certification.'
-      : 'You can now browse certified SMEs in our registry.';
+      : 'You can now browse certified businesses and send introduction requests through our official registry.';
 
     const html = `
       <!DOCTYPE html>
