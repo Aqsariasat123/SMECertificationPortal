@@ -216,11 +216,13 @@ class EmailService {
           .content { padding: 35px 30px; }
           .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
           .subtitle { font-size: 14px; color: #3a736d; margin-bottom: 25px; font-weight: 500; }
-          .text { color: #4b5563; font-size: 14px; margin-bottom: 25px; line-height: 1.7; }
-          .features { margin: 25px 0; padding: 20px; background: #f8faf9; border-radius: 8px; }
-          .features-title { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-          .feature { color: #4b5563; font-size: 14px; padding: 8px 0; padding-left: 20px; position: relative; }
-          .feature:before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: #3a736d; border-radius: 50%; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .divider { height: 1px; background: #e5e7eb; margin: 25px 0; }
+          .features-title { font-size: 13px; font-weight: 600; color: #6b7280; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .feature-row { display: table; width: 100%; margin-bottom: 12px; }
+          .feature-check { display: table-cell; width: 24px; vertical-align: top; padding-top: 2px; }
+          .feature-check span { display: inline-block; width: 18px; height: 18px; background: #e6f4f1; border-radius: 50%; text-align: center; line-height: 18px; font-size: 11px; color: #3a736d; }
+          .feature-text { display: table-cell; color: #374151; font-size: 14px; padding-left: 10px; vertical-align: top; }
           .button-wrap { text-align: center; margin: 30px 0 10px; }
           .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
           .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
@@ -238,10 +240,14 @@ class EmailService {
               <div class="subtitle">${roleContent.subtitle}</div>
               <p class="text">Hello ${fullName},</p>
               <p class="text">${roleContent.message}</p>
-              <div class="features">
-                <div class="features-title">What you can do</div>
-                ${roleContent.features.map(f => `<div class="feature">${f}</div>`).join('')}
-              </div>
+              <div class="divider"></div>
+              <div class="features-title">What you can do</div>
+              ${roleContent.features.map(f => `
+                <div class="feature-row">
+                  <div class="feature-check"><span>&#10003;</span></div>
+                  <div class="feature-text">${f}</div>
+                </div>
+              `).join('')}
               <div class="button-wrap">
                 <a href="${dashboardUrl}" class="button">${roleContent.buttonText}</a>
               </div>
