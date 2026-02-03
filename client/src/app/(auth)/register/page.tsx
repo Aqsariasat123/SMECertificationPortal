@@ -161,7 +161,7 @@ export default function RegisterPage() {
               1
             </div>
             <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-              Account
+              Type
             </span>
           </div>
           <div
@@ -183,7 +183,7 @@ export default function RegisterPage() {
                   2
                 </div>
                 <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                  {role === 'sme' ? 'Company' : 'Details'}
+                  {role === 'sme' ? 'Company' : 'Account'}
                 </span>
               </div>
               {(role === 'sme' || step === 1) && (
@@ -203,7 +203,7 @@ export default function RegisterPage() {
                       3
                     </div>
                     <span className="text-xs mt-1.5 font-medium" style={{ color: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                      {role === 'sme' ? 'Personal' : 'Details'}
+                      Personal
                     </span>
                   </div>
                 </>
@@ -221,7 +221,7 @@ export default function RegisterPage() {
                 2
               </div>
               <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                Details
+                Account
               </span>
             </div>
           )}
@@ -231,12 +231,12 @@ export default function RegisterPage() {
       {step === 1 ? (
         <>
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Choose Your Account Type</h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select the type of account you want to create to get started.</p>
+            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Get Started</h1>
+            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select how you'd like to use the SME Certification Portal.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-5 mb-6">
-            {/* SME Option */}
+            {/* Certification Path */}
             <div
               onClick={() => handleRoleSelect('sme')}
               className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
@@ -253,30 +253,22 @@ export default function RegisterPage() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {/* SME Icon - Shop/Store */}
+              {/* Shield with Checkmark Icon */}
               <div className="flex justify-center mb-5">
                 <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Store building */}
-                  <rect x="12" y="28" width="40" height="28" rx="2" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2"/>
-                  {/* Awning */}
-                  <path d="M8 28L12 16H52L56 28" stroke="#3a736d" strokeWidth="2" fill="#3a736d"/>
-                  <path d="M8 28C8 28 12 34 18 28C24 22 26 28 32 28C38 28 40 22 46 28C52 34 56 28 56 28" stroke="#3a736d" strokeWidth="2" fill="#5eb6af"/>
-                  {/* Door */}
-                  <rect x="26" y="40" width="12" height="16" rx="1" fill="#3a736d"/>
-                  <circle cx="35" cy="48" r="1.5" fill="white"/>
-                  {/* Windows */}
-                  <rect x="16" y="34" width="8" height="8" rx="1" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
-                  <rect x="40" y="34" width="8" height="8" rx="1" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
-                  {/* Flag */}
-                  <line x1="32" y1="8" x2="32" y2="16" stroke="#3a736d" strokeWidth="2"/>
-                  <path d="M32 8L42 12L32 16" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
+                  {/* Shield */}
+                  <path d="M32 4L8 14V30C8 44.36 18.12 57.54 32 60C45.88 57.54 56 44.36 56 30V14L32 4Z" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2.5"/>
+                  {/* Inner shield highlight */}
+                  <path d="M32 10L14 18V30C14 41.5 22.4 51.8 32 54C41.6 51.8 50 41.5 50 30V18L32 10Z" fill="#5eb6af" fillOpacity="0.3"/>
+                  {/* Checkmark */}
+                  <path d="M22 32L28 38L42 24" stroke="#3a736d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Business Registration</h3>
-              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors.</p>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Certify a Business</h3>
+              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified to access the official registry and new opportunities.</p>
             </div>
 
-            {/* Investor Option */}
+            {/* Registry Browser Path */}
             <div
               onClick={() => handleRoleSelect('user')}
               className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
@@ -293,25 +285,24 @@ export default function RegisterPage() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {/* Investor Icon */}
+              {/* Search/List Icon */}
               <div className="flex justify-center mb-5">
                 <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Person */}
-                  <circle cx="24" cy="16" r="8" fill="#3a736d"/>
-                  <path d="M10 44C10 34 16 28 24 28C32 28 38 34 38 44" fill="#3a736d"/>
-                  {/* Growth chart */}
-                  <rect x="36" y="24" width="22" height="32" rx="2" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2"/>
-                  {/* Chart bars */}
-                  <rect x="40" y="44" width="4" height="8" fill="#5eb6af"/>
-                  <rect x="46" y="38" width="4" height="14" fill="#5eb6af"/>
-                  <rect x="52" y="32" width="4" height="20" fill="#3a736d"/>
-                  {/* Arrow up */}
-                  <path d="M42 36L47 28L52 32" stroke="#3a736d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                  <path d="M47 28L47 32L51 30" fill="#3a736d"/>
+                  {/* Document/List background */}
+                  <rect x="12" y="8" width="40" height="48" rx="3" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2.5"/>
+                  {/* List lines */}
+                  <rect x="20" y="18" width="24" height="3" rx="1.5" fill="#5eb6af"/>
+                  <rect x="20" y="26" width="18" height="3" rx="1.5" fill="#5eb6af"/>
+                  <rect x="20" y="34" width="20" height="3" rx="1.5" fill="#5eb6af"/>
+                  {/* Magnifying glass */}
+                  <circle cx="44" cy="44" r="10" fill="white" stroke="#3a736d" strokeWidth="2.5"/>
+                  <circle cx="44" cy="44" r="5" fill="#e8f5f3"/>
+                  <line x1="51" y1="51" x2="58" y2="58" stroke="#3a736d" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Investor Access</h3>
-              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Browse SMEs and request introductions.</p>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Browse Certified Businesses</h3>
+              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Access the registry of verified SMEs.</p>
+              <p className="text-xs mt-2 italic" style={{ color: 'var(--graphite-500)' }}>View-only access</p>
             </div>
           </div>
 
@@ -324,16 +315,16 @@ export default function RegisterPage() {
               onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
             >
-              Register as SME
+              Start Certification
             </button>
             <button
               onClick={() => handleRoleSelect('user')}
-              className="flex-1 py-3 px-4 rounded-lg font-medium text-white transition-all duration-200"
-              style={{ background: 'var(--teal-600)' }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+              className="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200"
+              style={{ background: 'white', border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--teal-400)'; e.currentTarget.style.color = 'var(--teal-600)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-300)'; e.currentTarget.style.color = 'var(--graphite-700)'; }}
             >
-              Register as Investor
+              Access Registry
             </button>
           </div>
         </>
