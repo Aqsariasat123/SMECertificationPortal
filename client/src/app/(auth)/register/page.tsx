@@ -27,6 +27,7 @@ export default function RegisterPage() {
   const [success, setSuccess] = useState(false);
 
   const handleRoleSelect = (selectedRole: UserRole) => {
+    setError('');
     setRole(selectedRole);
     setStep(2);
     setSmeSubStep(1);
@@ -341,7 +342,7 @@ export default function RegisterPage() {
         <>
           <div className="mb-8">
             <button
-              onClick={() => setStep(1)}
+              onClick={() => { setError(''); setStep(1); }}
               className="flex items-center gap-2 text-sm mb-4 transition-colors"
               style={{ color: 'var(--foreground-muted)' }}
             >
@@ -466,7 +467,7 @@ export default function RegisterPage() {
         <>
           <div className="mb-8">
             <button
-              onClick={() => role === 'sme' ? setSmeSubStep(1) : setStep(1)}
+              onClick={() => { setError(''); role === 'sme' ? setSmeSubStep(1) : setStep(1); }}
               className="flex items-center gap-2 text-sm mb-4 transition-colors"
               style={{ color: 'var(--foreground-muted)' }}
             >
