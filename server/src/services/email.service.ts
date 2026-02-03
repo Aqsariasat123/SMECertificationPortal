@@ -178,23 +178,25 @@ class EmailService {
       : `${process.env.FRONTEND_URL}/user/dashboard`;
 
     const roleContent = role === 'sme' ? {
-      title: 'Your Business Journey Starts Here',
-      message: 'Your account is now verified and ready. Complete your company profile and submit for certification to join the UAE\'s official SME Registry.',
+      title: 'Welcome to SME Readiness Portal',
+      subtitle: 'Your certification journey begins now',
+      message: 'Your account has been verified successfully. You can now complete your company profile and submit your application to join the UAE\'s official SME Registry.',
       features: [
-        { icon: '&#128196;', text: 'Complete your business profile' },
-        { icon: '&#128203;', text: 'Upload verification documents' },
-        { icon: '&#9989;', text: 'Get certified and listed' },
-        { icon: '&#127775;', text: 'Gain visibility to verified users' },
+        'Complete your business profile',
+        'Upload verification documents',
+        'Submit for certification',
+        'Get listed in the official registry',
       ],
       buttonText: 'Complete My Profile',
     } : {
-      title: 'Welcome to the UAE SME Registry',
-      message: 'Your account is verified and you now have full access to browse certified businesses and connect with verified SMEs across the UAE.',
+      title: 'Welcome to SME Readiness Portal',
+      subtitle: 'Your gateway to verified UAE businesses',
+      message: 'Your account has been verified successfully. You now have full access to browse certified businesses and connect with verified SMEs across the UAE.',
       features: [
-        { icon: '&#128269;', text: 'Browse certified businesses' },
-        { icon: '&#128172;', text: 'Send introduction requests' },
-        { icon: '&#9989;', text: 'View verified company profiles' },
-        { icon: '&#128274;', text: 'Secure and trusted platform' },
+        'Browse certified businesses',
+        'Send introduction requests',
+        'View verified company profiles',
+        'Access the official SME registry',
       ],
       buttonText: 'Explore Registry',
     };
@@ -205,26 +207,23 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .success-banner { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; text-align: center; }
-          .success-banner .icon { font-size: 40px; margin-bottom: 10px; }
-          .success-banner h2 { margin: 0; font-size: 20px; font-weight: 600; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .features { margin: 30px 0; }
-          .feature { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
-          .feature:last-child { border-bottom: none; }
-          .feature-icon { font-size: 20px; margin-right: 15px; min-width: 30px; }
-          .feature-text { color: #374151; font-size: 14px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #3a736d; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 25px; line-height: 1.7; }
+          .features { margin: 25px 0; padding: 20px; background: #f8faf9; border-radius: 8px; }
+          .features-title { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .feature { color: #4b5563; font-size: 14px; padding: 8px 0; padding-left: 20px; position: relative; }
+          .feature:before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: #3a736d; border-radius: 50%; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -234,29 +233,22 @@ class EmailService {
               <h1>SME Readiness Portal</h1>
               <p>Official UAE SME Certification Platform</p>
             </div>
-            <div class="success-banner">
-              <div class="icon">&#10003;</div>
-              <h2>Account Verified Successfully!</h2>
-            </div>
             <div class="content">
-              <div class="greeting">${roleContent.title}</div>
+              <div class="title">${roleContent.title}</div>
+              <div class="subtitle">${roleContent.subtitle}</div>
               <p class="text">Hello ${fullName},</p>
               <p class="text">${roleContent.message}</p>
               <div class="features">
-                ${roleContent.features.map(f => `
-                  <div class="feature">
-                    <span class="feature-icon">${f.icon}</span>
-                    <span class="feature-text">${f.text}</span>
-                  </div>
-                `).join('')}
+                <div class="features-title">What you can do</div>
+                ${roleContent.features.map(f => `<div class="feature">${f}</div>`).join('')}
               </div>
               <div class="button-wrap">
                 <a href="${dashboardUrl}" class="button">${roleContent.buttonText}</a>
               </div>
             </div>
             <div class="footer">
-              <p>Questions? Our support team is here to help.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Questions? Contact our support team anytime.</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -267,8 +259,8 @@ class EmailService {
     return this.sendEmail({
       to: email,
       subject: role === 'sme'
-        ? 'Welcome! Start Your Certification Journey - SME Readiness Portal'
-        : 'Welcome to SME Readiness Portal - Account Verified',
+        ? 'Welcome to SME Readiness Portal'
+        : 'Welcome to SME Readiness Portal',
       html,
     });
   }
