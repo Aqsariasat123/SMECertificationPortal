@@ -300,12 +300,14 @@ export default function AdminSupportPage() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  // Filter tickets by search
-  const filteredTickets = tickets.filter(t =>
-    t.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter tickets by search and sort by latest message (WhatsApp style)
+  const filteredTickets = tickets
+    .filter(t =>
+      t.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   // Group messages by date
   const groupedMessages: { date: string; messages: Message[] }[] = [];
