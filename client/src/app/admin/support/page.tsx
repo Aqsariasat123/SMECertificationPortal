@@ -326,7 +326,7 @@ export default function AdminSupportPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Tickets List */}
-      <div className="w-[380px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className="w-[320px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
@@ -401,7 +401,7 @@ export default function AdminSupportPage() {
               <div
                 key={ticket.id}
                 onClick={() => fetchTicketMessages(ticket.id, true)}
-                className="flex items-start gap-3 px-4 py-4 cursor-pointer transition-all border-b"
+                className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-all border-b"
                 style={{
                   backgroundColor: selectedTicket?.id === ticket.id ? 'var(--teal-50)' : 'transparent',
                   borderColor: 'var(--graphite-100)',
@@ -412,27 +412,25 @@ export default function AdminSupportPage() {
               >
                 {/* Avatar - User Initial */}
                 <div className="flex-shrink-0 relative">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
-                    <span className="text-white font-semibold text-lg">{ticket.user.fullName?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-semibold">{ticket.user.fullName?.charAt(0)?.toUpperCase() || 'U'}</span>
                   </div>
                   {ticket.status === 'open' && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white" style={{ backgroundColor: 'var(--success-500)' }}></div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white" style={{ backgroundColor: 'var(--success-500)' }}></div>
                   )}
                 </div>
 
-                {/* Content */}
+                {/* Content - WhatsApp Style */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 mb-1">
+                  <div className="flex items-center justify-between gap-2">
                     <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--graphite-900)' }}>{ticket.user.fullName}</h3>
                     <span className="text-[11px] flex-shrink-0" style={{ color: 'var(--graphite-400)' }}>
                       {formatConversationTime(ticket.updatedAt)}
                     </span>
                   </div>
-                  <p className="text-xs font-medium truncate mb-1" style={{ color: 'var(--graphite-700)' }}>{ticket.subject}</p>
-                  <p className="text-xs truncate mb-2" style={{ color: 'var(--graphite-500)' }}>
+                  <p className="text-[13px] truncate mt-0.5" style={{ color: 'var(--graphite-500)' }}>
                     {formatPreviewText(ticket.lastMessage?.content)}
                   </p>
-                  {getStatusBadge(ticket.status)}
                 </div>
               </div>
             ))
