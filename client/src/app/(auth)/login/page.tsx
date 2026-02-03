@@ -134,7 +134,7 @@ export default function LoginPage() {
 
       <div className="mt-6 pt-5 text-center text-sm" style={{ borderTop: '1px solid var(--graphite-100)' }}>
         <span style={{ color: 'var(--foreground-muted)' }}>Don&apos;t have an account? </span>
-        <Link href="/register" style={{ color: 'var(--teal-600)' }}>Create account</Link>
+        <Link href="/register" style={{ color: 'var(--teal-600)' }}>Get Started</Link>
       </div>
     </div>
   );
