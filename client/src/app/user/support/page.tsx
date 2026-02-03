@@ -294,12 +294,14 @@ export default function UserSupportPage() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  // Filter tickets by search and status
-  const filteredTickets = tickets.filter(t => {
-    const matchesSearch = t.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = !statusFilter || t.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  // Filter tickets by search and status, sort by latest message
+  const filteredTickets = tickets
+    .filter(t => {
+      const matchesSearch = t.subject.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = !statusFilter || t.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   // Group messages by date
   const groupedMessages: { date: string; messages: Message[] }[] = [];
@@ -320,7 +322,7 @@ export default function UserSupportPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Tickets List */}
-      <div className="w-[380px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className="w-[320px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
@@ -432,18 +434,17 @@ export default function UserSupportPage() {
                   )}
                 </div>
 
-                {/* Content */}
+                {/* Content - WhatsApp style */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--graphite-900)' }}>{ticket.subject}</h3>
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--graphite-900)' }}>Support Team</h3>
                     <span className="text-[11px] flex-shrink-0" style={{ color: 'var(--graphite-400)' }}>
                       {formatConversationTime(ticket.updatedAt)}
                     </span>
                   </div>
-                  <p className="text-xs truncate mb-2" style={{ color: 'var(--graphite-500)' }}>
+                  <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>
                     {formatPreviewText(ticket.lastMessage?.content)}
                   </p>
-                  {getStatusBadge(ticket.status)}
                 </div>
               </div>
             ))

@@ -430,13 +430,15 @@ export default function MessagesPage() {
     );
   };
 
-  // Filter conversations by search and tab
-  const filteredConversations = conversations.filter((c) => {
-    const matchesSearch = c.recipientName.toLowerCase().includes(searchTerm.toLowerCase());
-    const isArchived = c.status === 'archived' || c.status === 'ARCHIVED';
-    const matchesTab = activeTab === 'archived' ? isArchived : !isArchived;
-    return matchesSearch && matchesTab;
-  });
+  // Filter conversations by search and tab, sort by latest message
+  const filteredConversations = conversations
+    .filter((c) => {
+      const matchesSearch = c.recipientName.toLowerCase().includes(searchTerm.toLowerCase());
+      const isArchived = c.status === 'archived' || c.status === 'ARCHIVED';
+      const matchesTab = activeTab === 'archived' ? isArchived : !isArchived;
+      return matchesSearch && matchesTab;
+    })
+    .sort((a, b) => new Date(b.lastMessageDate).getTime() - new Date(a.lastMessageDate).getTime());
 
   // Count for tabs - only show unread count (like WhatsApp)
   const currentConversations = conversations.filter(c => c.status !== 'archived' && c.status !== 'ARCHIVED');
@@ -446,7 +448,7 @@ export default function MessagesPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Conversations List */}
-      <div className="w-[380px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className="w-[320px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
