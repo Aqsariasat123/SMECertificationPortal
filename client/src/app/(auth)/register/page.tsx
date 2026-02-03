@@ -186,9 +186,10 @@ export default function RegisterPage() {
             <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select the type of account you want to create to get started.</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-5 mb-6">
             {/* SME Option */}
             <div
+              onClick={() => handleRoleSelect('sme')}
               className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
               style={{
                 background: 'white',
@@ -222,21 +223,13 @@ export default function RegisterPage() {
                   <path d="M32 8L42 12L32 16" fill="#5eb6af" stroke="#3a736d" strokeWidth="1"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am a SME</h3>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Business Registration</h3>
               <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified and connect with partners & investors.</p>
-              <button
-                onClick={() => handleRoleSelect('sme')}
-                className="w-full py-2.5 px-4 rounded-lg font-medium text-white transition-all duration-200 mt-6"
-                style={{ background: 'var(--teal-600)' }}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
-              >
-                Create SME Account
-              </button>
             </div>
 
             {/* Investor Option */}
             <div
+              onClick={() => handleRoleSelect('user')}
               className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
               style={{
                 background: 'white',
@@ -268,18 +261,31 @@ export default function RegisterPage() {
                   <path d="M47 28L47 32L51 30" fill="#3a736d"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2 min-h-[56px] flex items-center justify-center" style={{ color: 'var(--graphite-900)' }}>I am an Investor / Partner</h3>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Investor Access</h3>
               <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Browse SMEs and request introductions.</p>
-              <button
-                onClick={() => handleRoleSelect('user')}
-                className="w-full py-2.5 px-4 rounded-lg font-medium text-white transition-all duration-200 mt-6"
-                style={{ background: 'var(--teal-600)' }}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
-              >
-                Create Investor Account
-              </button>
             </div>
+          </div>
+
+          {/* Action Buttons - Same Line */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => handleRoleSelect('sme')}
+              className="flex-1 py-3 px-4 rounded-lg font-medium text-white transition-all duration-200"
+              style={{ background: 'var(--teal-600)' }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+            >
+              Register as SME
+            </button>
+            <button
+              onClick={() => handleRoleSelect('user')}
+              className="flex-1 py-3 px-4 rounded-lg font-medium text-white transition-all duration-200"
+              style={{ background: 'var(--teal-600)' }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+            >
+              Register as Investor
+            </button>
           </div>
         </>
       ) : (
