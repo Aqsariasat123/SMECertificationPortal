@@ -1,5 +1,4 @@
-# Brand Voice & UX Writing Guide
-## SME Certification Portal - Phase 1
+## SME Readiness Portal
 
 ---
 
