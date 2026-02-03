@@ -93,7 +93,7 @@ export default function RegisterPage() {
         setError(result.message);
       }
     } catch {
-      setError('An error occurred during registration');
+      setError('An error occurred during setup');
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +111,7 @@ export default function RegisterPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold mb-3" style={{ color: 'var(--graphite-900)' }}>Registration Successful!</h1>
+          <h1 className="text-2xl font-semibold mb-3" style={{ color: 'var(--graphite-900)' }}>Setup Complete!</h1>
           <p className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--foreground-muted)' }}>
             We&apos;ve sent a verification email to <span className="font-medium" style={{ color: 'var(--graphite-700)' }}>{formData.email}</span>. Please check your inbox to verify your account.
           </p>
@@ -468,11 +468,11 @@ export default function RegisterPage() {
               {role === 'sme' ? 'Back to company info' : 'Back to account type'}
             </button>
             <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              {role === 'sme' ? 'Personal Details' : 'Create Your Account'}
+              {role === 'sme' ? 'Personal Details' : 'Secure Your Access'}
             </h1>
             <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
               {role === 'sme'
-                ? 'Set up your login credentials to complete registration.'
+                ? 'Set up your login credentials to complete setup.'
                 : 'Enter your details to access the SME registry'}
             </p>
           </div>
@@ -626,11 +626,11 @@ export default function RegisterPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Creating account...
+                  Completing setup...
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  Create Account
+                  Complete Setup
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
