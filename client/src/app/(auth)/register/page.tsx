@@ -54,20 +54,6 @@ export default function RegisterPage() {
       return;
     }
 
-    if (role === 'sme') {
-      if (!formData.companyName) {
-        setError('Please enter your company name');
-        return;
-      }
-      if (!formData.tradeLicenseNumber) {
-        setError('Please enter your trade license number');
-        return;
-      }
-      if (!formData.industrySector) {
-        setError('Please select your industry sector');
-        return;
-      }
-    }
 
     setIsLoading(true);
 
@@ -77,9 +63,6 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         role: role!,
-        companyName: role === 'sme' ? formData.companyName : undefined,
-        tradeLicenseNumber: role === 'sme' ? formData.tradeLicenseNumber : undefined,
-        industrySector: role === 'sme' ? formData.industrySector : undefined,
       });
 
       if (result.success) {
@@ -329,84 +312,6 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {role === 'sme' && (
-              <>
-                <div>
-                  <label className="input-label block">Company Name</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      className="input-field w-full"
-                      style={{ paddingLeft: '2.5rem' }}
-                      placeholder="Enter your company name"
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="input-label block">Trade License Number</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      value={formData.tradeLicenseNumber}
-                      onChange={(e) => setFormData({ ...formData, tradeLicenseNumber: e.target.value })}
-                      className="input-field w-full"
-                      style={{ paddingLeft: '2.5rem' }}
-                      placeholder="Enter trade license number"
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="input-label block">Industry Sector</label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <select
-                      value={formData.industrySector}
-                      onChange={(e) => setFormData({ ...formData, industrySector: e.target.value })}
-                      className="input-field w-full appearance-none cursor-pointer"
-                      style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                      disabled={isLoading}
-                    >
-                      <option value="">Select industry sector</option>
-                      <option value="technology">Technology</option>
-                      <option value="healthcare">Healthcare</option>
-                      <option value="finance">Finance</option>
-                      <option value="retail">Retail</option>
-                      <option value="manufacturing">Manufacturing</option>
-                      <option value="real_estate">Real Estate</option>
-                      <option value="hospitality">Hospitality</option>
-                      <option value="education">Education</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="input-label block">First Name</label>
