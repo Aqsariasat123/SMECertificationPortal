@@ -54,21 +54,20 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .link-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 20px 0; word-break: break-all; font-size: 13px; color: #3a736d; }
-          .expire-note { background: #fef3c7; border-radius: 8px; padding: 12px 15px; font-size: 13px; color: #92400e; margin: 20px 0; }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
-          .footer a { color: #3a736d; text-decoration: none; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 20px; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .button-wrap { text-align: center; margin: 30px 0; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .link-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin: 20px 0; word-break: break-all; font-size: 12px; color: #3a736d; }
+          .note { background: #fef3c7; border-radius: 6px; padding: 12px 15px; font-size: 13px; color: #92400e; margin: 20px 0; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -79,21 +78,19 @@ class EmailService {
               <p>Official UAE SME Certification Platform</p>
             </div>
             <div class="content">
-              <div class="greeting">Hello ${fullName}!</div>
-              <p class="text">Thank you for choosing SME Readiness Portal. You're just one step away from accessing the UAE's trusted platform for SME certification and verification.</p>
-              <p class="text">Please verify your email address to complete your secure account setup:</p>
+              <div class="title">Verify Your Email</div>
+              <p class="text">Hello ${fullName},</p>
+              <p class="text">Thank you for choosing SME Readiness Portal. Please verify your email address to complete your account setup.</p>
               <div class="button-wrap">
                 <a href="${verifyUrl}" class="button">Verify My Email</a>
               </div>
-              <p class="text" style="font-size: 13px; color: #6b7280;">If the button doesn't work, copy and paste this link into your browser:</p>
+              <p class="text" style="font-size: 12px; color: #6b7280;">If the button doesn't work, copy and paste this link:</p>
               <div class="link-box">${verifyUrl}</div>
-              <div class="expire-note">
-                <strong>Security Notice:</strong> This verification link expires in 24 hours for your protection.
-              </div>
+              <div class="note">This verification link expires in 24 hours.</div>
             </div>
             <div class="footer">
               <p>If you didn't request this, you can safely ignore this email.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -118,20 +115,20 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .link-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 20px 0; word-break: break-all; font-size: 13px; color: #3a736d; }
-          .warning-box { background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 15px; font-size: 14px; color: #92400e; margin: 25px 0; }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 20px; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .button-wrap { text-align: center; margin: 30px 0; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .link-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin: 20px 0; word-break: break-all; font-size: 12px; color: #3a736d; }
+          .note { background: #fef3c7; border-radius: 6px; padding: 12px 15px; font-size: 13px; color: #92400e; margin: 20px 0; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -139,24 +136,22 @@ class EmailService {
           <div class="card">
             <div class="header">
               <h1>SME Readiness Portal</h1>
-              <p>Secure Password Reset</p>
+              <p>Password Reset</p>
             </div>
             <div class="content">
-              <div class="greeting">Hello ${fullName},</div>
-              <p class="text">We received a request to reset your password for your SME Readiness Portal account.</p>
-              <p class="text">Click the secure button below to set a new password:</p>
+              <div class="title">Reset Your Password</div>
+              <p class="text">Hello ${fullName},</p>
+              <p class="text">We received a request to reset your password. Click the button below to set a new password.</p>
               <div class="button-wrap">
-                <a href="${resetUrl}" class="button">Reset My Password</a>
+                <a href="${resetUrl}" class="button">Reset Password</a>
               </div>
-              <p class="text" style="font-size: 13px; color: #6b7280;">Or copy this link into your browser:</p>
+              <p class="text" style="font-size: 12px; color: #6b7280;">Or copy and paste this link:</p>
               <div class="link-box">${resetUrl}</div>
-              <div class="warning-box">
-                <strong>Important:</strong> This link expires in 1 hour for security. If you didn't request this reset, please ignore this email - your account remains secure.
-              </div>
+              <div class="note">This link expires in 1 hour. If you didn't request this, please ignore this email.</div>
             </div>
             <div class="footer">
-              <p>Need help? Contact our support team anytime.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Need help? Contact our support team.</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -264,9 +259,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: role === 'sme'
-        ? 'Welcome to SME Readiness Portal'
-        : 'Welcome to SME Readiness Portal',
+      subject: 'Welcome to SME Readiness Portal',
       html,
     });
   }
@@ -281,28 +274,30 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .status-card { background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; }
-          .status-icon { font-size: 50px; margin-bottom: 15px; }
-          .status-title { font-size: 18px; font-weight: 600; color: #1e40af; margin-bottom: 5px; }
-          .status-subtitle { font-size: 14px; color: #3b82f6; }
-          .timeline { margin: 30px 0; }
-          .timeline-item { display: flex; margin-bottom: 20px; }
-          .timeline-dot { width: 32px; height: 32px; background: #3a736d; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0; }
-          .timeline-content { margin-left: 15px; padding-top: 5px; }
-          .timeline-title { font-weight: 600; color: #111827; font-size: 14px; }
-          .timeline-desc { color: #6b7280; font-size: 13px; margin-top: 3px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #3a736d; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .status-box { background: #e6f4f1; border-left: 4px solid #3a736d; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .status-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .status-value { font-size: 16px; font-weight: 600; color: #3a736d; }
+          .divider { height: 1px; background: #e5e7eb; margin: 25px 0; }
+          .steps-title { font-size: 13px; font-weight: 600; color: #6b7280; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .step { display: table; width: 100%; margin-bottom: 15px; }
+          .step-num { display: table-cell; width: 28px; vertical-align: top; }
+          .step-num span { display: inline-block; width: 24px; height: 24px; background: #3a736d; border-radius: 50%; text-align: center; line-height: 24px; font-size: 12px; color: white; font-weight: 600; }
+          .step-content { display: table-cell; padding-left: 12px; vertical-align: top; }
+          .step-title { font-weight: 600; color: #111827; font-size: 14px; }
+          .step-desc { color: #6b7280; font-size: 13px; margin-top: 2px; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -310,51 +305,51 @@ class EmailService {
           <div class="card">
             <div class="header">
               <h1>SME Readiness Portal</h1>
-              <p>Certification Application Update</p>
+              <p>Certification Application</p>
             </div>
             <div class="content">
-              <div class="greeting">Application Submitted!</div>
+              <div class="title">Application Submitted</div>
+              <div class="subtitle">Your certification journey has begun</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">Great news! We have received the certification application for <strong>${companyName}</strong>. Your application is now queued for review by our verification team.</p>
+              <p class="text">We have received the certification application for <strong>${companyName}</strong>. Your application is now queued for review.</p>
 
-              <div class="status-card">
-                <div class="status-icon">&#128203;</div>
-                <div class="status-title">Application Received</div>
-                <div class="status-subtitle">Expected review time: 24-48 business hours</div>
+              <div class="status-box">
+                <div class="status-label">Application Status</div>
+                <div class="status-value">Submitted - Awaiting Review</div>
               </div>
 
-              <p class="text"><strong>What happens next?</strong></p>
-              <div class="timeline">
-                <div class="timeline-item">
-                  <div class="timeline-dot">1</div>
-                  <div class="timeline-content">
-                    <div class="timeline-title">Document Review</div>
-                    <div class="timeline-desc">Our team reviews your submitted documents and company information</div>
-                  </div>
+              <div class="divider"></div>
+              <div class="steps-title">What happens next</div>
+
+              <div class="step">
+                <div class="step-num"><span>1</span></div>
+                <div class="step-content">
+                  <div class="step-title">Document Review</div>
+                  <div class="step-desc">Our team reviews your documents and company information</div>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot">2</div>
-                  <div class="timeline-content">
-                    <div class="timeline-title">Verification Process</div>
-                    <div class="timeline-desc">You'll receive an email when your review begins</div>
-                  </div>
+              </div>
+              <div class="step">
+                <div class="step-num"><span>2</span></div>
+                <div class="step-content">
+                  <div class="step-title">Verification</div>
+                  <div class="step-desc">You'll receive an email when your review begins</div>
                 </div>
-                <div class="timeline-item">
-                  <div class="timeline-dot">3</div>
-                  <div class="timeline-content">
-                    <div class="timeline-title">Certification Issued</div>
-                    <div class="timeline-desc">Once approved, your business joins the official UAE SME Registry</div>
-                  </div>
+              </div>
+              <div class="step">
+                <div class="step-num"><span>3</span></div>
+                <div class="step-content">
+                  <div class="step-title">Certification</div>
+                  <div class="step-desc">Once approved, your business joins the official registry</div>
                 </div>
               </div>
 
               <div class="button-wrap">
-                <a href="${dashboardUrl}" class="button">Track Application Status</a>
+                <a href="${dashboardUrl}" class="button">Track Application</a>
               </div>
             </div>
             <div class="footer">
-              <p>Thank you for choosing SME Readiness Portal for your certification.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Expected review time: 24-48 business hours</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -364,7 +359,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Application Received - Your Certification Journey Has Begun',
+      subject: 'Application Received - SME Readiness Portal',
       html,
     });
   }
@@ -379,24 +374,24 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .progress-card { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; }
-          .progress-icon { font-size: 50px; margin-bottom: 15px; }
-          .progress-title { font-size: 18px; font-weight: 600; color: #92400e; margin-bottom: 5px; }
-          .progress-subtitle { font-size: 14px; color: #b45309; }
-          .info-box { background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 25px 0; }
-          .info-box p { margin: 0; color: #166534; font-size: 14px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #3a736d; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .status-box { background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .status-label { font-size: 12px; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .status-value { font-size: 16px; font-weight: 600; color: #92400e; }
+          .info-box { background: #f0fdf4; border-radius: 6px; padding: 15px; margin: 20px 0; }
+          .info-text { color: #166534; font-size: 13px; margin: 0; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -407,29 +402,29 @@ class EmailService {
               <p>Certification Status Update</p>
             </div>
             <div class="content">
-              <div class="greeting">Verification In Progress!</div>
+              <div class="title">Verification In Progress</div>
+              <div class="subtitle">Your application is being reviewed</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">Exciting news! Our certification team has begun reviewing your application for <strong>${companyName}</strong>.</p>
+              <p class="text">Our certification team has begun reviewing your application for <strong>${companyName}</strong>.</p>
 
-              <div class="progress-card">
-                <div class="progress-icon">&#128270;</div>
-                <div class="progress-title">Under Review</div>
-                <div class="progress-subtitle">A verification specialist is reviewing your application</div>
+              <div class="status-box">
+                <div class="status-label">Application Status</div>
+                <div class="status-value">Under Review</div>
               </div>
 
               <div class="info-box">
-                <p><strong>What this means:</strong> Your documents and company information are being carefully verified. You'll receive a notification once the review is complete - typically within 24-48 business hours.</p>
+                <p class="info-text">Your documents and company information are being carefully verified. You'll receive a notification once the review is complete.</p>
               </div>
 
-              <p class="text">Please ensure your contact details are up to date in case our team needs to reach you for any clarifications.</p>
+              <p class="text">Please ensure your contact details are up to date in case our team needs to reach you.</p>
 
               <div class="button-wrap">
-                <a href="${dashboardUrl}" class="button">View Application Status</a>
+                <a href="${dashboardUrl}" class="button">View Status</a>
               </div>
             </div>
             <div class="footer">
-              <p>Questions? Our support team is ready to assist you.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Expected completion: 24-48 business hours</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -439,7 +434,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Good News! Your Application is Being Reviewed',
+      subject: 'Your Application is Under Review - SME Readiness Portal',
       html,
     });
   }
@@ -454,28 +449,28 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .celebration-banner { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 35px; text-align: center; }
-          .celebration-icon { font-size: 60px; margin-bottom: 15px; }
-          .celebration-title { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
-          .celebration-subtitle { font-size: 16px; opacity: 0.95; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .benefits { margin: 30px 0; }
-          .benefit { display: flex; align-items: center; padding: 15px; background: #f0fdf4; border-radius: 10px; margin-bottom: 12px; }
-          .benefit-icon { font-size: 24px; margin-right: 15px; color: #10b981; }
-          .benefit-text { color: #166534; font-size: 14px; font-weight: 500; }
-          .highlight-box { background: linear-gradient(135deg, #e6f4f1 0%, #d1fae5 100%); border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; }
-          .highlight-text { color: #065f46; font-size: 16px; font-weight: 600; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 18px 50px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 14px rgba(16,185,129,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #10b981; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .status-box { background: #d1fae5; border-left: 4px solid #10b981; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .status-label { font-size: 12px; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .status-value { font-size: 16px; font-weight: 600; color: #065f46; }
+          .divider { height: 1px; background: #e5e7eb; margin: 25px 0; }
+          .benefits-title { font-size: 13px; font-weight: 600; color: #6b7280; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .benefit-row { display: table; width: 100%; margin-bottom: 12px; }
+          .benefit-check { display: table-cell; width: 24px; vertical-align: top; padding-top: 2px; }
+          .benefit-check span { display: inline-block; width: 18px; height: 18px; background: #d1fae5; border-radius: 50%; text-align: center; line-height: 18px; font-size: 11px; color: #10b981; }
+          .benefit-text { display: table-cell; color: #374151; font-size: 14px; padding-left: 10px; vertical-align: top; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #10b981; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -483,48 +478,46 @@ class EmailService {
           <div class="card">
             <div class="header">
               <h1>SME Readiness Portal</h1>
-              <p>Official UAE SME Certification Platform</p>
-            </div>
-            <div class="celebration-banner">
-              <div class="celebration-icon">&#127881;</div>
-              <div class="celebration-title">Congratulations!</div>
-              <div class="celebration-subtitle">Your Business is Now Certified</div>
+              <p>Certification Approved</p>
             </div>
             <div class="content">
-              <div class="greeting">Welcome to the UAE SME Registry!</div>
+              <div class="title">Congratulations!</div>
+              <div class="subtitle">Your business is now certified</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">We are thrilled to inform you that <strong>${companyName}</strong> has been successfully verified and certified. Your business is now officially listed in the UAE SME Registry!</p>
+              <p class="text">We are pleased to inform you that <strong>${companyName}</strong> has been successfully verified and certified. Your business is now listed in the UAE SME Registry.</p>
 
-              <div class="benefits">
-                <div class="benefit">
-                  <span class="benefit-icon">&#9989;</span>
-                  <span class="benefit-text">Listed in the Official UAE SME Registry</span>
-                </div>
-                <div class="benefit">
-                  <span class="benefit-icon">&#128737;</span>
-                  <span class="benefit-text">Verified Business Credibility Badge</span>
-                </div>
-                <div class="benefit">
-                  <span class="benefit-icon">&#128101;</span>
-                  <span class="benefit-text">Access to Introduction Requests from Verified Users</span>
-                </div>
-                <div class="benefit">
-                  <span class="benefit-icon">&#127775;</span>
-                  <span class="benefit-text">Enhanced Visibility Across the Platform</span>
-                </div>
+              <div class="status-box">
+                <div class="status-label">Certification Status</div>
+                <div class="status-value">Certified & Active</div>
               </div>
 
-              <div class="highlight-box">
-                <div class="highlight-text">Your certification is active and your business is now visible to all registry users!</div>
+              <div class="divider"></div>
+              <div class="benefits-title">Your benefits</div>
+
+              <div class="benefit-row">
+                <div class="benefit-check"><span>&#10003;</span></div>
+                <div class="benefit-text">Listed in the Official UAE SME Registry</div>
+              </div>
+              <div class="benefit-row">
+                <div class="benefit-check"><span>&#10003;</span></div>
+                <div class="benefit-text">Verified Business Credibility Badge</div>
+              </div>
+              <div class="benefit-row">
+                <div class="benefit-check"><span>&#10003;</span></div>
+                <div class="benefit-text">Access to Introduction Requests</div>
+              </div>
+              <div class="benefit-row">
+                <div class="benefit-check"><span>&#10003;</span></div>
+                <div class="benefit-text">Enhanced Visibility on the Platform</div>
               </div>
 
               <div class="button-wrap">
-                <a href="${dashboardUrl}" class="button">View My Certified Profile</a>
+                <a href="${dashboardUrl}" class="button">View My Profile</a>
               </div>
             </div>
             <div class="footer">
-              <p>Thank you for being part of the UAE's trusted SME ecosystem.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Thank you for being part of the UAE SME ecosystem.</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -534,7 +527,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Congratulations! Your Business is Now Certified - SME Readiness Portal',
+      subject: 'Congratulations! Your Business is Certified - SME Readiness Portal',
       html,
     });
   }
@@ -549,27 +542,25 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .action-banner { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center; }
-          .action-icon { font-size: 40px; margin-bottom: 10px; }
-          .action-title { font-size: 16px; font-weight: 600; color: #92400e; }
-          .notes-box { background: #ffffff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 25px; margin: 25px 0; }
-          .notes-header { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 15px; display: flex; align-items: center; }
-          .notes-header-icon { margin-right: 10px; }
-          .notes-content { color: #4b5563; font-size: 14px; white-space: pre-wrap; background: #f9fafb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; }
-          .help-box { background: #eff6ff; border-radius: 8px; padding: 15px; margin: 20px 0; }
-          .help-text { color: #1e40af; font-size: 13px; margin: 0; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(245,158,11,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #f59e0b; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .status-box { background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .status-label { font-size: 12px; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .status-value { font-size: 16px; font-weight: 600; color: #92400e; }
+          .notes-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 20px; margin: 25px 0; }
+          .notes-label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+          .notes-content { color: #374151; font-size: 14px; white-space: pre-wrap; line-height: 1.6; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #f59e0b; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -580,34 +571,30 @@ class EmailService {
               <p>Application Update Required</p>
             </div>
             <div class="content">
-              <div class="greeting">Additional Information Needed</div>
+              <div class="title">Additional Information Needed</div>
+              <div class="subtitle">Action required to proceed</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">We've reviewed the certification application for <strong>${companyName}</strong> and need some additional information before we can proceed with verification.</p>
+              <p class="text">We've reviewed the certification application for <strong>${companyName}</strong> and need some additional information before we can proceed.</p>
 
-              <div class="action-banner">
-                <div class="action-icon">&#128221;</div>
-                <div class="action-title">Action Required: Please Update Your Application</div>
+              <div class="status-box">
+                <div class="status-label">Application Status</div>
+                <div class="status-value">Revision Requested</div>
               </div>
 
               <div class="notes-box">
-                <div class="notes-header">
-                  <span class="notes-header-icon">&#128172;</span>
-                  Reviewer Feedback:
-                </div>
+                <div class="notes-label">Reviewer Feedback</div>
                 <div class="notes-content">${revisionNotes}</div>
               </div>
 
-              <div class="help-box">
-                <p class="help-text"><strong>Need help?</strong> Our support team is available to assist you with any questions about the required changes.</p>
-              </div>
+              <p class="text">Please update your application with the requested information and resubmit.</p>
 
               <div class="button-wrap">
-                <a href="${dashboardUrl}" class="button">Update My Application</a>
+                <a href="${dashboardUrl}" class="button">Update Application</a>
               </div>
             </div>
             <div class="footer">
-              <p>We're here to help you get certified successfully.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>Need help? Contact our support team.</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -617,7 +604,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Action Required: Please Update Your Application - SME Readiness Portal',
+      subject: 'Action Required: Update Your Application - SME Readiness Portal',
       html,
     });
   }
@@ -632,26 +619,27 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.7; color: #1f2937; margin: 0; padding: 0; background: #f3f4f6; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07); }
-          .header { background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
-          .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
-          .content { padding: 40px 30px; }
-          .greeting { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 20px; }
-          .text { color: #4b5563; font-size: 15px; margin-bottom: 20px; }
-          .status-card { background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; padding: 20px; margin: 25px 0; }
-          .status-title { font-size: 14px; font-weight: 600; color: #991b1b; margin-bottom: 5px; }
-          .status-subtitle { font-size: 13px; color: #dc2626; }
-          .reason-box { background: #ffffff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 25px; margin: 25px 0; }
-          .reason-header { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 15px; }
-          .reason-content { color: #4b5563; font-size: 14px; white-space: pre-wrap; background: #f9fafb; padding: 15px; border-radius: 8px; }
-          .help-box { background: #f0fdf4; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center; }
-          .help-text { color: #166534; font-size: 14px; margin: 0 0 10px; }
-          .button-wrap { text-align: center; margin: 35px 0; }
-          .button { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #3a736d 0%, #2d5a55 100%); color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 14px rgba(58,115,109,0.4); }
-          .footer { padding: 25px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 5px; }
+          .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 25px; font-weight: 500; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .status-box { background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .status-label { font-size: 12px; color: #991b1b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .status-value { font-size: 16px; font-weight: 600; color: #991b1b; }
+          .notes-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 20px; margin: 25px 0; }
+          .notes-label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+          .notes-content { color: #374151; font-size: 14px; white-space: pre-wrap; line-height: 1.6; }
+          .info-box { background: #f0fdf4; border-radius: 6px; padding: 15px; margin: 20px 0; }
+          .info-text { color: #166534; font-size: 13px; margin: 0; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
         </style>
       </head>
       <body>
@@ -662,23 +650,23 @@ class EmailService {
               <p>Application Status Update</p>
             </div>
             <div class="content">
-              <div class="greeting">Application Update</div>
+              <div class="title">Application Update</div>
+              <div class="subtitle">Review completed</div>
               <p class="text">Hello ${fullName},</p>
               <p class="text">We have completed our review of the certification application for <strong>${companyName}</strong>. Unfortunately, we are unable to approve the application at this time.</p>
 
-              <div class="status-card">
-                <div class="status-title">Application Status: Not Approved</div>
-                <div class="status-subtitle">Please review the details below</div>
+              <div class="status-box">
+                <div class="status-label">Application Status</div>
+                <div class="status-value">Not Approved</div>
               </div>
 
-              <div class="reason-box">
-                <div class="reason-header">Reason for Decision:</div>
-                <div class="reason-content">${rejectionReason}</div>
+              <div class="notes-box">
+                <div class="notes-label">Reason</div>
+                <div class="notes-content">${rejectionReason}</div>
               </div>
 
-              <div class="help-box">
-                <p class="help-text"><strong>Have questions about this decision?</strong></p>
-                <p class="help-text" style="margin: 0;">Our support team is available to discuss your application and provide guidance on next steps.</p>
+              <div class="info-box">
+                <p class="info-text">If you have questions about this decision, our support team is available to help.</p>
               </div>
 
               <div class="button-wrap">
@@ -687,7 +675,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>We appreciate your interest in the SME Readiness Portal.</p>
-              <p style="margin-top: 15px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
             </div>
           </div>
         </div>
