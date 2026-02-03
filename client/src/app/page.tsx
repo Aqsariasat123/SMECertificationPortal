@@ -205,9 +205,9 @@ export default function LandingPage() {
               >
                 1
               </div>
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#ffffff' }}>Create Account</h3>
+              <h3 className="text-xl font-semibold mb-3" style={{ color: '#ffffff' }}>Start Certification</h3>
               <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                Register your company and complete your business profile.
+                Begin your certification process and submit your business details.
               </p>
             </div>
 
