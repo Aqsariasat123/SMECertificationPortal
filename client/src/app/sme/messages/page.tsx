@@ -248,15 +248,21 @@ export default function MessagesPage() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || sending || !activeRequestId) return;
+    const messageContent = newMessage.trim();
 
     try {
       setSending(true);
-      const result = await api.sendChatMessage(activeRequestId, newMessage.trim());
+      const result = await api.sendChatMessage(activeRequestId, messageContent);
       if (result.success && result.data) {
         shouldScrollRef.current = true; // Scroll to bottom after sending
         setMessages((prev) => [...prev, result.data as Message]);
         setNewMessage('');
-        fetchConversations(); // Refresh conversation list
+        // Update local conversation list without full refresh (better UX)
+        setConversations(prev => prev.map(c =>
+          c.id === activeRequestId
+            ? { ...c, lastMessage: messageContent, lastMessageDate: new Date().toISOString() }
+            : c
+        ));
       } else {
         setError(result.message || 'Failed to send message');
       }
@@ -277,7 +283,12 @@ export default function MessagesPage() {
       if (result.success && result.data) {
         shouldScrollRef.current = true; // Scroll to bottom after upload
         setMessages((prev) => [...prev, result.data as Message]);
-        fetchConversations();
+        // Update local conversation list without full refresh (better UX)
+        setConversations(prev => prev.map(c =>
+          c.id === activeRequestId
+            ? { ...c, lastMessage: `📎 ${file.name}`, lastMessageDate: new Date().toISOString() }
+            : c
+        ));
       } else {
         setError(result.message || 'Failed to upload file');
       }
@@ -440,7 +451,7 @@ export default function MessagesPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Conversations List */}
-      <div className="w-[320px] flex flex-col" style={{ borderRight: '1px solid var(--graphite-200)', backgroundColor: 'white' }}>
+      <div className="w-[350px] flex flex-col" style={{ borderRight: '1px solid var(--graphite-200)', backgroundColor: 'white' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">

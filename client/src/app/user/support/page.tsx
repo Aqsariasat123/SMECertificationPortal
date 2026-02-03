@@ -113,14 +113,20 @@ export default function UserSupportPage() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedTicket) return;
+    const messageContent = newMessage.trim();
     setSending(true);
     try {
-      const result = await api.sendSupportMessage(selectedTicket.id, newMessage.trim());
+      const result = await api.sendSupportMessage(selectedTicket.id, messageContent);
       if (result.success) {
         setNewMessage('');
         shouldScrollRef.current = true; // Scroll to bottom after sending
         fetchTicketMessages(selectedTicket.id);
-        fetchTickets();
+        // Update local ticket list without full refresh (better UX)
+        setTickets(prev => prev.map(t =>
+          t.id === selectedTicket.id
+            ? { ...t, updatedAt: new Date().toISOString(), lastMessage: { content: messageContent, createdAt: new Date().toISOString(), sender: { fullName: 'You', role: 'user' } } }
+            : t
+        ));
       }
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -139,7 +145,12 @@ export default function UserSupportPage() {
       if (result.success) {
         shouldScrollRef.current = true; // Scroll to bottom after upload
         fetchTicketMessages(selectedTicket.id);
-        fetchTickets();
+        // Update local ticket list without full refresh (better UX)
+        setTickets(prev => prev.map(t =>
+          t.id === selectedTicket.id
+            ? { ...t, updatedAt: new Date().toISOString(), lastMessage: { content: `📎 ${file.name}`, createdAt: new Date().toISOString(), sender: { fullName: 'You', role: 'user' } } }
+            : t
+        ));
       } else {
         console.error('Upload failed:', result.message);
         alert(result.message || 'Failed to upload file');
@@ -322,7 +333,7 @@ export default function UserSupportPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Tickets List */}
-      <div className="w-[320px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className="w-[350px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
