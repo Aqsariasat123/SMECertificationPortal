@@ -414,6 +414,9 @@ export async function verifyEmail(req: Request, res: Response): Promise<void> {
       ipAddress: req.ip || req.socket.remoteAddress,
     });
 
+    // Send welcome email
+    await emailService.sendWelcomeEmail(user.email, user.fullName, user.role);
+
     res.status(200).json({
       success: true,
       message: 'Email verified successfully. You can now log in.',

@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { PrismaClient, CertificationStatus } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
+import { emailService } from '../services/email.service';
 
 const prisma = new PrismaClient();
 
@@ -374,6 +375,28 @@ export const reviewApplication = async (req: AuthenticatedRequest, res: Response
         newValue: JSON.stringify({ status: newStatus, notes }),
       },
     });
+
+    // Send email notifications based on action
+    const userEmail = updatedApplication.user?.email;
+    const userName = updatedApplication.user?.fullName || 'User';
+    const companyName = updatedApplication.companyName || 'Your Company';
+
+    if (userEmail) {
+      switch (action) {
+        case 'start_review':
+          await emailService.sendVerificationInProgressEmail(userEmail, userName, companyName);
+          break;
+        case 'approve':
+          await emailService.sendCertificationIssuedEmail(userEmail, userName, companyName);
+          break;
+        case 'reject':
+          await emailService.sendApplicationRejectedEmail(userEmail, userName, companyName, notes);
+          break;
+        case 'request_revision':
+          await emailService.sendRevisionRequiredEmail(userEmail, userName, companyName, notes);
+          break;
+      }
+    }
 
     return res.json({
       success: true,

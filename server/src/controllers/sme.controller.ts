@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { PrismaClient, CertificationStatus, IndustrySector, RequestStatus, LegalStructure, BusinessModel, FundingStage, OfficeType } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { DocumentType, DOCUMENT_TYPE_LABELS, REQUIRED_DOCUMENTS } from '../middleware/upload';
+import { emailService } from '../services/email.service';
 import fs from 'fs';
 import path from 'path';
 
@@ -461,6 +462,16 @@ export const submitCertification = async (req: AuthenticatedRequest, res: Respon
         ipAddress: req.ip || 'unknown',
       },
     });
+
+    // Send application submitted email
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user) {
+      await emailService.sendApplicationSubmittedEmail(
+        user.email,
+        user.fullName,
+        profile.companyName || 'Your Company'
+      );
+    }
 
     return res.json({
       success: true,
