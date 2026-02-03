@@ -354,7 +354,7 @@ export default function AdminAuditLogsPage() {
             >
               <option value="">All Actions</option>
               <option value="USER_LOGIN">Login</option>
-              <option value="USER_REGISTERED">Registration</option>
+              <option value="USER_REGISTERED">Signup</option>
               <option value="SME_PROFILE_UPDATED">Profile Update</option>
               <option value="PROFILE_UPDATE_REQUEST">Update Request</option>
               <option value="DOCUMENT_UPLOADED">Document Upload</option>

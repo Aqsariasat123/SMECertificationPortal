@@ -17,7 +17,7 @@ export default function NotificationsPage() {
       id: '1',
       type: 'success',
       title: 'Welcome to the Portal!',
-      message: 'Start exploring certified SMEs and connect with potential investments.',
+      message: 'Start exploring certified SMEs and connect with business opportunities.',
       timestamp: 'Just now',
       read: false,
     },

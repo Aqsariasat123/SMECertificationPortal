@@ -109,7 +109,7 @@ export default function AdminAnalyticsPage() {
   const getActionLabel = (action: string) => {
     const labels: Record<string, string> = {
       'USER_LOGIN': 'User Logins',
-      'USER_REGISTER': 'Registrations',
+      'USER_REGISTER': 'New Signups',
       'PROFILE_UPDATE': 'Profile Updates',
       'CERTIFICATION_SUBMITTED': 'Certifications Submitted',
       'CERTIFICATION_APPROVED': 'Certifications Approved',
