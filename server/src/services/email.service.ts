@@ -78,11 +78,12 @@ class EmailService {
               <p>Official UAE SME Certification Platform</p>
             </div>
             <div class="content">
-              <div class="title">Verify Your Email</div>
+              <div class="title">Verify Your Credentials</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">Thank you for choosing SME Readiness Portal. Please verify your email address to complete your account setup.</p>
+              <p class="text">You have initiated account setup for the SME Readiness Portal.</p>
+              <p class="text">To secure your account and proceed, please verify your email address by clicking the button below.</p>
               <div class="button-wrap">
-                <a href="${verifyUrl}" class="button">Verify My Email</a>
+                <a href="${verifyUrl}" class="button">Verify Email Address</a>
               </div>
               <p class="text" style="font-size: 12px; color: #6b7280;">If the button doesn't work, copy and paste this link:</p>
               <div class="link-box">${verifyUrl}</div>
@@ -100,7 +101,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Verify Your Email - SME Readiness Portal',
+      subject: 'Verify Your Credentials - SME Readiness Portal',
       html,
     });
   }
@@ -173,27 +174,29 @@ class EmailService {
       : `${process.env.FRONTEND_URL}/user/dashboard`;
 
     const roleContent = role === 'sme' ? {
-      title: 'Welcome to SME Readiness Portal',
-      subtitle: 'Your certification journey begins now',
-      message: 'Your account has been verified successfully. You can now complete your company profile and submit your application to join the UAE\'s official SME Registry.',
+      title: 'Account Verified: Ready for Certification',
+      subtitle: '',
+      message: 'Your account has been successfully verified.\n\nYou may now complete your business profile and submit your documentation for review by the certification committee.',
+      featuresTitle: 'NEXT STEPS',
       features: [
         'Complete your business profile',
         'Upload verification documents',
         'Submit for certification',
         'Get listed in the official registry',
       ],
-      buttonText: 'Complete My Profile',
+      buttonText: 'Proceed to Application',
     } : {
-      title: 'Welcome to SME Readiness Portal',
-      subtitle: 'Your gateway to verified UAE businesses',
-      message: 'Your account has been verified successfully. You now have full access to browse certified businesses and connect with verified SMEs across the UAE.',
+      title: 'Registry Access Granted',
+      subtitle: '',
+      message: 'Your account credentials have been verified.\n\nYou now have read-only access to the official SME Registry to browse certified businesses and view verified profiles.',
+      featuresTitle: 'AVAILABLE ACTIONS',
       features: [
         'Browse certified businesses',
         'Send introduction requests',
         'View verified company profiles',
         'Access the official SME registry',
       ],
-      buttonText: 'Explore Registry',
+      buttonText: 'Access Registry',
     };
 
     const html = `
@@ -232,11 +235,11 @@ class EmailService {
             </div>
             <div class="content">
               <div class="title">${roleContent.title}</div>
-              <div class="subtitle">${roleContent.subtitle}</div>
+              ${roleContent.subtitle ? `<div class="subtitle">${roleContent.subtitle}</div>` : ''}
               <p class="text">Hello ${fullName},</p>
-              <p class="text">${roleContent.message}</p>
+              <p class="text" style="white-space: pre-line;">${roleContent.message}</p>
               <div class="divider"></div>
-              <div class="features-title">What you can do</div>
+              <div class="features-title">${roleContent.featuresTitle}</div>
               ${roleContent.features.map(f => `
                 <div class="feature-row">
                   <div class="feature-check"><span>&#10003;</span></div>
@@ -259,7 +262,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Welcome to SME Readiness Portal',
+      subject: role === 'sme' ? 'Account Verified - SME Readiness Portal' : 'Registry Access Granted - SME Readiness Portal',
       html,
     });
   }
