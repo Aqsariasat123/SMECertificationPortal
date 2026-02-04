@@ -337,7 +337,7 @@ a[href],
 }
 
 .btn-signout:hover {
-  background: #dc2626;
+  background: var(--graphite-700);
 }
 
 /* Input field */
