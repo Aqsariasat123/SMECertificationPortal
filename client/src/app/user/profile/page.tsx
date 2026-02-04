@@ -189,6 +189,9 @@ export default function UserProfilePage() {
   const [deleteError, setDeleteError] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // 2FA state
+  const [show2FAModal, setShow2FAModal] = useState(false);
+
   const [introductionRequests, setIntroductionRequests] = useState<IntroductionRequest[]>([]);
   const [requestsLoading, setRequestsLoading] = useState(true);
 
@@ -856,7 +859,7 @@ export default function UserProfilePage() {
                     </div>
                   </div>
                   <button
-                    onClick={() => alert('Two-Factor Authentication setup coming soon! This feature will allow you to add an authenticator app for extra security.')}
+                    onClick={() => setShow2FAModal(true)}
                     className="w-full sm:w-auto px-4 py-2 text-sm font-semibold rounded-xl transition-colors flex-shrink-0 hover:bg-teal-50"
                     style={{ color: 'var(--teal-600)', borderWidth: '1px', borderColor: 'var(--teal-200)' }}
                   >
@@ -889,6 +892,51 @@ export default function UserProfilePage() {
           )}
         </div>
       </div>
+
+      {/* 2FA Setup Modal */}
+      {show2FAModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-100)' }}>
+                <svg className="w-6 h-6" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold" style={{ color: 'var(--graphite-900)' }}>Two-Factor Authentication</h3>
+                <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>Extra security for your account</p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl mb-4" style={{ backgroundColor: 'var(--teal-50)', borderWidth: '1px', borderColor: 'var(--teal-100)' }}>
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium" style={{ color: 'var(--teal-800)' }}>Coming Soon</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--teal-700)' }}>
+                    Two-factor authentication with authenticator apps (Google Authenticator, Authy) will be available soon. This feature will add an extra layer of security to your account.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-sm mb-4" style={{ color: 'var(--graphite-600)' }}>
+              When enabled, you&apos;ll need to enter a code from your authenticator app each time you sign in, making your account much more secure.
+            </p>
+
+            <button
+              onClick={() => setShow2FAModal(false)}
+              className="w-full px-4 py-3 rounded-xl font-semibold transition-colors"
+              style={{ backgroundColor: 'var(--teal-500)', color: 'white' }}
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Delete Account Modal */}
       {showDeleteModal && (

@@ -178,13 +178,13 @@ export default function SMEDetailPage() {
                     onError={(e) => {
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
-                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%); color: white;">${getInitials(sme.companyName)}</div>`;
+                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: var(--teal-500); color: white;">${getInitials(sme.companyName)}</div>`;
                       }
                     }}
                   />
                 </div>
               ) : (
-                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)', color: 'white' }}>
+                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'var(--teal-500)', color: 'white' }}>
                   {getInitials(sme.companyName)}
                 </div>
               )}
@@ -750,7 +750,7 @@ export default function SMEDetailPage() {
                     <img src={`${STATIC_BASE_URL}${sme.companyLogo}`} alt="" className="w-full h-full object-contain p-2" />
                   </div>
                 ) : (
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-white" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%)' }}>
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-white" style={{ background: 'var(--teal-500)' }}>
                     {getInitials(sme.companyName)}
                   </div>
                 )}
