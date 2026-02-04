@@ -170,7 +170,7 @@ export default function SMEDetailPage() {
             {/* Logo */}
             <div className="relative">
               {sme.companyLogo ? (
-                <div className="w-28 h-28 rounded-2xl overflow-hidden bg-white shadow-xl">
+                <div className="w-28 h-28 rounded-2xl overflow-hidden bg-white shadow-xl border-4 border-white/20">
                   <img
                     src={`${STATIC_BASE_URL}${sme.companyLogo}`}
                     alt={sme.companyName || 'Company Logo'}
@@ -184,7 +184,7 @@ export default function SMEDetailPage() {
                   />
                 </div>
               ) : (
-                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'linear-gradient(135deg, var(--graphite-700) 0%, var(--graphite-900) 100%)', color: 'white' }}>
+                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl border-4 border-white/20" style={{ background: 'linear-gradient(135deg, var(--graphite-700) 0%, var(--graphite-900) 100%)', color: 'white' }}>
                   {getInitials(sme.companyName)}
                 </div>
               )}
