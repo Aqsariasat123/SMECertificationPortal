@@ -197,17 +197,6 @@ export default function UserDashboard() {
               <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Access business information, credentials, and contact details</p>
             </div>
           </div>
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--graphite-100)', color: 'var(--graphite-400)' }}>
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-medium text-sm" style={{ color: 'var(--graphite-500)' }}>Connect with SMEs</p>
-              <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>Coming soon in Phase 2</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

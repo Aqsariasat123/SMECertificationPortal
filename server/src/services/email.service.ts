@@ -192,8 +192,8 @@ class EmailService {
       featuresTitle: 'AVAILABLE ACTIONS',
       features: [
         'Browse certified businesses',
-        'Send introduction requests',
         'View verified company profiles',
+        'Access business credentials',
         'Access the official SME registry',
       ],
       buttonText: 'Access Registry',
@@ -507,7 +507,7 @@ class EmailService {
               </div>
               <div class="benefit-row">
                 <div class="benefit-check"><span>&#10003;</span></div>
-                <div class="benefit-text">Access to Introduction Requests</div>
+                <div class="benefit-text">Access to Business Network</div>
               </div>
               <div class="benefit-row">
                 <div class="benefit-check"><span>&#10003;</span></div>
