@@ -205,10 +205,18 @@ input:focus, textarea:focus, select:focus {
   border: none;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
   background: var(--teal-700);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(74, 143, 135, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* Button - Secondary */
@@ -218,11 +226,19 @@ input:focus, textarea:focus, select:focus {
   border: 1px solid var(--graphite-200);
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
   background: var(--graphite-50);
   border-color: var(--graphite-300);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* Button - Teal accent */
@@ -232,10 +248,18 @@ input:focus, textarea:focus, select:focus {
   border: none;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-teal:hover {
   background: var(--teal-700);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(74, 143, 135, 0.3);
+}
+
+.btn-teal:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* All clickable elements - pointer cursor */
@@ -365,9 +389,10 @@ a[href],
 
 .data-table tbody tr {
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.data-table tr:hover {
+.data-table tbody tr:hover {
   background: var(--graphite-50);
 }
 
