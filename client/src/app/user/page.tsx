@@ -456,7 +456,7 @@ export default function UserDashboardPage() {
                 <th>Company</th>
                 <th className="hidden md:table-cell" style={{ paddingRight: '3rem' }}>Sector</th>
                 <th className="hidden lg:table-cell" style={{ paddingRight: '3rem' }}>Employees</th>
-                <th style={{ textAlign: 'left', width: '120px' }}>Actions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -509,10 +509,10 @@ export default function UserDashboardPage() {
                       {formatEmployeeCount(sme.employeeCount)}
                     </span>
                   </td>
-                  <td style={{ textAlign: 'left', width: '120px' }}>
+                  <td>
                     <button
                       onClick={() => handleViewProfile(sme)}
-                      className="btn-primary px-3 py-1.5 text-xs font-medium rounded"
+                      className="btn-primary px-3 py-1.5 text-xs font-medium rounded whitespace-nowrap"
                     >
                       View Profile
                     </button>
