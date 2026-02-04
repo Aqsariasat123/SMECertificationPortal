@@ -12,6 +12,7 @@ import {
   submitKyc,
   uploadKycDocument,
   removeKycDocument,
+  deleteAccount,
 } from '../controllers/user.controller';
 
 const router = Router();
@@ -49,5 +50,8 @@ router.post('/kyc/documents', upload.single('document'), uploadKycDocument);
 
 // DELETE /api/user/kyc/documents/:type - Remove KYC document
 router.delete('/kyc/documents/:type', removeKycDocument);
+
+// DELETE /api/user/account - Delete user account
+router.delete('/account', deleteAccount);
 
 export default router;

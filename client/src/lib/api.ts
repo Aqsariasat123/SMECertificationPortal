@@ -145,6 +145,13 @@ class ApiClient {
     });
   }
 
+  async deleteAccount(password: string): Promise<ApiResponse> {
+    return this.request('/user/account', {
+      method: 'DELETE',
+      body: JSON.stringify({ password }),
+    });
+  }
+
   async uploadProfilePicture(file: File): Promise<ApiResponse<{ profilePicture: string }>> {
     const token = this.getToken();
     const formData = new FormData();

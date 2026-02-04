@@ -182,6 +182,13 @@ export default function UserProfilePage() {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+
+  // Delete account state
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
   const [introductionRequests, setIntroductionRequests] = useState<IntroductionRequest[]>([]);
   const [requestsLoading, setRequestsLoading] = useState(true);
 
@@ -247,6 +254,31 @@ export default function UserProfilePage() {
       setPasswordError('An error occurred. Please try again.');
     } finally {
       setPasswordSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!deletePassword) {
+      setDeleteError('Please enter your password');
+      return;
+    }
+
+    setDeleteLoading(true);
+    setDeleteError('');
+
+    try {
+      const result = await api.deleteAccount(deletePassword);
+
+      if (result.success) {
+        // Account deleted - redirect to home and clear auth
+        window.location.href = '/';
+      } else {
+        setDeleteError(result.message || 'Failed to delete account');
+      }
+    } catch {
+      setDeleteError('An error occurred. Please try again.');
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -844,7 +876,7 @@ export default function UserProfilePage() {
                       <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--graphite-500)' }}>Once you delete your account, there is no going back. Please be certain.</p>
                     </div>
                     <button
-                      onClick={() => alert('Account deletion feature coming soon. For immediate assistance, please contact support.')}
+                      onClick={() => setShowDeleteModal(true)}
                       className="w-full sm:w-auto px-4 py-2 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap flex-shrink-0 hover:bg-red-50"
                       style={{ color: 'var(--danger-600)', borderWidth: '1px', borderColor: 'var(--danger-200)' }}
                     >
@@ -857,6 +889,75 @@ export default function UserProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--danger-100)' }}>
+                <svg className="w-6 h-6" style={{ color: 'var(--danger-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold" style={{ color: 'var(--graphite-900)' }}>Delete Account</h3>
+                <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>This action cannot be undone</p>
+              </div>
+            </div>
+
+            <p className="text-sm mb-4" style={{ color: 'var(--graphite-600)' }}>
+              All your data including profile, KYC documents, and support tickets will be permanently deleted.
+              Please enter your password to confirm.
+            </p>
+
+            {deleteError && (
+              <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                {deleteError}
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--graphite-700)' }}>
+                Enter your password
+              </label>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => {
+                  setDeletePassword(e.target.value);
+                  setDeleteError('');
+                }}
+                placeholder="Your current password"
+                className="w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2"
+                style={{ borderColor: 'var(--graphite-200)', backgroundColor: 'white' }}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setDeletePassword('');
+                  setDeleteError('');
+                }}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors"
+                style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteLoading}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors disabled:opacity-50"
+                style={{ backgroundColor: 'var(--danger-600)', color: 'white' }}
+              >
+                {deleteLoading ? 'Deleting...' : 'Delete My Account'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hidden file input for profile picture */}
       <input

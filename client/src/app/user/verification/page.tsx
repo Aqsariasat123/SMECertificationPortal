@@ -231,9 +231,9 @@ export default function InvestorVerificationPage() {
           <div className="p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: isApproved ? 'rgba(16, 185, 129, 0.2)' : 'var(--teal-100)' }}>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--teal-100)' }}>
                   {isApproved ? (
-                    <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-7 h-7" style={{ color: 'var(--teal-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   ) : (
@@ -247,7 +247,7 @@ export default function InvestorVerificationPage() {
                     <h1 className="text-xl md:text-2xl font-bold text-white">
                       {isApproved ? 'Verification Complete' : 'KYC Under Review'}
                     </h1>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isApproved ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isApproved ? 'bg-teal-500/20 text-teal-300' : 'bg-amber-500/20 text-amber-300'}`}>
                       {isApproved ? 'Verified' : 'Pending'}
                     </span>
                   </div>
@@ -366,9 +366,9 @@ export default function InvestorVerificationPage() {
                 </div>
                 <div className="flex items-center justify-between px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isApproved ? 'bg-emerald-100' : 'bg-amber-100'}`}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: isApproved ? 'var(--teal-100)' : '#fef3c7' }}>
                       {isApproved ? (
-                        <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       ) : (
@@ -382,7 +382,7 @@ export default function InvestorVerificationPage() {
                       <p className="text-sm text-gray-500">{isApproved ? 'Verification complete' : 'Estimated duration'}</p>
                     </div>
                   </div>
-                  <span className={`font-semibold ${isApproved ? 'text-emerald-600' : 'text-gray-900'}`}>
+                  <span className="font-semibold" style={{ color: isApproved ? 'var(--teal-600)' : '#111827' }}>
                     {isApproved ? 'Verified' : '1-3 business days'}
                   </span>
                 </div>
@@ -422,20 +422,7 @@ export default function InvestorVerificationPage() {
                     <p className="text-xs text-gray-500">Discover certified businesses</p>
                   </div>
                 </button>
-                <button
-                  onClick={() => router.push('/user/messages')}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-100)' }}>
-                    <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900 text-sm">Messages</p>
-                    <p className="text-xs text-gray-500">View your conversations</p>
-                  </div>
-                </button>
+                {/* Phase 1: Messages hidden (Read-Only mode) */}
                 <button
                   onClick={() => router.push('/user/support')}
                   className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
@@ -488,28 +475,28 @@ export default function InvestorVerificationPage() {
                 {isApproved ? (
                   <>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--teal-100)' }}>
+                        <svg className="w-3.5 h-3.5" style={{ color: 'var(--teal-600)' }} fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600">Browse and connect with verified SMEs</p>
+                      <p className="text-sm text-gray-600">Browse verified SME profiles</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--teal-100)' }}>
+                        <svg className="w-3.5 h-3.5" style={{ color: 'var(--teal-600)' }} fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600">Access detailed financial reports</p>
+                      <p className="text-sm text-gray-600">Access business credentials</p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--teal-100)' }}>
+                        <svg className="w-3.5 h-3.5" style={{ color: 'var(--teal-600)' }} fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600">Make direct introduction requests</p>
+                      <p className="text-sm text-gray-600">View official SME registry</p>
                     </div>
                   </>
                 ) : (

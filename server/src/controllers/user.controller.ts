@@ -695,3 +695,101 @@ export const changePassword = async (req: AuthenticatedRequest, res: Response) =
     });
   }
 };
+
+// DELETE /api/user/account - Delete user account
+export const deleteAccount = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+    const { password } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password is required to delete account',
+      });
+    }
+
+    // Verify user and password
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Incorrect password',
+      });
+    }
+
+    // Delete user and all related data (cascading delete handled by Prisma)
+    await prisma.$transaction(async (tx) => {
+      // Delete user profile
+      await tx.userProfile.deleteMany({
+        where: { userId },
+      });
+
+      // Delete support tickets
+      await tx.supportTicket.deleteMany({
+        where: { userId },
+      });
+
+      // Delete introduction requests
+      await tx.introductionRequest.deleteMany({
+        where: { requesterId: userId },
+      });
+
+      // Delete chat messages sent by user
+      await tx.chatMessage.deleteMany({
+        where: { senderId: userId },
+      });
+
+      // Log the deletion before deleting user
+      await tx.auditLog.create({
+        data: {
+          userId,
+          actionType: 'ACCOUNT_DELETED',
+          actionDescription: `User ${user.email} deleted their account`,
+          targetType: 'User',
+          targetId: userId,
+          ipAddress: req.ip || 'unknown',
+        },
+      });
+
+      // Finally delete the user
+      await tx.user.delete({
+        where: { id: userId },
+      });
+    });
+
+    return res.json({
+      success: true,
+      message: 'Account deleted successfully',
+    });
+  } catch (error) {
+    console.error('Delete account error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to delete account',
+    });
+  }
+};

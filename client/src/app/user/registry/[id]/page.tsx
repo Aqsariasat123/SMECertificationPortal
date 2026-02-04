@@ -41,7 +41,7 @@ export default function SMEDetailPage() {
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return '?';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    return name.charAt(0).toUpperCase();
   };
 
   const formatSector = (sector: string | null | undefined) => {
