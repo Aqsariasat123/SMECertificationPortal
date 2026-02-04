@@ -542,7 +542,7 @@ export default function SMEDashboardPage() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {/* Phase 1: Introduction Requests Card hidden (Read-Only mode) */}
             {/* <Link
               href="/sme/messages"

@@ -825,3 +825,12 @@ button:not(.btn-primary):not(.btn-secondary):not(.btn-teal):not(.btn-signout):no
     transform: translate(-5px, 10px) scale(0.95);
   }
 }
+
+/* Hide scrollbar for horizontal tabs on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}

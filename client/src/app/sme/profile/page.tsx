@@ -865,12 +865,15 @@ export default function SMEProfilePage() {
       {/* Tabs */}
       <div className="solid-card rounded-2xl">
         <div style={{ borderBottom: '1px solid var(--graphite-100)' }}>
-          <div className="flex overflow-x-auto">
+          <div
+            className="flex overflow-x-auto scrollbar-hide"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className="flex items-center gap-2 px-6 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-all"
+                className="flex items-center gap-2 px-4 md:px-6 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-all flex-shrink-0"
                 style={{
                   borderColor: activeTab === tab.id ? 'var(--teal-600)' : 'transparent',
                   color: activeTab === tab.id ? 'var(--teal-600)' : 'var(--graphite-500)',

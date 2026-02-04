@@ -42,11 +42,36 @@ export default function SMECertificationPage() {
   ];
 
   // Calculate completion status
-  const profileCompletion = profile?.completionPercentage || 0;
   const docs = profile?.documents || {};
   const uploadedFiles = (docs.uploadedFiles || []) as Array<{ type?: string; name: string; path?: string; uploadedAt?: string }>;
   const documentsCount = uploadedFiles.length;
   const requiredDocuments = requiredDocumentTypes.length;
+
+  // Check if already submitted/certified
+  const isAlreadySubmitted = profile && ['submitted', 'under_review', 'certified'].includes(profile.certificationStatus);
+
+  // Calculate profile completion locally (same as Dashboard - 7 sections)
+  const calculateProfileCompletion = () => {
+    if (!profile) return 0;
+    let completed = 0;
+    const total = 7;
+    // Basic Info
+    if (profile.companyName && profile.tradeLicenseNumber && profile.industrySector) completed++;
+    // Legal & Registration
+    if (profile.registrationNumber && profile.legalStructure) completed++;
+    // Ownership
+    if (profile.ownerName && profile.ownerNationality) completed++;
+    // Financial Info
+    if (profile.fundingStage || profile.bankName) completed++;
+    // Business Operations
+    if (profile.businessModel) completed++;
+    // Compliance
+    if (profile.hasAmlPolicy || profile.hasDataProtectionPolicy) completed++;
+    // Documents (at least 3)
+    if (uploadedFiles.length >= 3) completed++;
+    return Math.round((completed / total) * 100);
+  };
+  const profileCompletion = calculateProfileCompletion();
 
   // Check which required documents are uploaded
   const isDocumentUploaded = (docType: string) => {
@@ -68,6 +93,8 @@ export default function SMECertificationPage() {
         if (!isProfileComplete) return 'locked';
         return isDocumentsComplete ? 'complete' : 'incomplete';
       case 2:
+        // If already submitted/under_review/certified, step 3 is complete
+        if (isAlreadySubmitted) return 'complete';
         if (!isProfileComplete || !isDocumentsComplete) return 'locked';
         return canSubmit ? 'incomplete' : 'locked';
       default:
@@ -469,48 +496,50 @@ export default function SMECertificationPage() {
         </div>
       </div>
 
-      {/* Submit Section */}
-      <div className="rounded-2xl p-6 md:p-8" style={{ background: 'var(--graphite-800)' }}>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="flex items-start gap-5">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: canSubmit ? 'rgba(74,143,135,0.2)' : 'rgba(255,255,255,0.1)', color: canSubmit ? 'var(--teal-400)' : 'var(--graphite-400)' }}
+      {/* Submit Section - Hide when already submitted/certified */}
+      {!isAlreadySubmitted && (
+        <div className="rounded-2xl p-6 md:p-8" style={{ background: 'var(--graphite-800)' }}>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-start gap-5">
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                style={{ background: canSubmit ? 'rgba(74,143,135,0.2)' : 'rgba(255,255,255,0.1)', color: canSubmit ? 'var(--teal-400)' : 'var(--graphite-400)' }}
+              >
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg text-white">Ready to Submit?</h3>
+                <p className="text-sm mt-1.5 max-w-md" style={{ color: 'var(--graphite-300)' }}>
+                  {canSubmit
+                    ? 'All requirements met! Submit your application for certification review.'
+                    : 'Complete all requirements above to submit your certification application. Our team will review your application within 5-7 business days.'}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleSubmit}
+              disabled={!canSubmit || submitting}
+              className="px-6 py-3.5 font-semibold rounded-xl whitespace-nowrap transition-all"
+              style={{
+                background: canSubmit ? 'var(--teal-600)' : 'rgba(255,255,255,0.1)',
+                color: canSubmit ? 'white' : 'var(--graphite-400)',
+                cursor: canSubmit ? 'pointer' : 'not-allowed'
+              }}
             >
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg text-white">Ready to Submit?</h3>
-              <p className="text-sm mt-1.5 max-w-md" style={{ color: 'var(--graphite-300)' }}>
-                {canSubmit
-                  ? 'All requirements met! Submit your application for certification review.'
-                  : 'Complete all requirements above to submit your certification application. Our team will review your application within 5-7 business days.'}
-              </p>
-            </div>
+              {submitting ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Submitting...
+                </span>
+              ) : (
+                'Submit Application'
+              )}
+            </button>
           </div>
-          <button
-            onClick={handleSubmit}
-            disabled={!canSubmit || submitting}
-            className="px-6 py-3.5 font-semibold rounded-xl whitespace-nowrap transition-all"
-            style={{
-              background: canSubmit ? 'var(--teal-600)' : 'rgba(255,255,255,0.1)',
-              color: canSubmit ? 'white' : 'var(--graphite-400)',
-              cursor: canSubmit ? 'pointer' : 'not-allowed'
-            }}
-          >
-            {submitting ? (
-              <span className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Submitting...
-              </span>
-            ) : (
-              'Submit Application'
-            )}
-          </button>
         </div>
-      </div>
+      )}
 
       {/* Help Card */}
       <div className="solid-card rounded-2xl p-6">

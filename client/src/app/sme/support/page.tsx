@@ -334,7 +334,7 @@ export default function SMESupportPage() {
   return (
     <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Tickets List */}
-      <div className="w-[350px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className={`${selectedTicket ? 'hidden lg:flex' : 'flex'} w-full lg:w-[350px] flex-col bg-white`} style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
@@ -465,7 +465,7 @@ export default function SMESupportPage() {
       </div>
 
       {/* Right Panel - Chat Area */}
-      <div className="flex-1 flex flex-col" style={{ backgroundColor: 'var(--graphite-50)' }}>
+      <div className={`${selectedTicket ? 'flex' : 'hidden lg:flex'} flex-1 flex-col`} style={{ backgroundColor: 'var(--graphite-50)' }}>
         {!selectedTicket ? (
           // No ticket selected
           <div className="flex-1 flex flex-col items-center justify-center" style={{ color: 'var(--graphite-400)' }}>
@@ -484,11 +484,21 @@ export default function SMESupportPage() {
         ) : (
           <>
             {/* Chat Header */}
-            <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+            <div className="bg-white px-4 lg:px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
-                    <span className="text-white font-bold text-lg">S</span>
+                <div className="flex items-center gap-3 lg:gap-4">
+                  {/* Back button for mobile */}
+                  <button
+                    onClick={() => setSelectedTicket(null)}
+                    className="lg:hidden p-2 -ml-2 rounded-lg transition-colors"
+                    style={{ color: 'var(--graphite-600)' }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                    <span className="text-white font-bold text-base lg:text-lg">S</span>
                   </div>
                   <div>
                     <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Support Team</h2>
