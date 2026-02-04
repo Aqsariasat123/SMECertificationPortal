@@ -108,8 +108,8 @@ export default function VerifyEmailPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: 'var(--graphite-900)' }}>Email Verified!</h1>
-          <p className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--foreground-muted)' }}>{message || 'Your email has been successfully verified. You can now access all features.'}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: 'var(--graphite-900)' }}>Credentials Verified</h1>
+          <p className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--foreground-muted)' }}>{message || 'Your credentials have been verified. You may now access the portal.'}</p>
 
           {/* Success badge */}
           <div

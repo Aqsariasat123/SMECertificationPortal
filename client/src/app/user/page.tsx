@@ -511,16 +511,9 @@ export default function UserDashboardPage() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleViewProfile(sme)}
-                        className="px-3 py-1.5 text-xs font-medium rounded transition-colors"
-                        style={{ color: 'var(--graphite-600)' }}
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => handleRequestIntroduction(sme)}
                         className="btn-primary px-3 py-1.5 text-xs font-medium rounded"
                       >
-                        Connect
+                        View Profile
                       </button>
                     </div>
                   </td>

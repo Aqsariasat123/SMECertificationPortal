@@ -16,8 +16,8 @@ export default function NotificationsPage() {
     {
       id: '1',
       type: 'success',
-      title: 'Welcome to the Portal!',
-      message: 'Complete your profile to get started with the certification process.',
+      title: 'Account Verified',
+      message: 'Complete your business profile to proceed with the certification application.',
       timestamp: 'Just now',
       read: false,
     },

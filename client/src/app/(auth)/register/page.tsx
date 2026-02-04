@@ -111,9 +111,9 @@ export default function RegisterPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold mb-3" style={{ color: 'var(--graphite-900)' }}>Setup Complete!</h1>
+          <h1 className="text-2xl font-semibold mb-3" style={{ color: 'var(--graphite-900)' }}>Verification Email Sent</h1>
           <p className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--foreground-muted)' }}>
-            We&apos;ve sent a verification email to <span className="font-medium" style={{ color: 'var(--graphite-700)' }}>{formData.email}</span>. Please check your inbox to verify your account.
+            A verification link has been sent to <span className="font-medium" style={{ color: 'var(--graphite-700)' }}>{formData.email}</span>. Check your inbox to verify your credentials.
           </p>
           <Link
             href="/login"

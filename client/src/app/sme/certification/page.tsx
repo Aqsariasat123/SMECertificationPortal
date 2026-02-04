@@ -206,10 +206,10 @@ export default function SMECertificationPage() {
           <div>
             <p className="text-sm font-semibold" style={{ color: profile.certificationStatus === 'certified' ? 'var(--success-800)' : 'var(--teal-800)' }}>
               {profile.certificationStatus === 'certified'
-                ? 'Your company is certified!'
+                ? 'Certification Status: Approved'
                 : profile.certificationStatus === 'under_review'
-                  ? 'Your application is under review'
-                  : 'Your application has been submitted'}
+                  ? 'Application Status: Under Review'
+                  : 'Application Status: Submitted'}
             </p>
             <p className="text-xs mt-0.5" style={{ color: profile.certificationStatus === 'certified' ? 'var(--success-600)' : 'var(--teal-600)' }}>
               {profile.certificationStatus === 'certified'

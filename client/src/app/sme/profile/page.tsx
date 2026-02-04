@@ -1876,8 +1876,8 @@ export default function SMEProfilePage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg">Ready to Submit!</h3>
-                  <p className="text-sm" style={{ color: 'var(--teal-200)' }}>All requirements completed. Submit your application for review.</p>
+                  <h3 className="font-bold text-white text-lg">Application Ready</h3>
+                  <p className="text-sm" style={{ color: 'var(--teal-200)' }}>All requirements completed. Proceed to submit for certification review.</p>
                 </div>
               </div>
               <button

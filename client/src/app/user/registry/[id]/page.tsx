@@ -237,18 +237,18 @@ export default function SMEDetailPage() {
               </div>
             </div>
 
-            {/* CTA Button */}
+            {/* Phase 1: Read-Only Access Badge */}
             <div className="md:self-center">
-              <button
-                onClick={() => setShowIntroModal(true)}
-                className="w-full md:w-auto px-8 py-4 rounded-xl font-semibold text-white transition-all transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-3"
-                style={{ background: 'linear-gradient(135deg, var(--teal-500) 0%, var(--teal-600) 100%)', boxShadow: '0 10px 30px -10px rgba(74, 143, 135, 0.5)' }}
+              <div
+                className="w-full md:w-auto px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2"
+                style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.9)' }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                Connect
-              </button>
+                Read-Only Access
+              </div>
             </div>
           </div>
         </div>
@@ -729,17 +729,11 @@ export default function SMEDetailPage() {
             <div className="rounded-2xl p-12 text-center" style={{ background: '#f9fafb' }}>
               <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: '#e5e7eb' }}>
                 <svg className="w-8 h-8" style={{ color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="font-semibold mb-2" style={{ color: '#374151' }}>Contact Info Not Public</h3>
-              <p className="text-sm mb-4" style={{ color: '#6b7280' }}>Request an introduction to get in touch with this company.</p>
-              <button
-                onClick={() => setShowIntroModal(true)}
-                className="btn-teal px-6 py-2.5 rounded-xl font-semibold"
-              >
-                Request Introduction
-              </button>
+              <h3 className="font-semibold mb-2" style={{ color: '#374151' }}>Contact Information Not Available</h3>
+              <p className="text-sm" style={{ color: '#6b7280' }}>Public contact details have not been disclosed for this company.</p>
             </div>
           )}
         </div>

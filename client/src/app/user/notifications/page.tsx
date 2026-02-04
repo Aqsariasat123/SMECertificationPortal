@@ -16,8 +16,8 @@ export default function NotificationsPage() {
     {
       id: '1',
       type: 'success',
-      title: 'Welcome to the Portal!',
-      message: 'Start exploring certified SMEs and connect with business opportunities.',
+      title: 'Registry Access Granted',
+      message: 'You now have read-only access to browse certified businesses in the SME Registry.',
       timestamp: 'Just now',
       read: false,
     },
