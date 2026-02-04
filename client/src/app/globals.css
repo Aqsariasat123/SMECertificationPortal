@@ -329,6 +329,17 @@ a[href],
   color: white;
 }
 
+/* Sign Out Button */
+.btn-signout {
+  background: var(--graphite-600);
+  color: white;
+  transition: all 0.15s ease;
+}
+
+.btn-signout:hover {
+  background: #dc2626;
+}
+
 /* Input field */
 .input-field {
   height: 42px;
