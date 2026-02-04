@@ -132,7 +132,10 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           href="/user"
-          className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-200 transition-all"
+          className="group bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all"
+          style={{ border: '1px solid var(--graphite-200)' }}
+          onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--teal-300)'}
+          onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--graphite-200)'}
         >
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.2)' }}>
@@ -152,7 +155,10 @@ export default function UserDashboard() {
 
         <Link
           href="/user/profile"
-          className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-200 transition-all"
+          className="group bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all"
+          style={{ border: '1px solid var(--graphite-200)' }}
+          onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--teal-300)'}
+          onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--graphite-200)'}
         >
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.2)' }}>
