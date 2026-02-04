@@ -178,13 +178,13 @@ export default function SMEDetailPage() {
                     onError={(e) => {
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
-                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: var(--teal-500); color: white;">${getInitials(sme.companyName)}</div>`;
+                        parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-3xl font-bold" style="background: linear-gradient(135deg, var(--graphite-700) 0%, var(--graphite-900) 100%); color: white;">${getInitials(sme.companyName)}</div>`;
                       }
                     }}
                   />
                 </div>
               ) : (
-                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'var(--teal-500)', color: 'white' }}>
+                <div className="w-28 h-28 rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl" style={{ background: 'linear-gradient(135deg, var(--graphite-700) 0%, var(--graphite-900) 100%)', color: 'white' }}>
                   {getInitials(sme.companyName)}
                 </div>
               )}
