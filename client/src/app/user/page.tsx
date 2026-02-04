@@ -431,16 +431,18 @@ export default function UserDashboardPage() {
               >
                 <button
                   onClick={() => handleViewProfile(sme)}
-                  className="btn-secondary flex-1 h-9 text-xs font-medium rounded"
+                  className="btn-primary flex-1 h-9 text-xs font-medium rounded"
                 >
                   View Profile
                 </button>
+                {/* Phase 1: Request Introduction hidden
                 <button
                   onClick={() => handleRequestIntroduction(sme)}
                   className="btn-primary flex-1 h-9 text-xs font-medium rounded"
                 >
                   Request Introduction
                 </button>
+                */}
               </div>
             </div>
           ))}
@@ -452,8 +454,8 @@ export default function UserDashboardPage() {
             <thead>
               <tr>
                 <th>Company</th>
-                <th className="hidden md:table-cell">Sector</th>
-                <th className="hidden lg:table-cell">Employees</th>
+                <th className="hidden md:table-cell" style={{ paddingRight: '3rem' }}>Sector</th>
+                <th className="hidden lg:table-cell" style={{ paddingRight: '3rem' }}>Employees</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
@@ -497,12 +499,12 @@ export default function UserDashboardPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="hidden md:table-cell">
+                  <td className="hidden md:table-cell" style={{ paddingRight: '3rem' }}>
                     <span className="badge badge-teal">
                       {formatSector(sme.industrySector)}
                     </span>
                   </td>
-                  <td className="hidden lg:table-cell">
+                  <td className="hidden lg:table-cell" style={{ paddingRight: '3rem' }}>
                     <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>
                       {formatEmployeeCount(sme.employeeCount)}
                     </span>
