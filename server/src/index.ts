@@ -25,10 +25,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 // MIDDLEWARE CONFIGURATION
 // ===========================================
 
-// Security Headers (stricter in production)
+// Security Headers (relaxed for mobile compatibility)
 app.use(helmet({
-  contentSecurityPolicy: isProduction ? undefined : false,
-  crossOriginEmbedderPolicy: isProduction,
+  contentSecurityPolicy: false, // Disabled for mobile compatibility
+  crossOriginEmbedderPolicy: false, // Disabled - causes issues on mobile
   crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow images to load cross-origin
 }));
 
@@ -37,28 +37,14 @@ if (isProduction) {
   app.set('trust proxy', 1);
 }
 
-// CORS Configuration
-const allowedOrigins = process.env.FRONTEND_URL
-  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000', 'http://localhost:3001'];
-
+// CORS Configuration - Permissive for mobile Safari compatibility
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else if (!isProduction) {
-      // In development, allow all origins
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins (mobile Safari has issues with strict CORS)
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Length', 'X-Request-Id'],
+  maxAge: 86400, // Cache preflight for 24 hours
 }));
 
 // Rate Limiting (more permissive in development)

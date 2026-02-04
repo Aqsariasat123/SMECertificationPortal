@@ -54,6 +54,8 @@ class ApiClient {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
         headers,
+        mode: 'cors',
+        credentials: 'omit', // Safari mobile fix - don't send credentials with CORS
       });
 
       const data = await response.json();
@@ -67,11 +69,12 @@ class ApiClient {
       }
 
       return data;
-    } catch (error) {
-      console.error('API request failed:', error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('API request failed:', endpoint, errorMessage, error);
       return {
         success: false,
-        message: 'Network error. Please check your connection.',
+        message: `Network error: ${errorMessage}`,
       };
     }
   }
