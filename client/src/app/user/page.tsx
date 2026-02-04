@@ -382,7 +382,7 @@ export default function UserDashboardPage() {
                 ) : (
                   <div
                     className="w-12 h-12 rounded flex items-center justify-center text-white text-base font-semibold flex-shrink-0"
-                    style={{ background: 'var(--teal-500)' }}
+                    style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}
                   >
                     {getInitials(sme.companyName)}
                   </div>
@@ -454,7 +454,7 @@ export default function UserDashboardPage() {
                 <th>Company</th>
                 <th className="hidden md:table-cell">Sector</th>
                 <th className="hidden lg:table-cell">Employees</th>
-                <th className="text-right">Actions</th>
+                <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -472,7 +472,7 @@ export default function UserDashboardPage() {
                       ) : (
                         <div
                           className="w-9 h-9 rounded flex items-center justify-center text-white text-xs font-semibold flex-shrink-0"
-                          style={{ background: 'var(--teal-500)' }}
+                          style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}
                         >
                           {getInitials(sme.companyName)}
                         </div>
