@@ -313,8 +313,9 @@ a[href],
 }
 
 .sidebar-nav-item:hover {
-  background: var(--sidebar-hover);
-  color: var(--graphite-200);
+  background: rgba(74, 143, 135, 0.12);
+  border-left-color: var(--teal-600);
+  color: white;
 }
 
 .sidebar-nav-item.active {
