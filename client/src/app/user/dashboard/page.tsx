@@ -112,52 +112,23 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Stats Cards - Match Admin Dashboard Style */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="glass-card rounded-xl p-6 stat-accent-teal">
-          <div className="flex items-center gap-6">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-50)', color: 'var(--teal-600)' }}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.totalRequests}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Total Requests</p>
-            </div>
+      {/* Phase 1: Read-Only Access Info */}
+      <div className="glass-card rounded-xl p-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--teal-50)', color: 'var(--teal-600)' }}>
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
           </div>
-        </div>
-
-        <div className="glass-card rounded-xl p-6 stat-accent-warning">
-          <div className="flex items-center gap-6">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--warning-50)', color: 'var(--warning-600)' }}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.pendingRequests}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Pending</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-card rounded-xl p-6 stat-accent-success">
-          <div className="flex items-center gap-6">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: 'var(--success-50)', color: 'var(--success-600)' }}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--graphite-900)' }}>{stats.respondedRequests}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>Responded</p>
-            </div>
+          <div>
+            <p className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Read-Only Registry Access</p>
+            <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>Browse certified businesses and view verified company profiles</p>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions - Modern cards with gradient hover */}
+      {/* Quick Actions - Phase 1: Only Browse Registry */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           href="/user"
@@ -171,7 +142,7 @@ export default function UserDashboard() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-slate-900 transition-colors">Browse Registry</h3>
-              <p className="text-sm text-slate-500 mt-0.5">Find and connect with certified SMEs</p>
+              <p className="text-sm text-slate-500 mt-0.5">View certified businesses and company profiles</p>
             </div>
             <svg className="w-5 h-5 text-slate-300 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -180,18 +151,18 @@ export default function UserDashboard() {
         </Link>
 
         <Link
-          href="/user/messages"
+          href="/user/profile"
           className="group bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-200 transition-all"
         >
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: 'linear-gradient(to bottom right, var(--teal-600), var(--teal-500))', boxShadow: '0 10px 15px -3px rgba(74, 143, 135, 0.2)' }}>
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-slate-900 transition-colors" style={{ color: 'var(--graphite-900)' }}>Messages</h3>
-              <p className="text-sm text-slate-500 mt-0.5">View your conversations with SMEs</p>
+              <h3 className="font-semibold text-slate-900 transition-colors" style={{ color: 'var(--graphite-900)' }}>My Profile</h3>
+              <p className="text-sm text-slate-500 mt-0.5">Manage your account settings</p>
             </div>
             <svg className="w-5 h-5 text-slate-300 group-hover:translate-x-1 transition-all" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -200,75 +171,44 @@ export default function UserDashboard() {
         </Link>
       </div>
 
-      {/* Recent Introduction Requests */}
-      <div className="solid-card rounded-xl overflow-hidden">
-        <div className="p-5 border-b" style={{ borderColor: 'var(--graphite-200)' }}>
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>Recent Introduction Requests</h2>
-            <Link
-              href="/user/profile?tab=introductions"
-              className="text-sm font-medium"
-              style={{ color: 'var(--teal-600)' }}
-            >
-              View All →
-            </Link>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="p-8 text-center">
-            <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderColor: 'var(--teal-600)', borderTopColor: 'transparent' }} />
-            <p className="mt-3 text-sm" style={{ color: 'var(--graphite-500)' }}>Loading...</p>
-          </div>
-        ) : introductionRequests.length > 0 ? (
-          <div className="divide-y" style={{ borderColor: 'var(--graphite-100)' }}>
-            {introductionRequests.slice(0, 5).map((request) => {
-              const statusConfig = getStatusConfig(request.status);
-              return (
-                <Link
-                  key={request.id}
-                  href={`/user/messages?chat=${request.id}`}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}>
-                      {getInitials(request.smeName)}
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm group-hover:underline" style={{ color: 'var(--graphite-900)' }}>{request.smeName || 'Unknown Company'}</p>
-                      <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>{formatSector(request.smeSector)} • {formatDate(request.requestedDate)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${statusConfig.bg} ${statusConfig.text}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${statusConfig.dot}`} />
-                      {statusConfig.label}
-                    </span>
-                    <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--graphite-400)' }}>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="p-8 text-center">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--graphite-100)' }}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--graphite-400)' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+      {/* Phase 1: Getting Started Info */}
+      <div className="solid-card rounded-xl p-6">
+        <h2 className="font-semibold mb-4" style={{ color: 'var(--graphite-900)' }}>Getting Started</h2>
+        <div className="space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--teal-50)', color: 'var(--teal-600)' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>No requests yet</h3>
-            <p className="text-sm mt-1 mb-4" style={{ color: 'var(--graphite-500)' }}>Browse the SME registry to find companies and request introductions</p>
-            <Link
-              href="/user"
-              className="btn-teal inline-flex items-center gap-2 px-4 py-2 font-semibold rounded-lg text-sm"
-            >
-              Browse Registry
-            </Link>
+            <div>
+              <p className="font-medium text-sm" style={{ color: 'var(--graphite-800)' }}>Browse the SME Registry</p>
+              <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>View certified businesses and their verified profiles</p>
+            </div>
           </div>
-        )}
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--teal-50)', color: 'var(--teal-600)' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-medium text-sm" style={{ color: 'var(--graphite-800)' }}>View Company Details</p>
+              <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Access business information, credentials, and contact details</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: 'var(--graphite-100)', color: 'var(--graphite-400)' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-medium text-sm" style={{ color: 'var(--graphite-500)' }}>Connect with SMEs</p>
+              <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>Coming soon in Phase 2</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

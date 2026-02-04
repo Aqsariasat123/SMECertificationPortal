@@ -11,7 +11,8 @@ export default function SMEDashboardPage() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [introRequestsCount, setIntroRequestsCount] = useState(0);
+  // Phase 1: Introduction requests hidden (Read-Only mode)
+  // const [introRequestsCount, setIntroRequestsCount] = useState(0);
   const [showSupportModal, setShowSupportModal] = useState(false);
   const [supportForm, setSupportForm] = useState({ subject: '', message: '' });
   const [sendingSupport, setSendingSupport] = useState(false);
@@ -55,14 +56,15 @@ export default function SMEDashboardPage() {
       if (profileResult.success && profileResult.data) {
         setProfile(profileResult.data);
 
-        try {
-          const introResult = await api.getSMEIntroductionRequests();
-          if (introResult.success && introResult.data) {
-            setIntroRequestsCount(introResult.data.count);
-          }
-        } catch {
-          console.log('Could not load introduction requests');
-        }
+        // Phase 1: Introduction requests hidden (Read-Only mode)
+        // try {
+        //   const introResult = await api.getSMEIntroductionRequests();
+        //   if (introResult.success && introResult.data) {
+        //     setIntroRequestsCount(introResult.data.count);
+        //   }
+        // } catch {
+        //   console.log('Could not load introduction requests');
+        // }
       } else {
         setError(profileResult.message || 'Failed to load profile');
       }
@@ -541,8 +543,8 @@ export default function SMEDashboardPage() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-            {/* Introduction Requests Card */}
-            <Link
+            {/* Phase 1: Introduction Requests Card hidden (Read-Only mode) */}
+            {/* <Link
               href="/sme/messages"
               className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden hover:shadow-md transition-all group"
             >
@@ -566,7 +568,7 @@ export default function SMEDashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
-            </Link>
+            </Link> */}
 
             {/* Registry Status Card */}
             <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">

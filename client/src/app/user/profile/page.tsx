@@ -302,11 +302,12 @@ export default function UserProfilePage() {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
       </svg>
     )},
-    { id: 'introductions', label: 'Introductions', count: introductionRequests.length, icon: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-      </svg>
-    )},
+    // Phase 1: Introductions tab hidden (Read-Only mode)
+    // { id: 'introductions', label: 'Introductions', count: introductionRequests.length, icon: (
+    //   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    //     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+    //   </svg>
+    // )},
     { id: 'security', label: 'Security', icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -323,7 +324,7 @@ export default function UserProfilePage() {
       {/* Header */}
       <div>
         <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--graphite-900)' }}>My Profile</h1>
-        <p className="text-sm sm:text-base mt-1" style={{ color: 'var(--foreground-muted)' }}>Manage your account and view your introduction requests</p>
+        <p className="text-sm sm:text-base mt-1" style={{ color: 'var(--foreground-muted)' }}>Manage your account settings and security</p>
       </div>
 
       {/* Profile Card */}
@@ -447,7 +448,8 @@ export default function UserProfilePage() {
                 <span className="flex-shrink-0">{tab.icon}</span>
                 <span className="hidden xs:inline sm:inline">{tab.label}</span>
                 <span className="xs:hidden sm:hidden">{tab.label.split(' ')[0]}</span>
-                {tab.count !== undefined && (
+                {/* Phase 1: Tab count hidden (Read-Only mode) */}
+                {/* {tab.count !== undefined && (
                   <span
                     className="px-1.5 sm:px-2 py-0.5 text-xs font-semibold rounded-full"
                     style={activeTab === tab.id
@@ -457,7 +459,7 @@ export default function UserProfilePage() {
                   >
                     {tab.count}
                   </span>
-                )}
+                )} */}
               </button>
             ))}
           </div>
