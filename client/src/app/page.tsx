@@ -70,7 +70,7 @@ export default function LandingPage() {
               style={{ color: 'var(--foreground-muted)' }}
             >
               Get your business certified and listed in the official UAE SME registry.
-              Build credibility, gain verification, and access new opportunities.
+              Establish verified credibility and unlock access to new opportunities.
             </p>
 
             <Link
@@ -92,15 +92,15 @@ export default function LandingPage() {
           <div className="grid grid-cols-3 gap-8">
             <div className="text-center">
               <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>500+</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Certified SMEs</p>
+              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Verified Businesses</p>
             </div>
             <div className="text-center" style={{ borderLeft: '1px solid var(--graphite-200)', borderRight: '1px solid var(--graphite-200)' }}>
               <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>98%</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Success Rate</p>
+              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Completion Rate</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>24h</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Avg. Review Time</p>
+              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Review Turnaround</p>
             </div>
           </div>
         </div>
@@ -148,10 +148,10 @@ export default function LandingPage() {
                 </svg>
               </div>
               <h3 className="text-base font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>
-                Grow Your Business
+                Access New Opportunities
               </h3>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--foreground-muted)' }}>
-                Access opportunities and connect with partners through our certified registry.
+                Connect with partners and access opportunities through the certified registry.
               </p>
             </div>
 
