@@ -43,7 +43,7 @@ export default function UserProfilePage() {
   const nameParts = fullName.split(' ');
   const initialFirstName = nameParts[0] || '';
   const initialLastName = nameParts.slice(1).join(' ') || '';
-  const initials = `${initialFirstName.charAt(0)}${initialLastName.charAt(0) || initialFirstName.charAt(1) || ''}`.toUpperCase() || 'U';
+  const initials = initialFirstName.charAt(0).toUpperCase() || 'U';
 
   // Form state
   const [formData, setFormData] = useState({
@@ -316,8 +316,8 @@ export default function UserProfilePage() {
   };
 
   const getInitials = (name: string | null) => {
-    if (!name) return '??';
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    if (!name) return '?';
+    return name.charAt(0).toUpperCase();
   };
 
   const formatDate = (dateString: string) => {
