@@ -84,13 +84,7 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-colors"
-                  style={{
-                    background: isActive(item.href) ? 'var(--sidebar-active)' : 'transparent',
-                    borderLeft: isActive(item.href) ? '2px solid var(--sidebar-active-border)' : '2px solid transparent',
-                    color: isActive(item.href) ? 'white' : 'var(--graphite-400)',
-                    marginLeft: '-2px',
-                  }}
+                  className={`sidebar-nav-item ${isActive(item.href) ? 'active' : ''}`}
                 >
                   <span className="w-4 h-4 flex-shrink-0">{item.icon}</span>
                   <span>{item.label}</span>

@@ -297,6 +297,37 @@ a[href],
   background: var(--sidebar-bg);
 }
 
+/* Sidebar Navigation Items */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--graphite-400);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+  transition: all 0.15s ease;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--sidebar-hover);
+  color: var(--graphite-200);
+}
+
+.sidebar-nav-item.active {
+  background: var(--sidebar-active);
+  border-left-color: var(--sidebar-active-border);
+  color: white;
+}
+
+.sidebar-nav-item.active:hover {
+  background: var(--sidebar-active);
+  color: white;
+}
+
 /* Input field */
 .input-field {
   height: 42px;
