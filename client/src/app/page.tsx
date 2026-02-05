@@ -20,7 +20,7 @@ export default function LandingPage() {
               </svg>
             </div>
             <span className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              SME Readiness Portal
+              Naywa
             </span>
           </Link>
           <nav className="flex items-center gap-3">
@@ -60,9 +60,9 @@ export default function LandingPage() {
               className="text-4xl sm:text-5xl font-semibold tracking-tight mb-5"
               style={{ color: 'var(--graphite-900)', lineHeight: 1.15 }}
             >
-              SME Readiness &
-              <span className="block" style={{ color: 'var(--teal-600)' }}>
-                Certification Platform
+              Naywa
+              <span className="block text-2xl sm:text-3xl mt-2 font-medium" style={{ color: 'var(--teal-600)' }}>
+                SME Readiness & Certification Platform
               </span>
             </h1>
 

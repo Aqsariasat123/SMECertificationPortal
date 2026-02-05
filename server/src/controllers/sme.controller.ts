@@ -1487,7 +1487,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.moveTo(60, 120).lineTo(pageW - 60, 120).lineWidth(1).strokeColor('#4a8f87').stroke();
 
     // Title
-    doc.fontSize(12).fillColor('#4a8f87').font('Helvetica-Bold').text('SME READINESS PORTAL', 60, 60, { align: 'center', width: contentW });
+    doc.fontSize(12).fillColor('#4a8f87').font('Helvetica-Bold').text('NAYWA', 60, 60, { align: 'center', width: contentW });
     doc.fontSize(28).fillColor('#23282d').font('Helvetica-Bold').text('CERTIFICATE OF CERTIFICATION', 60, 85, { align: 'center', width: contentW });
 
     // Subtitle
@@ -1503,7 +1503,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     // Description
     doc.fontSize(11).fillColor('#666').font('Helvetica').text(
-      'has successfully completed the SME certification process and is hereby recognized as a certified Small and Medium Enterprise under the SME Readiness Portal.',
+      'has successfully completed the SME certification process and is hereby recognized as a certified Small and Medium Enterprise under Naywa.',
       100, 220, { align: 'center', width: contentW - 80, lineGap: 4 }
     );
 
@@ -1530,7 +1530,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     // Footer
     doc.fontSize(8).fillColor('#999').font('Helvetica')
       .text(`Generated: ${generatedAt.toISOString()}`, 60, pageH - 95)
-      .text('SME Readiness Portal — Official Certification Document', 60, pageH - 80, { align: 'center', width: contentW })
+      .text('Naywa — Official Certification Document', 60, pageH - 80, { align: 'center', width: contentW })
       .text(`This certificate is valid until ${formatDate(expiryDate)}. Verify at sme.byredstone.com`, 60, pageH - 68, { align: 'center', width: contentW });
 
     doc.end();

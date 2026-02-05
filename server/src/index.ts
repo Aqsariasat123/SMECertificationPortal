@@ -85,7 +85,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    service: 'SME Certification Portal API'
+    service: 'Naywa API'
   });
 });
 
@@ -114,7 +114,7 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════════════╗
-║       SME Certification Portal - Backend API           ║
+║       Naywa - Backend API                              ║
 ╠════════════════════════════════════════════════════════╣
 ║  Server running on: http://localhost:${PORT}              ║
 ║  Environment: ${process.env.NODE_ENV || 'development'}                          ║

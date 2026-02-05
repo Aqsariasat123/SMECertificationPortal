@@ -17,14 +17,14 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: 'SME Certification Portal',
-    template: '%s | SME Certification Portal',
+    default: 'Naywa – SME Readiness & Certification Platform',
+    template: '%s | Naywa',
   },
-  description: 'UAE SME Readiness Certification Portal - Get certified, gain credibility, and access new opportunities. Trusted by businesses across the UAE.',
-  keywords: ['SME certification', 'UAE business', 'business certification', 'SME registry', 'registry access', 'business credibility'],
-  authors: [{ name: 'SME Certification Portal' }],
-  creator: 'SME Certification Portal',
-  publisher: 'SME Certification Portal',
+  description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified, gain credibility, and access new opportunities. Trusted by businesses across the UAE.',
+  keywords: ['Naywa', 'SME certification', 'UAE business', 'business certification', 'SME registry', 'registry access', 'business credibility'],
+  authors: [{ name: 'Naywa' }],
+  creator: 'Naywa',
+  publisher: 'Naywa',
   robots: {
     index: true,
     follow: true,
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_AE',
-    siteName: 'SME Certification Portal',
-    title: 'SME Certification Portal',
-    description: 'UAE SME Readiness Certification Portal - Get certified and access opportunities',
+    siteName: 'Naywa',
+    title: 'Naywa – SME Readiness & Certification Platform',
+    description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SME Certification Portal',
-    description: 'UAE SME Readiness Certification Portal - Get certified and access opportunities',
+    title: 'Naywa – SME Readiness & Certification Platform',
+    description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
   },
   icons: {
     icon: '/favicon.ico',

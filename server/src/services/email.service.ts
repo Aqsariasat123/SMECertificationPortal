@@ -32,7 +32,7 @@ class EmailService {
       }
 
       await this.transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@smecertification.ae',
+        from: process.env.EMAIL_FROM || 'noreply@naywa.ae',
         to: options.to,
         subject: options.subject,
         html: options.html,
@@ -74,13 +74,13 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
-              <p>Official UAE SME Certification Platform</p>
+              <h1>Naywa</h1>
+              <p>SME Readiness & Certification Platform</p>
             </div>
             <div class="content">
               <div class="title">Verify Your Credentials</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">You have initiated account setup for the SME Readiness Portal.</p>
+              <p class="text">You have initiated account setup for the Naywa platform.</p>
               <p class="text">To secure your account and proceed, please verify your email address by clicking the button below.</p>
               <div class="button-wrap">
                 <a href="${verifyUrl}" class="button">Verify Email Address</a>
@@ -91,7 +91,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>If you didn't request this, you can safely ignore this email.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Verify Your Credentials - SME Readiness Portal',
+      subject: 'Verify Your Credentials - Naywa',
       html,
     });
   }
@@ -136,7 +136,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Password Reset</p>
             </div>
             <div class="content">
@@ -152,7 +152,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Need help? Contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -162,7 +162,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Reset Your Password - SME Readiness Portal',
+      subject: 'Reset Your Password - Naywa',
       html,
     });
   }
@@ -230,8 +230,8 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
-              <p>Official UAE SME Certification Platform</p>
+              <h1>Naywa</h1>
+              <p>SME Readiness & Certification Platform</p>
             </div>
             <div class="content">
               <div class="title">${roleContent.title}</div>
@@ -252,7 +252,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Questions? Contact our support team anytime.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: role === 'sme' ? 'Account Verified - SME Readiness Portal' : 'Registry Access Granted - SME Readiness Portal',
+      subject: role === 'sme' ? 'Account Verified - Naywa' : 'Registry Access Granted - Naywa',
       html,
     });
   }
@@ -307,7 +307,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Certification Application</p>
             </div>
             <div class="content">
@@ -352,7 +352,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Expected review time: 24-48 business hours</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -362,7 +362,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Application Received - SME Readiness Portal',
+      subject: 'Application Received - Naywa',
       html,
     });
   }
@@ -401,7 +401,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Certification Status Update</p>
             </div>
             <div class="content">
@@ -427,7 +427,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Expected completion: 24-48 business hours</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -437,7 +437,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Your Application is Under Review - SME Readiness Portal',
+      subject: 'Your Application is Under Review - Naywa',
       html,
     });
   }
@@ -480,7 +480,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Certification Approved</p>
             </div>
             <div class="content">
@@ -520,7 +520,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Thank you for being part of the UAE SME ecosystem.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -530,7 +530,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Congratulations! Your Business is Certified - SME Readiness Portal',
+      subject: 'Congratulations! Your Business is Certified - Naywa',
       html,
     });
   }
@@ -570,7 +570,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Application Update Required</p>
             </div>
             <div class="content">
@@ -597,7 +597,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Need help? Contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -607,7 +607,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Action Required: Update Your Application - SME Readiness Portal',
+      subject: 'Action Required: Update Your Application - Naywa',
       html,
     });
   }
@@ -649,7 +649,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>SME Readiness Portal</h1>
+              <h1>Naywa</h1>
               <p>Application Status Update</p>
             </div>
             <div class="content">
@@ -677,8 +677,8 @@ class EmailService {
               </div>
             </div>
             <div class="footer">
-              <p>We appreciate your interest in the SME Readiness Portal.</p>
-              <p style="margin-top: 10px;"><strong>SME Readiness Portal</strong> - UAE</p>
+              <p>We appreciate your interest in the Naywa.</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -688,7 +688,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Application Status Update - SME Readiness Portal',
+      subject: 'Application Status Update - Naywa',
       html,
     });
   }
