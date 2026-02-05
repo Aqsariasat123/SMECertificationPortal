@@ -762,18 +762,34 @@ export const exportApplications = async (req: AuthenticatedRequest, res: Respons
 export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const timeRange = parseInt(req.query.timeRange as string) || 30;
+    const roleFilter = req.query.role as string | undefined; // 'sme', 'user', 'admin', or undefined (all)
+    const timezone = (req.query.timezone as string) || 'UTC';
     const now = new Date();
     const startDate = new Date(now.getTime() - timeRange * 24 * 60 * 60 * 1000);
 
+    // Validate role filter
+    const validRoles = ['sme', 'user', 'admin'];
+    const activeRoleFilter = roleFilter && validRoles.includes(roleFilter) ? roleFilter : null;
+
     // 1. Login Segmentation — JOIN audit_logs + users, GROUP BY role
-    const loginsByRole = await prisma.$queryRaw<{ role: string; count: bigint }[]>`
-      SELECT u."role", COUNT(*) as count
-      FROM "audit_logs" a
-      JOIN "users" u ON a."userId" = u."id"
-      WHERE a."actionType" = 'USER_LOGIN'
-        AND a."timestamp" >= ${startDate}
-      GROUP BY u."role"
-    `;
+    const loginsByRole = activeRoleFilter
+      ? await prisma.$queryRaw<{ role: string; count: bigint }[]>`
+          SELECT u."role", COUNT(*) as count
+          FROM "audit_logs" a
+          JOIN "users" u ON a."userId" = u."id"
+          WHERE a."actionType" = 'USER_LOGIN'
+            AND a."timestamp" >= ${startDate}
+            AND u."role" = ${activeRoleFilter}
+          GROUP BY u."role"
+        `
+      : await prisma.$queryRaw<{ role: string; count: bigint }[]>`
+          SELECT u."role", COUNT(*) as count
+          FROM "audit_logs" a
+          JOIN "users" u ON a."userId" = u."id"
+          WHERE a."actionType" = 'USER_LOGIN'
+            AND a."timestamp" >= ${startDate}
+          GROUP BY u."role"
+        `;
 
     const loginSegmentation = {
       sme: 0,
@@ -790,24 +806,46 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
     });
 
     // 2. Usage Quality — Unique logins, repeat logins, inactive certified
-    const uniqueLoginsResult = await prisma.$queryRaw<{ count: bigint }[]>`
-      SELECT COUNT(DISTINCT "userId") as count
-      FROM "audit_logs"
-      WHERE "actionType" = 'USER_LOGIN'
-        AND "timestamp" >= ${startDate}
-    `;
+    const uniqueLoginsResult = activeRoleFilter
+      ? await prisma.$queryRaw<{ count: bigint }[]>`
+          SELECT COUNT(DISTINCT a."userId") as count
+          FROM "audit_logs" a
+          JOIN "users" u ON a."userId" = u."id"
+          WHERE a."actionType" = 'USER_LOGIN'
+            AND a."timestamp" >= ${startDate}
+            AND u."role" = ${activeRoleFilter}
+        `
+      : await prisma.$queryRaw<{ count: bigint }[]>`
+          SELECT COUNT(DISTINCT "userId") as count
+          FROM "audit_logs"
+          WHERE "actionType" = 'USER_LOGIN'
+            AND "timestamp" >= ${startDate}
+        `;
     const uniqueLogins = Number(uniqueLoginsResult[0]?.count || 0);
 
-    const repeatLoginsResult = await prisma.$queryRaw<{ count: bigint }[]>`
-      SELECT COUNT(*) as count FROM (
-        SELECT "userId"
-        FROM "audit_logs"
-        WHERE "actionType" = 'USER_LOGIN'
-          AND "timestamp" >= ${startDate}
-        GROUP BY "userId"
-        HAVING COUNT(*) > 1
-      ) sub
-    `;
+    const repeatLoginsResult = activeRoleFilter
+      ? await prisma.$queryRaw<{ count: bigint }[]>`
+          SELECT COUNT(*) as count FROM (
+            SELECT a."userId"
+            FROM "audit_logs" a
+            JOIN "users" u ON a."userId" = u."id"
+            WHERE a."actionType" = 'USER_LOGIN'
+              AND a."timestamp" >= ${startDate}
+              AND u."role" = ${activeRoleFilter}
+            GROUP BY a."userId"
+            HAVING COUNT(*) > 1
+          ) sub
+        `
+      : await prisma.$queryRaw<{ count: bigint }[]>`
+          SELECT COUNT(*) as count FROM (
+            SELECT "userId"
+            FROM "audit_logs"
+            WHERE "actionType" = 'USER_LOGIN'
+              AND "timestamp" >= ${startDate}
+            GROUP BY "userId"
+            HAVING COUNT(*) > 1
+          ) sub
+        `;
     const repeatLogins = Number(repeatLoginsResult[0]?.count || 0);
 
     // Inactive certified SMEs: certified but no login in 30 days
@@ -840,14 +878,22 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
       certificationFunnel[row.status] = Number(row.count);
     });
 
-    // 4. Activity by day
-    const activityByDayResult = await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
-      SELECT DATE("timestamp") as date, COUNT(*) as count
-      FROM "audit_logs"
-      WHERE "timestamp" >= ${startDate}
-      GROUP BY DATE("timestamp")
-      ORDER BY date ASC
-    `;
+    // 4. Activity by day (timezone-aware)
+    const activityByDayResult = timezone !== 'UTC'
+      ? await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
+          SELECT DATE("timestamp" AT TIME ZONE 'UTC' AT TIME ZONE ${timezone}) as date, COUNT(*) as count
+          FROM "audit_logs"
+          WHERE "timestamp" >= ${startDate}
+          GROUP BY DATE("timestamp" AT TIME ZONE 'UTC' AT TIME ZONE ${timezone})
+          ORDER BY date ASC
+        `
+      : await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
+          SELECT DATE("timestamp") as date, COUNT(*) as count
+          FROM "audit_logs"
+          WHERE "timestamp" >= ${startDate}
+          GROUP BY DATE("timestamp")
+          ORDER BY date ASC
+        `;
 
     // Fill in missing days with 0
     const activityByDay: { date: string; count: number }[] = [];

@@ -5,6 +5,25 @@ import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
 
 const prisma = new PrismaClient();
 
+// GET /api/legal — Admin, list all legal pages
+export const getAllLegalPages = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const pages = await prisma.legalPage.findMany({
+      orderBy: { slug: 'asc' },
+      select: { slug: true, title: true, content: true, lastUpdated: true, isPublished: true },
+    });
+
+    res.json({
+      success: true,
+      message: 'Legal pages retrieved successfully',
+      data: pages,
+    });
+  } catch (error) {
+    console.error('Error fetching legal pages:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch legal pages' });
+  }
+};
+
 // GET /api/legal/:slug — Public, no auth required
 export const getLegalPage = async (req: Request, res: Response): Promise<void> => {
   try {

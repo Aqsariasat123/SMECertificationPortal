@@ -4,19 +4,37 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { AnalyticsData } from '@/types';
 
+// Tooltip component
+function Tooltip({ text }: { text: string }) {
+  return (
+    <span className="relative group inline-flex ml-1 cursor-help">
+      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--graphite-400)' }}>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50" style={{ background: 'var(--graphite-800)', color: 'white' }}>
+        {text}
+      </span>
+    </span>
+  );
+}
+
 export default function AdminAnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [timeRange, setTimeRange] = useState<'7' | '30' | '90'>('30');
+  const [roleFilter, setRoleFilter] = useState<string>('');
+  const [timezone, setTimezone] = useState<string>(() => {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return 'UTC'; }
+  });
 
   useEffect(() => {
     fetchAnalytics();
-  }, [timeRange]);
+  }, [timeRange, roleFilter, timezone]);
 
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const result = await api.getAdminAnalytics(parseInt(timeRange));
+      const result = await api.getAdminAnalytics(parseInt(timeRange), roleFilter || undefined, timezone);
       if (result.success && result.data) {
         setAnalytics(result.data);
       }
@@ -142,7 +160,35 @@ export default function AdminAnalyticsPage() {
           <h1 className="text-2xl font-bold" style={{ color: 'var(--graphite-900)' }}>Activity Analytics</h1>
           <p style={{ color: 'var(--graphite-500)' }} className="mt-1">Platform metrics and certification diagnostics</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Role Filter */}
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="px-3 py-2 text-sm rounded-lg border-0 font-medium"
+            style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+          >
+            <option value="">All Roles</option>
+            <option value="sme">SME</option>
+            <option value="user">Partners</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          {/* Timezone */}
+          <select
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            className="px-3 py-2 text-sm rounded-lg border-0 font-medium max-w-[140px]"
+            style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+          >
+            <option value="UTC">UTC</option>
+            <option value="Asia/Dubai">Dubai (GST)</option>
+            <option value="Asia/Karachi">Karachi (PKT)</option>
+            <option value="Europe/London">London (GMT)</option>
+            <option value="America/New_York">New York (EST)</option>
+          </select>
+
+          {/* Time Range */}
           {(['7', '30', '90'] as const).map((range) => (
             <button
               key={range}
@@ -161,7 +207,7 @@ export default function AdminAnalyticsPage() {
 
       {/* Login Segmentation Cards */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--graphite-500)' }}>Login Segmentation</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Login Segmentation<Tooltip text="Login counts grouped by user role in the selected period" /></h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: 'Total Logins', value: analytics.loginSegmentation.total, color: 'teal', icon: 'M15 19l-7-7 7-7' },
@@ -191,7 +237,7 @@ export default function AdminAnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Usage Quality */}
         <div className="solid-card rounded-xl p-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--graphite-500)' }}>Usage Quality</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center" style={{ color: 'var(--graphite-500)' }}>Usage Quality<Tooltip text="Unique users, repeat visitors, and inactive certified SMEs" /></h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
               <div className="flex items-center gap-3">
@@ -222,7 +268,7 @@ export default function AdminAnalyticsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
                   </svg>
                 </div>
-                <span className="text-sm" style={{ color: 'var(--graphite-700)' }}>Inactive Certified SMEs</span>
+                <span className="text-sm flex items-center" style={{ color: 'var(--graphite-700)' }}>Inactive Certified SMEs<Tooltip text="Certified SMEs with no login in 30 days" /></span>
               </div>
               <span className="text-lg font-bold" style={{ color: 'var(--warning-600)' }}>{analytics.usageQuality.inactiveCertified}</span>
             </div>
@@ -231,7 +277,7 @@ export default function AdminAnalyticsPage() {
 
         {/* Certification Lifecycle */}
         <div className="solid-card rounded-xl p-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--graphite-500)' }}>Certification Lifecycle</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center" style={{ color: 'var(--graphite-500)' }}>Certification Lifecycle<Tooltip text="Average days from signup to submission and drop-off by stage" /></h2>
           <div className="mb-4 p-3 rounded-lg" style={{ background: 'var(--teal-50)' }}>
             <p className="text-xs" style={{ color: 'var(--teal-600)' }}>Avg. Days to Submit</p>
             <p className="text-2xl font-bold" style={{ color: 'var(--teal-700)' }}>
@@ -430,7 +476,7 @@ export default function AdminAnalyticsPage() {
 
       {/* Registry Consumption */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--graphite-500)' }}>Registry Consumption</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Registry Consumption<Tooltip text="How users interact with the SME registry — searches, views, and filters" /></h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Registry Stats Cards */}
           <div className="solid-card rounded-xl p-6">
@@ -494,7 +540,7 @@ export default function AdminAnalyticsPage() {
 
       {/* Risk & Compliance */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance<Tooltip text="Compliance signals — missing docs, expiring licenses, admin interventions" /></h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },

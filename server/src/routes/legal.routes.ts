@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import { authenticate, authorize } from '../middleware/auth';
-import { getLegalPage, updateLegalPage } from '../controllers/legal.controller';
+import { getAllLegalPages, getLegalPage, updateLegalPage } from '../controllers/legal.controller';
 
 const router = Router();
+
+// Admin — list all legal pages
+router.get('/', authenticate, authorize('admin'), getAllLegalPages);
 
 // Public — no auth required
 router.get('/:slug', getLegalPage);

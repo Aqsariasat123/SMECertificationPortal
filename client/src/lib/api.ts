@@ -960,8 +960,18 @@ class ApiClient {
   }
 
   // Admin — server-computed analytics
-  async getAdminAnalytics(timeRange: number = 30): Promise<ApiResponse<AnalyticsData>> {
-    return this.request(`/admin/analytics?timeRange=${timeRange}`, {
+  async getAdminAnalytics(timeRange: number = 30, role?: string, timezone?: string): Promise<ApiResponse<AnalyticsData>> {
+    let url = `/admin/analytics?timeRange=${timeRange}`;
+    if (role) url += `&role=${role}`;
+    if (timezone) url += `&timezone=${encodeURIComponent(timezone)}`;
+    return this.request(url, {
+      method: 'GET',
+    });
+  }
+
+  // Admin — list all legal pages
+  async getAllLegalPages(): Promise<ApiResponse<LegalPageData[]>> {
+    return this.request('/legal', {
       method: 'GET',
     });
   }
