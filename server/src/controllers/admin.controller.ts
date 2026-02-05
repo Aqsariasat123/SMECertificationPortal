@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { PrismaClient, CertificationStatus } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { emailService } from '../services/email.service';
+import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
 
 const prisma = new PrismaClient();
 
@@ -678,6 +679,17 @@ export const exportAuditLogs = async (req: AuthenticatedRequest, res: Response) 
       ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
+    // Log the export action in audit trail
+    const adminId = req.user?.userId;
+    if (adminId) {
+      await logAuditAction({
+        userId: adminId,
+        actionType: AuditAction.AUDIT_LOGS_EXPORTED,
+        actionDescription: `Admin exported audit logs (${logs.length} records)`,
+        ipAddress: getClientIP(req),
+      });
+    }
+
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', `attachment; filename=audit-logs-${new Date().toISOString().split('T')[0]}.csv`);
     return res.send(csvContent);
@@ -686,6 +698,62 @@ export const exportAuditLogs = async (req: AuthenticatedRequest, res: Response) 
     return res.status(500).json({
       success: false,
       message: 'Failed to export audit logs',
+    });
+  }
+};
+
+// GET /api/admin/applications/export - Export applications as CSV
+export const exportApplications = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const applications = await prisma.sMEProfile.findMany({
+      where: {
+        certificationStatus: { not: 'draft' as CertificationStatus },
+      },
+      orderBy: { submittedDate: 'desc' },
+      include: {
+        user: { select: { fullName: true, email: true } },
+        reviewedBy: { select: { fullName: true } },
+      },
+    });
+
+    const headers = ['Company Name', 'Trade License', 'Industry Sector', 'Status', 'Submitted Date', 'Owner', 'Email', 'Reviewed By', 'Legal Structure', 'Employee Count'];
+    const rows = applications.map(app => [
+      app.companyName || '',
+      app.tradeLicenseNumber || '',
+      (app.industrySector || '').replace(/_/g, ' '),
+      app.certificationStatus,
+      app.submittedDate ? new Date(app.submittedDate).toISOString().split('T')[0] : '',
+      app.user.fullName,
+      app.user.email,
+      app.reviewedBy?.fullName || '',
+      (app.legalStructure || '').replace(/_/g, ' '),
+      app.employeeCount?.toString() || '',
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+    ].join('\n');
+
+    // Log the export action in audit trail
+    const adminId = req.user?.userId;
+    if (adminId) {
+      await logAuditAction({
+        userId: adminId,
+        actionType: AuditAction.APPLICATIONS_EXPORTED,
+        actionDescription: `Admin exported applications data (${applications.length} records)`,
+        ipAddress: getClientIP(req),
+      });
+    }
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=applications-${new Date().toISOString().split('T')[0]}.csv`);
+    return res.send(csvContent);
+  } catch (error) {
+    console.error('Export applications error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to export applications',
     });
   }
 };

@@ -920,6 +920,52 @@ class ApiClient {
     const baseUrl = this.baseUrl.replace('/api', '');
     return `${baseUrl}/uploads/support/${ticketId}/${filename}`;
   }
+
+  // Download certification PDF
+  async downloadCertificate(): Promise<void> {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const response = await fetch(`${this.baseUrl}/sme/certificate`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'SME-Certificate.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(blobUrl);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Certificate download failed:', error);
+    }
+  }
+
+  // Export admin applications as CSV
+  async exportApplicationsCSV(): Promise<void> {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const response = await fetch(`${this.baseUrl}/admin/applications/export`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `applications-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(blobUrl);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Applications export failed:', error);
+    }
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

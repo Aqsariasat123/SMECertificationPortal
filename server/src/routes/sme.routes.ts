@@ -13,6 +13,7 @@ import {
   deleteCompanyLogo,
   getIntroductionRequests,
   respondToIntroductionRequest,
+  downloadCertificate,
 } from '../controllers/sme.controller';
 
 const router = Router();
@@ -28,6 +29,7 @@ router.put('/profile', updateSMEProfile);
 // Certification endpoints
 router.post('/submit-certification', submitCertification);
 router.get('/certification-status', getCertificationStatus);
+router.get('/certificate', downloadCertificate);
 
 // Document endpoints
 router.get('/documents', getDocuments);

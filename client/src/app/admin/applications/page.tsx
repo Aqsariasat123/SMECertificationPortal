@@ -13,6 +13,7 @@ export default function AdminApplicationsPage() {
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchApplications();
@@ -35,6 +36,17 @@ export default function AdminApplicationsPage() {
       console.error('Failed to fetch applications:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExportCSV = async () => {
+    setExporting(true);
+    try {
+      await api.exportApplicationsCSV();
+    } catch (err) {
+      console.error('Failed to export applications:', err);
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -204,6 +216,19 @@ export default function AdminApplicationsPage() {
             </div>
           </div>
 
+          <div className="flex items-center gap-3">
+          {/* Export Button */}
+          <button
+            onClick={handleExportCSV}
+            disabled={exporting}
+            className="btn-teal h-12 px-5 rounded-xl flex items-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            {exporting ? 'Exporting...' : 'Export CSV'}
+          </button>
+
           {/* Status Tabs */}
           <div className="rounded-xl p-1.5 inline-flex gap-1 overflow-x-auto" style={{ backgroundColor: 'var(--graphite-100)' }}>
             {[
@@ -235,6 +260,7 @@ export default function AdminApplicationsPage() {
                 </span>
               </button>
             ))}
+          </div>
           </div>
         </div>
       </div>

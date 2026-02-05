@@ -16,6 +16,7 @@ export default function SMEDashboardPage() {
   const [showSupportModal, setShowSupportModal] = useState(false);
   const [supportForm, setSupportForm] = useState({ subject: '', message: '' });
   const [sendingSupport, setSendingSupport] = useState(false);
+  const [downloadingCert, setDownloadingCert] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -90,6 +91,17 @@ export default function SMEDashboardPage() {
       setError('Failed to resubmit application');
     } finally {
       setSubmitLoading(false);
+    }
+  };
+
+  const handleDownloadCertificate = async () => {
+    try {
+      setDownloadingCert(true);
+      await api.downloadCertificate();
+    } catch (err) {
+      setError('Failed to download certificate. Please try again.');
+    } finally {
+      setDownloadingCert(false);
     }
   };
 
@@ -333,6 +345,28 @@ export default function SMEDashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
+          )}
+
+          {certificationStatus === 'certified' && (
+            <button
+              onClick={handleDownloadCertificate}
+              disabled={downloadingCert}
+              className="btn-teal inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-medium w-full sm:w-auto sm:self-start disabled:opacity-50"
+            >
+              {downloadingCert ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download Certificate
+                </>
+              )}
+            </button>
           )}
 
           {certificationStatus === 'revision_requested' && (

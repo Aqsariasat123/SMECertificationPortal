@@ -3,6 +3,7 @@ import { PrismaClient, CertificationStatus, IndustrySector, RequestStatus, Legal
 import { AuthenticatedRequest } from '../types';
 import { DocumentType, DOCUMENT_TYPE_LABELS, REQUIRED_DOCUMENTS } from '../middleware/upload';
 import { emailService } from '../services/email.service';
+import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 
@@ -1431,3 +1432,111 @@ function calculateCompletionPercentage(profile: any): number {
 
   return Math.round((completedWeight / totalWeight) * 100);
 }
+
+// GET /api/sme/certificate - Download certification PDF
+export const downloadCertificate = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const profile = await prisma.sMEProfile.findUnique({
+      where: { userId },
+      include: { user: { select: { fullName: true, email: true } } },
+    });
+
+    if (!profile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    if (profile.certificationStatus !== 'certified') {
+      return res.status(400).json({ success: false, message: 'Company is not certified' });
+    }
+
+    // Certificate data
+    const certDate = profile.submittedDate || profile.updatedAt;
+    const expiryDate = new Date(certDate);
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+    const certVersion = 'v1.0';
+    const certId = `SME-CERT-${profile.id.slice(0, 8).toUpperCase()}`;
+    const generatedAt = new Date();
+
+    const formatDate = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Generate PDF
+    const doc = new PDFDocument({
+      size: 'A4',
+      layout: 'landscape',
+      margins: { top: 50, bottom: 50, left: 60, right: 60 },
+    });
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=SME-Certificate-${profile.companyName?.replace(/[^a-zA-Z0-9]/g, '_') || 'certificate'}.pdf`);
+    doc.pipe(res);
+
+    const pageW = doc.page.width;
+    const pageH = doc.page.height;
+    const contentW = pageW - 120;
+
+    // Border
+    doc.rect(30, 30, pageW - 60, pageH - 60).lineWidth(2).strokeColor('#23282d').stroke();
+    doc.rect(35, 35, pageW - 70, pageH - 70).lineWidth(0.5).strokeColor('#4a8f87').stroke();
+
+    // Header line
+    doc.moveTo(60, 120).lineTo(pageW - 60, 120).lineWidth(1).strokeColor('#4a8f87').stroke();
+
+    // Title
+    doc.fontSize(12).fillColor('#4a8f87').font('Helvetica-Bold').text('SME READINESS PORTAL', 60, 60, { align: 'center', width: contentW });
+    doc.fontSize(28).fillColor('#23282d').font('Helvetica-Bold').text('CERTIFICATE OF CERTIFICATION', 60, 85, { align: 'center', width: contentW });
+
+    // Subtitle
+    doc.fontSize(11).fillColor('#666').font('Helvetica').text('This is to certify that', 60, 145, { align: 'center', width: contentW });
+
+    // Company Name
+    doc.fontSize(26).fillColor('#23282d').font('Helvetica-Bold').text(profile.companyName || 'N/A', 60, 170, { align: 'center', width: contentW });
+
+    // Decorative line under company name
+    const nameWidth = doc.widthOfString(profile.companyName || 'N/A');
+    const lineX = (pageW - nameWidth) / 2;
+    doc.moveTo(lineX, 202).lineTo(lineX + nameWidth, 202).lineWidth(1).strokeColor('#4a8f87').stroke();
+
+    // Description
+    doc.fontSize(11).fillColor('#666').font('Helvetica').text(
+      'has successfully completed the SME certification process and is hereby recognized as a certified Small and Medium Enterprise under the SME Readiness Portal.',
+      100, 220, { align: 'center', width: contentW - 80, lineGap: 4 }
+    );
+
+    // Details grid
+    const detailsY = 275;
+    const col1X = 120;
+    const col2X = pageW / 2 + 30;
+
+    const drawDetail = (x: number, y: number, label: string, value: string) => {
+      doc.fontSize(8).fillColor('#999').font('Helvetica').text(label.toUpperCase(), x, y);
+      doc.fontSize(12).fillColor('#23282d').font('Helvetica-Bold').text(value, x, y + 14);
+    };
+
+    drawDetail(col1X, detailsY, 'Trade License', profile.tradeLicenseNumber || 'N/A');
+    drawDetail(col2X, detailsY, 'Industry Sector', (profile.industrySector || 'N/A').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+    drawDetail(col1X, detailsY + 50, 'Certification Date', formatDate(certDate));
+    drawDetail(col2X, detailsY + 50, 'Expiry Date', formatDate(expiryDate));
+    drawDetail(col1X, detailsY + 100, 'Certificate ID', certId);
+    drawDetail(col2X, detailsY + 100, 'Certificate Version', certVersion);
+
+    // Bottom line
+    doc.moveTo(60, pageH - 110).lineTo(pageW - 60, pageH - 110).lineWidth(0.5).strokeColor('#ddd').stroke();
+
+    // Footer
+    doc.fontSize(8).fillColor('#999').font('Helvetica')
+      .text(`Generated: ${generatedAt.toISOString()}`, 60, pageH - 95)
+      .text('SME Readiness Portal — Official Certification Document', 60, pageH - 80, { align: 'center', width: contentW })
+      .text(`This certificate is valid until ${formatDate(expiryDate)}. Verify at sme.byredstone.com`, 60, pageH - 68, { align: 'center', width: contentW });
+
+    doc.end();
+    return;
+  } catch (error) {
+    console.error('Certificate generation error:', error);
+    return res.status(500).json({ success: false, message: 'Failed to generate certificate' });
+  }
+};

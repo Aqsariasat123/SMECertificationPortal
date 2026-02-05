@@ -10,6 +10,7 @@ import {
   updateVisibility,
   getIntroductionRequests,
   exportAuditLogs,
+  exportApplications,
   getKycApplications,
   getKycApplicationDetail,
   reviewKycApplication,
@@ -29,6 +30,7 @@ router.get('/users', getUsers);
 
 // Applications/Certifications management
 router.get('/applications', getApplications);
+router.get('/applications/export', exportApplications);
 router.get('/applications/:id', getApplicationDetail);
 router.post('/applications/:id/review', reviewApplication);
 
