@@ -923,47 +923,51 @@ class ApiClient {
 
   // Download certification PDF
   async downloadCertificate(): Promise<void> {
-    try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      const response = await fetch(`${this.baseUrl}/sme/certificate`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = 'SME-Certificate.pdf';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(blobUrl);
-        document.body.removeChild(a);
-      }
-    } catch (error) {
-      console.error('Certificate download failed:', error);
+    const token = this.getToken();
+    const response = await fetch(`${this.baseUrl}/sme/certificate`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SME-Certificate.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } else {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to download certificate');
     }
   }
 
   // Export admin applications as CSV
   async exportApplicationsCSV(): Promise<void> {
-    try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      const response = await fetch(`${this.baseUrl}/admin/applications/export`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = `applications-${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(blobUrl);
-        document.body.removeChild(a);
-      }
-    } catch (error) {
-      console.error('Applications export failed:', error);
+    const token = this.getToken();
+    const response = await fetch(`${this.baseUrl}/admin/applications/export`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `applications-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } else {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to export applications');
     }
   }
 }
