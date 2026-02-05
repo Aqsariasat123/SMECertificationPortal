@@ -1589,7 +1589,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     const qrX = pageW - marginX - qrSize - 10;
     const qrY = curY - 5;
     doc.image(qrBuffer, qrX, qrY, { width: qrSize, height: qrSize });
-    doc.fontSize(7).fillColor('#888').font('Helvetica').text('Scan to verify', qrX, qrY + qrSize + 3, { width: qrSize, align: 'center' });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('Verify via Naywa Registry', qrX - 20, qrY + qrSize + 3, { width: qrSize + 40, align: 'center' });
 
     // ============ Footer Statement ============
     const footerY = pageH - 50;

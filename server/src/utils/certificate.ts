@@ -119,5 +119,5 @@ export function formatCertificateDate(date: Date): string {
  * Build verification URL for a certificate
  */
 export function buildVerificationUrl(certificateId: string, frontendUrl: string): string {
-  return `${frontendUrl}/certificate/${certificateId}`;
+  return `${frontendUrl}/registry/verify/${certificateId}`;
 }
