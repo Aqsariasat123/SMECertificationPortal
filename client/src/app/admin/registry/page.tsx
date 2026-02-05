@@ -482,6 +482,74 @@ export default function AdminRegistryPage() {
           </table>
         </div>
 
+        {/* Mobile Card List */}
+        <div className="mobile-card-list p-4">
+          {entries.length === 0 ? (
+            <div className="text-center py-12">
+              <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--graphite-300)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <p className="font-medium" style={{ color: 'var(--foreground-muted)' }}>No certified SMEs found</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {entries.map((entry) => (
+                <div key={entry.id} className="mobile-card">
+                  <div className="mobile-card-header">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                        style={{ background: 'linear-gradient(to bottom right, var(--graphite-700), var(--graphite-900))' }}
+                      >
+                        {entry.companyName?.charAt(0).toUpperCase() || '?'}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold truncate" style={{ color: 'var(--graphite-900)' }}>{entry.companyName || 'Unnamed'}</p>
+                        <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>{entry.user.fullName} &middot; {entry.user.email}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Industry</span>
+                    <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>{formatSector(entry.industrySector)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Certified</span>
+                    <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>{formatDate(entry.submittedDate)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Visibility</span>
+                    {entry.listingVisible ? (
+                      <span className="badge badge-success">
+                        <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--success-500)' }} />
+                        Visible
+                      </span>
+                    ) : (
+                      <span className="badge badge-neutral">
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--graphite-400)' }} />
+                        Hidden
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--graphite-100)' }}>
+                    <button
+                      onClick={() => handleToggleVisibility(entry.id, entry.listingVisible)}
+                      disabled={togglingId === entry.id}
+                      className="w-full px-4 py-2.5 text-sm font-medium rounded-lg transition-all disabled:opacity-50"
+                      style={{
+                        background: entry.listingVisible ? 'var(--graphite-100)' : 'var(--teal-600)',
+                        color: entry.listingVisible ? 'var(--graphite-700)' : 'white',
+                      }}
+                    >
+                      {togglingId === entry.id ? 'Updating...' : entry.listingVisible ? 'Hide from Registry' : 'Show in Registry'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Pagination */}
         {pagination && pagination.total > 0 && (
           <div

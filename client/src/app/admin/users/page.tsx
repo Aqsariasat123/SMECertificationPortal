@@ -505,6 +505,56 @@ export default function AdminUsersPage() {
           </table>
         </div>
 
+        {/* Mobile Card List */}
+        <div className="mobile-card-list p-4">
+          {users.length === 0 ? (
+            <div className="text-center py-12">
+              <svg className="w-12 h-12 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--graphite-300)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <p className="font-medium" style={{ color: 'var(--foreground-muted)' }}>No users found</p>
+              <p className="text-sm" style={{ color: 'var(--graphite-400)' }}>Try adjusting your search or filters</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {users.map((user) => (
+                <div key={user.id} className="mobile-card">
+                  <div className="mobile-card-header">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-sm flex-shrink-0"
+                        style={getAvatarStyle(user.role)}
+                      >
+                        {getInitials(user.fullName)}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold truncate" style={{ color: 'var(--graphite-900)' }}>{user.fullName}</p>
+                        <p className="text-sm truncate" style={{ color: 'var(--foreground-muted)' }}>{user.email}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Role</span>
+                    <span>{getRoleBadge(user.role)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Status</span>
+                    <span>{getStatusBadge(user.isVerified)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Joined</span>
+                    <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>{formatDate(user.createdAt)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Last Login</span>
+                    <span className="text-sm" style={{ color: 'var(--foreground-muted)' }}>{user.lastLogin ? formatDate(user.lastLogin) : 'Never'}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Pagination */}
         {pagination && pagination.total > 0 && (
           <div

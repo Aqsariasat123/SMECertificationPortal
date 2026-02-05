@@ -90,12 +90,12 @@ export default function LandingPage() {
       {/* Stats Section */}
       <section style={{ background: 'white', borderTop: '1px solid var(--graphite-100)', borderBottom: '1px solid var(--graphite-100)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
               <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>500+</p>
               <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Verified Businesses</p>
             </div>
-            <div className="text-center" style={{ borderLeft: '1px solid var(--graphite-200)', borderRight: '1px solid var(--graphite-200)' }}>
+            <div className="text-center sm:border-x" style={{ borderColor: 'var(--graphite-200)' }}>
               <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>98%</p>
               <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Completion Rate</p>
             </div>

@@ -457,9 +457,9 @@ export default function MessagesPage() {
   const archivedCount = conversations.filter(c => c.status === 'archived' || c.status === 'ARCHIVED').length;
 
   return (
-    <div className="solid-card flex h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
+    <div className="solid-card flex flex-col lg:flex-row h-[calc(100vh-120px)] rounded-2xl overflow-hidden shadow-lg" style={{ borderColor: 'var(--graphite-200)' }}>
       {/* Left Panel - Conversations List */}
-      <div className="w-[350px] flex flex-col bg-white" style={{ borderRight: '1px solid var(--graphite-200)' }}>
+      <div className={`${activeRequestId ? 'hidden lg:flex' : 'flex'} w-full lg:w-[350px] flex-col bg-white`} style={{ borderRight: '1px solid var(--graphite-200)' }}>
         {/* Header */}
         <div className="p-5" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
           <div className="flex items-center justify-between mb-4">
@@ -586,7 +586,7 @@ export default function MessagesPage() {
       </div>
 
       {/* Right Panel - Chat Area */}
-      <div className="flex-1 flex flex-col" style={{ backgroundColor: 'var(--graphite-50)' }}>
+      <div className={`flex-1 ${activeRequestId ? 'flex' : 'hidden lg:flex'} flex-col`} style={{ backgroundColor: 'var(--graphite-50)' }}>
         {!activeRequestId ? (
           // No chat selected
           <div className="flex-1 flex flex-col items-center justify-center" style={{ color: 'var(--graphite-400)' }}>
@@ -605,10 +605,19 @@ export default function MessagesPage() {
         ) : (
           <>
             {/* Chat Header */}
-            <div className="bg-white px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
+            <div className="bg-white px-3 sm:px-6 py-4" style={{ borderBottom: '1px solid var(--graphite-200)' }}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <button
+                    onClick={() => router.push('/user/messages')}
+                    className="lg:hidden p-2 -ml-1 rounded-lg transition-colors"
+                    style={{ color: 'var(--graphite-600)' }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
                     <span className="text-white font-bold text-lg">
                       {otherParty?.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
@@ -755,7 +764,7 @@ export default function MessagesPage() {
             )}
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4">
               {/* No search results */}
               {chatSearchTerm.trim() && filteredMessages.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full" style={{ color: 'var(--graphite-400)' }}>
@@ -800,7 +809,7 @@ export default function MessagesPage() {
                     <div key={msg.id} className={`flex mb-4 ${msg.isOwnMessage ? 'justify-end' : 'justify-start'}`}>
                       {/* Received Message */}
                       {!msg.isOwnMessage && (
-                        <div className="flex items-start gap-3 max-w-[70%]">
+                        <div className="flex items-start gap-2 sm:gap-3 max-w-[85%] sm:max-w-[70%]">
                           <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(to bottom right, var(--teal-400), var(--teal-600))' }}>
                             <span className="text-white font-semibold text-sm">
                               {msg.senderName?.charAt(0)?.toUpperCase() || '?'}
@@ -865,7 +874,7 @@ export default function MessagesPage() {
 
                       {/* Sent Message */}
                       {msg.isOwnMessage && (
-                        <div className="flex items-start gap-3 max-w-[70%] group">
+                        <div className="flex items-start gap-2 sm:gap-3 max-w-[85%] sm:max-w-[70%] group">
                           <div className="flex flex-col items-end">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatTime(msg.createdAt)}</span>
@@ -1024,8 +1033,8 @@ export default function MessagesPage() {
             </div>
 
             {/* Input Area */}
-            <div className="bg-white p-4" style={{ borderTop: '1px solid var(--graphite-200)' }}>
-              <form onSubmit={handleSendMessage} className="flex items-center gap-3">
+            <div className="bg-white p-3 sm:p-4" style={{ borderTop: '1px solid var(--graphite-200)' }}>
+              <form onSubmit={handleSendMessage} className="flex items-center gap-2 sm:gap-3">
                 <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar" />
 
                 <div className="flex-1 relative">
@@ -1108,7 +1117,7 @@ export default function MessagesPage() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="p-3 rounded-full transition-colors"
+                  className="hidden sm:flex p-3 rounded-full transition-colors"
                   style={{ backgroundColor: 'var(--teal-100)', color: 'var(--teal-600)' }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-200)'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--teal-100)'}

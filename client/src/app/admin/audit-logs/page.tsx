@@ -463,6 +463,62 @@ export default function AdminAuditLogsPage() {
           </table>
         </div>
 
+        {/* Mobile Card List */}
+        <div className="mobile-card-list p-4">
+          {filteredLogs.length === 0 ? (
+            <div className="text-center py-12">
+              <svg className="w-12 h-12 mx-auto mb-3" style={{ color: 'var(--graphite-300)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <p className="font-medium" style={{ color: 'var(--graphite-500)' }}>No audit logs found</p>
+              <p className="text-sm" style={{ color: 'var(--graphite-400)' }}>Try adjusting your filters</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredLogs.map((log) => {
+                const actionConfig = getActionConfig(log.actionType);
+                return (
+                  <div key={log.id} className="mobile-card">
+                    <div className="mobile-card-header">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                          style={getRoleColor(log.user.role)}
+                        >
+                          {log.user.fullName.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium truncate" style={{ color: 'var(--graphite-900)' }}>{log.user.fullName}</p>
+                          <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>{log.user.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Action</span>
+                      <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-semibold" style={actionConfig.style}>
+                        {actionConfig.icon}
+                        {formatAction(log.actionType)}
+                      </span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Description</span>
+                      <span className="text-sm text-right flex-1 min-w-0 truncate" style={{ color: 'var(--graphite-600)' }}>{log.actionDescription}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Timestamp</span>
+                      <span className="text-xs font-mono" style={{ color: 'var(--graphite-600)' }}>{formatDate(log.timestamp)}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">IP Address</span>
+                      <span className="text-xs font-mono" style={{ color: 'var(--graphite-400)' }}>{log.ipAddress}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
         {/* Pagination */}
         {pagination && pagination.total > 0 && (
           <div className="px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid var(--graphite-100)' }}>
