@@ -227,6 +227,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       actionType: AuditAction.USER_LOGIN,
       actionDescription: `User logged in successfully`,
       ipAddress: req.ip || req.socket.remoteAddress,
+      newValue: { role: user.role },
     });
 
     res.status(200).json({

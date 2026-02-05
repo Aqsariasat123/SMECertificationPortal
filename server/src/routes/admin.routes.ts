@@ -14,6 +14,7 @@ import {
   getKycApplications,
   getKycApplicationDetail,
   reviewKycApplication,
+  getAnalytics,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -24,6 +25,9 @@ router.use(authorize('admin'));
 
 // Dashboard
 router.get('/dashboard', getDashboardStats);
+
+// Analytics (server-side computed)
+router.get('/analytics', getAnalytics);
 
 // Users management
 router.get('/users', getUsers);

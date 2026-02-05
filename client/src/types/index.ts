@@ -525,6 +525,36 @@ export interface KycApplication {
   };
 }
 
+// Analytics Types (server-computed)
+export interface AnalyticsData {
+  timeRange: number;
+  totalActions: number;
+  loginSegmentation: {
+    sme: number;
+    user: number;
+    admin: number;
+    total: number;
+  };
+  usageQuality: {
+    uniqueLogins: number;
+    repeatLogins: number;
+    inactiveCertified: number;
+  };
+  certificationLifecycle: {
+    avgDaysToSubmit: number;
+    funnel: Record<string, number>;
+  };
+  activityByDay: { date: string; count: number }[];
+  actionsByType: Record<string, number>;
+  certificationStats: {
+    total: number;
+    approved: number;
+    rejected: number;
+    pending: number;
+    approvalRate: number;
+  };
+}
+
 // Legal Page Types
 export interface LegalPageData {
   slug: string;

@@ -20,6 +20,7 @@ import {
   AdminIntroductionRequest,
   KycApplication,
   LegalPageData,
+  AnalyticsData,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -954,6 +955,13 @@ class ApiClient {
   // Public — fetch legal page by slug (no auth required)
   async getLegalPage(slug: string): Promise<ApiResponse<LegalPageData>> {
     return this.request(`/legal/${slug}`, {
+      method: 'GET',
+    });
+  }
+
+  // Admin — server-computed analytics
+  async getAdminAnalytics(timeRange: number = 30): Promise<ApiResponse<AnalyticsData>> {
+    return this.request(`/admin/analytics?timeRange=${timeRange}`, {
       method: 'GET',
     });
   }

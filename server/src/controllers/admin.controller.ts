@@ -758,6 +758,173 @@ export const exportApplications = async (req: AuthenticatedRequest, res: Respons
   }
 };
 
+// GET /api/admin/analytics - Server-side computed analytics
+export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const timeRange = parseInt(req.query.timeRange as string) || 30;
+    const now = new Date();
+    const startDate = new Date(now.getTime() - timeRange * 24 * 60 * 60 * 1000);
+
+    // 1. Login Segmentation — JOIN audit_logs + users, GROUP BY role
+    const loginsByRole = await prisma.$queryRaw<{ role: string; count: bigint }[]>`
+      SELECT u."role", COUNT(*) as count
+      FROM "audit_logs" a
+      JOIN "users" u ON a."userId" = u."id"
+      WHERE a."actionType" = 'USER_LOGIN'
+        AND a."timestamp" >= ${startDate}
+      GROUP BY u."role"
+    `;
+
+    const loginSegmentation = {
+      sme: 0,
+      user: 0,
+      admin: 0,
+      total: 0,
+    };
+    loginsByRole.forEach(row => {
+      const count = Number(row.count);
+      if (row.role === 'sme') loginSegmentation.sme = count;
+      else if (row.role === 'user') loginSegmentation.user = count;
+      else if (row.role === 'admin') loginSegmentation.admin = count;
+      loginSegmentation.total += count;
+    });
+
+    // 2. Usage Quality — Unique logins, repeat logins, inactive certified
+    const uniqueLoginsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(DISTINCT "userId") as count
+      FROM "audit_logs"
+      WHERE "actionType" = 'USER_LOGIN'
+        AND "timestamp" >= ${startDate}
+    `;
+    const uniqueLogins = Number(uniqueLoginsResult[0]?.count || 0);
+
+    const repeatLoginsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM (
+        SELECT "userId"
+        FROM "audit_logs"
+        WHERE "actionType" = 'USER_LOGIN'
+          AND "timestamp" >= ${startDate}
+        GROUP BY "userId"
+        HAVING COUNT(*) > 1
+      ) sub
+    `;
+    const repeatLogins = Number(repeatLoginsResult[0]?.count || 0);
+
+    // Inactive certified SMEs: certified but no login in 30 days
+    const inactiveCertifiedResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count
+      FROM "sme_profiles" sp
+      JOIN "users" u ON sp."userId" = u."id"
+      WHERE sp."certificationStatus" = 'certified'
+        AND (u."lastLogin" IS NULL OR u."lastLogin" < NOW() - INTERVAL '30 days')
+    `;
+    const inactiveCertified = Number(inactiveCertifiedResult[0]?.count || 0);
+
+    // 3. Certification Lifecycle
+    // Avg days from profile creation to submission
+    const avgDaysToSubmitResult = await prisma.$queryRaw<{ avg_days: number | null }[]>`
+      SELECT AVG(EXTRACT(EPOCH FROM ("submittedDate" - "createdAt")) / 86400) as avg_days
+      FROM "sme_profiles"
+      WHERE "submittedDate" IS NOT NULL
+    `;
+    const avgDaysToSubmit = Math.round(avgDaysToSubmitResult[0]?.avg_days || 0);
+
+    // Drop-off by stage
+    const dropOffByStage = await prisma.$queryRaw<{ status: string; count: bigint }[]>`
+      SELECT "certificationStatus" as status, COUNT(*) as count
+      FROM "sme_profiles"
+      GROUP BY "certificationStatus"
+    `;
+    const certificationFunnel: Record<string, number> = {};
+    dropOffByStage.forEach(row => {
+      certificationFunnel[row.status] = Number(row.count);
+    });
+
+    // 4. Activity by day
+    const activityByDayResult = await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
+      SELECT DATE("timestamp") as date, COUNT(*) as count
+      FROM "audit_logs"
+      WHERE "timestamp" >= ${startDate}
+      GROUP BY DATE("timestamp")
+      ORDER BY date ASC
+    `;
+
+    // Fill in missing days with 0
+    const activityByDay: { date: string; count: number }[] = [];
+    for (let i = 0; i < timeRange; i++) {
+      const d = new Date(now.getTime() - (timeRange - 1 - i) * 24 * 60 * 60 * 1000);
+      const dateStr = d.toISOString().split('T')[0];
+      const found = activityByDayResult.find(r => new Date(r.date).toISOString().split('T')[0] === dateStr);
+      activityByDay.push({ date: dateStr, count: found ? Number(found.count) : 0 });
+    }
+
+    // 5. Actions by type (top 15)
+    const actionsByTypeResult = await prisma.$queryRaw<{ action: string; count: bigint }[]>`
+      SELECT "actionType" as action, COUNT(*) as count
+      FROM "audit_logs"
+      WHERE "timestamp" >= ${startDate}
+      GROUP BY "actionType"
+      ORDER BY count DESC
+      LIMIT 15
+    `;
+    const actionsByType: Record<string, number> = {};
+    actionsByTypeResult.forEach(row => {
+      actionsByType[row.action] = Number(row.count);
+    });
+
+    // 6. Certification stats
+    const totalApplications = await prisma.sMEProfile.count();
+    const certifiedCount = certificationFunnel['certified'] || 0;
+    const rejectedCount = certificationFunnel['rejected'] || 0;
+    const pendingCount = (certificationFunnel['submitted'] || 0) +
+      (certificationFunnel['under_review'] || 0) +
+      (certificationFunnel['revision_requested'] || 0);
+    const decided = certifiedCount + rejectedCount;
+    const approvalRate = decided > 0 ? Math.round((certifiedCount / decided) * 100) : 0;
+
+    // 7. Total actions in period
+    const totalActionsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count
+      FROM "audit_logs"
+      WHERE "timestamp" >= ${startDate}
+    `;
+    const totalActions = Number(totalActionsResult[0]?.count || 0);
+
+    return res.json({
+      success: true,
+      data: {
+        timeRange,
+        totalActions,
+        loginSegmentation,
+        usageQuality: {
+          uniqueLogins,
+          repeatLogins,
+          inactiveCertified,
+        },
+        certificationLifecycle: {
+          avgDaysToSubmit,
+          funnel: certificationFunnel,
+        },
+        activityByDay,
+        actionsByType,
+        certificationStats: {
+          total: totalApplications,
+          approved: certifiedCount,
+          rejected: rejectedCount,
+          pending: pendingCount,
+          approvalRate,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get analytics error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch analytics',
+    });
+  }
+};
+
 // GET /api/admin/pending-update-requests - Get pending profile update requests
 export const getPendingUpdateRequests = async (req: AuthenticatedRequest, res: Response) => {
   try {
