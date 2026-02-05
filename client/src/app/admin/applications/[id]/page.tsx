@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction } from '@/types';
+import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData } from '@/types';
 
 export default function ApplicationDetailPage() {
   const params = useParams();
@@ -12,6 +12,7 @@ export default function ApplicationDetailPage() {
 
   const [application, setApplication] = useState<AdminApplication | null>(null);
   const [auditHistory, setAuditHistory] = useState<AuditLogEntry[]>([]);
+  const [certificate, setCertificate] = useState<CertificateData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
@@ -20,8 +21,12 @@ export default function ApplicationDetailPage() {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showRevisionModal, setShowRevisionModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRevokeModal, setShowRevokeModal] = useState(false);
+  const [showReissueModal, setShowReissueModal] = useState(false);
   const [notes, setNotes] = useState('');
+  const [revokeReason, setRevokeReason] = useState('');
   const [visibilityLoading, setVisibilityLoading] = useState(false);
+  const [certActionLoading, setCertActionLoading] = useState(false);
 
   useEffect(() => {
     fetchApplicationDetail();
@@ -34,6 +39,11 @@ export default function ApplicationDetailPage() {
       if (result.success && result.data) {
         setApplication(result.data.application);
         setAuditHistory(result.data.auditHistory);
+        // Handle certificate data from backend (extended response)
+        const extendedData = result.data as { application: AdminApplication; auditHistory: AuditLogEntry[]; certificate?: CertificateData };
+        if (extendedData.certificate) {
+          setCertificate(extendedData.certificate);
+        }
       } else {
         setError(result.message || 'Failed to load application');
       }
@@ -83,6 +93,45 @@ export default function ApplicationDetailPage() {
       setError('Failed to update visibility');
     } finally {
       setVisibilityLoading(false);
+    }
+  };
+
+  const handleRevokeCertificate = async () => {
+    if (!certificate) return;
+
+    try {
+      setCertActionLoading(true);
+      const result = await api.revokeCertificate(certificate.certificateId, revokeReason || undefined);
+      if (result.success) {
+        setShowRevokeModal(false);
+        setRevokeReason('');
+        fetchApplicationDetail();
+      } else {
+        setError(result.message || 'Failed to revoke certificate');
+      }
+    } catch (err) {
+      setError('Failed to revoke certificate');
+    } finally {
+      setCertActionLoading(false);
+    }
+  };
+
+  const handleReissueCertificate = async () => {
+    if (!certificate) return;
+
+    try {
+      setCertActionLoading(true);
+      const result = await api.reissueCertificate(certificate.certificateId);
+      if (result.success) {
+        setShowReissueModal(false);
+        fetchApplicationDetail();
+      } else {
+        setError(result.message || 'Failed to reissue certificate');
+      }
+    } catch (err) {
+      setError('Failed to reissue certificate');
+    } finally {
+      setCertActionLoading(false);
     }
   };
 
@@ -553,6 +602,82 @@ export default function ApplicationDetailPage() {
             </div>
           )}
 
+          {/* Certificate Management */}
+          {application.certificationStatus === 'certified' && certificate && (
+            <div className="solid-card rounded-xl p-5">
+              <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--graphite-900)' }}>
+                <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Certificate
+              </h3>
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                  <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Certificate ID</p>
+                  <p className="font-mono text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>{certificate.certificateId}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Version</p>
+                    <p className="font-medium" style={{ color: 'var(--graphite-800)' }}>{certificate.version}</p>
+                  </div>
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Status</p>
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium"
+                      style={{
+                        background: certificate.status === 'active' ? 'var(--success-100)' : certificate.status === 'expired' ? 'var(--warning-100)' : 'var(--danger-100)',
+                        color: certificate.status === 'active' ? 'var(--success-700)' : certificate.status === 'expired' ? 'var(--warning-700)' : 'var(--danger-700)',
+                      }}
+                    >
+                      {certificate.status.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                  <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Expires</p>
+                  <p className="font-medium" style={{ color: 'var(--graphite-800)' }}>{formatDate(certificate.expiresAt)}</p>
+                </div>
+                <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                  <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Verification URL</p>
+                  <a
+                    href={certificate.verificationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm break-all hover:underline"
+                    style={{ color: 'var(--teal-600)' }}
+                  >
+                    {certificate.verificationUrl}
+                  </a>
+                </div>
+                {certificate.revocationReason && (
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--danger-50)' }}>
+                    <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--danger-500)' }}>Revocation Reason</p>
+                    <p className="text-sm" style={{ color: 'var(--danger-700)' }}>{certificate.revocationReason}</p>
+                  </div>
+                )}
+                <div className="flex gap-2 pt-2">
+                  {certificate.status !== 'revoked' && (
+                    <button
+                      onClick={() => setShowRevokeModal(true)}
+                      className="flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all"
+                      style={{ background: 'var(--danger-100)', color: 'var(--danger-700)' }}
+                    >
+                      Revoke
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShowReissueModal(true)}
+                    className="flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all"
+                    style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
+                  >
+                    Reissue
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Timeline */}
           <div className="solid-card rounded-xl p-5">
             <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--graphite-900)' }}>
@@ -668,6 +793,59 @@ export default function ApplicationDetailPage() {
               style={{ background: 'var(--warning-600)' }}
             >
               {actionLoading ? 'Processing...' : 'Request Revision'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Certificate Revoke Modal */}
+      {showRevokeModal && certificate && (
+        <Modal title="Revoke Certificate" onClose={() => { setShowRevokeModal(false); setRevokeReason(''); }}>
+          <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
+            Are you sure you want to revoke certificate <strong>{certificate.certificateId}</strong>?
+            This action cannot be easily undone.
+          </p>
+          <textarea
+            value={revokeReason}
+            onChange={(e) => setRevokeReason(e.target.value)}
+            placeholder="Enter revocation reason (optional)..."
+            className="input-field w-full h-24 resize-none"
+          />
+          <div className="flex justify-end gap-3 mt-4">
+            <button onClick={() => { setShowRevokeModal(false); setRevokeReason(''); }} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
+            <button
+              onClick={handleRevokeCertificate}
+              disabled={certActionLoading}
+              className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
+              style={{ background: 'var(--danger-600)' }}
+            >
+              {certActionLoading ? 'Revoking...' : 'Revoke Certificate'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Certificate Reissue Modal */}
+      {showReissueModal && certificate && (
+        <Modal title="Reissue Certificate" onClose={() => setShowReissueModal(false)}>
+          <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
+            This will issue a new version of certificate <strong>{certificate.certificateId}</strong> with:
+          </p>
+          <ul className="list-disc pl-5 mb-4 space-y-1" style={{ color: 'var(--graphite-600)' }}>
+            <li>New version number ({certificate.version} + 1)</li>
+            <li>New expiry date (12 months from now)</li>
+            <li>New verification hash</li>
+            <li>Status reset to Active (if revoked)</li>
+          </ul>
+          <div className="flex justify-end gap-3">
+            <button onClick={() => setShowReissueModal(false)} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
+            <button
+              onClick={handleReissueCertificate}
+              disabled={certActionLoading}
+              className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
+              style={{ background: 'var(--teal-600)' }}
+            >
+              {certActionLoading ? 'Reissuing...' : 'Reissue Certificate'}
             </button>
           </div>
         </Modal>

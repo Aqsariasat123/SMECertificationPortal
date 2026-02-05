@@ -21,6 +21,8 @@ import {
   KycApplication,
   LegalPageData,
   AnalyticsData,
+  CertificateData,
+  CertificateVerification,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -1007,6 +1009,42 @@ class ApiClient {
       const err = await response.json().catch(() => ({}));
       throw new Error(err.message || 'Failed to export applications');
     }
+  }
+
+  // ============================================
+  // Certificate Management
+  // ============================================
+
+  // Public - verify certificate (no auth required)
+  async verifyCertificate(certificateId: string): Promise<ApiResponse<CertificateVerification>> {
+    // Public endpoint - no token needed
+    try {
+      const response = await fetch(`${this.baseUrl}/verify/${certificateId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return response.json();
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to verify certificate',
+      };
+    }
+  }
+
+  // Admin - revoke certificate
+  async revokeCertificate(certificateId: string, reason?: string): Promise<ApiResponse<CertificateData>> {
+    return this.request(`/admin/certificates/${certificateId}/revoke`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  // Admin - reissue certificate
+  async reissueCertificate(certificateId: string): Promise<ApiResponse<CertificateData>> {
+    return this.request(`/admin/certificates/${certificateId}/reissue`, {
+      method: 'POST',
+    });
   }
 }
 

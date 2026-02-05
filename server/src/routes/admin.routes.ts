@@ -15,6 +15,8 @@ import {
   getKycApplicationDetail,
   reviewKycApplication,
   getAnalytics,
+  revokeCertificate,
+  reissueCertificate,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -52,5 +54,9 @@ router.get('/audit-logs/export', exportAuditLogs);
 router.get('/kyc-applications', getKycApplications);
 router.get('/kyc-applications/:id', getKycApplicationDetail);
 router.post('/kyc-applications/:id/review', reviewKycApplication);
+
+// Certificate management
+router.post('/certificates/:certificateId/revoke', revokeCertificate);
+router.post('/certificates/:certificateId/reissue', reissueCertificate);
 
 export default router;

@@ -14,6 +14,7 @@ import adminRoutes from './routes/admin.routes';
 import chatRoutes from './routes/chat.routes';
 import supportRoutes from './routes/support.routes';
 import legalRoutes from './routes/legal.routes';
+import verifyRoutes from './routes/verify.routes';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -98,6 +99,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/support', supportRoutes);
 app.use('/api/legal', legalRoutes);
+app.use('/api/verify', verifyRoutes); // Public - no auth required
 
 // 404 Handler
 app.use((req, res) => {

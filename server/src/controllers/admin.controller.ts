@@ -3,6 +3,14 @@ import { PrismaClient, CertificationStatus } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { emailService } from '../services/email.service';
 import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
+import {
+  generateCertificateId,
+  generateVerificationHash,
+  calculateExpiryDate,
+  buildVerificationUrl,
+  computeCertificateStatus,
+  incrementVersion,
+} from '../utils/certificate';
 
 const prisma = new PrismaClient();
 
@@ -212,6 +220,10 @@ export const getApplicationDetail = async (req: AuthenticatedRequest, res: Respo
             email: true,
           },
         },
+        certificates: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+        },
       },
     });
 
@@ -237,10 +249,36 @@ export const getApplicationDetail = async (req: AuthenticatedRequest, res: Respo
       },
     });
 
+    // Get latest certificate with computed status
+    const latestCertificate = application.certificates[0];
+    let certificateData = null;
+    if (latestCertificate) {
+      certificateData = {
+        id: latestCertificate.id,
+        certificateId: latestCertificate.certificateId,
+        version: latestCertificate.certificateVersion,
+        issuedAt: latestCertificate.issuedAt,
+        expiresAt: latestCertificate.expiresAt,
+        status: computeCertificateStatus(
+          latestCertificate.status as 'active' | 'expired' | 'revoked',
+          latestCertificate.expiresAt
+        ),
+        storedStatus: latestCertificate.status,
+        revokedAt: latestCertificate.revokedAt,
+        revocationReason: latestCertificate.revocationReason,
+        verificationUrl: latestCertificate.verificationUrl,
+        lastReissuedAt: latestCertificate.lastReissuedAt,
+      };
+    }
+
     return res.json({
       success: true,
       data: {
-        application,
+        application: {
+          ...application,
+          certificates: undefined, // Remove raw certificates array
+        },
+        certificate: certificateData,
         auditHistory,
       },
     });
@@ -345,37 +383,131 @@ export const reviewApplication = async (req: AuthenticatedRequest, res: Response
         });
     }
 
-    // Update application
-    const updatedApplication = await prisma.sMEProfile.update({
-      where: { id },
-      data: {
-        certificationStatus: newStatus,
-        reviewedById: adminId,
-        revisionNotes: action === 'request_revision' || action === 'reject' ? notes : null,
-        listingVisible: action === 'approve', // Auto-enable visibility on approval
-      },
-      include: {
-        user: {
-          select: {
-            fullName: true,
-            email: true,
+    // Update application (with certificate creation on approval)
+    let updatedApplication;
+    let certificate = null;
+
+    if (action === 'approve') {
+      // Use transaction to atomically update profile and create certificate
+      const frontendUrl = process.env.FRONTEND_URL || 'https://sme.byredstone.com';
+      const certId = generateCertificateId();
+      const issuedAt = new Date();
+      const expiresAt = calculateExpiryDate(issuedAt);
+      const version = 'v1.0';
+
+      const verificationHash = generateVerificationHash({
+        certificateId: certId,
+        companyName: application.companyName || '',
+        tradeLicenseNumber: application.tradeLicenseNumber || '',
+        industrySector: application.industrySector || 'other',
+        issuedAt,
+        expiresAt,
+        version,
+      });
+
+      const result = await prisma.$transaction(async (tx) => {
+        const profile = await tx.sMEProfile.update({
+          where: { id },
+          data: {
+            certificationStatus: newStatus,
+            reviewedById: adminId,
+            revisionNotes: null,
+            listingVisible: true,
+          },
+          include: {
+            user: {
+              select: {
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        });
+
+        const cert = await tx.certificate.create({
+          data: {
+            certificateId: certId,
+            certificateVersion: version,
+            smeProfileId: id,
+            companyName: application.companyName || '',
+            tradeLicenseNumber: application.tradeLicenseNumber || '',
+            industrySector: application.industrySector || 'other',
+            issuedAt,
+            expiresAt,
+            status: 'active',
+            verificationUrl: buildVerificationUrl(certId, frontendUrl),
+            verificationHash,
+            issuedById: adminId,
+          },
+        });
+
+        // Create audit logs
+        await tx.auditLog.create({
+          data: {
+            userId: adminId,
+            actionType: 'CERTIFICATION_APPROVE',
+            actionDescription,
+            targetType: 'SMEProfile',
+            targetId: id,
+            ipAddress: req.ip || 'unknown',
+            newValue: JSON.stringify({ status: newStatus }),
+          },
+        });
+
+        await tx.auditLog.create({
+          data: {
+            userId: adminId,
+            actionType: AuditAction.CERTIFICATE_ISSUED,
+            actionDescription: `Issued certificate ${certId} for ${application.companyName}`,
+            targetType: 'Certificate',
+            targetId: cert.id,
+            ipAddress: req.ip || 'unknown',
+            newValue: JSON.stringify({
+              certificateId: certId,
+              version,
+              expiresAt: expiresAt.toISOString(),
+            }),
+          },
+        });
+
+        return { profile, cert };
+      });
+
+      updatedApplication = result.profile;
+      certificate = result.cert;
+    } else {
+      // Non-approval actions
+      updatedApplication = await prisma.sMEProfile.update({
+        where: { id },
+        data: {
+          certificationStatus: newStatus,
+          reviewedById: adminId,
+          revisionNotes: action === 'request_revision' || action === 'reject' ? notes : null,
+          listingVisible: false,
+        },
+        include: {
+          user: {
+            select: {
+              fullName: true,
+              email: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    // Create audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: adminId,
-        actionType: `CERTIFICATION_${action.toUpperCase()}`,
-        actionDescription,
-        targetType: 'SMEProfile',
-        targetId: id,
-        ipAddress: req.ip || 'unknown',
-        newValue: JSON.stringify({ status: newStatus, notes }),
-      },
-    });
+      // Create audit log for non-approval actions
+      await prisma.auditLog.create({
+        data: {
+          userId: adminId,
+          actionType: `CERTIFICATION_${action.toUpperCase()}`,
+          actionDescription,
+          targetType: 'SMEProfile',
+          targetId: id,
+          ipAddress: req.ip || 'unknown',
+          newValue: JSON.stringify({ status: newStatus, notes }),
+        },
+      });
+    }
 
     // Send email notifications based on action
     const userEmail = updatedApplication.user?.email;
@@ -402,7 +534,16 @@ export const reviewApplication = async (req: AuthenticatedRequest, res: Response
     return res.json({
       success: true,
       message: `Application ${action.replace('_', ' ')} successfully`,
-      data: updatedApplication,
+      data: {
+        ...updatedApplication,
+        certificate: certificate ? {
+          certificateId: certificate.certificateId,
+          version: certificate.certificateVersion,
+          issuedAt: certificate.issuedAt,
+          expiresAt: certificate.expiresAt,
+          verificationUrl: certificate.verificationUrl,
+        } : null,
+      },
     });
   } catch (error) {
     console.error('Review application error:', error);
@@ -1555,6 +1696,194 @@ export const reviewKycApplication = async (req: AuthenticatedRequest, res: Respo
     return res.status(500).json({
       success: false,
       message: 'Failed to review KYC application',
+    });
+  }
+};
+
+// POST /api/admin/certificates/:certificateId/revoke - Revoke a certificate
+export const revokeCertificate = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const certId = req.params.certificateId as string;
+    const { reason } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Find the certificate
+    const certificate = await prisma.certificate.findUnique({
+      where: { certificateId: certId },
+      include: {
+        smeProfile: {
+          select: { companyName: true },
+        },
+      },
+    });
+
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not found',
+      });
+    }
+
+    if (certificate.status === 'revoked') {
+      return res.status(400).json({
+        success: false,
+        message: 'Certificate is already revoked',
+      });
+    }
+
+    // Revoke the certificate
+    const updatedCertificate = await prisma.certificate.update({
+      where: { certificateId: certId },
+      data: {
+        status: 'revoked',
+        revokedAt: new Date(),
+        revocationReason: reason || null,
+      },
+    });
+
+    // Create audit log
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.CERTIFICATE_REVOKED,
+      actionDescription: `Revoked certificate ${certId} for ${certificate.smeProfile.companyName}`,
+      targetType: 'Certificate',
+      targetId: certificate.id,
+      ipAddress: getClientIP(req),
+      newValue: {
+        certificateId: certId,
+        reason: reason || 'No reason provided',
+        revokedAt: new Date().toISOString(),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: 'Certificate revoked successfully',
+      data: {
+        certificateId: updatedCertificate.certificateId,
+        status: 'revoked',
+        revokedAt: updatedCertificate.revokedAt,
+        revocationReason: updatedCertificate.revocationReason,
+      },
+    });
+  } catch (error) {
+    console.error('Revoke certificate error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to revoke certificate',
+    });
+  }
+};
+
+// POST /api/admin/certificates/:certificateId/reissue - Reissue a certificate
+export const reissueCertificate = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const certId = req.params.certificateId as string;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Find the certificate
+    const certificate = await prisma.certificate.findUnique({
+      where: { certificateId: certId },
+      include: {
+        smeProfile: {
+          select: { companyName: true, certificationStatus: true },
+        },
+      },
+    });
+
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not found',
+      });
+    }
+
+    // Only allow reissue for non-revoked certificates of certified SMEs
+    if (certificate.smeProfile.certificationStatus !== 'certified') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot reissue certificate for non-certified SME',
+      });
+    }
+
+    // Increment version and recalculate hash
+    const newVersion = incrementVersion(certificate.certificateVersion);
+    const issuedAt = new Date();
+    const expiresAt = calculateExpiryDate(issuedAt);
+    const frontendUrl = process.env.FRONTEND_URL || 'https://sme.byredstone.com';
+
+    const newHash = generateVerificationHash({
+      certificateId: certificate.certificateId,
+      companyName: certificate.companyName,
+      tradeLicenseNumber: certificate.tradeLicenseNumber,
+      industrySector: certificate.industrySector,
+      issuedAt,
+      expiresAt,
+      version: newVersion,
+    });
+
+    // Update the certificate
+    const updatedCertificate = await prisma.certificate.update({
+      where: { certificateId: certId },
+      data: {
+        certificateVersion: newVersion,
+        issuedAt,
+        expiresAt,
+        status: 'active',
+        revokedAt: null,
+        revocationReason: null,
+        verificationHash: newHash,
+        verificationUrl: buildVerificationUrl(certId, frontendUrl),
+        lastReissuedAt: new Date(),
+      },
+    });
+
+    // Create audit log
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.CERTIFICATE_REISSUED,
+      actionDescription: `Reissued certificate ${certId} (${newVersion}) for ${certificate.smeProfile.companyName}`,
+      targetType: 'Certificate',
+      targetId: certificate.id,
+      ipAddress: getClientIP(req),
+      newValue: {
+        certificateId: certId,
+        version: newVersion,
+        expiresAt: expiresAt.toISOString(),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: 'Certificate reissued successfully',
+      data: {
+        certificateId: updatedCertificate.certificateId,
+        version: updatedCertificate.certificateVersion,
+        issuedAt: updatedCertificate.issuedAt,
+        expiresAt: updatedCertificate.expiresAt,
+        status: 'active',
+        verificationUrl: updatedCertificate.verificationUrl,
+      },
+    });
+  } catch (error) {
+    console.error('Reissue certificate error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to reissue certificate',
     });
   }
 };

@@ -1659,3 +1659,352 @@ If project is awarded today (27 January 2026) and Milestone 1 is created, develo
 4. **Registry tracking via audit log** — Reuse existing AuditLog model with new action types (consistent with codebase pattern).
 5. **Custom SVG charts** — No external chart library. Continue existing SVG pattern.
 6. **Footer: component, not inline** — Reusable `PublicFooter` for public pages. Auth layout gets compact version. Dashboards get no footer.
+
+---
+
+## 17. Certificate Upgrade Specification — Registry-Grade Digital Credential
+
+> **Version:** 1.1 | **Status:** Approved | **Target:** v4.0
+
+### Objective
+
+Upgrade the Naywa SME Certificate from a stateless PDF to a **verifiable, registry-grade digital credential** suitable for institutional use (banks, investors, regulators), while remaining fully within Phase 1 scope.
+
+The certificate must be:
+- Electronically issued
+- Time-bound (auto-expiry)
+- Verifiable via public registry page
+- Tamper-evident (SHA-256 hash)
+- Auditable (full lifecycle logging)
+
+**The registry is the single source of truth. The PDF is a portable representation only.**
+
+---
+
+### PHASE 1: Database Schema
+
+**File:** `server/prisma/schema.prisma`
+
+#### New Enum: CertificateStatus
+```prisma
+enum CertificateStatus {
+  active
+  expired
+  revoked
+}
+```
+
+#### New Model: Certificate
+```prisma
+model Certificate {
+  id                    String            @id @default(uuid())
+  certificateId         String            @unique  // SME-CERT-XXXXXXXX (cryptographically random)
+  certificateVersion    String            @default("v1.0")  // v1.0, v1.1, v1.2...
+
+  // Linked SME Profile
+  smeProfileId          String
+
+  // Core certificate data (snapshot at issuance)
+  companyName           String
+  tradeLicenseNumber    String
+  industrySector        String
+
+  // Dates
+  issuedAt              DateTime          @default(now())
+  expiresAt             DateTime          // issuedAt + 12 months
+
+  // Status & Governance
+  status                CertificateStatus @default(active)
+  revokedAt             DateTime?
+  revocationReason      String?
+
+  // Verification
+  verificationUrl       String            // https://sme.byredstone.com/verify/{certificateId}
+  verificationHash      String            // SHA-256 hash of deterministic payload
+
+  // Issuance metadata
+  issuedBy              String            // Admin user ID who approved
+  lastReissuedAt        DateTime?
+
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  // Relations
+  smeProfile            SMEProfile        @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  issuedByUser          User              @relation("CertificateIssuer", fields: [issuedBy], references: [id])
+
+  @@index([smeProfileId])
+  @@index([status])
+  @@index([certificateId])
+  @@map("certificates")
+}
+```
+
+#### Model Updates
+- Add `certificates Certificate[]` to SMEProfile
+- Add `issuedCertificates Certificate[] @relation("CertificateIssuer")` to User
+
+#### Migration
+- Run `npx prisma migrate dev --name add_certificate_model`
+- Create data migration script for existing certified SMEs
+
+---
+
+### PHASE 2: Certificate Utilities
+
+**New File:** `server/src/utils/certificate.ts`
+
+| Function | Purpose |
+|----------|---------|
+| `generateCertificateId()` | crypto.randomBytes(4) → `SME-CERT-XXXXXXXX` |
+| `generateVerificationHash(payload)` | SHA-256 of sorted JSON (certId, company, license, sector, issuedAt, expiresAt, version) |
+| `computeCertificateStatus(storedStatus, expiresAt)` | Dynamic: if revoked→Revoked, if now>expiresAt→Expired, else→Active |
+| `incrementVersion(current)` | v1.0 → v1.1 → v1.2 |
+
+**File:** `server/src/utils/auditLogger.ts`
+
+Add new audit actions:
+- `CERTIFICATE_ISSUED`
+- `CERTIFICATE_DOWNLOADED`
+- `CERTIFICATE_REISSUED`
+- `CERTIFICATE_REVOKED`
+- `REGISTRY_VERIFICATION_VIEWED`
+
+---
+
+### PHASE 3: Backend API Endpoints
+
+#### 3.1 Auto-create Certificate on Approval
+**File:** `server/src/controllers/admin.controller.ts`
+
+In `reviewApplication` → `case 'approve'`:
+- Wrap in `prisma.$transaction()`
+- Create Certificate record atomically with profile status update
+- Generate certificateId, verificationHash, verificationUrl
+- Set expiresAt = now + 12 months
+- Log `CERTIFICATE_ISSUED` audit action
+
+#### 3.2 Revoke Certificate
+**Endpoint:** `POST /api/admin/certificates/:certificateId/revoke`
+
+- Set status = revoked, revokedAt = now, revocationReason = req.body.reason
+- Log `CERTIFICATE_REVOKED`
+
+#### 3.3 Reissue Certificate
+**Endpoint:** `POST /api/admin/certificates/:certificateId/reissue`
+
+- Increment version (v1.0 → v1.1)
+- Generate new verificationHash
+- Reset expiresAt = now + 12 months
+- Set lastReissuedAt = now, status = active
+- Log `CERTIFICATE_REISSUED`
+
+#### 3.4 Rewrite downloadCertificate
+**File:** `server/src/controllers/sme.controller.ts` (lines 1436-1542)
+
+- Fetch Certificate record from DB
+- Generate QR code via `qrcode.toBuffer()` (package already installed)
+- Generate new institutional PDF layout (see Phase 4)
+- Log `CERTIFICATE_DOWNLOADED`
+
+#### 3.5 Public Verification API
+**New File:** `server/src/controllers/verify.controller.ts`
+
+**Endpoint:** `GET /api/verify/:certificateId` (PUBLIC, no auth)
+
+Returns:
+- certificateId, certificateVersion
+- companyName, tradeLicenseNumber, industrySector
+- issuedAt, expiresAt
+- status (computed dynamically: Active/Expired/Revoked)
+- verificationHash (truncated to 16 chars for display)
+- revokedAt, revocationReason (if revoked)
+
+**NO personal data** (emails, phones, IDs)
+
+#### 3.6 Register Routes
+**New File:** `server/src/routes/verify.routes.ts` (public, no auth middleware)
+
+**File:** `server/src/index.ts`
+- Mount `app.use('/api/verify', verifyRoutes)`
+
+**File:** `server/src/routes/admin.routes.ts`
+- Add `POST /admin/certificates/:certificateId/revoke`
+- Add `POST /admin/certificates/:certificateId/reissue`
+
+#### 3.7 Return Certificate in Application Detail
+**File:** `server/src/controllers/admin.controller.ts` → `getApplicationDetail`
+
+- Include latest Certificate record when status is certified
+
+---
+
+### PHASE 4: PDF Redesign — Institutional Layout
+
+**File:** `server/src/controllers/sme.controller.ts`
+
+Complete rewrite of PDF generation. A4 Landscape (842×595 pts).
+
+| Block | Content |
+|-------|---------|
+| 1. Authority Header | "NAYWA" left-aligned + "SME Certification Authority" subtitle + hairline rule |
+| 2. Certification Statement | "Certificate of SME Certification" 18pt + attestation paragraph |
+| 3. Certified Entity | 2-column grid: Company Name (dominant 14pt), Trade License, Industry Sector |
+| 4. Validity & Control Box | Gray bordered box: Certificate ID, Version, Issued, Expires, Status |
+| 5. Verification Footer | Left: truncated SHA-256 hash + verification URL. Right: QR code (monochrome, 80×80) + "Verify via Naywa Registry" label |
+
+**Footer Text:**
+> *"Digitally issued via Naywa Registry System. This document is electronically generated and does not require a physical signature."*
+
+**PROHIBITED:**
+- No signatures (named or handwritten)
+- No graphic stamps or seals
+- No decorative borders
+- No award/diploma styling
+- No government-resembling insignia
+
+---
+
+### PHASE 5: Frontend
+
+#### 5.1 Types
+**File:** `client/src/types/index.ts`
+
+```typescript
+export type CertificateStatus = 'Active' | 'Expired' | 'Revoked';
+
+export interface CertificateData {
+  certificateId: string;
+  certificateVersion: string;
+  companyName: string;
+  tradeLicenseNumber: string;
+  industrySector: string;
+  issuedAt: string;
+  expiresAt: string;
+  status: CertificateStatus;
+  verificationHash: string;
+  verificationUrl: string;
+  revokedAt: string | null;
+  revocationReason: string | null;
+  issuedBy: string;
+  lastReissuedAt: string | null;
+}
+
+export interface CertificateVerification {
+  certificateId: string;
+  certificateVersion: string;
+  companyName: string;
+  tradeLicenseNumber: string;
+  industrySector: string;
+  issuedAt: string;
+  expiresAt: string;
+  status: CertificateStatus;
+  verificationHashTruncated: string;
+  revokedAt: string | null;
+  revocationReason: string | null;
+}
+```
+
+#### 5.2 API Methods
+**File:** `client/src/lib/api.ts`
+
+- `verifyCertificate(certificateId)` — public, no auth token
+- `revokeCertificate(certificateId, reason?)` — admin
+- `reissueCertificate(certificateId)` — admin
+
+#### 5.3 Public Verification Page
+**New File:** `client/src/app/(public)/verify/[certificateId]/page.tsx`
+
+- Uses existing `(public)` layout (Naywa header + footer)
+- Calls `/api/verify/:certificateId` on mount
+- 4 states: Active (green badge), Expired (amber badge), Revoked (red badge + reason), Not Found
+- Shows: company name, trade license, industry, dates, cert ID, version, truncated hash
+- Institutional design matching existing public pages
+
+#### 5.4 Admin Certificate Management
+**File:** `client/src/app/admin/applications/[id]/page.tsx`
+
+When status = certified, show Certificate section:
+- Certificate ID, version, issued date, expiry, status
+- "Revoke Certificate" button + confirmation modal (with optional reason input)
+- "Reissue Certificate" button + confirmation
+
+#### 5.5 SME Certificate Info
+**File:** `client/src/app/sme/certification/page.tsx`
+
+When certified, display:
+- Certificate ID, version, expiry
+- Verification URL (clickable)
+- Download button (works with new PDF)
+
+---
+
+### PHASE 6: Migration & Deployment
+
+1. Run Prisma migration on production DB
+2. Run data migration script for existing certified SMEs
+3. Verify `FRONTEND_URL=https://sme.byredstone.com` in production env
+4. Build client + server
+5. Deploy via PM2 restart
+6. Create database backup as v4.0
+7. Create Git tag v4.0
+
+---
+
+### Files Modified/Created Summary
+
+| Action | File |
+|--------|------|
+| MODIFY | `server/prisma/schema.prisma` |
+| CREATE | `server/src/utils/certificate.ts` |
+| MODIFY | `server/src/utils/auditLogger.ts` |
+| MODIFY | `server/src/controllers/admin.controller.ts` |
+| MODIFY | `server/src/controllers/sme.controller.ts` |
+| CREATE | `server/src/controllers/verify.controller.ts` |
+| CREATE | `server/src/routes/verify.routes.ts` |
+| MODIFY | `server/src/routes/admin.routes.ts` |
+| MODIFY | `server/src/index.ts` |
+| CREATE | `scripts/migrate-existing-certificates.ts` |
+| MODIFY | `client/src/types/index.ts` |
+| MODIFY | `client/src/lib/api.ts` |
+| CREATE | `client/src/app/(public)/verify/[certificateId]/page.tsx` |
+| MODIFY | `client/src/app/admin/applications/[id]/page.tsx` |
+| MODIFY | `client/src/app/sme/certification/page.tsx` |
+
+---
+
+### Audit Trail Requirements
+
+| Action | Trigger | Data Logged |
+|--------|---------|-------------|
+| `CERTIFICATE_ISSUED` | Admin approves certification | certificateId, smeProfileId, issuedBy |
+| `CERTIFICATE_DOWNLOADED` | SME downloads PDF | certificateId, userId |
+| `CERTIFICATE_REISSUED` | Admin reissues certificate | certificateId, oldVersion, newVersion |
+| `CERTIFICATE_REVOKED` | Admin revokes certificate | certificateId, reason, revokedBy |
+| `REGISTRY_VERIFICATION_VIEWED` | Public verification page accessed | certificateId, IP (if available) |
+
+---
+
+### Governance Rules
+
+1. **Expiry Enforcement:** Certificate auto-expires when `now > expiresAt`. Verification page reflects status immediately.
+
+2. **Revocation (Admin Only):** Sets status = revoked, records reason. Reflected instantly on verification page.
+
+3. **Reissue:** Creates new version (v1.1, v1.2), generates new hash, resets expiry. Old version marked superseded.
+
+4. **Single Source of Truth:** In the event of any discrepancy between the PDF and the registry record, **the registry record shall prevail**.
+
+---
+
+### Definition of Done
+
+Implementation is complete when:
+
+- [ ] Certificate PDF includes: QR verification, expiry date, version number, hash, digital issuance statement
+- [ ] Verification page works for: Active, Expired, Revoked, Not Found states
+- [ ] Audit logs capture all certificate lifecycle actions
+- [ ] No signatures or decorative stamps are present
+- [ ] Admin can revoke and reissue certificates
+- [ ] Existing certified SMEs have Certificate records (migration complete)
+- [ ] All tests pass, deployed to production

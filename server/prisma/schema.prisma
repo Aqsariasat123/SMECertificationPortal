@@ -111,6 +111,12 @@ enum OfficeType {
   home_based
 }
 
+enum CertificateStatus {
+  active
+  expired
+  revoked
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -141,6 +147,7 @@ model User {
   sentMessages          ChatMessage[]         @relation("MessageSender")
   supportTickets        SupportTicket[]       @relation("TicketCreator")
   supportMessages       SupportMessage[]      @relation("SupportMessageSender")
+  issuedCertificates    Certificate[]         @relation("IssuedCertificates")
 
   @@map("users")
 }
@@ -314,8 +321,53 @@ model SMEProfile {
   user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   reviewedBy           User?                 @relation("ReviewedBy", fields: [reviewedById], references: [id])
   introductionRequests IntroductionRequest[]
+  certificates         Certificate[]
 
   @@map("sme_profiles")
+}
+
+/// Certificate model - Registry-grade digital credentials for certified SMEs
+model Certificate {
+  id                  String            @id @default(uuid())
+  certificateId       String            @unique // SME-CERT-XXXXXXXX (8 random hex chars)
+  certificateVersion  String            @default("v1.0")
+  smeProfileId        String
+
+  // Certificate Data (snapshot at time of issuance)
+  companyName         String
+  tradeLicenseNumber  String
+  industrySector      String
+
+  // Validity
+  issuedAt            DateTime          @default(now())
+  expiresAt           DateTime          // +12 months from issuance
+  status              CertificateStatus @default(active)
+
+  // Revocation (if applicable)
+  revokedAt           DateTime?
+  revocationReason    String?
+
+  // Verification
+  verificationUrl     String            // Full URL to public verification page
+  verificationHash    String            // SHA-256 hash of certificate data
+
+  // Issuer
+  issuedById          String            // Admin who approved the application
+
+  // Reissuance tracking
+  lastReissuedAt      DateTime?
+
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  // Relations
+  smeProfile          SMEProfile        @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  issuedBy            User              @relation("IssuedCertificates", fields: [issuedById], references: [id])
+
+  @@index([certificateId])
+  @@index([smeProfileId])
+  @@index([status])
+  @@map("certificates")
 }
 
 /// IntroductionRequest model - Requests from users to connect with SMEs

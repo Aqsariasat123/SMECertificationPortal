@@ -605,3 +605,34 @@ export interface AdminIntroductionRequest {
   status: IntroductionRequestStatus;
   requestedDate: string;
 }
+
+// Certificate Types
+export type CertificateStatusType = 'active' | 'expired' | 'revoked';
+
+export interface CertificateData {
+  id: string;
+  certificateId: string;
+  version: string;
+  issuedAt: string;
+  expiresAt: string;
+  status: CertificateStatusType;
+  storedStatus?: CertificateStatusType;
+  revokedAt: string | null;
+  revocationReason: string | null;
+  verificationUrl: string;
+  lastReissuedAt: string | null;
+}
+
+export interface CertificateVerification {
+  certificateId: string;
+  version: string;
+  companyName: string;
+  tradeLicenseNumber: string;
+  industrySector: string;
+  issuedAt: string;
+  expiresAt: string;
+  status: CertificateStatusType | 'not_found';
+  revokedAt: string | null;
+  revocationReason: string | null;
+  verificationHash: string;
+}
