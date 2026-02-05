@@ -261,7 +261,7 @@ export default function SMECertificationPage() {
               onClick={handleDownloadCertificate}
               disabled={downloadingCert}
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all flex-shrink-0 disabled:opacity-50"
-              style={{ background: 'var(--success-600)', color: 'white' }}
+              style={{ background: 'var(--teal-600)', color: 'white' }}
             >
               {downloadingCert ? (
                 <>
