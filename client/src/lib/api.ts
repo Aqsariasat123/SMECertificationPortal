@@ -19,6 +19,7 @@ import {
   IntroductionRequest,
   AdminIntroductionRequest,
   KycApplication,
+  LegalPageData,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -944,6 +945,25 @@ class ApiClient {
       const err = await response.json().catch(() => ({}));
       throw new Error(err.message || 'Failed to download certificate');
     }
+  }
+
+  // ============================================
+  // LEGAL PAGE ENDPOINTS
+  // ============================================
+
+  // Public — fetch legal page by slug (no auth required)
+  async getLegalPage(slug: string): Promise<ApiResponse<LegalPageData>> {
+    return this.request(`/legal/${slug}`, {
+      method: 'GET',
+    });
+  }
+
+  // Admin — update legal page content
+  async updateLegalPage(slug: string, data: { title?: string; content?: string; isPublished?: boolean }): Promise<ApiResponse<LegalPageData>> {
+    return this.request(`/legal/${slug}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   }
 
   // Export admin applications as CSV

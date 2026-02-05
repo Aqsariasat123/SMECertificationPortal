@@ -40,6 +40,9 @@ export enum AuditAction {
   // Export Actions
   AUDIT_LOGS_EXPORTED = 'AUDIT_LOGS_EXPORTED',
   APPLICATIONS_EXPORTED = 'APPLICATIONS_EXPORTED',
+
+  // Legal Page Actions
+  LEGAL_PAGE_UPDATED = 'LEGAL_PAGE_UPDATED',
 }
 
 interface AuditLogParams {

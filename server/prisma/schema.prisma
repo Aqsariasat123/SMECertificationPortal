@@ -401,6 +401,21 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+/// LegalPage model - Dynamic legal/trust pages (Terms, Privacy, Legal Notice, Contact)
+model LegalPage {
+  id          String   @id @default(uuid())
+  slug        String   @unique // terms, privacy, legal-notice, contact
+  title       String
+  content     String   @db.Text
+  isPublished Boolean  @default(true)
+  lastUpdated DateTime @default(now())
+  updatedBy   String?  // Admin user ID who last edited
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legal_pages")
+}
+
 /// SupportTicket model - Support conversations between users/SMEs and admin
 model SupportTicket {
   id          String                 @id @default(uuid())

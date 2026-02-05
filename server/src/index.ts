@@ -13,6 +13,7 @@ import registryRoutes from './routes/registry.routes';
 import adminRoutes from './routes/admin.routes';
 import chatRoutes from './routes/chat.routes';
 import supportRoutes from './routes/support.routes';
+import legalRoutes from './routes/legal.routes';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -96,6 +97,7 @@ app.use('/api/registry', registryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/legal', legalRoutes);
 
 // 404 Handler
 app.use((req, res) => {

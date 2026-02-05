@@ -1531,3 +1531,131 @@ If project is awarded today (27 January 2026) and Milestone 1 is created, develo
 |---------|------|---------|--------|
 | 1.0 | 2026-01-27 | Initial development plan | Development Team |
 | 2.0 | 2026-01-30 | Complete rewrite for SME Readiness Certification Portal: replaced Equity Crowdfunding concept with Certification SaaS; changed roles from Investor/SME/Admin to User/SME/Admin; removed all investment/deal/express-interest features; added certification workflow (submit/review/approve/reject/revision); added public registry listing; added Request Introduction mechanism; added Data Integrity Restriction (Admin cannot edit SME data); updated all screens, RBAC matrix, API endpoints, audit log actions, UAT criteria; updated milestone deliverables and dates | Development Team |
+| 3.0 | 2026-02-05 | Client Scope Update: Added Section 16 — 4-Phase implementation plan for Legal & Trust Pages, Analytics Enhancements, Registry Tracking, and Optional Polish. All additions are non-breaking and additive only. | Development Team |
+
+---
+
+## 16. Client Scope Update — 4-Phase Implementation Plan
+
+> All data MUST be dynamic (database-driven). Nothing hardcoded.
+
+### NON-BREAKING GUARANTEE
+
+> **IMPORTANT:** This scope update is ADDITIVE only. No existing functionality, database tables, frontend pages, or backend endpoints will be modified in a breaking way. All changes are new additions or safe extensions to existing code.
+>
+> - **Database:** Only NEW models/tables added (e.g., `LegalPage`). Existing models (`User`, `SMEProfile`, `AuditLog`, etc.) remain untouched except for adding new enum values to `AuditAction`.
+> - **Backend:** Only NEW controllers/routes added (e.g., `legal.controller.ts`, `legal.routes.ts`). Existing controllers only get new functions appended — no existing function signatures or behavior changed.
+> - **Frontend:** Only NEW pages/components added (e.g., `PublicFooter`, legal pages). Existing pages only get minor additions (e.g., footer component import, button color). No existing UI or logic removed or altered.
+> - **Auth/RBAC:** No changes to existing authentication flow or role permissions.
+
+---
+
+### PHASE 1: Legal & Trust Pages + Public Footer
+
+**Goal:** 4 legal pages (Terms, Privacy, Legal Notice, Contact) stored in DB, accessible from a consistent footer on all public pages.
+
+#### Server Changes
+
+| # | Task | File |
+|---|------|------|
+| 1 | New Prisma model: `LegalPage` (id, slug, title, content, lastUpdated, updatedBy, isPublished) | `server/prisma/schema.prisma` |
+| 2 | New controller: `getLegalPage` (public), `updateLegalPage` (admin) | `server/src/controllers/legal.controller.ts` |
+| 3 | New routes: `GET /api/legal/:slug`, `PUT /api/legal/:slug` | `server/src/routes/legal.routes.ts` |
+| 4 | Register routes: `app.use('/api/legal', legalRoutes)` | `server/src/index.ts` |
+| 5 | Add `LEGAL_PAGE_UPDATED` audit action | `server/src/utils/auditLogger.ts` |
+| 6 | Seed script: upsert 4 pages with Draft.docx content | `server/prisma/seed-legal.ts` |
+
+#### Client Changes
+
+| # | Task | File |
+|---|------|------|
+| 7 | `PublicFooter` component (links, branding, copyright) | `client/src/components/PublicFooter.tsx` |
+| 8 | Legal page layout (header + footer) | `client/src/app/(public)/layout.tsx` |
+| 9 | Terms page (dynamic from DB) | `client/src/app/(public)/terms/page.tsx` |
+| 10 | Privacy page (dynamic from DB) | `client/src/app/(public)/privacy/page.tsx` |
+| 11 | Legal Notice page (dynamic from DB) | `client/src/app/(public)/legal-notice/page.tsx` |
+| 12 | Contact page (dynamic from DB) | `client/src/app/(public)/contact/page.tsx` |
+| 13 | Replace landing page inline footer with `PublicFooter` | `client/src/app/page.tsx` |
+| 14 | Add compact footer to auth layout | `client/src/app/(auth)/layout.tsx` |
+| 15 | Fix register page `#` links to `/terms` and `/privacy` | `client/src/app/(auth)/register/page.tsx` |
+| 16 | API methods: `getLegalPage(slug)`, `updateLegalPage(slug, data)` | `client/src/lib/api.ts` |
+| 17 | `LegalPageData` interface | `client/src/types/index.ts` |
+
+---
+
+### PHASE 2: Login Segmentation + Core Analytics API
+
+**Goal:** Move analytics computation to server-side. Add login segmentation (SME/Partner/Admin), usage quality metrics, and certification lifecycle diagnostics.
+
+#### Server Changes
+
+| # | Task | File |
+|---|------|------|
+| 1 | Fix login audit to store role in `newValue` | `server/src/controllers/auth.controller.ts` |
+| 2 | New endpoint: `GET /api/admin/analytics?timeRange=30` — all metrics server-side | `server/src/controllers/admin.controller.ts` |
+| 3 | Register analytics route | `server/src/routes/admin.routes.ts` |
+
+**Metrics:** Login counts by role, unique logins, repeat logins, inactive certified SMEs, avg days to submit, drop-off by stage, activity by day, actions by type, certification stats.
+
+#### Client Changes
+
+| # | Task | File |
+|---|------|------|
+| 4 | API method: `getAdminAnalytics(timeRange)` + `AnalyticsData` type | `client/src/lib/api.ts`, `client/src/types/index.ts` |
+| 5 | Rewrite analytics page — fetch from server, remove client-side computation | `client/src/app/admin/analytics/page.tsx` |
+
+---
+
+### PHASE 3: Registry Tracking + Risk & Compliance
+
+**Goal:** Track registry views/searches in audit log. Add registry consumption analytics and risk/compliance signals.
+
+#### Server Changes
+
+| # | Task | File |
+|---|------|------|
+| 1 | New audit actions: `REGISTRY_SEARCH`, `REGISTRY_VIEW`, `REGISTRY_ZERO_RESULTS` | `server/src/utils/auditLogger.ts` |
+| 2 | Instrument registry controller with audit logging | `server/src/controllers/registry.controller.ts` |
+| 3 | Extend analytics endpoint with registry + risk metrics | `server/src/controllers/admin.controller.ts` |
+
+**Metrics:** Views by sector, search filters used, zero-result searches, missing docs, near-expiry certs, expired certs, admin overrides, revocations by reason.
+
+#### Client Changes
+
+| # | Task | File |
+|---|------|------|
+| 4 | Extend analytics types with `registryConsumption` and `riskCompliance` | `client/src/types/index.ts` |
+| 5 | Add "Registry Consumption" and "Risk & Compliance" sections | `client/src/app/admin/analytics/page.tsx` |
+
+---
+
+### PHASE 4: Optional Enhancements + Polish
+
+**Goal:** Role-based analytics filters, metric tooltips, timezone normalization, admin legal page editor.
+
+#### Server Changes
+
+| # | Task | File |
+|---|------|------|
+| 1 | Role filter + timezone param on analytics endpoint | `server/src/controllers/admin.controller.ts` |
+
+#### Client Changes
+
+| # | Task | File |
+|---|------|------|
+| 2 | Role filter dropdown on analytics page | `client/src/app/admin/analytics/page.tsx` |
+| 3 | Metric tooltips (info icons with hover) | `client/src/app/admin/analytics/page.tsx` |
+| 4 | Timezone auto-detect + optional override | `client/src/app/admin/analytics/page.tsx` |
+| 5 | Admin legal page editor | `client/src/app/admin/legal/page.tsx` |
+| 6 | Add "Legal Pages" nav item | `client/src/components/DashboardShell.tsx` |
+
+---
+
+### Key Design Decisions
+
+1. **Legal content in DB** — Not hardcoded. Admin can edit without code changes. Seed script provides initial content.
+2. **Server-side analytics** — Replace current client-side computation (fetches 500 raw logs). All metrics computed via Prisma raw SQL.
+3. **Login role via JOIN** — Historical logs lack role. JOIN with users table solves retroactively. Future logs also store role in newValue.
+4. **Registry tracking via audit log** — Reuse existing AuditLog model with new action types (consistent with codebase pattern).
+5. **Custom SVG charts** — No external chart library. Continue existing SVG pattern.
+6. **Footer: component, not inline** — Reusable `PublicFooter` for public pages. Auth layout gets compact version. Dashboards get no footer.

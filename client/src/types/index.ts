@@ -525,6 +525,15 @@ export interface KycApplication {
   };
 }
 
+// Legal Page Types
+export interface LegalPageData {
+  slug: string;
+  title: string;
+  content: string;
+  lastUpdated: string;
+  isPublished?: boolean;
+}
+
 export interface IntroductionRequest {
   id: string;
   smeId: string;

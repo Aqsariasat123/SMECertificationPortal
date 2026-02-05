@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PublicFooter from '@/components/PublicFooter';
 
 export default function AuthLayout({
   children,
@@ -6,7 +7,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen flex flex-col">
+    <div className="flex-1 flex flex-col lg:flex-row">
       {/* Branding Panel - Top on mobile, Left on desktop */}
       <div
         className="w-full lg:w-5/12 text-white flex flex-col justify-between p-6 lg:p-10 relative overflow-hidden"
@@ -87,6 +89,8 @@ export default function AuthLayout({
           {children}
         </div>
       </div>
+    </div>
+    <PublicFooter compact />
     </div>
   );
 }
