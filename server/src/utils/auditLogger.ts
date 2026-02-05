@@ -43,6 +43,11 @@ export enum AuditAction {
 
   // Legal Page Actions
   LEGAL_PAGE_UPDATED = 'LEGAL_PAGE_UPDATED',
+
+  // Registry Tracking Actions
+  REGISTRY_SEARCH = 'REGISTRY_SEARCH',
+  REGISTRY_VIEW = 'REGISTRY_VIEW',
+  REGISTRY_ZERO_RESULTS = 'REGISTRY_ZERO_RESULTS',
 }
 
 interface AuditLogParams {

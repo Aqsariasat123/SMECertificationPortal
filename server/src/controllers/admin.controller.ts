@@ -890,6 +890,102 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
     `;
     const totalActions = Number(totalActionsResult[0]?.count || 0);
 
+    // ============ PHASE 3: Registry Consumption ============
+
+    // 8a. Registry views by sector
+    const viewsBySectorResult = await prisma.$queryRaw<{ sector: string; count: bigint }[]>`
+      SELECT sp."industrySector" as sector, COUNT(*) as count
+      FROM "audit_logs" a
+      JOIN "sme_profiles" sp ON a."targetId" = sp."id"
+      WHERE a."actionType" = 'REGISTRY_VIEW'
+        AND a."timestamp" >= ${startDate}
+        AND sp."industrySector" IS NOT NULL
+      GROUP BY sp."industrySector"
+      ORDER BY count DESC
+    `;
+    const viewsBySector: Record<string, number> = {};
+    viewsBySectorResult.forEach(row => {
+      viewsBySector[row.sector] = Number(row.count);
+    });
+
+    // 8b. Total registry views
+    const totalViewsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'REGISTRY_VIEW' AND "timestamp" >= ${startDate}
+    `;
+    const totalRegistryViews = Number(totalViewsResult[0]?.count || 0);
+
+    // 8c. Total registry searches
+    const totalSearchesResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'REGISTRY_SEARCH' AND "timestamp" >= ${startDate}
+    `;
+    const totalSearches = Number(totalSearchesResult[0]?.count || 0);
+
+    // 8d. Text searches vs sector-only searches
+    const textSearchesResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'REGISTRY_SEARCH'
+        AND "timestamp" >= ${startDate}
+        AND "newValue" IS NOT NULL
+        AND "newValue"::text LIKE '%"search":"%'
+        AND "newValue"::text NOT LIKE '%"search":null%'
+        AND "newValue"::text NOT LIKE '%"search":""%'
+    `;
+    const textSearchCount = Number(textSearchesResult[0]?.count || 0);
+
+    // 8e. Zero-result searches
+    const zeroResultsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'REGISTRY_ZERO_RESULTS' AND "timestamp" >= ${startDate}
+    `;
+    const zeroResultSearches = Number(zeroResultsResult[0]?.count || 0);
+
+    // ============ PHASE 3: Risk & Compliance ============
+
+    // 9a. Missing mandatory docs — certified SMEs with null/empty documents
+    const missingDocsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "sme_profiles"
+      WHERE "certificationStatus" = 'certified'
+        AND ("documents" IS NULL OR "documents"::text = 'null' OR "documents"::text = '{}')
+    `;
+    const missingDocs = Number(missingDocsResult[0]?.count || 0);
+
+    // 9b. Near-expiry licenses (within 30 days)
+    const nearExpiryResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "sme_profiles"
+      WHERE "certificationStatus" = 'certified'
+        AND "licenseExpiryDate" IS NOT NULL
+        AND "licenseExpiryDate" > NOW()
+        AND "licenseExpiryDate" <= NOW() + INTERVAL '30 days'
+    `;
+    const nearExpiry = Number(nearExpiryResult[0]?.count || 0);
+
+    // 9c. Expired licenses
+    const expiredResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "sme_profiles"
+      WHERE "certificationStatus" = 'certified'
+        AND "licenseExpiryDate" IS NOT NULL
+        AND "licenseExpiryDate" < NOW()
+    `;
+    const expiredLicenses = Number(expiredResult[0]?.count || 0);
+
+    // 9d. Admin overrides (LISTING_ENABLED / LISTING_DISABLED)
+    const adminOverridesResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" IN ('LISTING_ENABLED', 'LISTING_DISABLED')
+        AND "timestamp" >= ${startDate}
+    `;
+    const adminOverrides = Number(adminOverridesResult[0]?.count || 0);
+
+    // 9e. Rejections count in period
+    const rejectionsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATION_REJECT'
+        AND "timestamp" >= ${startDate}
+    `;
+    const rejectionsPeriod = Number(rejectionsResult[0]?.count || 0);
+
     return res.json({
       success: true,
       data: {
@@ -913,6 +1009,21 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
           rejected: rejectedCount,
           pending: pendingCount,
           approvalRate,
+        },
+        registryConsumption: {
+          totalViews: totalRegistryViews,
+          totalSearches,
+          textSearches: textSearchCount,
+          sectorSearches: totalSearches - textSearchCount,
+          zeroResultSearches,
+          viewsBySector,
+        },
+        riskCompliance: {
+          missingDocs,
+          nearExpiry,
+          expiredLicenses,
+          adminOverrides,
+          rejectionsPeriod,
         },
       },
     });

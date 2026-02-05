@@ -553,6 +553,21 @@ export interface AnalyticsData {
     pending: number;
     approvalRate: number;
   };
+  registryConsumption: {
+    totalViews: number;
+    totalSearches: number;
+    textSearches: number;
+    sectorSearches: number;
+    zeroResultSearches: number;
+    viewsBySector: Record<string, number>;
+  };
+  riskCompliance: {
+    missingDocs: number;
+    nearExpiry: number;
+    expiredLicenses: number;
+    adminOverrides: number;
+    rejectionsPeriod: number;
+  };
 }
 
 // Legal Page Types

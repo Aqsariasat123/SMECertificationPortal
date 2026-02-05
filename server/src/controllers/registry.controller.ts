@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
+import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
 
 const prisma = new PrismaClient();
 
@@ -84,6 +85,28 @@ export const getCertifiedSMEs = async (req: AuthenticatedRequest, res: Response)
     const uniqueSectors = sectors
       .map(s => s.industrySector)
       .filter(Boolean) as string[];
+
+    // Audit log: registry search
+    const userId = req.user?.userId;
+    if (userId) {
+      await logAuditAction({
+        userId,
+        actionType: AuditAction.REGISTRY_SEARCH,
+        actionDescription: `Registry search${search ? `: "${search}"` : ''}${sector ? ` [sector: ${sector}]` : ''} — ${total} results`,
+        ipAddress: getClientIP(req),
+        newValue: { search: search || null, sector: sector || null, resultCount: total },
+      });
+
+      if (total === 0) {
+        await logAuditAction({
+          userId,
+          actionType: AuditAction.REGISTRY_ZERO_RESULTS,
+          actionDescription: `Zero-result registry search${search ? `: "${search}"` : ''}${sector ? ` [sector: ${sector}]` : ''}`,
+          ipAddress: getClientIP(req),
+          newValue: { search: search || null, sector: sector || null },
+        });
+      }
+    }
 
     return res.json({
       success: true,
@@ -171,6 +194,19 @@ export const getSMEDetail = async (req: AuthenticatedRequest, res: Response) => 
       companyLogo = docs.companyLogo || null;
       revenueRange = docs.revenueRange || null;
       revenueGrowth = docs.revenueGrowth || null;
+    }
+
+    // Audit log: registry view
+    const userId = req.user?.userId;
+    if (userId) {
+      await logAuditAction({
+        userId,
+        actionType: AuditAction.REGISTRY_VIEW,
+        actionDescription: `Viewed registry profile: ${sme.companyName || profileId}`,
+        targetType: 'SMEProfile',
+        targetId: profileId,
+        ipAddress: getClientIP(req),
+      });
     }
 
     return res.json({

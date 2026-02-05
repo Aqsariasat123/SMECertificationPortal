@@ -49,8 +49,26 @@ export default function AdminAnalyticsPage() {
       'LEGAL_PAGE_UPDATED': 'Legal Pages Updated',
       'AUDIT_LOGS_EXPORTED': 'Audit Logs Exported',
       'APPLICATIONS_EXPORTED': 'Applications Exported',
+      'REGISTRY_SEARCH': 'Registry Searches',
+      'REGISTRY_VIEW': 'Registry Views',
+      'REGISTRY_ZERO_RESULTS': 'Zero-Result Searches',
     };
     return labels[action] || action.replace(/_/g, ' ');
+  };
+
+  const getSectorLabel = (sector: string) => {
+    const labels: Record<string, string> = {
+      technology: 'Technology',
+      healthcare: 'Healthcare',
+      finance: 'Finance',
+      retail: 'Retail',
+      manufacturing: 'Manufacturing',
+      real_estate: 'Real Estate',
+      hospitality: 'Hospitality',
+      education: 'Education',
+      other: 'Other',
+    };
+    return labels[sector] || sector.replace(/_/g, ' ');
   };
 
   const getActionColor = (action: string) => {
@@ -407,6 +425,98 @@ export default function AdminAnalyticsPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Registry Consumption */}
+      <div>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--graphite-500)' }}>Registry Consumption</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Registry Stats Cards */}
+          <div className="solid-card rounded-xl p-6">
+            <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--graphite-900)' }}>Search & View Stats</h3>
+            <div className="space-y-3">
+              {[
+                { label: 'Total Registry Views', value: analytics.registryConsumption.totalViews, icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z', bg: 'teal' },
+                { label: 'Total Searches', value: analytics.registryConsumption.totalSearches, icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', bg: 'teal' },
+                { label: 'Text Searches', value: analytics.registryConsumption.textSearches, icon: 'M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129', bg: 'graphite' },
+                { label: 'Sector-Only Searches', value: analytics.registryConsumption.sectorSearches, icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', bg: 'graphite' },
+                { label: 'Zero-Result Searches', value: analytics.registryConsumption.zeroResultSearches, icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', bg: 'danger' },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `var(--${item.bg}-100)`, color: `var(--${item.bg}-600)` }}>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                      </svg>
+                    </div>
+                    <span className="text-sm" style={{ color: 'var(--graphite-700)' }}>{item.label}</span>
+                  </div>
+                  <span className="text-lg font-bold" style={{ color: item.bg === 'danger' && item.value > 0 ? 'var(--danger-600)' : 'var(--graphite-900)' }}>{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Views by Sector Bar Chart */}
+          <div className="solid-card rounded-xl p-6">
+            <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--graphite-900)' }}>Views by Sector</h3>
+            {Object.keys(analytics.registryConsumption.viewsBySector).length > 0 ? (
+              <div className="space-y-3">
+                {(() => {
+                  const entries = Object.entries(analytics.registryConsumption.viewsBySector).sort(([, a], [, b]) => b - a);
+                  const maxVal = Math.max(...entries.map(([, v]) => v), 1);
+                  return entries.map(([sector, count]) => (
+                    <div key={sector}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium" style={{ color: 'var(--graphite-700)' }}>{getSectorLabel(sector)}</span>
+                        <span className="text-sm font-bold" style={{ color: 'var(--graphite-900)' }}>{count}</span>
+                      </div>
+                      <div className="h-3 rounded-full overflow-hidden" style={{ background: 'var(--graphite-100)' }}>
+                        <div className="h-full rounded-full transition-all" style={{ width: `${(count / maxVal) * 100}%`, background: 'var(--teal-500)' }} />
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12" style={{ color: 'var(--graphite-400)' }}>
+                <svg className="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <p className="text-sm">No registry views tracked yet</p>
+                <p className="text-xs mt-1">Views will appear as users browse the registry</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Risk & Compliance */}
+      <div>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance</h2>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+            { label: 'Near Expiry', value: analytics.riskCompliance.nearExpiry, desc: 'License expires within 30d', color: 'warning', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+            { label: 'Expired Licenses', value: analytics.riskCompliance.expiredLicenses, desc: 'Certified with expired license', color: 'danger', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
+            { label: 'Admin Overrides', value: analytics.riskCompliance.adminOverrides, desc: `Visibility toggles (${timeRange}d)`, color: 'graphite', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
+            { label: 'Rejections', value: analytics.riskCompliance.rejectionsPeriod, desc: `Cert rejections (${timeRange}d)`, color: 'danger', icon: 'M6 18L18 6M6 6l12 12' },
+          ].map((item) => (
+            <div key={item.label} className="solid-card rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: `var(--${item.color}-100)`, color: `var(--${item.color}-600)` }}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-2xl font-bold" style={{ color: item.value > 0 && (item.color === 'danger' || item.color === 'warning') ? `var(--${item.color}-600)` : 'var(--graphite-900)' }}>{item.value}</p>
+              <p className="text-xs font-medium" style={{ color: 'var(--graphite-700)' }}>{item.label}</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-400)' }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
