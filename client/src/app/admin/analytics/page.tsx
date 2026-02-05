@@ -21,6 +21,7 @@ function Tooltip({ text }: { text: string }) {
 export default function AdminAnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<'7' | '30' | '90'>('30');
   const [roleFilter, setRoleFilter] = useState<string>('');
   const [timezone, setTimezone] = useState<string>(() => {
@@ -33,13 +34,17 @@ export default function AdminAnalyticsPage() {
 
   const fetchAnalytics = async () => {
     setLoading(true);
+    setError(null);
     try {
       const result = await api.getAdminAnalytics(parseInt(timeRange), roleFilter || undefined, timezone);
       if (result.success && result.data) {
         setAnalytics(result.data);
+      } else {
+        setError(result.message || 'Failed to load analytics data');
       }
-    } catch (error) {
-      console.error('Failed to fetch analytics:', error);
+    } catch (err) {
+      console.error('Failed to fetch analytics:', err);
+      setError('Unable to connect to the analytics service');
     } finally {
       setLoading(false);
     }
@@ -150,7 +155,26 @@ export default function AdminAnalyticsPage() {
     );
   }
 
-  if (!analytics) return null;
+  if (error || !analytics) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'var(--danger-100)' }}>
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--danger-500)' }}>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--graphite-900)' }}>Failed to load analytics</h2>
+        <p className="text-sm mb-4" style={{ color: 'var(--graphite-500)' }}>{error || 'No data available'}</p>
+        <button
+          onClick={fetchAnalytics}
+          className="px-5 py-2.5 text-sm font-medium rounded-lg text-white transition-all"
+          style={{ background: 'var(--teal-600)' }}
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

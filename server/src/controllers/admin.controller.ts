@@ -774,16 +774,16 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
     // 1. Login Segmentation — JOIN audit_logs + users, GROUP BY role
     const loginsByRole = activeRoleFilter
       ? await prisma.$queryRaw<{ role: string; count: bigint }[]>`
-          SELECT u."role", COUNT(*) as count
+          SELECT u."role"::text, COUNT(*) as count
           FROM "audit_logs" a
           JOIN "users" u ON a."userId" = u."id"
           WHERE a."actionType" = 'USER_LOGIN'
             AND a."timestamp" >= ${startDate}
-            AND u."role" = ${activeRoleFilter}
+            AND u."role"::text = ${activeRoleFilter}
           GROUP BY u."role"
         `
       : await prisma.$queryRaw<{ role: string; count: bigint }[]>`
-          SELECT u."role", COUNT(*) as count
+          SELECT u."role"::text, COUNT(*) as count
           FROM "audit_logs" a
           JOIN "users" u ON a."userId" = u."id"
           WHERE a."actionType" = 'USER_LOGIN'
@@ -813,7 +813,7 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
           JOIN "users" u ON a."userId" = u."id"
           WHERE a."actionType" = 'USER_LOGIN'
             AND a."timestamp" >= ${startDate}
-            AND u."role" = ${activeRoleFilter}
+            AND u."role"::text = ${activeRoleFilter}
         `
       : await prisma.$queryRaw<{ count: bigint }[]>`
           SELECT COUNT(DISTINCT "userId") as count
@@ -831,7 +831,7 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
             JOIN "users" u ON a."userId" = u."id"
             WHERE a."actionType" = 'USER_LOGIN'
               AND a."timestamp" >= ${startDate}
-              AND u."role" = ${activeRoleFilter}
+              AND u."role"::text = ${activeRoleFilter}
             GROUP BY a."userId"
             HAVING COUNT(*) > 1
           ) sub
@@ -884,15 +884,15 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
           SELECT DATE("timestamp" AT TIME ZONE 'UTC' AT TIME ZONE ${timezone}) as date, COUNT(*) as count
           FROM "audit_logs"
           WHERE "timestamp" >= ${startDate}
-          GROUP BY DATE("timestamp" AT TIME ZONE 'UTC' AT TIME ZONE ${timezone})
-          ORDER BY date ASC
+          GROUP BY 1
+          ORDER BY 1 ASC
         `
       : await prisma.$queryRaw<{ date: Date; count: bigint }[]>`
           SELECT DATE("timestamp") as date, COUNT(*) as count
           FROM "audit_logs"
           WHERE "timestamp" >= ${startDate}
-          GROUP BY DATE("timestamp")
-          ORDER BY date ASC
+          GROUP BY 1
+          ORDER BY 1 ASC
         `;
 
     // Fill in missing days with 0
