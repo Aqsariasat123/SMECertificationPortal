@@ -1173,6 +1173,51 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
     `;
     const rejectionsPeriod = Number(rejectionsResult[0]?.count || 0);
 
+    // ============ PHASE: Certificate Verification Tracking ============
+
+    // 10a. Total verification attempts (all time)
+    const totalVerificationsAllTimeResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATE_VERIFICATION_ATTEMPT'
+    `;
+    const totalVerificationsAllTime = Number(totalVerificationsAllTimeResult[0]?.count || 0);
+
+    // 10b. Verification attempts (in period)
+    const verificationsInPeriodResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATE_VERIFICATION_ATTEMPT'
+        AND "timestamp" >= ${startDate}
+    `;
+    const verificationsInPeriod = Number(verificationsInPeriodResult[0]?.count || 0);
+
+    // 10c. Successful verifications
+    const successfulVerificationsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATE_VERIFICATION_ATTEMPT'
+        AND "timestamp" >= ${startDate}
+        AND "newValue"::text LIKE '%"result":"SUCCESS"%'
+    `;
+    const successfulVerifications = Number(successfulVerificationsResult[0]?.count || 0);
+
+    // 10d. Not found / invalid attempts
+    const notFoundVerificationsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATE_VERIFICATION_ATTEMPT'
+        AND "timestamp" >= ${startDate}
+        AND "newValue"::text LIKE '%"result":"NOT_FOUND"%'
+    `;
+    const notFoundVerifications = Number(notFoundVerificationsResult[0]?.count || 0);
+
+    // 10e. Channel split (QR vs manual entry)
+    const qrVerificationsResult = await prisma.$queryRaw<{ count: bigint }[]>`
+      SELECT COUNT(*) as count FROM "audit_logs"
+      WHERE "actionType" = 'CERTIFICATE_VERIFICATION_ATTEMPT'
+        AND "timestamp" >= ${startDate}
+        AND "newValue"::text LIKE '%"lookupMethod":"QR"%'
+    `;
+    const qrVerifications = Number(qrVerificationsResult[0]?.count || 0);
+    const manualVerifications = verificationsInPeriod - qrVerifications;
+
     return res.json({
       success: true,
       data: {
@@ -1211,6 +1256,16 @@ export const getAnalytics = async (req: AuthenticatedRequest, res: Response) => 
           expiredLicenses,
           adminOverrides,
           rejectionsPeriod,
+        },
+        certificateVerification: {
+          totalAllTime: totalVerificationsAllTime,
+          totalInPeriod: verificationsInPeriod,
+          successful: successfulVerifications,
+          notFound: notFoundVerifications,
+          byChannel: {
+            qr: qrVerifications,
+            manual: manualVerifications,
+          },
         },
       },
     });
