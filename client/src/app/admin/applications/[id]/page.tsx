@@ -346,9 +346,11 @@ export default function ApplicationDetailPage() {
     trade_license: { label: 'Trade License', description: 'Valid commercial license issued by the relevant authority.', category: 'Legal & Registration', level: 'required' },
     certificate_of_incorporation: { label: 'Certificate of Incorporation', description: 'Required where applicable based on legal form.', category: 'Legal & Registration', level: 'conditional' },
     company_registration: { label: 'Company Registration Details', description: 'Official registration extract or equivalent.', category: 'Legal & Registration', level: 'required' },
+    vat_certificate: { label: 'VAT Registration Certificate', description: 'Tax registration certificate (if VAT registered).', category: 'Legal & Registration', level: 'conditional' },
     // Ownership & Management
     moa_shareholding: { label: 'Memorandum of Association (MOA) / Shareholding Structure', description: 'Ownership and control structure.', category: 'Ownership & Management', level: 'conditional' },
     signatory_id: { label: 'Authorized Signatory Identification', description: 'Government-issued ID of the authorized representative.', category: 'Ownership & Management', level: 'required' },
+    ubo_declaration: { label: 'Ultimate Beneficial Owner (UBO) Declaration', description: 'Declaration of individuals with significant ownership or control.', category: 'Ownership & Management', level: 'conditional' },
     // Financial Information
     financial_statements: { label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'Financial Information', level: 'required' },
     bank_statement: { label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'Financial Information', level: 'optional' },
@@ -358,6 +360,9 @@ export default function ApplicationDetailPage() {
     licenses_permits: { label: 'Key Licenses / Permits (if applicable)', description: 'Sector-specific regulatory approvals.', category: 'Operations & Compliance', level: 'conditional' },
     contracts_references: { label: 'Key Contracts or Client References', description: 'May support operational context where relevant.', category: 'Operations & Compliance', level: 'optional' },
   };
+
+  // Required documents list for checklist
+  const REQUIRED_DOCUMENTS = ['trade_license', 'company_registration', 'signatory_id', 'financial_statements', 'company_profile'];
 
   const DOCUMENT_CATEGORIES = ['Legal & Registration', 'Ownership & Management', 'Financial Information', 'Operations & Compliance'];
 
@@ -704,6 +709,64 @@ export default function ApplicationDetailPage() {
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--graphite-400)' }}></span>
                 Optional
               </span>
+            </div>
+
+            {/* Required Documents Checklist */}
+            <div className="mb-5 p-4 rounded-lg" style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold" style={{ color: 'var(--graphite-700)' }}>
+                  Required Documents Checklist
+                </h4>
+                {(() => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const uploadedTypes = (application.documents?.uploadedFiles || []).map((d: any) => d.type as string);
+                  const uploaded = REQUIRED_DOCUMENTS.filter(type => uploadedTypes.includes(type)).length;
+                  const total = REQUIRED_DOCUMENTS.length;
+                  const allComplete = uploaded === total;
+                  return (
+                    <span
+                      className="text-xs font-medium px-2 py-1 rounded-full"
+                      style={{
+                        background: allComplete ? 'var(--green-100)' : 'var(--danger-50)',
+                        color: allComplete ? 'var(--green-700)' : 'var(--danger-700)',
+                      }}
+                    >
+                      {uploaded}/{total} complete
+                    </span>
+                  );
+                })()}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {REQUIRED_DOCUMENTS.map((docType) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const uploadedTypes = (application.documents?.uploadedFiles || []).map((d: any) => d.type as string);
+                  const isUploaded = uploadedTypes.includes(docType);
+                  const docInfo = DOCUMENT_TYPE_INFO[docType];
+                  return (
+                    <div
+                      key={docType}
+                      className="flex items-center gap-2 p-2 rounded"
+                      style={{ background: isUploaded ? 'var(--green-50)' : 'white' }}
+                    >
+                      {isUploaded ? (
+                        <svg className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--green-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--danger-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      )}
+                      <span
+                        className="text-xs"
+                        style={{ color: isUploaded ? 'var(--green-700)' : 'var(--danger-700)' }}
+                      >
+                        {docInfo?.label || docType}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {application.documents?.uploadedFiles && application.documents.uploadedFiles.length > 0 ? (

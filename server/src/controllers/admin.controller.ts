@@ -3,6 +3,8 @@ import { PrismaClient, CertificationStatus } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { emailService } from '../services/email.service';
 import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
+import fs from 'fs';
+import path from 'path';
 import {
   generateCertificateId,
   generateVerificationHash,
@@ -2098,6 +2100,162 @@ export const getInternalReview = async (req: AuthenticatedRequest, res: Response
     return res.status(500).json({
       success: false,
       message: 'Failed to get internal review',
+    });
+  }
+};
+
+// GET /api/admin/applications/:id/documents - Get documents list for application
+export const getApplicationDocuments = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const adminId = req.user?.userId;
+
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        companyName: true,
+        documents: true,
+        userId: true,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Parse documents
+    let documents: Array<{
+      id: string;
+      type: string;
+      name: string;
+      originalName: string;
+      size: number;
+      mimeType: string;
+      uploadedAt: string;
+      version?: number;
+    }> = [];
+
+    if (application.documents) {
+      const docsData = typeof application.documents === 'string'
+        ? JSON.parse(application.documents)
+        : application.documents;
+      documents = docsData.uploadedFiles || [];
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        applicationId: application.id,
+        companyName: application.companyName,
+        documents,
+        totalCount: documents.length,
+      },
+    });
+  } catch (error) {
+    console.error('Get application documents error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get documents',
+    });
+  }
+};
+
+// GET /api/admin/applications/:id/documents/:documentId/view - View/download document with audit logging
+export const viewDocument = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const documentId = req.params.documentId as string;
+    const adminId = req.user?.userId;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        companyName: true,
+        documents: true,
+        userId: true,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Parse documents and find the requested one
+    let documents: Array<{
+      id: string;
+      type: string;
+      name: string;
+      originalName: string;
+      path: string;
+      size: number;
+      mimeType: string;
+    }> = [];
+
+    if (application.documents) {
+      const docsData = typeof application.documents === 'string'
+        ? JSON.parse(application.documents)
+        : application.documents;
+      documents = docsData.uploadedFiles || [];
+    }
+
+    const document = documents.find(d => d.id === documentId);
+
+    if (!document) {
+      return res.status(404).json({
+        success: false,
+        message: 'Document not found',
+      });
+    }
+
+    // Check if file exists
+    const filePath = path.join(__dirname, '../../uploads', application.userId, document.name);
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        message: 'Document file not found on server',
+      });
+    }
+
+    // Log the document view
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.ADMIN_DOCUMENT_VIEWED,
+      actionDescription: `Admin viewed document: ${document.originalName} (${document.type})`,
+      targetType: 'SMEProfile',
+      targetId: application.id,
+      ipAddress: getClientIP(req),
+      newValue: {
+        documentId: document.id,
+        documentType: document.type,
+        documentName: document.originalName,
+        companyName: application.companyName,
+      },
+    });
+
+    // Send the file
+    res.setHeader('Content-Type', document.mimeType);
+    res.setHeader('Content-Disposition', `inline; filename="${document.originalName}"`);
+    return res.sendFile(filePath);
+  } catch (error) {
+    console.error('View document error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to view document',
     });
   }
 };
