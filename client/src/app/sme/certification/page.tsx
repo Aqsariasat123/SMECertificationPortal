@@ -139,6 +139,10 @@ export default function SMECertificationPage() {
     setShowRequirementsOverview(false);
   };
 
+  const handleViewRequirements = () => {
+    setShowRequirementsOverview(true);
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
@@ -323,16 +327,30 @@ export default function SMECertificationPage() {
             <h1 className="text-2xl font-bold">Certification Application</h1>
             <p style={{ color: 'var(--graphite-400)' }}>Complete all requirements to submit your certification</p>
           </div>
-          <Link
-            href="/sme"
-            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors"
-            style={{ background: 'var(--teal-600)', color: 'white' }}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Dashboard
-          </Link>
+          <div className="flex items-center gap-3">
+            {!isAlreadySubmitted && (
+              <button
+                onClick={handleViewRequirements}
+                className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors"
+                style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                View Requirements
+              </button>
+            )}
+            <Link
+              href="/sme"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors"
+              style={{ background: 'var(--teal-600)', color: 'white' }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
 
