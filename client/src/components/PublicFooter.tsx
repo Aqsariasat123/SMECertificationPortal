@@ -11,6 +11,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs" style={{ color: 'var(--graphite-500)' }}>
           <Link href="/terms" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Terms</Link>
           <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Privacy</Link>
+          <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Certification Standards</Link>
           <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Legal Notice</Link>
           <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Contact</Link>
           <span>&copy; {new Date().getFullYear()} Naywa</span>
@@ -38,6 +39,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
             <Link href="/terms" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Terms of Service</Link>
             <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Privacy Policy</Link>
+            <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Certification Standards</Link>
             <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Legal Notice</Link>
             <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Contact</Link>
           </div>
@@ -46,6 +48,13 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
             <span>United Arab Emirates</span>
             <span>&copy; {new Date().getFullYear()} Naywa. All rights reserved</span>
           </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-6 pt-4 text-center" style={{ borderTop: '1px solid var(--graphite-700)' }}>
+          <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+            Naywa certification is an independent assessment and does not constitute regulatory approval, legal advice, or a guarantee of performance.
+          </p>
         </div>
       </div>
     </footer>

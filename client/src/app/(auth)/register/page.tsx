@@ -608,8 +608,8 @@ export default function RegisterPage() {
               <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>
                 I agree to the{' '}
                 <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--teal-600)' }} className="font-medium">Terms of Service</a>
-                {' '}and{' '}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--teal-600)' }} className="font-medium">Privacy Policy</a>
+                {' '}and acknowledge the{' '}
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--teal-600)' }} className="font-medium">Privacy Policy</a>.
               </span>
             </label>
 
