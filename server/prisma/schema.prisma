@@ -126,6 +126,17 @@ enum PaymentStatus {
   refunded          // Payment refunded
 }
 
+enum DocumentStatus {
+  pending           // Not yet reviewed
+  approved          // Admin approved this document
+  requires_revision // Admin flagged for revision
+}
+
+enum EmailStatus {
+  sent              // Email sent successfully
+  failed            // Email failed to send
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -158,6 +169,7 @@ model User {
   supportMessages       SupportMessage[]      @relation("SupportMessageSender")
   issuedCertificates    Certificate[]         @relation("IssuedCertificates")
   requestedPayments     Payment[]             @relation("PaymentRequestedBy")
+  reviewedDocuments     DocumentVersion[]     @relation("DocumentReviewedBy")
 
   @@map("users")
 }
@@ -339,6 +351,7 @@ model SMEProfile {
   introductionRequests IntroductionRequest[]
   certificates         Certificate[]
   payments             Payment[]
+  documentVersions     DocumentVersion[]
 
   @@map("sme_profiles")
 }
@@ -567,4 +580,56 @@ model SupportMessage {
   @@index([ticketId])
   @@index([senderId])
   @@map("support_messages")
+}
+
+/// DocumentVersion model - Tracks document upload history with versions
+model DocumentVersion {
+  id            String         @id @default(uuid())
+  smeProfileId  String
+  documentType  String         // trade_license, financial_statements, etc.
+  originalName  String         // Original filename uploaded
+  fileName      String         // Stored filename on disk
+  filePath      String         // Full path to file
+  fileSize      Int?           // File size in bytes
+  mimeType      String?        // MIME type of the file
+  version       Int            @default(1)
+  status        DocumentStatus @default(pending)
+  adminFeedback String?        // Admin feedback for this document
+  reviewedById  String?        // Admin who reviewed
+  reviewedAt    DateTime?      // When reviewed
+  uploadedAt    DateTime       @default(now())
+  replacedAt    DateTime?      // When this version was replaced by a newer one
+  isLatest      Boolean        @default(true) // Is this the latest version
+
+  // Relations
+  smeProfile    SMEProfile     @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  reviewedBy    User?          @relation("DocumentReviewedBy", fields: [reviewedById], references: [id])
+
+  @@index([smeProfileId])
+  @@index([documentType])
+  @@index([isLatest])
+  @@map("document_versions")
+}
+
+/// EmailLog model - Logs all email activity for audit purposes
+model EmailLog {
+  id             String      @id @default(uuid())
+  recipientEmail String
+  recipientName  String?
+  entityType     String      // sme, user, admin, investor
+  entityId       String?     // Related entity ID (userId, smeProfileId, etc.)
+  eventType      String      // welcome, verification, approval, rejection, etc.
+  subject        String
+  templateId     String?     // Email template used
+  status         EmailStatus @default(sent)
+  errorMessage   String?     // Error message if failed
+  metadata       Json?       // Additional context (e.g., { companyName, applicationId })
+  sentAt         DateTime    @default(now())
+
+  @@index([recipientEmail])
+  @@index([entityType, entityId])
+  @@index([eventType])
+  @@index([status])
+  @@index([sentAt])
+  @@map("email_logs")
 }

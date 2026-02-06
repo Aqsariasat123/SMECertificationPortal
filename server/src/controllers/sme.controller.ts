@@ -700,6 +700,37 @@ export const uploadDocument = async (req: AuthenticatedRequest, res: Response) =
       },
     });
 
+    // Save to DocumentVersion table for version history tracking
+    // Mark previous versions as not latest
+    if (isReplacement) {
+      await prisma.documentVersion.updateMany({
+        where: {
+          smeProfileId: profile.id,
+          documentType: documentType,
+          isLatest: true,
+        },
+        data: {
+          isLatest: false,
+          replacedAt: new Date(),
+        },
+      });
+    }
+
+    // Create new document version record
+    await prisma.documentVersion.create({
+      data: {
+        smeProfileId: profile.id,
+        documentType: documentType,
+        originalName: req.file.originalname,
+        fileName: req.file.filename,
+        filePath: `/uploads/${userId}/${req.file.filename}`,
+        fileSize: req.file.size,
+        mimeType: req.file.mimetype,
+        version: currentVersion,
+        isLatest: true,
+      },
+    });
+
     return res.json({
       success: true,
       message: 'Document uploaded successfully',

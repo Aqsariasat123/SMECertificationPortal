@@ -1,5 +1,8 @@
 import nodemailer from 'nodemailer';
+import { PrismaClient, EmailStatus } from '@prisma/client';
 import { logAuditAction, AuditAction } from '../utils/auditLogger';
+
+const prisma = new PrismaClient();
 
 interface EmailOptions {
   to: string;
@@ -12,6 +15,8 @@ interface EmailContext {
   entityId?: string;
   userId?: string;
   emailType: string;    // 'verification', 'password_reset', 'welcome', etc.
+  recipientName?: string;
+  metadata?: Record<string, unknown>;
 }
 
 class EmailService {
@@ -74,6 +79,7 @@ class EmailService {
     errorMessage?: string
   ): Promise<void> {
     try {
+      // Log to AuditLog table
       await logAuditAction({
         userId: context.userId || 'SYSTEM',
         actionType: success ? AuditAction.EMAIL_SENT : AuditAction.EMAIL_FAILED,
@@ -88,6 +94,21 @@ class EmailService {
           emailType: context.emailType,
           status: success ? 'sent' : 'failed',
           ...(errorMessage && { error: errorMessage }),
+        },
+      });
+
+      // Also log to EmailLog table for dedicated email tracking
+      await prisma.emailLog.create({
+        data: {
+          recipientEmail: options.to,
+          recipientName: context.recipientName,
+          entityType: context.entityType || 'unknown',
+          entityId: context.entityId,
+          eventType: context.emailType,
+          subject: options.subject,
+          status: success ? EmailStatus.sent : EmailStatus.failed,
+          errorMessage: errorMessage,
+          metadata: context.metadata ? JSON.parse(JSON.stringify(context.metadata)) : undefined,
         },
       });
     } catch (err) {
@@ -159,6 +180,7 @@ class EmailService {
       entityId: userId,
       userId: userId,
       emailType: 'verification',
+      recipientName: fullName,
     });
   }
 
@@ -225,6 +247,7 @@ class EmailService {
       entityId: userId,
       userId: userId,
       emailType: 'password_reset',
+      recipientName: fullName,
     });
   }
 
@@ -330,6 +353,8 @@ class EmailService {
       entityId: userId,
       userId: userId,
       emailType: 'welcome',
+      recipientName: fullName,
+      metadata: { role },
     });
   }
 
@@ -435,6 +460,8 @@ class EmailService {
       entityId: context?.smeProfileId,
       userId: context?.userId,
       emailType: 'application_submitted',
+      recipientName: fullName,
+      metadata: { companyName },
     });
   }
 
@@ -515,6 +542,8 @@ class EmailService {
       entityId: context?.smeProfileId,
       userId: context?.userId,
       emailType: 'verification_in_progress',
+      recipientName: fullName,
+      metadata: { companyName },
     });
   }
 
@@ -613,6 +642,8 @@ class EmailService {
       entityId: context?.smeProfileId,
       userId: context?.userId,
       emailType: 'certification_issued',
+      recipientName: fullName,
+      metadata: { companyName },
     });
   }
 
@@ -695,6 +726,8 @@ class EmailService {
       entityId: context?.smeProfileId,
       userId: context?.userId,
       emailType: 'revision_required',
+      recipientName: fullName,
+      metadata: { companyName, revisionNotes },
     });
   }
 
@@ -781,6 +814,8 @@ class EmailService {
       entityId: context?.smeProfileId,
       userId: context?.userId,
       emailType: 'application_rejected',
+      recipientName: fullName,
+      metadata: { companyName, rejectionReason },
     });
   }
 }
