@@ -42,7 +42,6 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
             <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Privacy Policy</Link>
             <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Legal Notice</Link>
             <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Contact</Link>
-            <Link href="/registry/verify" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Verify a Certificate</Link>
           </div>
 
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--graphite-500)' }}>

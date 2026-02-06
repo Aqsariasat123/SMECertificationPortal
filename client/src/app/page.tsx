@@ -104,18 +104,18 @@ export default function LandingPage() {
 
       {/* What Naywa Certification Represents */}
       <section className="py-16" style={{ background: 'var(--background)' }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-semibold mb-8 text-center" style={{ color: 'var(--graphite-900)' }}>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-xl font-semibold mb-8" style={{ color: 'var(--graphite-900)' }}>
             What Naywa Certification Represents
           </h2>
-          <div className="space-y-4">
-            <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
+          <div className="space-y-3">
+            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
               Independent review of submitted business documentation
             </p>
-            <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
+            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
               Certification reflects assessment at a defined point in time
             </p>
-            <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
+            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
               Certification status is verifiable via Naywa&apos;s official registry
             </p>
           </div>
