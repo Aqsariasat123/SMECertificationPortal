@@ -274,6 +274,7 @@ export default function ApplicationDetailPage() {
     // Financial Information
     financial_statements: { label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'Financial Information', level: 'required' },
     bank_statement: { label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'Financial Information', level: 'optional' },
+    wps_certificate: { label: 'WPS Certificate / Wage Protection Compliance', description: 'Proof of wage protection compliance (where applicable).', category: 'Financial Information', level: 'optional' },
     // Operations & Compliance
     company_profile: { label: 'Company Profile', description: 'Overview of business activities and operations.', category: 'Operations & Compliance', level: 'required' },
     licenses_permits: { label: 'Key Licenses / Permits (if applicable)', description: 'Sector-specific regulatory approvals.', category: 'Operations & Compliance', level: 'conditional' },

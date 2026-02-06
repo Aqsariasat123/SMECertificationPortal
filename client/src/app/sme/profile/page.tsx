@@ -47,6 +47,7 @@ const DOCUMENT_TYPES: DocumentType[] = [
   // Financial Information
   { type: 'financial_statements', label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'financial', level: 'required' },
   { type: 'bank_statement', label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'financial', level: 'optional' },
+  { type: 'wps_certificate', label: 'WPS Certificate / Wage Protection Compliance', description: 'Proof of wage protection compliance (where applicable).', category: 'financial', level: 'optional' },
   // Operations & Compliance
   { type: 'company_profile', label: 'Company Profile', description: 'Overview of business activities and operations.', category: 'operations', level: 'required' },
   { type: 'licenses_permits', label: 'Key Licenses / Permits (if applicable)', description: 'Sector-specific regulatory approvals.', category: 'operations', level: 'conditional' },
