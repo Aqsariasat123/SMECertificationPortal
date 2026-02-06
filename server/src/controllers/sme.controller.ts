@@ -13,6 +13,7 @@ import {
   formatCertificateDate,
 } from '../utils/certificate';
 import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
+import { validateUploadedFile, deleteInvalidFile } from '../utils/fileValidator';
 
 const prisma = new PrismaClient();
 
@@ -570,6 +571,22 @@ export const uploadDocument = async (req: AuthenticatedRequest, res: Response) =
       return res.status(400).json({
         success: false,
         message: 'Document type is required',
+      });
+    }
+
+    // Validate file content (magic bytes check)
+    const validation = validateUploadedFile(
+      req.file.path,
+      req.file.mimetype,
+      req.file.originalname
+    );
+
+    if (!validation.valid) {
+      deleteInvalidFile(req.file.path);
+      console.warn('File validation failed:', validation.error, validation.details);
+      return res.status(400).json({
+        success: false,
+        message: validation.error || 'Invalid file content',
       });
     }
 

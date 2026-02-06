@@ -78,8 +78,17 @@ export const uploadMultiple = multer({
 export const DOCUMENT_TYPES = {
   TRADE_LICENSE: 'trade_license',
   CERTIFICATE_OF_INCORPORATION: 'certificate_of_incorporation',
+  COMPANY_REGISTRATION: 'company_registration',
+  VAT_CERTIFICATE: 'vat_certificate',
+  MOA_SHAREHOLDING: 'moa_shareholding',
+  SIGNATORY_ID: 'signatory_id',
+  UBO_DECLARATION: 'ubo_declaration',
   FINANCIAL_STATEMENTS: 'financial_statements',
+  BANK_STATEMENT: 'bank_statement',
+  WPS_CERTIFICATE: 'wps_certificate',
   COMPANY_PROFILE: 'company_profile',
+  LICENSES_PERMITS: 'licenses_permits',
+  CONTRACTS_REFERENCES: 'contracts_references',
   OTHER: 'other',
 } as const;
 
@@ -88,13 +97,24 @@ export type DocumentType = typeof DOCUMENT_TYPES[keyof typeof DOCUMENT_TYPES];
 export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   trade_license: 'Trade License',
   certificate_of_incorporation: 'Certificate of Incorporation',
-  financial_statements: 'Financial Statements (Last 2 years)',
-  company_profile: 'Company Profile / Brochure',
-  other: 'Other Supporting Document',
+  company_registration: 'Company Registration Details',
+  vat_certificate: 'VAT Registration Certificate',
+  moa_shareholding: 'MOA / Shareholding Structure',
+  signatory_id: 'Authorized Signatory ID',
+  ubo_declaration: 'UBO Declaration',
+  financial_statements: 'Financial Statements',
+  bank_statement: 'Bank Statement',
+  wps_certificate: 'WPS Certificate',
+  company_profile: 'Company Profile',
+  licenses_permits: 'Licenses / Permits',
+  contracts_references: 'Contracts / References',
+  other: 'Other Document',
 };
 
 export const REQUIRED_DOCUMENTS: DocumentType[] = [
   DOCUMENT_TYPES.TRADE_LICENSE,
-  DOCUMENT_TYPES.CERTIFICATE_OF_INCORPORATION,
+  DOCUMENT_TYPES.COMPANY_REGISTRATION,
+  DOCUMENT_TYPES.SIGNATORY_ID,
   DOCUMENT_TYPES.FINANCIAL_STATEMENTS,
+  DOCUMENT_TYPES.COMPANY_PROFILE,
 ];

@@ -41,9 +41,11 @@ const DOCUMENT_TYPES: DocumentType[] = [
   { type: 'trade_license', label: 'Trade License', description: 'Valid commercial license issued by the relevant authority.', category: 'legal', level: 'required' },
   { type: 'certificate_of_incorporation', label: 'Certificate of Incorporation', description: 'Required where applicable based on legal form.', category: 'legal', level: 'conditional' },
   { type: 'company_registration', label: 'Company Registration Details', description: 'Official registration extract or equivalent.', category: 'legal', level: 'required' },
+  { type: 'vat_certificate', label: 'VAT Registration Certificate', description: 'Tax registration certificate (if VAT registered).', category: 'legal', level: 'conditional' },
   // Ownership & Management
   { type: 'moa_shareholding', label: 'Memorandum of Association (MOA) / Shareholding Structure', description: 'Ownership and control structure.', category: 'ownership', level: 'conditional' },
   { type: 'signatory_id', label: 'Authorized Signatory Identification', description: 'Government-issued ID of the authorized representative.', category: 'ownership', level: 'required' },
+  { type: 'ubo_declaration', label: 'Ultimate Beneficial Owner (UBO) Declaration', description: 'Declaration of individuals with significant ownership or control.', category: 'ownership', level: 'conditional' },
   // Financial Information
   { type: 'financial_statements', label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'financial', level: 'required' },
   { type: 'bank_statement', label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'financial', level: 'optional' },
