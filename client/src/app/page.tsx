@@ -32,6 +32,13 @@ export default function LandingPage() {
               Certification Standards
             </Link>
             <Link
+              href="/registry/verify"
+              className="px-3 py-2 text-sm font-medium transition-colors hidden sm:block"
+              style={{ color: 'var(--graphite-600)' }}
+            >
+              Verify a Certificate
+            </Link>
+            <Link
               href="/login"
               className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
               style={{ border: '1px solid var(--teal-300)', color: 'var(--teal-700)' }}
