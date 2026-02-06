@@ -14,10 +14,21 @@ export default function SMECertificationPage() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [downloadingCert, setDownloadingCert] = useState(false);
+  const [showRequirementsOverview, setShowRequirementsOverview] = useState(false);
 
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  // Check if user should see requirements overview (only for draft status, first time)
+  useEffect(() => {
+    if (profile && profile.certificationStatus === 'draft') {
+      const hasSeenOverview = localStorage.getItem('hasSeenCertificationOverview');
+      if (!hasSeenOverview) {
+        setShowRequirementsOverview(true);
+      }
+    }
+  }, [profile]);
 
   const fetchProfile = async () => {
     try {
@@ -123,6 +134,11 @@ export default function SMECertificationPage() {
     }
   };
 
+  const handleContinueFromOverview = () => {
+    localStorage.setItem('hasSeenCertificationOverview', 'true');
+    setShowRequirementsOverview(false);
+  };
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
@@ -167,6 +183,128 @@ export default function SMECertificationPage() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Requirements Overview Screen
+  if (showRequirementsOverview) {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div
+          className="rounded-2xl p-6 text-white relative overflow-hidden"
+          style={{ background: 'var(--graphite-800)' }}
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold">Certification Requirements Overview</h1>
+              <p style={{ color: 'var(--graphite-400)' }}>What you need to complete your certification</p>
+            </div>
+            <Link
+              href="/sme"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors"
+              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+
+        {/* Main Content Card */}
+        <div className="solid-card rounded-2xl p-8">
+          {/* Icon */}
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+            style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+
+          {/* Body Copy */}
+          <div className="space-y-4 mb-8">
+            <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
+              To complete Naywa certification, your business will be required to submit documentation for review across the following areas.
+            </p>
+            <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
+              Exact requirements may vary depending on your company type, sector, and operational profile.
+            </p>
+          </div>
+
+          {/* Documentation Categories */}
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4" style={{ color: 'var(--graphite-500)' }}>
+              Documentation Categories
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { label: 'Legal & Registration', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+                { label: 'Ownership & Management', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+                { label: 'Financial Information', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { label: 'Operations & Compliance', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+              ].map((category) => (
+                <div
+                  key={category.label}
+                  className="flex items-center gap-3 p-4 rounded-xl"
+                  style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={category.icon} />
+                    </svg>
+                  </div>
+                  <span className="font-medium" style={{ color: 'var(--graphite-800)' }}>{category.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Notes */}
+          <div
+            className="p-4 rounded-xl mb-8"
+            style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
+          >
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>
+                  You will be guided step-by-step through the required submissions.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>
+                  All information provided is reviewed as part of Naywa&apos;s certification process and assessed at a specific point in time.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Continue Button */}
+          <button
+            onClick={handleContinueFromOverview}
+            className="w-full sm:w-auto px-8 py-3.5 font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+            style={{ background: 'var(--teal-600)', color: 'white' }}
+          >
+            Continue
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
         </div>
       </div>
     );
