@@ -186,14 +186,52 @@ export default function ApplicationDetailPage() {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
+  // Document types with categories and requirement levels
+  type RequirementLevel = 'required' | 'conditional' | 'optional';
+
+  interface DocumentTypeInfo {
+    label: string;
+    description: string;
+    category: string;
+    level: RequirementLevel;
+  }
+
+  const DOCUMENT_TYPE_INFO: Record<string, DocumentTypeInfo> = {
+    // Legal & Registration
+    trade_license: { label: 'Trade License', description: 'Valid commercial license issued by the relevant authority.', category: 'Legal & Registration', level: 'required' },
+    certificate_of_incorporation: { label: 'Certificate of Incorporation', description: 'Required where applicable based on legal form.', category: 'Legal & Registration', level: 'conditional' },
+    company_registration: { label: 'Company Registration Details', description: 'Official registration extract or equivalent.', category: 'Legal & Registration', level: 'required' },
+    // Ownership & Management
+    moa_shareholding: { label: 'Memorandum of Association (MOA) / Shareholding Structure', description: 'Ownership and control structure.', category: 'Ownership & Management', level: 'conditional' },
+    signatory_id: { label: 'Authorized Signatory Identification', description: 'Government-issued ID of the authorized representative.', category: 'Ownership & Management', level: 'required' },
+    // Financial Information
+    financial_statements: { label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'Financial Information', level: 'required' },
+    bank_statement: { label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'Financial Information', level: 'optional' },
+    // Operations & Compliance
+    company_profile: { label: 'Company Profile', description: 'Overview of business activities and operations.', category: 'Operations & Compliance', level: 'required' },
+    licenses_permits: { label: 'Key Licenses / Permits (if applicable)', description: 'Sector-specific regulatory approvals.', category: 'Operations & Compliance', level: 'conditional' },
+    contracts_references: { label: 'Key Contracts or Client References', description: 'May support operational context where relevant.', category: 'Operations & Compliance', level: 'optional' },
+  };
+
+  const DOCUMENT_CATEGORIES = ['Legal & Registration', 'Ownership & Management', 'Financial Information', 'Operations & Compliance'];
+
   const getDocumentTypeLabel = (type: string): string => {
-    const labels: Record<string, string> = {
-      trade_license: 'Trade License',
-      certificate_of_incorporation: 'Certificate of Incorporation',
-      financial_statements: 'Financial Statements',
-      company_profile: 'Company Profile / Brochure',
-    };
-    return labels[type] || type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    return DOCUMENT_TYPE_INFO[type]?.label || type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  };
+
+  const getDocumentInfo = (type: string): DocumentTypeInfo | null => {
+    return DOCUMENT_TYPE_INFO[type] || null;
+  };
+
+  const getLevelBadgeStyle = (level: RequirementLevel) => {
+    switch (level) {
+      case 'required':
+        return { bg: 'var(--danger-50)', color: 'var(--danger-700)', dot: 'var(--danger-500)' };
+      case 'conditional':
+        return { bg: 'var(--amber-50)', color: 'var(--amber-700)', dot: 'var(--amber-500)' };
+      case 'optional':
+        return { bg: 'var(--graphite-100)', color: 'var(--graphite-600)', dot: 'var(--graphite-400)' };
+    }
   };
 
   const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api').replace('/api', '');
@@ -480,55 +518,177 @@ export default function ApplicationDetailPage() {
                 </svg>
               </div>
               Uploaded Documents
+              {application.documents?.uploadedFiles && application.documents.uploadedFiles.length > 0 && (
+                <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}>
+                  {application.documents.uploadedFiles.length} files
+                </span>
+              )}
             </h3>
+
+            {/* Document Levels Legend */}
+            <div className="flex flex-wrap items-center gap-3 mb-5 pb-4" style={{ borderBottom: '1px solid var(--graphite-100)' }}>
+              <span className="text-xs font-medium" style={{ color: 'var(--graphite-500)' }}>Levels:</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--danger-500)' }}></span>
+                Required
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--amber-50)', color: 'var(--amber-700)' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--amber-500)' }}></span>
+                Conditional
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--graphite-100)', color: 'var(--graphite-600)' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--graphite-400)' }}></span>
+                Optional
+              </span>
+            </div>
+
             {application.documents?.uploadedFiles && application.documents.uploadedFiles.length > 0 ? (
-              <div className="space-y-3">
-                {application.documents.uploadedFiles.map((doc: { id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }, idx: number) => (
-                  <div
-                    key={doc.id || idx}
-                    className="flex items-center justify-between p-4 rounded-xl transition-colors"
-                    style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-medium" style={{ color: 'var(--graphite-900)' }}>{getDocumentTypeLabel(doc.type || '')}</p>
-                        <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>{doc.originalName || doc.name}</p>
-                        {doc.size && <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>{formatFileSize(doc.size)}</p>}
+              <div className="space-y-6">
+                {DOCUMENT_CATEGORIES.map((category) => {
+                  const allDocs = (application.documents?.uploadedFiles || []) as Array<{ id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }>;
+                  const categoryDocs = allDocs.filter(
+                    (doc) => getDocumentInfo(doc.type || '')?.category === category
+                  );
+                  if (categoryDocs.length === 0) return null;
+
+                  return (
+                    <div key={category}>
+                      <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--graphite-700)' }}>
+                        {category}
+                        <span className="text-xs font-normal" style={{ color: 'var(--graphite-400)' }}>
+                          ({categoryDocs.length} uploaded)
+                        </span>
+                      </h4>
+                      <div className="space-y-2">
+                        {categoryDocs.map((doc: { id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }, idx: number) => {
+                          const docInfo = getDocumentInfo(doc.type || '');
+                          const levelStyle = docInfo ? getLevelBadgeStyle(docInfo.level) : getLevelBadgeStyle('optional');
+
+                          return (
+                            <div
+                              key={doc.id || idx}
+                              className="flex items-center justify-between p-3 rounded-lg transition-colors"
+                              style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
+                            >
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--success-100)', color: 'var(--success-600)' }}>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <p className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{getDocumentTypeLabel(doc.type || '')}</p>
+                                    {docInfo && (
+                                      <span
+                                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium"
+                                        style={{ background: levelStyle.bg, color: levelStyle.color }}
+                                      >
+                                        <span className="w-1 h-1 rounded-full" style={{ background: levelStyle.dot }}></span>
+                                        {docInfo.level.charAt(0).toUpperCase() + docInfo.level.slice(1)}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>
+                                    {doc.originalName || doc.name}
+                                    {doc.size && <span className="ml-2">({formatFileSize(doc.size)})</span>}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                                <a
+                                  href={`${API_BASE_URL}${doc.path}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                  style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
+                                  title="View"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                  </svg>
+                                </a>
+                                <a
+                                  href={`${API_BASE_URL}${doc.path}`}
+                                  download={doc.originalName || doc.name}
+                                  className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                  style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                                  title="Download"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                  </svg>
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={`${API_BASE_URL}${doc.path}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-                        style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        View
-                      </a>
-                      <a
-                        href={`${API_BASE_URL}${doc.path}`}
-                        download={doc.originalName || doc.name}
-                        className="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-                        style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Download
-                      </a>
+                  );
+                })}
+
+                {/* Uncategorized documents (legacy) */}
+                {((application.documents?.uploadedFiles || []) as Array<{ id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }>).filter(
+                  (doc) => !getDocumentInfo(doc.type || '')
+                ).length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--graphite-700)' }}>Other Documents</h4>
+                    <div className="space-y-2">
+                      {((application.documents?.uploadedFiles || []) as Array<{ id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }>)
+                        .filter((doc) => !getDocumentInfo(doc.type || ''))
+                        .map((doc, idx) => (
+                          <div
+                            key={doc.id || idx}
+                            className="flex items-center justify-between p-3 rounded-lg"
+                            style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--teal-100)', color: 'var(--teal-600)' }}>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{getDocumentTypeLabel(doc.type || '')}</p>
+                                <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+                                  {doc.originalName || doc.name}
+                                  {doc.size && <span className="ml-2">({formatFileSize(doc.size)})</span>}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <a
+                                href={`${API_BASE_URL}${doc.path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-lg"
+                                style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
+                                title="View"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                              </a>
+                              <a
+                                href={`${API_BASE_URL}${doc.path}`}
+                                download={doc.originalName || doc.name}
+                                className="p-2 rounded-lg"
+                                style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                                title="Download"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                              </a>
+                            </div>
+                          </div>
+                        ))}
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             ) : (
               <div className="text-center py-8 rounded-xl" style={{ background: 'var(--graphite-50)' }}>

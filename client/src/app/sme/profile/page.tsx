@@ -18,11 +18,39 @@ interface UploadedDocument {
   uploadedAt: string;
 }
 
-const DOCUMENT_TYPES = [
-  { type: 'trade_license', label: 'Trade License', required: true },
-  { type: 'certificate_of_incorporation', label: 'Certificate of Incorporation', required: true },
-  { type: 'financial_statements', label: 'Financial Statements (Last 2 years)', required: true },
-  { type: 'company_profile', label: 'Company Profile / Brochure', required: false },
+// Document requirement levels
+type RequirementLevel = 'required' | 'conditional' | 'optional';
+
+interface DocumentType {
+  type: string;
+  label: string;
+  description: string;
+  category: string;
+  level: RequirementLevel;
+}
+
+const DOCUMENT_CATEGORIES = [
+  { id: 'legal', label: 'Legal & Registration', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+  { id: 'ownership', label: 'Ownership & Management', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+  { id: 'financial', label: 'Financial Information', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { id: 'operations', label: 'Operations & Compliance', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+];
+
+const DOCUMENT_TYPES: DocumentType[] = [
+  // Legal & Registration
+  { type: 'trade_license', label: 'Trade License', description: 'Valid commercial license issued by the relevant authority.', category: 'legal', level: 'required' },
+  { type: 'certificate_of_incorporation', label: 'Certificate of Incorporation', description: 'Required where applicable based on legal form.', category: 'legal', level: 'conditional' },
+  { type: 'company_registration', label: 'Company Registration Details', description: 'Official registration extract or equivalent.', category: 'legal', level: 'required' },
+  // Ownership & Management
+  { type: 'moa_shareholding', label: 'Memorandum of Association (MOA) / Shareholding Structure', description: 'Ownership and control structure.', category: 'ownership', level: 'conditional' },
+  { type: 'signatory_id', label: 'Authorized Signatory Identification', description: 'Government-issued ID of the authorized representative.', category: 'ownership', level: 'required' },
+  // Financial Information
+  { type: 'financial_statements', label: 'Latest Financial Statements', description: 'Most recent audited or management accounts.', category: 'financial', level: 'required' },
+  { type: 'bank_statement', label: 'Bank Statement (Last 6 Months)', description: 'Used to support financial activity verification.', category: 'financial', level: 'optional' },
+  // Operations & Compliance
+  { type: 'company_profile', label: 'Company Profile', description: 'Overview of business activities and operations.', category: 'operations', level: 'required' },
+  { type: 'licenses_permits', label: 'Key Licenses / Permits (if applicable)', description: 'Sector-specific regulatory approvals.', category: 'operations', level: 'conditional' },
+  { type: 'contracts_references', label: 'Key Contracts or Client References', description: 'May support operational context where relevant.', category: 'operations', level: 'optional' },
 ];
 
 export default function SMEProfilePage() {
@@ -562,7 +590,7 @@ export default function SMEProfilePage() {
       case 'compliance':
         return !!(formData.hasAmlPolicy || formData.hasDataProtectionPolicy);
       case 'documents':
-        const requiredTypes = DOCUMENT_TYPES.filter(d => d.required).map(d => d.type);
+        const requiredTypes = DOCUMENT_TYPES.filter(d => d.level === 'required').map(d => d.type);
         return requiredTypes.every(type => documents.some(doc => doc.type === type));
       default:
         return false;
@@ -597,7 +625,7 @@ export default function SMEProfilePage() {
         if (!formData.hasAmlPolicy && !formData.hasDataProtectionPolicy) missing.push('At least one compliance policy');
         break;
       case 'documents':
-        const requiredDocs = DOCUMENT_TYPES.filter(d => d.required);
+        const requiredDocs = DOCUMENT_TYPES.filter(d => d.level === 'required');
         requiredDocs.forEach(doc => {
           if (!documents.some(d => d.type === doc.type)) {
             missing.push(doc.label);
@@ -1687,148 +1715,238 @@ export default function SMEProfilePage() {
 
           {activeTab === 'documents' && (
             <div className="space-y-8">
+              {/* Document Requirement Legend */}
               <div
                 className="rounded-xl p-4"
                 style={{
-                  background: 'var(--teal-50)',
-                  border: '1px solid var(--teal-100)'
+                  background: 'var(--graphite-50)',
+                  border: '1px solid var(--graphite-200)'
                 }}
               >
-                <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold" style={{ color: 'var(--teal-700)' }}>Required Documents</p>
-                    <p className="text-sm mt-0.5" style={{ color: 'var(--teal-600)' }}>Please upload clear copies of all required documents. Accepted formats: PDF, JPG, PNG, DOC, DOCX (max 10MB each)</p>
+                <div className="flex flex-wrap items-center gap-4">
+                  <p className="text-sm font-medium" style={{ color: 'var(--graphite-700)' }}>Document Levels:</p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--danger-500)' }}></span>
+                      Required
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--amber-50)', color: 'var(--amber-700)' }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--amber-500)' }}></span>
+                      Conditional
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--graphite-100)', color: 'var(--graphite-600)' }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--graphite-400)' }}></span>
+                      Optional
+                    </span>
                   </div>
                 </div>
+                <p className="text-xs mt-3" style={{ color: 'var(--graphite-500)' }}>
+                  Accepted formats: PDF, JPG, PNG, DOC, DOCX (max 10MB each)
+                </p>
               </div>
 
-              <div className="space-y-4">
-                {DOCUMENT_TYPES.map((docType) => {
-                  const uploadedDoc = getUploadedDocument(docType.type);
-                  const isUploading = uploading === docType.type;
-                  const isDeleting = deleting === uploadedDoc?.id;
+              {/* Documents grouped by category */}
+              {DOCUMENT_CATEGORIES.map((category) => {
+                const categoryDocs = DOCUMENT_TYPES.filter(d => d.category === category.id);
+                const uploadedCount = categoryDocs.filter(d => documents.some(doc => doc.type === d.type)).length;
 
-                  return (
-                    <div
-                      key={docType.type}
-                      className="flex items-center justify-between p-5 rounded-xl border-2 transition-colors"
-                      style={{
-                        borderColor: uploadedDoc ? 'var(--success-500)' : 'var(--graphite-200)',
-                        borderStyle: uploadedDoc ? 'solid' : 'dashed',
-                        background: uploadedDoc ? 'var(--success-50)' : 'var(--graphite-50)'
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
+                return (
+                  <div key={category.id} className="space-y-4">
+                    {/* Category Header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center"
-                          style={{ background: uploadedDoc ? 'var(--success-100)' : 'var(--graphite-100)' }}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center"
+                          style={{ background: 'var(--teal-50)' }}
                         >
-                          {uploadedDoc ? (
-                            <svg className="w-6 h-6" style={{ color: 'var(--success-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <svg className="w-6 h-6" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                          )}
+                          <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={category.icon} />
+                          </svg>
                         </div>
                         <div>
-                          <p className="font-semibold" style={{ color: 'var(--graphite-900)' }}>
-                            {docType.label}
-                            {docType.required && <span style={{ color: 'var(--danger-500)' }} className="ml-1">*</span>}
+                          <h3 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>{category.label}</h3>
+                          <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+                            {uploadedCount} of {categoryDocs.length} uploaded
                           </p>
-                          {uploadedDoc ? (
-                            <p className="text-sm" style={{ color: 'var(--success-600)' }}>
-                              {uploadedDoc.originalName} ({formatFileSize(uploadedDoc.size)})
-                            </p>
-                          ) : (
-                            <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>No file uploaded</p>
-                          )}
                         </div>
                       </div>
+                    </div>
 
-                      <div className="flex items-center gap-2">
-                        {/* Hidden file input */}
-                        <input
-                          ref={(el) => { fileInputRefs.current[docType.type] = el; }}
-                          type="file"
-                          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                          onChange={(e) => handleFileUpload(e, docType.type)}
-                          className="hidden"
-                        />
+                    {/* Category Documents */}
+                    <div className="space-y-3 ml-13">
+                      {categoryDocs.map((docType) => {
+                        const uploadedDoc = getUploadedDocument(docType.type);
+                        const isUploading = uploading === docType.type;
+                        const isDeleting = deleting === uploadedDoc?.id;
 
-                        {uploadedDoc ? (
-                          <>
-                            {canEdit && (
-                              <>
-                                <button
-                                  onClick={() => handleFileSelect(docType.type)}
-                                  disabled={isUploading || isDeleting}
-                                  className="px-4 py-2 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
-                                  style={{ color: 'var(--teal-600)' }}
-                                >
-                                  Replace
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteDocument(uploadedDoc.id)}
-                                  disabled={isUploading || isDeleting}
-                                  className="px-4 py-2 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
-                                  style={{ color: 'var(--danger-600)' }}
-                                >
-                                  {isDeleting ? 'Deleting...' : 'Remove'}
-                                </button>
-                              </>
-                            )}
-                          </>
-                        ) : canEdit ? (
-                          <button
-                            onClick={() => handleFileSelect(docType.type)}
-                            disabled={isUploading}
-                            className="px-4 py-2 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50"
+                        // Requirement level badge styles
+                        const getLevelBadge = (level: RequirementLevel) => {
+                          switch (level) {
+                            case 'required':
+                              return { bg: 'var(--danger-50)', color: 'var(--danger-700)', dot: 'var(--danger-500)' };
+                            case 'conditional':
+                              return { bg: 'var(--amber-50)', color: 'var(--amber-700)', dot: 'var(--amber-500)' };
+                            case 'optional':
+                              return { bg: 'var(--graphite-100)', color: 'var(--graphite-600)', dot: 'var(--graphite-400)' };
+                          }
+                        };
+
+                        const levelBadge = getLevelBadge(docType.level);
+
+                        return (
+                          <div
+                            key={docType.type}
+                            className="p-4 rounded-xl border transition-all"
                             style={{
-                              background: 'var(--teal-50)',
-                              color: 'var(--teal-600)'
+                              borderColor: uploadedDoc ? 'var(--success-300)' : 'var(--graphite-200)',
+                              background: uploadedDoc ? 'var(--success-50)' : 'var(--white)'
                             }}
                           >
-                            {isUploading ? (
-                              <span className="flex items-center gap-2">
-                                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
-                                Uploading...
-                              </span>
-                            ) : (
-                              'Upload'
-                            )}
-                          </button>
-                        ) : (
-                          <span className="px-4 py-2 text-sm" style={{ color: 'var(--graphite-400)' }}>Not uploaded</span>
-                        )}
-                      </div>
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                              <div className="flex items-start gap-3 flex-1">
+                                {/* Status Icon */}
+                                <div
+                                  className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                                  style={{
+                                    background: uploadedDoc ? 'var(--success-100)' : 'var(--graphite-100)'
+                                  }}
+                                >
+                                  {uploadedDoc ? (
+                                    <svg className="w-4 h-4" style={{ color: 'var(--success-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="w-4 h-4" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                  )}
+                                </div>
+
+                                {/* Document Info */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                                    <p className="font-medium" style={{ color: 'var(--graphite-900)' }}>
+                                      {docType.label}
+                                    </p>
+                                    <span
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+                                      style={{ background: levelBadge.bg, color: levelBadge.color }}
+                                    >
+                                      <span className="w-1 h-1 rounded-full" style={{ background: levelBadge.dot }}></span>
+                                      {docType.level.charAt(0).toUpperCase() + docType.level.slice(1)}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs mb-2" style={{ color: 'var(--graphite-500)' }}>
+                                    {docType.description}
+                                  </p>
+                                  {uploadedDoc ? (
+                                    <p className="text-xs font-medium" style={{ color: 'var(--success-600)' }}>
+                                      <span className="inline-flex items-center gap-1">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        {uploadedDoc.originalName} ({formatFileSize(uploadedDoc.size)})
+                                      </span>
+                                    </p>
+                                  ) : (
+                                    <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>
+                                      Not uploaded
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Actions */}
+                              <div className="flex items-center gap-2 sm:flex-shrink-0">
+                                {/* Hidden file input */}
+                                <input
+                                  ref={(el) => { fileInputRefs.current[docType.type] = el; }}
+                                  type="file"
+                                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                  onChange={(e) => handleFileUpload(e, docType.type)}
+                                  className="hidden"
+                                />
+
+                                {uploadedDoc ? (
+                                  <>
+                                    {canEdit && (
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          onClick={() => handleFileSelect(docType.type)}
+                                          disabled={isUploading || isDeleting}
+                                          className="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-50"
+                                          style={{ color: 'var(--teal-600)', background: 'var(--teal-50)' }}
+                                        >
+                                          Replace
+                                        </button>
+                                        <button
+                                          onClick={() => handleDeleteDocument(uploadedDoc.id)}
+                                          disabled={isUploading || isDeleting}
+                                          className="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-50"
+                                          style={{ color: 'var(--danger-600)', background: 'var(--danger-50)' }}
+                                        >
+                                          {isDeleting ? 'Deleting...' : 'Remove'}
+                                        </button>
+                                      </div>
+                                    )}
+                                  </>
+                                ) : canEdit ? (
+                                  <button
+                                    onClick={() => handleFileSelect(docType.type)}
+                                    disabled={isUploading}
+                                    className="px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-50 text-white"
+                                    style={{
+                                      background: 'var(--teal-600)',
+                                      color: '#ffffff'
+                                    }}
+                                  >
+                                    {isUploading ? (
+                                      <span className="flex items-center gap-2">
+                                        <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                        </svg>
+                                        Uploading...
+                                      </span>
+                                    ) : (
+                                      'Upload'
+                                    )}
+                                  </button>
+                                ) : (
+                                  <span className="px-3 py-1.5 text-xs" style={{ color: 'var(--graphite-400)' }}>Not uploaded</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
 
               {/* Upload Summary */}
-              <div className="rounded-xl p-4" style={{ background: 'var(--graphite-50)' }}>
-                <div className="flex items-center justify-between">
+              <div className="rounded-xl p-4" style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-200)' }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
                     <p className="font-medium" style={{ color: 'var(--graphite-700)' }}>Upload Progress</p>
                     <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>
-                      {documents.length} of {DOCUMENT_TYPES.filter(d => d.required).length} required documents uploaded
+                      {documents.filter(doc => DOCUMENT_TYPES.find(d => d.type === doc.type && d.level === 'required')).length} of {DOCUMENT_TYPES.filter(d => d.level === 'required').length} required documents uploaded
                     </p>
                   </div>
-                  {isTabComplete('documents') && (
-                    <span className="badge badge-success">
-                      All required documents uploaded
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+                      Total: {documents.length} / {DOCUMENT_TYPES.length} documents
                     </span>
-                  )}
+                    {isTabComplete('documents') && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'var(--success-100)', color: 'var(--success-700)' }}>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        All required uploaded
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
