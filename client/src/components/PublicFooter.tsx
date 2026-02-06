@@ -37,11 +37,12 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
+            <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Certification Standards</Link>
             <Link href="/terms" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Terms of Service</Link>
             <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Privacy Policy</Link>
-            <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Certification Standards</Link>
             <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Legal Notice</Link>
             <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Contact</Link>
+            <Link href="/registry/verify" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Verify a Certificate</Link>
           </div>
 
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--graphite-500)' }}>
