@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData } from '@/types';
+import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData, InternalDimensions, DimensionStatus } from '@/types';
 
 export default function ApplicationDetailPage() {
   const params = useParams();
@@ -28,9 +28,76 @@ export default function ApplicationDetailPage() {
   const [visibilityLoading, setVisibilityLoading] = useState(false);
   const [certActionLoading, setCertActionLoading] = useState(false);
 
+  // Internal Review state
+  const [internalDimensions, setInternalDimensions] = useState<InternalDimensions>({
+    legal_ownership: 'not_reviewed',
+    financial_discipline: 'not_reviewed',
+    business_model: 'not_reviewed',
+    governance_controls: 'not_reviewed',
+    risk_continuity: 'not_reviewed',
+  });
+  const [internalNotes, setInternalNotes] = useState('');
+  const [internalReviewLoading, setInternalReviewLoading] = useState(false);
+  const [internalReviewSaving, setInternalReviewSaving] = useState(false);
+  const [lastInternalReviewAt, setLastInternalReviewAt] = useState<string | null>(null);
+
   useEffect(() => {
     fetchApplicationDetail();
+    fetchInternalReview();
   }, [id]);
+
+  const fetchInternalReview = async () => {
+    try {
+      setInternalReviewLoading(true);
+      const result = await api.getInternalReview(id);
+      if (result.success && result.data) {
+        setInternalDimensions(result.data.dimensions);
+        setInternalNotes(result.data.internalNotes || '');
+        setLastInternalReviewAt(result.data.lastInternalReviewAt);
+      }
+    } catch (err) {
+      console.error('Failed to fetch internal review:', err);
+    } finally {
+      setInternalReviewLoading(false);
+    }
+  };
+
+  const handleDimensionChange = async (dimension: keyof InternalDimensions, value: DimensionStatus) => {
+    // Optimistic update
+    const prevDimensions = { ...internalDimensions };
+    setInternalDimensions({ ...internalDimensions, [dimension]: value });
+
+    try {
+      setInternalReviewSaving(true);
+      const result = await api.updateInternalReview(id, { dimensions: { [dimension]: value } });
+      if (result.success && result.data) {
+        setLastInternalReviewAt(result.data.lastInternalReviewAt);
+      } else {
+        // Revert on failure
+        setInternalDimensions(prevDimensions);
+        setError(result.message || 'Failed to save dimension status');
+      }
+    } catch (err) {
+      setInternalDimensions(prevDimensions);
+      setError('Failed to save dimension status');
+    } finally {
+      setInternalReviewSaving(false);
+    }
+  };
+
+  const handleNotesBlur = async () => {
+    try {
+      setInternalReviewSaving(true);
+      const result = await api.updateInternalReview(id, { internalNotes });
+      if (result.success && result.data) {
+        setLastInternalReviewAt(result.data.lastInternalReviewAt);
+      }
+    } catch (err) {
+      console.error('Failed to save notes:', err);
+    } finally {
+      setInternalReviewSaving(false);
+    }
+  };
 
   const fetchApplicationDetail = async () => {
     try {
@@ -231,6 +298,24 @@ export default function ApplicationDetailPage() {
         return { bg: 'var(--amber-50)', color: 'var(--amber-700)', dot: 'var(--amber-500)' };
       case 'optional':
         return { bg: 'var(--graphite-100)', color: 'var(--graphite-600)', dot: 'var(--graphite-400)' };
+    }
+  };
+
+  const getDimensionStatusStyle = (status: DimensionStatus) => {
+    switch (status) {
+      case 'ready':
+        return { bg: 'var(--success-100)', color: 'var(--success-700)' };
+      case 'requires_clarification':
+        return { bg: 'var(--warning-100)', color: 'var(--warning-700)' };
+      case 'under_review':
+        return { bg: 'var(--teal-100)', color: 'var(--teal-700)' };
+      case 'deferred':
+        return { bg: 'var(--graphite-200)', color: 'var(--graphite-600)' };
+      case 'not_certified':
+        return { bg: 'var(--danger-100)', color: 'var(--danger-700)' };
+      case 'not_reviewed':
+      default:
+        return { bg: 'var(--graphite-100)', color: 'var(--graphite-500)' };
     }
   };
 
@@ -835,6 +920,194 @@ export default function ApplicationDetailPage() {
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Internal Review Dimensions (Admin-only) */}
+          {(application.certificationStatus === 'under_review' || application.certificationStatus === 'submitted' || application.certificationStatus === 'certified') && (
+            <div className="solid-card rounded-xl p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold flex items-center gap-2" style={{ color: 'var(--graphite-900)' }}>
+                  <svg className="w-5 h-5" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  Internal Review
+                </h3>
+                {internalReviewSaving && (
+                  <span className="text-xs flex items-center gap-1" style={{ color: 'var(--teal-600)' }}>
+                    <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Saving...
+                  </span>
+                )}
+              </div>
+
+              {internalReviewLoading ? (
+                <div className="flex items-center justify-center py-6">
+                  <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2" style={{ borderColor: 'var(--teal-600)' }}></div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {/* Dimension 1: Legal & Ownership Readiness */}
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>Legal & Ownership Readiness</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-500)' }}>Trade license, registration, shareholder docs</p>
+                      </div>
+                      <select
+                        value={internalDimensions.legal_ownership}
+                        onChange={(e) => handleDimensionChange('legal_ownership', e.target.value as DimensionStatus)}
+                        className="px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer"
+                        style={{
+                          background: getDimensionStatusStyle(internalDimensions.legal_ownership).bg,
+                          color: getDimensionStatusStyle(internalDimensions.legal_ownership).color,
+                        }}
+                      >
+                        <option value="not_reviewed">Not Reviewed</option>
+                        <option value="ready">Ready</option>
+                        <option value="requires_clarification">Requires Clarification</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="not_certified">Not Certified</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Dimension 2: Financial Discipline */}
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>Financial Discipline</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-500)' }}>Bank statements, audited accounts, tax records</p>
+                      </div>
+                      <select
+                        value={internalDimensions.financial_discipline}
+                        onChange={(e) => handleDimensionChange('financial_discipline', e.target.value as DimensionStatus)}
+                        className="px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer"
+                        style={{
+                          background: getDimensionStatusStyle(internalDimensions.financial_discipline).bg,
+                          color: getDimensionStatusStyle(internalDimensions.financial_discipline).color,
+                        }}
+                      >
+                        <option value="not_reviewed">Not Reviewed</option>
+                        <option value="ready">Ready</option>
+                        <option value="requires_clarification">Requires Clarification</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="not_certified">Not Certified</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Dimension 3: Business Model & Unit Economics */}
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>Business Model & Unit Economics</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-500)' }}>Revenue model, client contracts, projections</p>
+                      </div>
+                      <select
+                        value={internalDimensions.business_model}
+                        onChange={(e) => handleDimensionChange('business_model', e.target.value as DimensionStatus)}
+                        className="px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer"
+                        style={{
+                          background: getDimensionStatusStyle(internalDimensions.business_model).bg,
+                          color: getDimensionStatusStyle(internalDimensions.business_model).color,
+                        }}
+                      >
+                        <option value="not_reviewed">Not Reviewed</option>
+                        <option value="ready">Ready</option>
+                        <option value="requires_clarification">Requires Clarification</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="not_certified">Not Certified</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Dimension 4: Governance & Controls */}
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>Governance & Controls</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-500)' }}>Board structure, compliance policies, AML</p>
+                      </div>
+                      <select
+                        value={internalDimensions.governance_controls}
+                        onChange={(e) => handleDimensionChange('governance_controls', e.target.value as DimensionStatus)}
+                        className="px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer"
+                        style={{
+                          background: getDimensionStatusStyle(internalDimensions.governance_controls).bg,
+                          color: getDimensionStatusStyle(internalDimensions.governance_controls).color,
+                        }}
+                      >
+                        <option value="not_reviewed">Not Reviewed</option>
+                        <option value="ready">Ready</option>
+                        <option value="requires_clarification">Requires Clarification</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="not_certified">Not Certified</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Dimension 5: Risk / Continuity / Shock Resistance */}
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium" style={{ color: 'var(--graphite-800)' }}>Risk / Continuity / Shock Resistance</p>
+                        <p className="text-xs mt-0.5" style={{ color: 'var(--graphite-500)' }}>Insurance, BCP, key-man dependency</p>
+                      </div>
+                      <select
+                        value={internalDimensions.risk_continuity}
+                        onChange={(e) => handleDimensionChange('risk_continuity', e.target.value as DimensionStatus)}
+                        className="px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer"
+                        style={{
+                          background: getDimensionStatusStyle(internalDimensions.risk_continuity).bg,
+                          color: getDimensionStatusStyle(internalDimensions.risk_continuity).color,
+                        }}
+                      >
+                        <option value="not_reviewed">Not Reviewed</option>
+                        <option value="ready">Ready</option>
+                        <option value="requires_clarification">Requires Clarification</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="deferred">Deferred</option>
+                        <option value="not_certified">Not Certified</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Internal Notes */}
+                  <div className="pt-2">
+                    <label className="text-xs font-medium uppercase tracking-wider block mb-2" style={{ color: 'var(--graphite-500)' }}>
+                      Internal Notes (Admin Only)
+                    </label>
+                    <textarea
+                      value={internalNotes}
+                      onChange={(e) => setInternalNotes(e.target.value)}
+                      onBlur={handleNotesBlur}
+                      placeholder="Add internal notes about this application..."
+                      rows={3}
+                      className="w-full px-3 py-2 rounded-lg text-sm resize-none transition-colors"
+                      style={{
+                        background: 'var(--white)',
+                        border: '1px solid var(--graphite-200)',
+                        color: 'var(--graphite-800)',
+                      }}
+                    />
+                  </div>
+
+                  {/* Last Updated */}
+                  {lastInternalReviewAt && (
+                    <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>
+                      Last updated: {formatDate(lastInternalReviewAt)}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

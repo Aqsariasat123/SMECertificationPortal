@@ -636,3 +636,29 @@ export interface CertificateVerification {
   revocationReason: string | null;
   verificationHash: string;
 }
+
+// Internal Review Types (Admin-only)
+export type DimensionStatus =
+  | 'not_reviewed'
+  | 'ready'
+  | 'requires_clarification'
+  | 'under_review'
+  | 'deferred'
+  | 'not_certified';
+
+export interface InternalDimensions {
+  legal_ownership: DimensionStatus;
+  financial_discipline: DimensionStatus;
+  business_model: DimensionStatus;
+  governance_controls: DimensionStatus;
+  risk_continuity: DimensionStatus;
+}
+
+export interface InternalReviewData {
+  id: string;
+  companyName: string | null;
+  dimensions: InternalDimensions;
+  internalNotes: string | null;
+  internalReviewStartedAt: string | null;
+  lastInternalReviewAt: string | null;
+}

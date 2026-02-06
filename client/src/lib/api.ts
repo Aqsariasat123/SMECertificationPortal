@@ -23,6 +23,8 @@ import {
   AnalyticsData,
   CertificateData,
   CertificateVerification,
+  InternalReviewData,
+  InternalDimensions,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -428,6 +430,23 @@ class ApiClient {
     return this.request(`/admin/applications/${id}/review`, {
       method: 'POST',
       body: JSON.stringify({ action, notes }),
+    });
+  }
+
+  // Internal Review (Admin-only)
+  async getInternalReview(id: string): Promise<ApiResponse<InternalReviewData>> {
+    return this.request(`/admin/applications/${id}/internal-review`, {
+      method: 'GET',
+    });
+  }
+
+  async updateInternalReview(
+    id: string,
+    data: { dimensions?: Partial<InternalDimensions>; internalNotes?: string }
+  ): Promise<ApiResponse<InternalReviewData>> {
+    return this.request(`/admin/applications/${id}/internal-review`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
     });
   }
 

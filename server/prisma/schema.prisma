@@ -317,6 +317,12 @@ model SMEProfile {
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 
+  // ============ INTERNAL REVIEW (Admin-only) ============
+  internalDimensions  Json?               // { dimension1: status, dimension2: status, ... }
+  internalNotes       String?             @db.Text // Admin internal notes (not visible to SME)
+  internalReviewStartedAt DateTime?       // When admin started review
+  lastInternalReviewAt DateTime?          // When admin last updated internal review
+
   // Relations
   user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   reviewedBy           User?                 @relation("ReviewedBy", fields: [reviewedById], references: [id])

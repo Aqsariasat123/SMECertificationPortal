@@ -17,6 +17,8 @@ import {
   getAnalytics,
   revokeCertificate,
   reissueCertificate,
+  updateInternalReview,
+  getInternalReview,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -39,6 +41,8 @@ router.get('/applications', getApplications);
 router.get('/applications/export', exportApplications);
 router.get('/applications/:id', getApplicationDetail);
 router.post('/applications/:id/review', reviewApplication);
+router.get('/applications/:id/internal-review', getInternalReview);
+router.put('/applications/:id/internal-review', updateInternalReview);
 
 // Registry visibility management
 router.put('/registry/:profileId/visibility', updateVisibility);

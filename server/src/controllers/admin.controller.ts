@@ -1887,3 +1887,162 @@ export const reissueCertificate = async (req: AuthenticatedRequest, res: Respons
     });
   }
 };
+
+// Internal Review Dimension Status Types
+type DimensionStatus = 'not_reviewed' | 'ready' | 'requires_clarification' | 'under_review' | 'deferred' | 'not_certified';
+
+interface InternalDimensions {
+  legal_ownership: DimensionStatus;
+  financial_discipline: DimensionStatus;
+  business_model: DimensionStatus;
+  governance_controls: DimensionStatus;
+  risk_continuity: DimensionStatus;
+}
+
+const DEFAULT_DIMENSIONS: InternalDimensions = {
+  legal_ownership: 'not_reviewed',
+  financial_discipline: 'not_reviewed',
+  business_model: 'not_reviewed',
+  governance_controls: 'not_reviewed',
+  risk_continuity: 'not_reviewed',
+};
+
+// PUT /api/admin/applications/:id/internal-review - Update internal review dimensions
+export const updateInternalReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const adminId = req.user!.userId;
+    const { dimensions, internalNotes } = req.body as {
+      dimensions?: Partial<InternalDimensions>;
+      internalNotes?: string;
+    };
+
+    // Get current application
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        companyName: true,
+        internalDimensions: true,
+        internalNotes: true,
+        internalReviewStartedAt: true,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Prepare previous value for audit
+    const previousValue = {
+      internalDimensions: application.internalDimensions as Record<string, unknown>,
+      internalNotes: application.internalNotes,
+    };
+
+    // Merge new dimensions with existing
+    const existingDimensions = application.internalDimensions
+      ? (application.internalDimensions as Record<string, string>)
+      : { ...DEFAULT_DIMENSIONS };
+
+    const updatedDimensions = dimensions
+      ? { ...existingDimensions, ...dimensions }
+      : existingDimensions;
+
+    // Update application
+    const updatedApplication = await prisma.sMEProfile.update({
+      where: { id },
+      data: {
+        internalDimensions: updatedDimensions as object,
+        internalNotes: internalNotes !== undefined ? internalNotes : application.internalNotes,
+        internalReviewStartedAt: application.internalReviewStartedAt || new Date(),
+        lastInternalReviewAt: new Date(),
+      },
+      select: {
+        id: true,
+        internalDimensions: true,
+        internalNotes: true,
+        internalReviewStartedAt: true,
+        lastInternalReviewAt: true,
+      },
+    });
+
+    // Create audit log
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.INTERNAL_REVIEW_UPDATED,
+      actionDescription: `Updated internal review for ${application.companyName || 'Unknown Company'}`,
+      targetType: 'SMEProfile',
+      targetId: id,
+      ipAddress: getClientIP(req),
+      previousValue,
+      newValue: {
+        internalDimensions: updatedDimensions,
+        internalNotes: internalNotes !== undefined ? internalNotes : application.internalNotes,
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: 'Internal review updated successfully',
+      data: updatedApplication,
+    });
+  } catch (error) {
+    console.error('Update internal review error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update internal review',
+    });
+  }
+};
+
+// GET /api/admin/applications/:id/internal-review - Get internal review data
+export const getInternalReview = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        companyName: true,
+        internalDimensions: true,
+        internalNotes: true,
+        internalReviewStartedAt: true,
+        lastInternalReviewAt: true,
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Return with default dimensions if not set
+    const dimensions = application.internalDimensions
+      ? (application.internalDimensions as Record<string, string>)
+      : { ...DEFAULT_DIMENSIONS };
+
+    return res.json({
+      success: true,
+      data: {
+        id: application.id,
+        companyName: application.companyName,
+        dimensions,
+        internalNotes: application.internalNotes,
+        internalReviewStartedAt: application.internalReviewStartedAt,
+        lastInternalReviewAt: application.lastInternalReviewAt,
+      },
+    });
+  } catch (error) {
+    console.error('Get internal review error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get internal review',
+    });
+  }
+};
