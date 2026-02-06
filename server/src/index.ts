@@ -4,6 +4,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // Import routes
 import authRoutes from './routes/auth.routes';
@@ -102,6 +105,76 @@ app.use('/api/support', supportRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/verify', verifyRoutes); // Public - no auth required
 app.use('/api/payments', paymentRoutes);
+
+// Public Stats Endpoint (no auth required)
+app.get('/api/public/stats', async (req, res) => {
+  try {
+    // Get certified SME count
+    const certifiedCount = await prisma.sMEProfile.count({
+      where: { certificationStatus: 'certified' }
+    });
+
+    // Get total submitted applications (for completion rate)
+    const totalSubmitted = await prisma.sMEProfile.count({
+      where: {
+        certificationStatus: {
+          in: ['submitted', 'under_review', 'certified', 'rejected']
+        }
+      }
+    });
+
+    // Get approved count for completion rate
+    const approvedCount = await prisma.sMEProfile.count({
+      where: { certificationStatus: 'certified' }
+    });
+
+    // Calculate completion rate (certified / total submitted * 100)
+    const completionRate = totalSubmitted > 0
+      ? Math.round((approvedCount / totalSubmitted) * 100)
+      : 0;
+
+    // Average review time - get from certificates with their SME profiles
+    const recentCertificates = await prisma.certificate.findMany({
+      where: {
+        status: 'active',
+        smeProfile: {
+          submittedDate: { not: null }
+        }
+      },
+      include: {
+        smeProfile: {
+          select: { submittedDate: true }
+        }
+      },
+      take: 50,
+      orderBy: { issuedAt: 'desc' }
+    });
+
+    let avgReviewHours = 24; // Default
+    if (recentCertificates.length > 0) {
+      const totalHours = recentCertificates.reduce((sum, cert) => {
+        if (cert.smeProfile?.submittedDate && cert.issuedAt) {
+          const hours = (cert.issuedAt.getTime() - cert.smeProfile.submittedDate.getTime()) / (1000 * 60 * 60);
+          return sum + Math.max(0, hours); // Ensure non-negative
+        }
+        return sum;
+      }, 0);
+      avgReviewHours = Math.round(totalHours / recentCertificates.length) || 24;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        certifiedCount,
+        completionRate,
+        avgReviewHours
+      }
+    });
+  } catch (error) {
+    console.error('Failed to fetch public stats:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch stats' });
+  }
+});
 
 // 404 Handler
 app.use((req, res) => {

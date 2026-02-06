@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import PublicFooter from '@/components/PublicFooter';
+import PublicStats from '@/components/PublicStats';
+import RegistryBadge from '@/components/RegistryBadge';
 
 export default function LandingPage() {
   return (
@@ -60,16 +62,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             {/* Registry Status Badge */}
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6"
-              style={{ background: 'var(--teal-50)', color: 'var(--teal-700)', border: '1px solid var(--teal-200)' }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: 'var(--teal-500)' }}
-              />
-              Registry Status: 500+ Certified Entities
-            </div>
+            <RegistryBadge />
 
             <h1
               className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4"
@@ -104,20 +97,7 @@ export default function LandingPage() {
       {/* Metrics Section */}
       <section style={{ background: 'white', borderTop: '1px solid var(--graphite-100)', borderBottom: '1px solid var(--graphite-100)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-            <div className="text-center">
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>500+</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Certified SMEs</p>
-            </div>
-            <div className="text-center sm:border-x" style={{ borderColor: 'var(--graphite-200)' }}>
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>98%</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Application Completion</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>~24h</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Typical Review</p>
-            </div>
-          </div>
+          <PublicStats />
         </div>
       </section>
 
