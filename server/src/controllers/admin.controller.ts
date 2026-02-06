@@ -2259,3 +2259,203 @@ export const viewDocument = async (req: AuthenticatedRequest, res: Response) => 
     });
   }
 };
+
+// PUT /api/admin/applications/:id/documents/:documentId/status - Update document status
+export const updateDocumentStatus = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const applicationId = req.params.id as string;
+    const documentId = req.params.documentId as string;
+    const { status, feedback } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Validate status
+    const validStatuses = ['pending', 'approved', 'requires_revision'];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid status. Must be: pending, approved, or requires_revision',
+      });
+    }
+
+    // Find the application
+    const application = await prisma.sMEProfile.findUnique({
+      where: { id: applicationId },
+      include: {
+        user: {
+          select: { fullName: true, email: true },
+        },
+      },
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found',
+      });
+    }
+
+    // Find or create document version record
+    let documentVersion = await prisma.documentVersion.findFirst({
+      where: {
+        smeProfileId: applicationId,
+        isLatest: true,
+      },
+      orderBy: { uploadedAt: 'desc' },
+    });
+
+    // Try to find by document type from the JSON documents
+    let documents: Array<{ id: string; type: string; name: string; originalName: string }> = [];
+    if (application.documents) {
+      const docsData = typeof application.documents === 'string'
+        ? JSON.parse(application.documents)
+        : application.documents;
+      documents = docsData.uploadedFiles || [];
+    }
+
+    const docFromJson = documents.find(d => d.id === documentId);
+
+    if (docFromJson) {
+      // Find the document version by document type and latest
+      documentVersion = await prisma.documentVersion.findFirst({
+        where: {
+          smeProfileId: applicationId,
+          documentType: docFromJson.type,
+          isLatest: true,
+        },
+      });
+
+      // If no DocumentVersion record exists, create one
+      if (!documentVersion) {
+        documentVersion = await prisma.documentVersion.create({
+          data: {
+            smeProfileId: applicationId,
+            documentType: docFromJson.type,
+            originalName: docFromJson.originalName,
+            fileName: docFromJson.name,
+            filePath: `/uploads/${application.userId}/${docFromJson.name}`,
+            version: 1,
+            status: status,
+            adminFeedback: feedback || null,
+            reviewedById: adminId,
+            reviewedAt: new Date(),
+            isLatest: true,
+          },
+        });
+      } else {
+        // Update the existing document version
+        documentVersion = await prisma.documentVersion.update({
+          where: { id: documentVersion.id },
+          data: {
+            status: status,
+            adminFeedback: feedback || null,
+            reviewedById: adminId,
+            reviewedAt: new Date(),
+          },
+        });
+      }
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: 'Document not found',
+      });
+    }
+
+    // Log the action
+    await logAuditAction({
+      userId: adminId,
+      actionType: status === 'requires_revision' ? AuditAction.CERTIFICATION_REVISION_REQUESTED : AuditAction.INTERNAL_REVIEW_UPDATED,
+      actionDescription: `Document ${docFromJson.type} status updated to ${status}${feedback ? ` with feedback` : ''}`,
+      targetType: 'SMEProfile',
+      targetId: applicationId,
+      ipAddress: getClientIP(req),
+      newValue: {
+        documentId,
+        documentType: docFromJson.type,
+        status,
+        feedback,
+        companyName: application.companyName,
+      },
+    });
+
+    // If revision requested, send email to SME
+    if (status === 'requires_revision' && feedback) {
+      await emailService.sendRevisionRequiredEmail(
+        application.user.email,
+        application.user.fullName,
+        application.companyName || 'Your Company',
+        `Document "${docFromJson.type}" requires revision: ${feedback}`,
+        { userId: application.userId, smeProfileId: applicationId }
+      );
+    }
+
+    return res.json({
+      success: true,
+      message: 'Document status updated successfully',
+      data: {
+        documentId,
+        documentType: docFromJson.type,
+        status: documentVersion.status,
+        feedback: documentVersion.adminFeedback,
+        reviewedAt: documentVersion.reviewedAt,
+      },
+    });
+  } catch (error) {
+    console.error('Update document status error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update document status',
+    });
+  }
+};
+
+// GET /api/admin/applications/:id/documents/status - Get all document statuses for an application
+export const getDocumentStatuses = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const applicationId = req.params.id as string;
+
+    const documentVersions = await prisma.documentVersion.findMany({
+      where: {
+        smeProfileId: applicationId,
+        isLatest: true,
+      },
+      select: {
+        id: true,
+        documentType: true,
+        status: true,
+        adminFeedback: true,
+        reviewedAt: true,
+        version: true,
+      },
+      orderBy: { documentType: 'asc' },
+    });
+
+    // Create a map of document type to status
+    const statusMap: Record<string, { status: string; feedback: string | null; reviewedAt: Date | null; version: number }> = {};
+    documentVersions.forEach(dv => {
+      statusMap[dv.documentType] = {
+        status: dv.status,
+        feedback: dv.adminFeedback,
+        reviewedAt: dv.reviewedAt,
+        version: dv.version,
+      };
+    });
+
+    return res.json({
+      success: true,
+      data: statusMap,
+    });
+  } catch (error) {
+    console.error('Get document statuses error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get document statuses',
+    });
+  }
+};

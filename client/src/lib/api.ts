@@ -452,6 +452,24 @@ class ApiClient {
     });
   }
 
+  // Document Status (Admin-only)
+  async getDocumentStatuses(applicationId: string): Promise<ApiResponse<Record<string, { status: string; feedback: string | null; reviewedAt: string | null; version: number }>>> {
+    return this.request(`/admin/applications/${applicationId}/documents/status`, {
+      method: 'GET',
+    });
+  }
+
+  async updateDocumentStatus(
+    applicationId: string,
+    documentId: string,
+    data: { status: 'pending' | 'approved' | 'requires_revision'; feedback?: string }
+  ): Promise<ApiResponse<{ documentId: string; documentType: string; status: string; feedback: string | null; reviewedAt: string }>> {
+    return this.request(`/admin/applications/${applicationId}/documents/${documentId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
   async getAuditLogs(params?: { page?: number; limit?: number; actionType?: string }): Promise<ApiResponse<{ logs: AuditLogEntry[]; pagination: PaginationData }>> {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set('page', params.page.toString());

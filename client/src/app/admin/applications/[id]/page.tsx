@@ -45,9 +45,16 @@ export default function ApplicationDetailPage() {
   const [internalReviewSaving, setInternalReviewSaving] = useState(false);
   const [lastInternalReviewAt, setLastInternalReviewAt] = useState<string | null>(null);
 
+  // Document Status state
+  const [documentStatuses, setDocumentStatuses] = useState<Record<string, { status: string; feedback: string | null; reviewedAt: string | null; version: number }>>({});
+  const [documentStatusLoading, setDocumentStatusLoading] = useState<string | null>(null);
+  const [showDocFeedbackModal, setShowDocFeedbackModal] = useState<{ docId: string; docType: string } | null>(null);
+  const [docFeedback, setDocFeedback] = useState('');
+
   useEffect(() => {
     fetchApplicationDetail();
     fetchInternalReview();
+    fetchDocumentStatuses();
   }, [id]);
 
   // Fetch payment when application is loaded and certified
@@ -70,6 +77,44 @@ export default function ApplicationDetailPage() {
       console.error('Failed to fetch internal review:', err);
     } finally {
       setInternalReviewLoading(false);
+    }
+  };
+
+  const fetchDocumentStatuses = async () => {
+    try {
+      const result = await api.getDocumentStatuses(id);
+      if (result.success && result.data) {
+        setDocumentStatuses(result.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch document statuses:', err);
+    }
+  };
+
+  const handleDocumentStatusChange = async (docId: string, docType: string, status: 'pending' | 'approved' | 'requires_revision', feedback?: string) => {
+    try {
+      setDocumentStatusLoading(docId);
+      const result = await api.updateDocumentStatus(id, docId, { status, feedback });
+      if (result.success && result.data) {
+        const data = result.data;
+        setDocumentStatuses(prev => ({
+          ...prev,
+          [docType]: {
+            status: data.status,
+            feedback: data.feedback,
+            reviewedAt: data.reviewedAt,
+            version: prev[docType]?.version || 1,
+          },
+        }));
+        setShowDocFeedbackModal(null);
+        setDocFeedback('');
+      } else {
+        setError(result.message || 'Failed to update document status');
+      }
+    } catch (err) {
+      setError('Failed to update document status');
+    } finally {
+      setDocumentStatusLoading(null);
     }
   };
 
@@ -790,64 +835,126 @@ export default function ApplicationDetailPage() {
                         {categoryDocs.map((doc: { id?: string; type?: string; name?: string; originalName?: string; path?: string; size?: number }, idx: number) => {
                           const docInfo = getDocumentInfo(doc.type || '');
                           const levelStyle = docInfo ? getLevelBadgeStyle(docInfo.level) : getLevelBadgeStyle('optional');
+                          const docStatus = documentStatuses[doc.type || ''];
+                          const currentStatus = docStatus?.status || 'pending';
+                          const isLoading = documentStatusLoading === doc.id;
+
+                          const statusStyles: Record<string, { bg: string; color: string; label: string }> = {
+                            pending: { bg: 'var(--graphite-100)', color: 'var(--graphite-600)', label: 'Pending' },
+                            approved: { bg: 'var(--success-100)', color: 'var(--success-700)', label: 'Approved' },
+                            requires_revision: { bg: 'var(--danger-100)', color: 'var(--danger-700)', label: 'Revision Required' },
+                          };
+                          const statusStyle = statusStyles[currentStatus] || statusStyles.pending;
 
                           return (
                             <div
                               key={doc.id || idx}
-                              className="flex items-center justify-between p-3 rounded-lg transition-colors"
+                              className="p-3 rounded-lg transition-colors"
                               style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}
                             >
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'var(--success-100)', color: 'var(--success-600)' }}>
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <div className="flex items-center gap-2 flex-wrap">
-                                    <p className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{getDocumentTypeLabel(doc.type || '')}</p>
-                                    {docInfo && (
-                                      <span
-                                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium"
-                                        style={{ background: levelStyle.bg, color: levelStyle.color }}
-                                      >
-                                        <span className="w-1 h-1 rounded-full" style={{ background: levelStyle.dot }}></span>
-                                        {docInfo.level.charAt(0).toUpperCase() + docInfo.level.slice(1)}
-                                      </span>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{
+                                    background: currentStatus === 'approved' ? 'var(--success-100)' : currentStatus === 'requires_revision' ? 'var(--danger-100)' : 'var(--graphite-100)',
+                                    color: currentStatus === 'approved' ? 'var(--success-600)' : currentStatus === 'requires_revision' ? 'var(--danger-600)' : 'var(--graphite-500)'
+                                  }}>
+                                    {currentStatus === 'approved' ? (
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    ) : currentStatus === 'requires_revision' ? (
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                      </svg>
+                                    ) : (
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      </svg>
                                     )}
                                   </div>
-                                  <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>
-                                    {doc.originalName || doc.name}
-                                    {doc.size && <span className="ml-2">({formatFileSize(doc.size)})</span>}
-                                  </p>
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <p className="font-medium text-sm" style={{ color: 'var(--graphite-900)' }}>{getDocumentTypeLabel(doc.type || '')}</p>
+                                      {docInfo && (
+                                        <span
+                                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium"
+                                          style={{ background: levelStyle.bg, color: levelStyle.color }}
+                                        >
+                                          <span className="w-1 h-1 rounded-full" style={{ background: levelStyle.dot }}></span>
+                                          {docInfo.level.charAt(0).toUpperCase() + docInfo.level.slice(1)}
+                                        </span>
+                                      )}
+                                      <span
+                                        className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium"
+                                        style={{ background: statusStyle.bg, color: statusStyle.color }}
+                                      >
+                                        {statusStyle.label}
+                                      </span>
+                                    </div>
+                                    <p className="text-xs truncate" style={{ color: 'var(--graphite-500)' }}>
+                                      {doc.originalName || doc.name}
+                                      {doc.size && <span className="ml-2">({formatFileSize(doc.size)})</span>}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                                  <a
+                                    href={`${API_BASE_URL}${doc.path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                    style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
+                                    title="View"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                  </a>
+                                  <a
+                                    href={`${API_BASE_URL}${doc.path}`}
+                                    download={doc.originalName || doc.name}
+                                    className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                    style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                                    title="Download"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                  </a>
+                                  {currentStatus !== 'approved' && (
+                                    <button
+                                      onClick={() => handleDocumentStatusChange(doc.id || '', doc.type || '', 'approved')}
+                                      disabled={isLoading}
+                                      className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                      style={{ background: 'var(--success-100)', color: 'var(--success-700)' }}
+                                      title="Approve"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    </button>
+                                  )}
+                                  {currentStatus !== 'requires_revision' && (
+                                    <button
+                                      onClick={() => { setShowDocFeedbackModal({ docId: doc.id || '', docType: doc.type || '' }); setDocFeedback(docStatus?.feedback || ''); }}
+                                      disabled={isLoading}
+                                      className="p-2 text-sm font-medium rounded-lg transition-colors"
+                                      style={{ background: 'var(--amber-100)', color: 'var(--amber-700)' }}
+                                      title="Request Revision"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                      </svg>
+                                    </button>
+                                  )}
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-                                <a
-                                  href={`${API_BASE_URL}${doc.path}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="p-2 text-sm font-medium rounded-lg transition-colors"
-                                  style={{ background: 'var(--teal-100)', color: 'var(--teal-700)' }}
-                                  title="View"
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                  </svg>
-                                </a>
-                                <a
-                                  href={`${API_BASE_URL}${doc.path}`}
-                                  download={doc.originalName || doc.name}
-                                  className="p-2 text-sm font-medium rounded-lg transition-colors"
-                                  style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
-                                  title="Download"
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                  </svg>
-                                </a>
-                              </div>
+                              {currentStatus === 'requires_revision' && docStatus?.feedback && (
+                                <div className="mt-2 p-2 rounded text-xs" style={{ background: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                                  <strong>Feedback:</strong> {docStatus.feedback}
+                                </div>
+                              )}
                             </div>
                           );
                         })}
@@ -1448,6 +1555,32 @@ export default function ApplicationDetailPage() {
               style={{ background: 'var(--danger-600)' }}
             >
               {actionLoading ? 'Processing...' : 'Reject Application'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Document Revision Feedback Modal */}
+      {showDocFeedbackModal && (
+        <Modal title="Request Document Revision" onClose={() => { setShowDocFeedbackModal(null); setDocFeedback(''); }}>
+          <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
+            Please specify what changes are needed for this document.
+          </p>
+          <textarea
+            value={docFeedback}
+            onChange={(e) => setDocFeedback(e.target.value)}
+            placeholder="Enter revision feedback..."
+            className="input-field w-full h-32 resize-none"
+          />
+          <div className="flex justify-end gap-3 mt-4">
+            <button onClick={() => { setShowDocFeedbackModal(null); setDocFeedback(''); }} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
+            <button
+              onClick={() => handleDocumentStatusChange(showDocFeedbackModal.docId, showDocFeedbackModal.docType, 'requires_revision', docFeedback)}
+              disabled={documentStatusLoading !== null || !docFeedback.trim()}
+              className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
+              style={{ background: 'var(--warning-600)' }}
+            >
+              {documentStatusLoading ? 'Saving...' : 'Request Revision'}
             </button>
           </div>
         </Modal>

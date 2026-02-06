@@ -21,6 +21,8 @@ import {
   getInternalReview,
   getApplicationDocuments,
   viewDocument,
+  updateDocumentStatus,
+  getDocumentStatuses,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -46,7 +48,9 @@ router.post('/applications/:id/review', reviewApplication);
 router.get('/applications/:id/internal-review', getInternalReview);
 router.put('/applications/:id/internal-review', updateInternalReview);
 router.get('/applications/:id/documents', getApplicationDocuments);
+router.get('/applications/:id/documents/status', getDocumentStatuses);
 router.get('/applications/:id/documents/:documentId/view', viewDocument);
+router.put('/applications/:id/documents/:documentId/status', updateDocumentStatus);
 
 // Registry visibility management
 router.put('/registry/:profileId/visibility', updateVisibility);
