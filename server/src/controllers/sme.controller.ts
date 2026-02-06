@@ -26,6 +26,7 @@ interface UploadedDocument {
   size: number;
   mimeType: string;
   uploadedAt: string;
+  version?: number;
 }
 
 // GET /api/sme/profile - Get SME profile
@@ -618,9 +619,16 @@ export const uploadDocument = async (req: AuthenticatedRequest, res: Response) =
       (doc: UploadedDocument) => doc.type === documentType
     );
 
-    // If exists, delete old file
-    if (existingIndex !== -1) {
+    // Track if this is a replacement
+    const isReplacement = existingIndex !== -1;
+    let previousDocument = null;
+    let currentVersion = 1;
+
+    // If exists, delete old file and track version
+    if (isReplacement) {
       const oldDoc = documents.uploadedFiles[existingIndex];
+      previousDocument = { ...oldDoc };
+      currentVersion = (oldDoc.version || 1) + 1;
       const oldFilePath = path.join(__dirname, '../../uploads', userId, oldDoc.name);
       if (fs.existsSync(oldFilePath)) {
         fs.unlinkSync(oldFilePath);
@@ -628,7 +636,7 @@ export const uploadDocument = async (req: AuthenticatedRequest, res: Response) =
       documents.uploadedFiles.splice(existingIndex, 1);
     }
 
-    // Create new document entry
+    // Create new document entry with version tracking
     const newDocument: UploadedDocument = {
       id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: documentType as DocumentType,
@@ -638,25 +646,40 @@ export const uploadDocument = async (req: AuthenticatedRequest, res: Response) =
       size: req.file.size,
       mimeType: req.file.mimetype,
       uploadedAt: new Date().toISOString(),
+      version: currentVersion,
     };
 
     documents.uploadedFiles.push(newDocument);
 
     // Update profile
-    const updatedProfile = await prisma.sMEProfile.update({
+    await prisma.sMEProfile.update({
       where: { userId },
       data: { documents },
     });
 
-    // Log the action
+    // Log the action (differentiate between upload and replace)
     await prisma.auditLog.create({
       data: {
         userId,
-        actionType: 'DOCUMENT_UPLOADED',
-        actionDescription: `Document uploaded: ${DOCUMENT_TYPE_LABELS[documentType as DocumentType] || documentType}`,
+        actionType: isReplacement ? 'DOCUMENT_REPLACED' : 'DOCUMENT_UPLOADED',
+        actionDescription: isReplacement
+          ? `Document replaced: ${DOCUMENT_TYPE_LABELS[documentType as DocumentType] || documentType} (v${currentVersion})`
+          : `Document uploaded: ${DOCUMENT_TYPE_LABELS[documentType as DocumentType] || documentType}`,
         targetType: 'SMEProfile',
         targetId: profile.id,
         ipAddress: req.ip || 'unknown',
+        previousValue: isReplacement ? JSON.stringify({
+          documentType,
+          originalName: previousDocument?.originalName,
+          version: previousDocument?.version || 1,
+          uploadedAt: previousDocument?.uploadedAt,
+        }) : null,
+        newValue: JSON.stringify({
+          documentType,
+          originalName: newDocument.originalName,
+          version: currentVersion,
+          uploadedAt: newDocument.uploadedAt,
+        }),
       },
     });
 

@@ -1,9 +1,17 @@
 import nodemailer from 'nodemailer';
+import { logAuditAction, AuditAction } from '../utils/auditLogger';
 
 interface EmailOptions {
   to: string;
   subject: string;
   html: string;
+}
+
+interface EmailContext {
+  entityType?: string;  // 'SMEProfile', 'Certificate', 'User'
+  entityId?: string;
+  userId?: string;
+  emailType: string;    // 'verification', 'password_reset', 'welcome', etc.
 }
 
 class EmailService {
@@ -21,13 +29,18 @@ class EmailService {
     });
   }
 
-  private async sendEmail(options: EmailOptions): Promise<boolean> {
+  private async sendEmail(options: EmailOptions, context?: EmailContext): Promise<boolean> {
     try {
       if (process.env.NODE_ENV === 'development' && !process.env.SMTP_PASS) {
         console.log('Email Service (Development Mode):');
         console.log('To:', options.to);
         console.log('Subject:', options.subject);
         console.log('Content:', options.html.replace(/<[^>]*>/g, ''));
+
+        // Log email even in dev mode
+        if (context) {
+          await this.logEmailAudit(true, options, context, undefined);
+        }
         return true;
       }
 
@@ -37,15 +50,53 @@ class EmailService {
         subject: options.subject,
         html: options.html,
       });
+
+      // Log successful email
+      if (context) {
+        await this.logEmailAudit(true, options, context, undefined);
+      }
       return true;
     } catch (error) {
       console.error('Email send failed:', error);
+
+      // Log failed email
+      if (context) {
+        await this.logEmailAudit(false, options, context, error instanceof Error ? error.message : 'Unknown error');
+      }
       return false;
     }
   }
 
+  private async logEmailAudit(
+    success: boolean,
+    options: EmailOptions,
+    context: EmailContext,
+    errorMessage?: string
+  ): Promise<void> {
+    try {
+      await logAuditAction({
+        userId: context.userId || 'SYSTEM',
+        actionType: success ? AuditAction.EMAIL_SENT : AuditAction.EMAIL_FAILED,
+        actionDescription: success
+          ? `Email sent: ${context.emailType} to ${options.to}`
+          : `Email failed: ${context.emailType} to ${options.to}`,
+        targetType: context.entityType,
+        targetId: context.entityId,
+        newValue: {
+          recipientEmail: options.to,
+          subject: options.subject,
+          emailType: context.emailType,
+          status: success ? 'sent' : 'failed',
+          ...(errorMessage && { error: errorMessage }),
+        },
+      });
+    } catch (err) {
+      console.error('Failed to log email audit:', err);
+    }
+  }
+
   // Email Verification - sent when user sets up account
-  async sendVerificationEmail(email: string, token: string, fullName: string): Promise<boolean> {
+  async sendVerificationEmail(email: string, token: string, fullName: string, userId?: string): Promise<boolean> {
     const verifyUrl = `${process.env.FRONTEND_URL}/verify/${token}`;
 
     const html = `
@@ -103,11 +154,16 @@ class EmailService {
       to: email,
       subject: 'Verify Your Credentials - Naywa',
       html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: 'verification',
     });
   }
 
   // Password Reset Email
-  async sendPasswordResetEmail(email: string, token: string, fullName: string): Promise<boolean> {
+  async sendPasswordResetEmail(email: string, token: string, fullName: string, userId?: string): Promise<boolean> {
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
 
     const html = `
@@ -164,11 +220,16 @@ class EmailService {
       to: email,
       subject: 'Reset Your Password - Naywa',
       html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: 'password_reset',
     });
   }
 
   // Welcome Email - sent after account is verified
-  async sendWelcomeEmail(email: string, fullName: string, role: string): Promise<boolean> {
+  async sendWelcomeEmail(email: string, fullName: string, role: string, userId?: string): Promise<boolean> {
     const dashboardUrl = role === 'sme'
       ? `${process.env.FRONTEND_URL}/sme`
       : `${process.env.FRONTEND_URL}/user/dashboard`;
@@ -264,11 +325,16 @@ class EmailService {
       to: email,
       subject: role === 'sme' ? 'Account Verified - Naywa' : 'Registry Access Granted - Naywa',
       html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: 'welcome',
     });
   }
 
   // Application Submitted - sent when SME submits certification
-  async sendApplicationSubmittedEmail(email: string, fullName: string, companyName: string): Promise<boolean> {
+  async sendApplicationSubmittedEmail(email: string, fullName: string, companyName: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const dashboardUrl = `${process.env.FRONTEND_URL}/sme/certification`;
 
     const html = `
@@ -364,11 +430,16 @@ class EmailService {
       to: email,
       subject: 'Application Received - Naywa',
       html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'application_submitted',
     });
   }
 
   // Verification In Progress - sent when admin starts reviewing
-  async sendVerificationInProgressEmail(email: string, fullName: string, companyName: string): Promise<boolean> {
+  async sendVerificationInProgressEmail(email: string, fullName: string, companyName: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const dashboardUrl = `${process.env.FRONTEND_URL}/sme/certification`;
 
     const html = `
@@ -439,11 +510,16 @@ class EmailService {
       to: email,
       subject: 'Your Application is Under Review - Naywa',
       html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'verification_in_progress',
     });
   }
 
   // Certification Issued - sent when application is approved
-  async sendCertificationIssuedEmail(email: string, fullName: string, companyName: string): Promise<boolean> {
+  async sendCertificationIssuedEmail(email: string, fullName: string, companyName: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const dashboardUrl = `${process.env.FRONTEND_URL}/sme`;
 
     const html = `
@@ -532,11 +608,16 @@ class EmailService {
       to: email,
       subject: 'Congratulations! Your Business is Certified - Naywa',
       html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'certification_issued',
     });
   }
 
   // Revision Required - sent when additional information is needed
-  async sendRevisionRequiredEmail(email: string, fullName: string, companyName: string, revisionNotes: string): Promise<boolean> {
+  async sendRevisionRequiredEmail(email: string, fullName: string, companyName: string, revisionNotes: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const dashboardUrl = `${process.env.FRONTEND_URL}/sme/certification`;
 
     const html = `
@@ -609,11 +690,16 @@ class EmailService {
       to: email,
       subject: 'Action Required: Update Your Application - Naywa',
       html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'revision_required',
     });
   }
 
   // Application Rejected - sent when application is rejected
-  async sendApplicationRejectedEmail(email: string, fullName: string, companyName: string, rejectionReason: string): Promise<boolean> {
+  async sendApplicationRejectedEmail(email: string, fullName: string, companyName: string, rejectionReason: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const supportUrl = `${process.env.FRONTEND_URL}/sme/support`;
 
     const html = `
@@ -690,6 +776,11 @@ class EmailService {
       to: email,
       subject: 'Application Status Update - Naywa',
       html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'application_rejected',
     });
   }
 }
