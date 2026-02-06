@@ -58,6 +58,12 @@ export enum AuditAction {
 
   // Internal Review Actions
   INTERNAL_REVIEW_UPDATED = 'INTERNAL_REVIEW_UPDATED',
+
+  // Payment Actions
+  PAYMENT_REQUESTED = 'PAYMENT_REQUESTED',
+  PAYMENT_COMPLETED = 'PAYMENT_COMPLETED',
+  PAYMENT_FAILED = 'PAYMENT_FAILED',
+  PAYMENT_REFUNDED = 'PAYMENT_REFUNDED',
 }
 
 interface AuditLogParams {

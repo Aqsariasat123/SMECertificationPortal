@@ -25,6 +25,8 @@ import {
   CertificateVerification,
   InternalReviewData,
   InternalDimensions,
+  PaymentData,
+  PaymentConfig,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -1064,6 +1066,65 @@ class ApiClient {
     return this.request(`/admin/certificates/${certificateId}/reissue`, {
       method: 'POST',
     });
+  }
+
+  // ============================================
+  // Payment Management
+  // ============================================
+
+  // Get payment configuration (public)
+  async getPaymentConfig(): Promise<ApiResponse<PaymentConfig>> {
+    return this.request('/payments/config', { method: 'GET' });
+  }
+
+  // SME: Get my payment status
+  async getMyPayment(): Promise<ApiResponse<PaymentData | null>> {
+    return this.request('/payments/my-payment', { method: 'GET' });
+  }
+
+  // SME: Confirm payment completion
+  async confirmPayment(paymentIntentId?: string): Promise<ApiResponse<PaymentData>> {
+    return this.request('/payments/confirm', {
+      method: 'POST',
+      body: JSON.stringify({ paymentIntentId }),
+    });
+  }
+
+  // SME: Simulate payment (for testing without Stripe)
+  async simulatePayment(): Promise<ApiResponse<PaymentData>> {
+    return this.request('/payments/simulate', { method: 'POST' });
+  }
+
+  // Admin: Request payment from SME
+  async requestPayment(smeProfileId: string, amount?: number, description?: string): Promise<ApiResponse<PaymentData>> {
+    return this.request(`/payments/request/${smeProfileId}`, {
+      method: 'POST',
+      body: JSON.stringify({ amount, description }),
+    });
+  }
+
+  // Admin: Get all payments
+  async getAllPayments(status?: string, page = 1, limit = 20): Promise<ApiResponse<{ data: PaymentData[]; pagination: PaginationData }>> {
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    params.append('page', String(page));
+    params.append('limit', String(limit));
+    return this.request(`/payments/admin/all?${params.toString()}`, { method: 'GET' });
+  }
+
+  // Admin: Get payment by ID
+  async getPaymentById(paymentId: string): Promise<ApiResponse<PaymentData>> {
+    return this.request(`/payments/admin/${paymentId}`, { method: 'GET' });
+  }
+
+  // Admin: Get payment by SME profile ID
+  async getPaymentBySmeProfile(smeProfileId: string): Promise<ApiResponse<PaymentData | null>> {
+    return this.request(`/payments/by-sme/${smeProfileId}`, { method: 'GET' });
+  }
+
+  // Admin: Cancel pending payment
+  async cancelPayment(paymentId: string): Promise<ApiResponse<void>> {
+    return this.request(`/payments/admin/${paymentId}/cancel`, { method: 'POST' });
   }
 }
 

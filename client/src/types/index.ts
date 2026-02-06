@@ -662,3 +662,38 @@ export interface InternalReviewData {
   internalReviewStartedAt: string | null;
   lastInternalReviewAt: string | null;
 }
+
+// Payment Types
+export type PaymentStatusType =
+  | 'not_requested'
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'refunded';
+
+export interface PaymentData {
+  id: string;
+  paymentId: string;
+  amount: number;
+  currency: string;
+  description: string;
+  status: PaymentStatusType;
+  invoiceNumber: string | null;
+  requestedAt: string | null;
+  paidAt: string | null;
+  receiptUrl: string | null;
+  clientSecret: string | null; // For Stripe checkout
+  smeProfile?: {
+    companyName: string | null;
+    user: { email: string; fullName: string };
+  };
+  requestedBy?: { fullName: string };
+}
+
+export interface PaymentConfig {
+  certificationFee: number;
+  currency: string;
+  formattedFee: string;
+  stripeConfigured: boolean;
+}

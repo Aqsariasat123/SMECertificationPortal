@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData, InternalDimensions, DimensionStatus } from '@/types';
+import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData, InternalDimensions, DimensionStatus, PaymentData } from '@/types';
 
 export default function ApplicationDetailPage() {
   const params = useParams();
@@ -13,6 +13,7 @@ export default function ApplicationDetailPage() {
   const [application, setApplication] = useState<AdminApplication | null>(null);
   const [auditHistory, setAuditHistory] = useState<AuditLogEntry[]>([]);
   const [certificate, setCertificate] = useState<CertificateData | null>(null);
+  const [payment, setPayment] = useState<PaymentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
@@ -23,10 +24,13 @@ export default function ApplicationDetailPage() {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRevokeModal, setShowRevokeModal] = useState(false);
   const [showReissueModal, setShowReissueModal] = useState(false);
+  const [showRequestPaymentModal, setShowRequestPaymentModal] = useState(false);
+  const [showCancelPaymentModal, setShowCancelPaymentModal] = useState(false);
   const [notes, setNotes] = useState('');
   const [revokeReason, setRevokeReason] = useState('');
   const [visibilityLoading, setVisibilityLoading] = useState(false);
   const [certActionLoading, setCertActionLoading] = useState(false);
+  const [paymentActionLoading, setPaymentActionLoading] = useState(false);
 
   // Internal Review state
   const [internalDimensions, setInternalDimensions] = useState<InternalDimensions>({
@@ -45,6 +49,13 @@ export default function ApplicationDetailPage() {
     fetchApplicationDetail();
     fetchInternalReview();
   }, [id]);
+
+  // Fetch payment when application is loaded and certified
+  useEffect(() => {
+    if (application?.certificationStatus === 'certified' && application?.id) {
+      fetchPaymentData();
+    }
+  }, [application?.certificationStatus, application?.id]);
 
   const fetchInternalReview = async () => {
     try {
@@ -200,6 +211,73 @@ export default function ApplicationDetailPage() {
     } finally {
       setCertActionLoading(false);
     }
+  };
+
+  // Payment functions
+  const fetchPaymentData = async () => {
+    if (!application?.id) return;
+    try {
+      const result = await api.getPaymentBySmeProfile(application.id);
+      if (result.success) {
+        setPayment(result.data ?? null);
+      }
+    } catch (err) {
+      console.error('Failed to fetch payment:', err);
+    }
+  };
+
+  const handleRequestPayment = async () => {
+    if (!application?.id) return;
+
+    try {
+      setPaymentActionLoading(true);
+      const result = await api.requestPayment(application.id);
+      if (result.success) {
+        setShowRequestPaymentModal(false);
+        fetchPaymentData();
+      } else {
+        setError(result.message || 'Failed to request payment');
+      }
+    } catch (err) {
+      setError('Failed to request payment');
+    } finally {
+      setPaymentActionLoading(false);
+    }
+  };
+
+  const handleCancelPayment = async () => {
+    if (!payment?.id) return;
+
+    try {
+      setPaymentActionLoading(true);
+      const result = await api.cancelPayment(payment.id);
+      if (result.success) {
+        setShowCancelPaymentModal(false);
+        fetchPaymentData();
+      } else {
+        setError(result.message || 'Failed to cancel payment');
+      }
+    } catch (err) {
+      setError('Failed to cancel payment');
+    } finally {
+      setPaymentActionLoading(false);
+    }
+  };
+
+  const getPaymentStatusConfig = (status: string) => {
+    const configs: Record<string, { bg: string; text: string; label: string }> = {
+      not_requested: { bg: 'var(--graphite-100)', text: 'var(--graphite-600)', label: 'Not Requested' },
+      pending: { bg: 'var(--warning-100)', text: 'var(--warning-700)', label: 'Pending' },
+      processing: { bg: 'var(--teal-100)', text: 'var(--teal-700)', label: 'Processing' },
+      completed: { bg: 'var(--success-100)', text: 'var(--success-700)', label: 'Completed' },
+      failed: { bg: 'var(--danger-100)', text: 'var(--danger-700)', label: 'Failed' },
+      refunded: { bg: 'var(--graphite-100)', text: 'var(--graphite-600)', label: 'Refunded' },
+    };
+    return configs[status] || configs.not_requested;
+  };
+
+  const formatCurrency = (amount: number, currency: string = 'AED') => {
+    return `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   const getStatusConfig = (status: CertificationStatus) => {
@@ -924,6 +1002,92 @@ export default function ApplicationDetailPage() {
             </div>
           )}
 
+          {/* Payment Management */}
+          {application.certificationStatus === 'certified' && (
+            <div className="solid-card rounded-xl p-5">
+              <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--graphite-900)' }}>
+                <svg className="w-5 h-5" style={{ color: 'var(--warning-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Certification Fee
+              </h3>
+
+              {!payment ? (
+                // No payment requested yet
+                <div className="space-y-3">
+                  <div className="p-4 rounded-lg text-center" style={{ background: 'var(--graphite-50)' }}>
+                    <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>No payment requested yet</p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Request certification fee from this SME</p>
+                  </div>
+                  <button
+                    onClick={() => setShowRequestPaymentModal(true)}
+                    className="w-full px-4 py-2.5 text-sm font-medium rounded-lg transition-all"
+                    style={{ background: 'var(--warning-600)', color: 'white' }}
+                  >
+                    Request Payment
+                  </button>
+                </div>
+              ) : (
+                // Payment exists
+                <div className="space-y-3">
+                  <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Status</p>
+                      <span
+                        className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                        style={{
+                          background: getPaymentStatusConfig(payment.status).bg,
+                          color: getPaymentStatusConfig(payment.status).text,
+                        }}
+                      >
+                        {getPaymentStatusConfig(payment.status).label}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                      <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Amount</p>
+                      <p className="font-semibold" style={{ color: 'var(--graphite-800)' }}>
+                        {formatCurrency(payment.amount, payment.currency)}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                      <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Invoice</p>
+                      <p className="font-mono text-xs" style={{ color: 'var(--graphite-800)' }}>
+                        {payment.invoiceNumber || 'N/A'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {payment.requestedAt && (
+                    <div className="p-3 rounded-lg" style={{ background: 'var(--graphite-50)' }}>
+                      <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--graphite-500)' }}>Requested</p>
+                      <p className="text-sm" style={{ color: 'var(--graphite-800)' }}>{formatDate(payment.requestedAt)}</p>
+                    </div>
+                  )}
+
+                  {payment.paidAt && (
+                    <div className="p-3 rounded-lg" style={{ background: 'var(--success-50)' }}>
+                      <p className="text-xs uppercase tracking-wider mb-1" style={{ color: 'var(--success-600)' }}>Paid</p>
+                      <p className="text-sm font-medium" style={{ color: 'var(--success-700)' }}>{formatDate(payment.paidAt)}</p>
+                    </div>
+                  )}
+
+                  {payment.status === 'pending' && (
+                    <button
+                      onClick={() => setShowCancelPaymentModal(true)}
+                      className="w-full px-4 py-2 text-sm font-medium rounded-lg transition-all"
+                      style={{ background: 'var(--danger-100)', color: 'var(--danger-700)' }}
+                    >
+                      Cancel Payment Request
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Internal Review Dimensions (Admin-only) */}
           {(application.certificationStatus === 'under_review' || application.certificationStatus === 'submitted' || application.certificationStatus === 'certified') && (
             <div className="solid-card rounded-xl p-5">
@@ -1280,6 +1444,60 @@ export default function ApplicationDetailPage() {
               style={{ background: 'var(--teal-600)' }}
             >
               {certActionLoading ? 'Reissuing...' : 'Reissue Certificate'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Request Payment Modal */}
+      {showRequestPaymentModal && (
+        <Modal title="Request Certification Fee" onClose={() => setShowRequestPaymentModal(false)}>
+          <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
+            You are about to request the certification fee from <strong>{application.companyName}</strong>.
+          </p>
+          <div className="p-4 rounded-lg mb-4" style={{ background: 'var(--graphite-50)' }}>
+            <div className="flex items-center justify-between">
+              <span style={{ color: 'var(--graphite-600)' }}>Certification Fee</span>
+              <span className="font-semibold" style={{ color: 'var(--graphite-900)' }}>AED 500.00</span>
+            </div>
+          </div>
+          <p className="text-sm mb-4" style={{ color: 'var(--graphite-500)' }}>
+            The SME will be notified and can complete the payment through their dashboard.
+          </p>
+          <div className="flex justify-end gap-3">
+            <button onClick={() => setShowRequestPaymentModal(false)} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
+            <button
+              onClick={handleRequestPayment}
+              disabled={paymentActionLoading}
+              className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
+              style={{ background: 'var(--warning-600)' }}
+            >
+              {paymentActionLoading ? 'Requesting...' : 'Request Payment'}
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Cancel Payment Modal */}
+      {showCancelPaymentModal && payment && (
+        <Modal title="Cancel Payment Request" onClose={() => setShowCancelPaymentModal(false)}>
+          <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
+            Are you sure you want to cancel the payment request for <strong>{application.companyName}</strong>?
+          </p>
+          <div className="p-4 rounded-lg mb-4" style={{ background: 'var(--warning-50)' }}>
+            <p className="text-sm" style={{ color: 'var(--warning-700)' }}>
+              This will mark the current payment request as cancelled. You can request payment again later if needed.
+            </p>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button onClick={() => setShowCancelPaymentModal(false)} className="btn-secondary px-4 py-2.5 rounded-xl">Keep Request</button>
+            <button
+              onClick={handleCancelPayment}
+              disabled={paymentActionLoading}
+              className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
+              style={{ background: 'var(--danger-600)' }}
+            >
+              {paymentActionLoading ? 'Cancelling...' : 'Cancel Request'}
             </button>
           </div>
         </Modal>

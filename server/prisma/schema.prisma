@@ -117,6 +117,15 @@ enum CertificateStatus {
   revoked
 }
 
+enum PaymentStatus {
+  not_requested     // No payment requested yet
+  pending           // Payment requested, awaiting SME payment
+  processing        // Payment being processed
+  completed         // Payment successful
+  failed            // Payment failed
+  refunded          // Payment refunded
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -148,6 +157,7 @@ model User {
   supportTickets        SupportTicket[]       @relation("TicketCreator")
   supportMessages       SupportMessage[]      @relation("SupportMessageSender")
   issuedCertificates    Certificate[]         @relation("IssuedCertificates")
+  requestedPayments     Payment[]             @relation("PaymentRequestedBy")
 
   @@map("users")
 }
@@ -328,6 +338,7 @@ model SMEProfile {
   reviewedBy           User?                 @relation("ReviewedBy", fields: [reviewedById], references: [id])
   introductionRequests IntroductionRequest[]
   certificates         Certificate[]
+  payments             Payment[]
 
   @@map("sme_profiles")
 }
@@ -472,6 +483,52 @@ model LegalPage {
   updatedAt   DateTime @updatedAt
 
   @@map("legal_pages")
+}
+
+/// Payment model - Certification fee payments
+model Payment {
+  id                  String        @id @default(uuid())
+  paymentId           String        @unique // PAY-XXXXXXXX (8 random hex chars)
+  smeProfileId        String
+
+  // Payment Details
+  amount              Decimal       @db.Decimal(10, 2)
+  currency            String        @default("AED")
+  description         String        @default("SME Certification Fee")
+
+  // Status
+  status              PaymentStatus @default(not_requested)
+
+  // Stripe Integration
+  stripePaymentIntentId String?     // Stripe Payment Intent ID
+  stripeClientSecret    String?     // For frontend payment form
+  stripeChargeId        String?     // Stripe Charge ID after successful payment
+
+  // Admin Control
+  requestedById       String?       // Admin who requested payment
+  requestedAt         DateTime?     // When payment was requested
+
+  // Payment Completion
+  paidAt              DateTime?     // When payment was completed
+  failedAt            DateTime?     // When payment failed
+  failureReason       String?       // Reason for failure
+
+  // Invoice/Receipt
+  invoiceNumber       String?       // NAYWA-INV-XXXXXXXX
+  receiptUrl          String?       // URL to payment receipt
+
+  // Timestamps
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  // Relations
+  smeProfile          SMEProfile    @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  requestedBy         User?         @relation("PaymentRequestedBy", fields: [requestedById], references: [id])
+
+  @@index([smeProfileId])
+  @@index([status])
+  @@index([paymentId])
+  @@map("payments")
 }
 
 /// SupportTicket model - Support conversations between users/SMEs and admin

@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { SMEProfileData } from '@/types';
+import { SMEProfileData, PaymentData } from '@/types';
 
 type StepStatus = 'complete' | 'incomplete' | 'locked';
 
 export default function SMECertificationPage() {
   const [profile, setProfile] = useState<SMEProfileData | null>(null);
+  const [payment, setPayment] = useState<PaymentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [downloadingCert, setDownloadingCert] = useState(false);
@@ -19,6 +21,13 @@ export default function SMECertificationPage() {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  // Fetch payment when profile is loaded and certified
+  useEffect(() => {
+    if (profile?.certificationStatus === 'certified') {
+      fetchPayment();
+    }
+  }, [profile?.certificationStatus]);
 
   // Check if user should see requirements overview (only for draft status, first time)
   useEffect(() => {
@@ -44,6 +53,49 @@ export default function SMECertificationPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchPayment = async () => {
+    try {
+      const result = await api.getMyPayment();
+      if (result.success) {
+        setPayment(result.data ?? null);
+      }
+    } catch (err) {
+      console.error('Failed to fetch payment:', err);
+    }
+  };
+
+  const handleCompletePayment = async () => {
+    try {
+      setPaymentProcessing(true);
+      setError('');
+      // Use simulate payment for now (Stripe integration can be added later)
+      const result = await api.simulatePayment();
+      if (result.success) {
+        setSuccessMessage('Payment completed successfully. Thank you!');
+        fetchPayment();
+      } else {
+        setError(result.message || 'Payment failed. Please try again.');
+      }
+    } catch (err) {
+      setError('Payment failed. Please try again.');
+    } finally {
+      setPaymentProcessing(false);
+    }
+  };
+
+  const formatCurrency = (amount: number, currency: string = 'AED') => {
+    return `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const formatPaymentDate = (dateString: string | null) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
   // Required document types
@@ -434,6 +486,98 @@ export default function SMECertificationPage() {
               )}
             </button>
           )}
+        </div>
+      )}
+
+      {/* Payment Section - For Certified SMEs */}
+      {profile && profile.certificationStatus === 'certified' && payment && payment.status === 'pending' && (
+        <div className="solid-card rounded-2xl p-6">
+          <div className="flex items-start gap-5">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'var(--warning-100)', color: 'var(--warning-600)' }}
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-lg" style={{ color: 'var(--graphite-900)' }}>Certification Fee Due</h3>
+              <p className="text-sm mt-1" style={{ color: 'var(--graphite-500)' }}>
+                Please complete the certification fee payment to finalize your certification.
+              </p>
+
+              <div className="mt-4 p-4 rounded-xl" style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-100)' }}>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Amount Due</p>
+                    <p className="text-lg font-bold mt-1" style={{ color: 'var(--graphite-900)' }}>
+                      {formatCurrency(payment.amount, payment.currency)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider" style={{ color: 'var(--graphite-500)' }}>Invoice Number</p>
+                    <p className="font-mono text-sm font-medium mt-1" style={{ color: 'var(--graphite-800)' }}>
+                      {payment.invoiceNumber || 'Pending'}
+                    </p>
+                  </div>
+                </div>
+                {payment.requestedAt && (
+                  <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--graphite-100)' }}>
+                    <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+                      Requested on {formatPaymentDate(payment.requestedAt)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={handleCompletePayment}
+                disabled={paymentProcessing}
+                className="mt-4 inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl transition-all disabled:opacity-50"
+                style={{ background: 'var(--teal-600)', color: 'white' }}
+              >
+                {paymentProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Complete Payment
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Completed Confirmation */}
+      {profile && profile.certificationStatus === 'certified' && payment && payment.status === 'completed' && (
+        <div
+          className="rounded-xl p-4 flex items-center gap-3"
+          style={{ background: 'var(--success-50)', border: '1px solid var(--success-100)' }}
+        >
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'var(--success-100)', color: 'var(--success-600)' }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold" style={{ color: 'var(--success-800)' }}>
+              Certification Fee Paid
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--success-600)' }}>
+              {payment.invoiceNumber} - {formatCurrency(payment.amount, payment.currency)} on {formatPaymentDate(payment.paidAt)}
+            </p>
+          </div>
         </div>
       )}
 
