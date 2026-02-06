@@ -1512,7 +1512,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     // ============ BLOCK 1: Authority Header ============
     doc.fontSize(20).fillColor('#23282d').font('Helvetica-Bold').text('NAYWA', marginX, curY);
-    doc.fontSize(10).fillColor('#666').font('Helvetica').text('SME Certification Authority', marginX, curY + 24);
+    doc.fontSize(10).fillColor('#666').font('Helvetica').text('SME Certification Registry', marginX, curY + 24);
     // Hairline rule
     curY += 45;
     doc.moveTo(marginX, curY).lineTo(pageW - marginX, curY).lineWidth(0.5).strokeColor('#ccc').stroke();
@@ -1570,34 +1570,52 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     // Status with color
     const statusX = marginX + (4 * colW) + boxPadding;
-    doc.fontSize(7).fillColor('#888').font('Helvetica').text('STATUS', statusX, boxTextY);
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('CERTIFICATION STATUS', statusX, boxTextY);
     const statusColor = certStatus === 'active' ? '#22c55e' : certStatus === 'expired' ? '#f59e0b' : '#ef4444';
-    doc.fontSize(10).fillColor(statusColor).font('Helvetica-Bold').text(certStatus.toUpperCase(), statusX, boxTextY + 12);
+    const statusLabel = certStatus === 'active' ? 'Active' : certStatus === 'expired' ? 'Expired' : 'Revoked';
+    doc.fontSize(10).fillColor(statusColor).font('Helvetica-Bold').text(statusLabel, statusX, boxTextY + 12);
 
-    // ============ BLOCK 5: Verification Footer ============
-    curY = boxY + boxH + 25;
+    // ============ BLOCK 5: Verification Section ============
+    curY = boxY + boxH + 15;
+
+    // Right side: QR code (moved up)
+    const qrSize = 60;
+    const qrX = pageW - marginX - qrSize;
+    const qrY = curY - 10;
+    doc.image(qrBuffer, qrX, qrY, { width: qrSize, height: qrSize });
+    doc.fontSize(6).fillColor('#888').font('Helvetica').text('Scan to Verify', qrX, qrY + qrSize + 2, { width: qrSize, align: 'center', lineBreak: false });
 
     // Left side: Hash + URL
-    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERIFICATION HASH', marginX, curY);
-    doc.fontSize(8).fillColor('#555').font('Courier').text(truncateHash(certificate.verificationHash), marginX, curY + 10);
-
-    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERIFICATION URL', marginX, curY + 28);
-    doc.fontSize(8).fillColor('#4a8f87').font('Helvetica').text(certificate.verificationUrl, marginX, curY + 38);
-
-    // Right side: QR code
-    const qrSize = 80;
-    const qrX = pageW - marginX - qrSize - 10;
-    const qrY = curY - 5;
-    doc.image(qrBuffer, qrX, qrY, { width: qrSize, height: qrSize });
-    doc.fontSize(7).fillColor('#888').font('Helvetica').text('Verify via Naywa Registry', qrX - 20, qrY + qrSize + 3, { width: qrSize + 40, align: 'center' });
-
-    // ============ Footer Statement ============
-    const footerY = pageH - 50;
-    doc.moveTo(marginX, footerY - 10).lineTo(pageW - marginX, footerY - 10).lineWidth(0.5).strokeColor('#eee').stroke();
-    doc.fontSize(7).fillColor('#999').font('Helvetica-Oblique').text(
-      'Digitally issued via Naywa Registry System. This document is electronically generated and does not require a physical signature.',
-      marginX, footerY, { width: contentW, align: 'center' }
+    const leftWidth = qrX - marginX - 30;
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERIFICATION HASH', marginX, curY, { lineBreak: false });
+    doc.fontSize(8).fillColor('#555').font('Courier').text(truncateHash(certificate.verificationHash), marginX, curY + 10, { width: leftWidth, lineBreak: false });
+    doc.fontSize(6).fillColor('#999').font('Helvetica-Oblique').text(
+      'This hash uniquely identifies the certificate and supports integrity verification.',
+      marginX, curY + 22, { width: leftWidth, lineBreak: false }
     );
+
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERIFICATION URL', marginX, curY + 36, { lineBreak: false });
+    doc.fontSize(8).fillColor('#4a8f87').font('Helvetica').text(certificate.verificationUrl, marginX, curY + 46, { width: leftWidth, lineBreak: false });
+
+    // ============ Footer Statement with Seal on right ============
+    const footerY = curY + 62;
+    doc.moveTo(marginX, footerY).lineTo(pageW - marginX, footerY).lineWidth(0.5).strokeColor('#eee').stroke();
+
+    // Footer text on left
+    doc.fontSize(5.5).fillColor('#999').font('Helvetica-Oblique').text(
+      'Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review.',
+      marginX, footerY + 6, { width: contentW - 90, lineBreak: false }
+    );
+
+    // Digital Verification Seal - aligned with footer (right side)
+    const sealW = 70;
+    const sealH = 22;
+    const sealX = pageW - marginX - sealW;
+    const sealY = footerY + 3;
+    doc.rect(sealX, sealY, sealW, sealH).lineWidth(1).strokeColor('#4a8f87').stroke();
+    doc.rect(sealX + 1, sealY + 1, sealW - 2, sealH - 2).lineWidth(0.5).strokeColor('#4a8f87').stroke();
+    doc.fontSize(5).fillColor('#4a8f87').font('Helvetica-Bold').text('NAYWA CERTIFIED', sealX, sealY + 5, { width: sealW, align: 'center', lineBreak: false });
+    doc.fontSize(4.5).fillColor('#666').font('Helvetica').text('Digital Verification Seal', sealX, sealY + 13, { width: sealW, align: 'center', lineBreak: false });
 
     doc.end();
 
