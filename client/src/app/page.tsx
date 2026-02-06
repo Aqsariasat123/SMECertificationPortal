@@ -59,6 +59,18 @@ export default function LandingPage() {
       <section className="pt-28 pb-16" style={{ background: 'var(--background)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
+            {/* Registry Status Badge */}
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6"
+              style={{ background: 'var(--teal-50)', color: 'var(--teal-700)', border: '1px solid var(--teal-200)' }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: 'var(--teal-500)' }}
+              />
+              Registry Status: 500+ Certified Entities
+            </div>
+
             <h1
               className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4"
               style={{ color: 'var(--graphite-900)', lineHeight: 1.15 }}
