@@ -195,7 +195,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Step 1 */}
-            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+            <div className="p-6 rounded-xl" style={{ background: 'transparent', border: '1px solid var(--graphite-600)' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
@@ -211,7 +211,7 @@ export default function LandingPage() {
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+            <div className="p-6 rounded-xl" style={{ background: 'transparent', border: '1px solid var(--graphite-600)' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
@@ -227,7 +227,7 @@ export default function LandingPage() {
             </div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+            <div className="p-6 rounded-xl" style={{ background: 'transparent', border: '1px solid var(--graphite-600)' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
