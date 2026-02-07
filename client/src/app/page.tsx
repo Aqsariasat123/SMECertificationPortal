@@ -47,15 +47,15 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="px-4 py-2.5 text-xs font-medium rounded-lg transition-colors"
+              className="px-4 py-2 text-xs font-medium rounded-lg transition-colors"
               style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'white' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="px-4 py-2.5 text-xs font-medium rounded-lg"
-              style={{ background: 'var(--teal-600)', color: 'white' }}
+              className="px-4 py-2 text-xs font-medium rounded-lg"
+              style={{ border: '1px solid var(--teal-600)', background: 'var(--teal-600)', color: 'white' }}
             >
               Start Certification
             </Link>
