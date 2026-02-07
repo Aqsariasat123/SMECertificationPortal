@@ -1591,12 +1591,11 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     // Format helpers
     const formatSector = (sector: string) => sector.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-    // Generate PDF - A4 Landscape (3-Zone Institutional Layout)
+    // Generate PDF - A4 Landscape
     const doc = new PDFDocument({
       size: 'A4',
       layout: 'landscape',
       margins: { top: 40, bottom: 40, left: 50, right: 50 },
-      autoFirstPage: true,
     });
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -1607,175 +1606,111 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     const pageH = doc.page.height; // 595
     const marginX = 50;
     const contentW = pageW - (marginX * 2);
+    let curY = 40;
 
-    // ════════════════════════════════════════════════════════════════════════
-    // ZONE 1: IDENTITY (Issuing Authority) - Top section with light background
-    // ════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════
+    // ZONE 1: IDENTITY HEADER
+    // ═══════════════════════════════════════════════════════════════════
+    doc.fontSize(20).fillColor('#23282d').font('Helvetica-Bold').text('NAYWA', marginX, curY);
+    doc.fontSize(9).fillColor('#666').font('Helvetica').text('SME Certification Authority', marginX, curY + 24);
 
-    // Light background for header
-    doc.save();
-    doc.rect(0, 0, pageW, 80).fill('#f8f9fa');
-    doc.restore();
+    // Right side certificate title
+    doc.fontSize(10).fillColor('#4a8f87').font('Helvetica-Bold').text('CERTIFICATE OF SME CERTIFICATION', pageW - marginX - 200, curY + 10, { width: 200, align: 'right' });
 
-    // NAYWA logo/title
-    doc.font('Helvetica-Bold').fontSize(20).fillColor('#23282d');
-    doc.text('NAYWA', marginX, 35, { lineBreak: false });
+    curY += 50;
+    doc.moveTo(marginX, curY).lineTo(pageW - marginX, curY).lineWidth(1.5).strokeColor('#4a8f87').stroke();
 
-    doc.font('Helvetica').fontSize(9).fillColor('#666666');
-    doc.text('SME Certification Authority', marginX, 58, { lineBreak: false });
-
-    // Right side title
-    doc.font('Helvetica-Bold').fontSize(10).fillColor('#4a8f87');
-    doc.text('CERTIFICATE OF SME CERTIFICATION', pageW - marginX - 200, 45, { width: 200, align: 'right', lineBreak: false });
-
-    // Teal separator line
-    doc.moveTo(marginX, 80).lineTo(pageW - marginX, 80).lineWidth(2).strokeColor('#4a8f87').stroke();
-
-    // ════════════════════════════════════════════════════════════════════════
-    // ZONE 2: FACTS (Certified Entity & Status)
-    // ════════════════════════════════════════════════════════════════════════
-
-    // Attestation text
-    doc.font('Helvetica').fontSize(9).fillColor('#555555');
-    doc.text(
+    // ═══════════════════════════════════════════════════════════════════
+    // ZONE 2: FACTS
+    // ═══════════════════════════════════════════════════════════════════
+    curY += 20;
+    doc.fontSize(9).fillColor('#555').font('Helvetica').text(
       'This certificate attests that the entity named below has completed the Naywa SME certification process based on submitted documentation.',
-      marginX, 100, { width: contentW, lineBreak: false }
+      marginX, curY, { width: contentW, lineGap: 2 }
     );
 
-    // Company Name
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('CERTIFIED ENTITY', marginX, 130, { lineBreak: false });
+    curY += 35;
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('CERTIFIED ENTITY', marginX, curY);
+    doc.fontSize(22).fillColor('#23282d').font('Helvetica-Bold').text(certificate.companyName, marginX, curY + 10);
 
-    doc.font('Helvetica-Bold').fontSize(22).fillColor('#23282d');
-    doc.text(certificate.companyName, marginX, 142, { lineBreak: false });
-
-    // 4-column details row
-    const detailsY = 185;
+    curY += 50;
     const colW = contentW / 4;
 
-    // Trade License
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('TRADE LICENSE', marginX, detailsY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(certificate.tradeLicenseNumber, marginX, detailsY + 12, { lineBreak: false });
+    // Details row
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('TRADE LICENSE', marginX, curY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(certificate.tradeLicenseNumber, marginX, curY + 10);
 
-    // Industry Sector
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('INDUSTRY SECTOR', marginX + colW, detailsY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(formatSector(certificate.industrySector), marginX + colW, detailsY + 12, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('INDUSTRY SECTOR', marginX + colW, curY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(formatSector(certificate.industrySector), marginX + colW, curY + 10);
 
-    // Issued Date
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('ISSUED', marginX + colW * 2, detailsY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(formatCertificateDate(certificate.issuedAt), marginX + colW * 2, detailsY + 12, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('ISSUED', marginX + colW * 2, curY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(formatCertificateDate(certificate.issuedAt), marginX + colW * 2, curY + 10);
 
-    // Valid Until
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('VALID UNTIL', marginX + colW * 3, detailsY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(formatCertificateDate(certificate.expiresAt), marginX + colW * 3, detailsY + 12, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VALID UNTIL', marginX + colW * 3, curY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(formatCertificateDate(certificate.expiresAt), marginX + colW * 3, curY + 10);
 
-    // Status & Control Box
-    const boxY = 230;
+    // Control box
+    curY += 45;
     const boxH = 50;
+    doc.rect(marginX, curY, contentW, boxH).lineWidth(1).strokeColor('#e5e7eb').fillAndStroke('#f8f9fa', '#e5e7eb');
 
-    // Box background
-    doc.save();
-    doc.rect(marginX, boxY, contentW, boxH).fill('#f8f9fa');
-    doc.restore();
-    doc.rect(marginX, boxY, contentW, boxH).lineWidth(1).strokeColor('#e5e7eb').stroke();
-
-    const boxTextY = boxY + 12;
+    const boxTextY = curY + 12;
     const boxCol = contentW / 3;
 
-    // Certificate ID
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('CERTIFICATE ID', marginX + 15, boxTextY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(certificate.certificateId, marginX + 15, boxTextY + 12, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('CERTIFICATE ID', marginX + 15, boxTextY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(certificate.certificateId, marginX + 15, boxTextY + 12);
 
-    // Version
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('VERSION', marginX + boxCol + 15, boxTextY, { lineBreak: false });
-    doc.font('Helvetica-Bold').fontSize(11).fillColor('#23282d');
-    doc.text(certificate.certificateVersion, marginX + boxCol + 15, boxTextY + 12, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERSION', marginX + boxCol + 15, boxTextY);
+    doc.fontSize(11).fillColor('#23282d').font('Helvetica-Bold').text(certificate.certificateVersion, marginX + boxCol + 15, boxTextY + 12);
 
-    // Status
     const statusColor = certStatus === 'active' ? '#22c55e' : certStatus === 'expired' ? '#f59e0b' : '#ef4444';
-    const statusBg = certStatus === 'active' ? '#dcfce7' : certStatus === 'expired' ? '#fef3c7' : '#fee2e2';
     const statusLabel = certStatus === 'active' ? 'ACTIVE' : certStatus === 'expired' ? 'EXPIRED' : 'REVOKED';
 
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('STATUS', marginX + boxCol * 2 + 15, boxTextY, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('STATUS', marginX + boxCol * 2 + 15, boxTextY);
+    doc.fontSize(11).fillColor(statusColor).font('Helvetica-Bold').text(statusLabel, marginX + boxCol * 2 + 15, boxTextY + 12);
 
-    // Status badge
-    const badgeX = marginX + boxCol * 2 + 15;
-    const badgeY = boxTextY + 13;
-    doc.save();
-    doc.roundedRect(badgeX, badgeY, 55, 16, 3).fill(statusBg);
-    doc.restore();
-    doc.font('Helvetica-Bold').fontSize(8).fillColor(statusColor);
-    doc.text(statusLabel, badgeX + 10, badgeY + 4, { lineBreak: false });
+    // ═══════════════════════════════════════════════════════════════════
+    // ZONE 3: VERIFICATION
+    // ═══════════════════════════════════════════════════════════════════
+    curY += boxH + 20;
+    doc.moveTo(marginX, curY).lineTo(pageW - marginX, curY).lineWidth(0.5).strokeColor('#ddd').stroke();
 
-    // ════════════════════════════════════════════════════════════════════════
-    // ZONE 3: VERIFICATION (QR, Hash, URL)
-    // ════════════════════════════════════════════════════════════════════════
+    curY += 12;
+    doc.fontSize(8).fillColor('#4a8f87').font('Helvetica-Bold').text('VERIFICATION', marginX, curY);
 
-    const verifyY = 305;
+    curY += 15;
 
-    // Separator line
-    doc.moveTo(marginX, verifyY).lineTo(pageW - marginX, verifyY).lineWidth(0.5).strokeColor('#dddddd').stroke();
-
-    // Section label
-    doc.font('Helvetica-Bold').fontSize(8).fillColor('#4a8f87');
-    doc.text('VERIFICATION', marginX, verifyY + 15, { lineBreak: false });
-
-    // QR code on right
-    const qrSize = 65;
+    // QR on right
+    const qrSize = 60;
     const qrX = pageW - marginX - qrSize;
-    const qrY = verifyY + 25;
-    doc.image(qrBuffer, qrX, qrY, { width: qrSize, height: qrSize });
-    doc.font('Helvetica').fontSize(6).fillColor('#666666');
-    doc.text('Scan to verify', qrX, qrY + qrSize + 3, { width: qrSize, align: 'center', lineBreak: false });
+    doc.image(qrBuffer, qrX, curY, { width: qrSize, height: qrSize });
+    doc.fontSize(6).fillColor('#666').font('Helvetica').text('Scan to verify', qrX, curY + qrSize + 2, { width: qrSize, align: 'center' });
 
-    // Hash
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('DOCUMENT HASH (SHA-256)', marginX, verifyY + 35, { lineBreak: false });
-    doc.font('Courier').fontSize(8).fillColor('#555555');
-    doc.text(truncateHash(certificate.verificationHash), marginX, verifyY + 47, { lineBreak: false });
+    // Hash and URL on left
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('DOCUMENT HASH (SHA-256)', marginX, curY);
+    doc.fontSize(8).fillColor('#555').font('Courier').text(truncateHash(certificate.verificationHash), marginX, curY + 10);
 
-    // URL
-    doc.font('Helvetica').fontSize(7).fillColor('#888888');
-    doc.text('VERIFICATION URL', marginX, verifyY + 68, { lineBreak: false });
-    doc.font('Helvetica').fontSize(8).fillColor('#4a8f87');
-    doc.text(certificate.verificationUrl, marginX, verifyY + 80, { lineBreak: false });
+    doc.fontSize(7).fillColor('#888').font('Helvetica').text('VERIFICATION URL', marginX, curY + 30);
+    doc.fontSize(8).fillColor('#4a8f87').font('Helvetica').text(certificate.verificationUrl, marginX, curY + 40);
 
-    // ════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════
     // FOOTER
-    // ════════════════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════
+    const footerY = pageH - 55;
+    doc.moveTo(marginX, footerY).lineTo(pageW - marginX, footerY).lineWidth(0.5).strokeColor('#eee').stroke();
 
-    const footerY = pageH - 50;
-
-    // Footer separator
-    doc.moveTo(marginX, footerY).lineTo(pageW - marginX, footerY).lineWidth(0.5).strokeColor('#e5e7eb').stroke();
-
-    // Footer text
-    doc.font('Helvetica').fontSize(6).fillColor('#999999');
-    doc.text(
+    doc.fontSize(5.5).fillColor('#999').font('Helvetica').text(
       'Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review.',
-      marginX, footerY + 10, { width: contentW - 90, lineBreak: false }
+      marginX, footerY + 8, { width: contentW - 90 }
     );
 
     // Registry seal
     const sealX = pageW - marginX - 70;
-    const sealY = footerY + 6;
-    doc.roundedRect(sealX, sealY, 70, 22, 3).lineWidth(1).strokeColor('#4a8f87').stroke();
-    doc.font('Helvetica-Bold').fontSize(6).fillColor('#4a8f87');
-    doc.text('NAYWA REGISTRY', sealX, sealY + 5, { width: 70, align: 'center', lineBreak: false });
-    doc.font('Helvetica').fontSize(5).fillColor('#888888');
-    doc.text('Verified Document', sealX, sealY + 13, { width: 70, align: 'center', lineBreak: false });
+    const sealY = footerY + 5;
+    doc.rect(sealX, sealY, 70, 22).lineWidth(1).strokeColor('#4a8f87').stroke();
+    doc.rect(sealX + 1, sealY + 1, 68, 20).lineWidth(0.5).strokeColor('#4a8f87').stroke();
+    doc.fontSize(5.5).fillColor('#4a8f87').font('Helvetica-Bold').text('NAYWA REGISTRY', sealX, sealY + 5, { width: 70, align: 'center' });
+    doc.fontSize(5).fillColor('#666').font('Helvetica').text('Verified Document', sealX, sealY + 13, { width: 70, align: 'center' });
 
     doc.end();
 
