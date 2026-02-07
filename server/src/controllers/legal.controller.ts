@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { logAuditAction, AuditAction, getClientIP } from '../utils/auditLogger';
+import { emailService } from '../services/email.service';
 
 const prisma = new PrismaClient();
 
@@ -120,6 +121,63 @@ export const updateLegalPage = async (req: Request, res: Response): Promise<void
     res.status(500).json({
       success: false,
       message: 'Failed to update legal page',
+    });
+  }
+};
+
+// POST /api/legal/:slug/notify — Admin only, send email notification to all users
+export const notifyLegalUpdate = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as AuthenticatedRequest;
+    const slug = req.params.slug as string;
+
+    if (!authReq.user) {
+      res.status(401).json({ success: false, message: 'Authentication required' });
+      return;
+    }
+
+    // Check if page exists
+    const page = await prisma.legalPage.findUnique({ where: { slug } });
+
+    if (!page) {
+      res.status(404).json({ success: false, message: 'Legal page not found' });
+      return;
+    }
+
+    // Get count of users to notify
+    const userCount = await prisma.user.count({
+      where: {
+        isActive: true,
+        emailVerified: true,
+      },
+    });
+
+    if (userCount === 0) {
+      res.json({
+        success: true,
+        message: 'No users to notify',
+        data: { sent: 0, failed: 0 },
+      });
+      return;
+    }
+
+    // Send bulk notification
+    const result = await emailService.sendBulkLegalUpdateNotification(
+      page.title,
+      page.slug,
+      authReq.user.userId
+    );
+
+    res.json({
+      success: true,
+      message: `Notification sent to ${result.sent} users`,
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error sending legal update notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send notification',
     });
   }
 };

@@ -818,6 +818,135 @@ class EmailService {
       metadata: { companyName, rejectionReason },
     });
   }
+  // Legal Update Notification - sent when admin updates legal pages
+  async sendLegalUpdateNotification(
+    email: string,
+    fullName: string,
+    pageName: string,
+    pageUrl: string,
+    userId?: string
+  ): Promise<boolean> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 20px; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .info-box { background: #f0f9ff; border-left: 4px solid #3a736d; border-radius: 6px; padding: 15px 20px; margin: 25px 0; }
+          .info-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+          .info-value { font-size: 16px; font-weight: 600; color: #3a736d; }
+          .button-wrap { text-align: center; margin: 30px 0 10px; }
+          .button { display: inline-block; padding: 14px 35px; background: #3a736d; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="card">
+            <div class="header">
+              <h1>Naywa</h1>
+              <p>Policy Update Notice</p>
+            </div>
+            <div class="content">
+              <div class="title">Policy Document Updated</div>
+              <p class="text">Hello ${fullName},</p>
+              <p class="text">We are writing to inform you that we have updated one of our policy documents. We encourage you to review the changes at your earliest convenience.</p>
+
+              <div class="info-box">
+                <div class="info-label">Updated Document</div>
+                <div class="info-value">${pageName}</div>
+              </div>
+
+              <p class="text">Your continued use of our platform constitutes acceptance of the updated terms.</p>
+
+              <div class="button-wrap">
+                <a href="${pageUrl}" class="button">Review Changes</a>
+              </div>
+            </div>
+            <div class="footer">
+              <p>If you have any questions, please contact our support team.</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendEmail({
+      to: email,
+      subject: `Policy Update: ${pageName} - Naywa`,
+      html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: 'legal_update',
+      recipientName: fullName,
+      metadata: { pageName, pageUrl },
+    });
+  }
+
+  // Bulk send legal update to all users
+  async sendBulkLegalUpdateNotification(
+    pageName: string,
+    pageSlug: string,
+    adminUserId: string
+  ): Promise<{ sent: number; failed: number }> {
+    const pageUrl = `${process.env.FRONTEND_URL}/${pageSlug}`;
+
+    // Get all active users
+    const users = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        emailVerified: true,
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+      },
+    });
+
+    let sent = 0;
+    let failed = 0;
+
+    for (const user of users) {
+      const success = await this.sendLegalUpdateNotification(
+        user.email,
+        user.fullName,
+        pageName,
+        pageUrl,
+        user.id
+      );
+
+      if (success) {
+        sent++;
+      } else {
+        failed++;
+      }
+    }
+
+    // Log the bulk action
+    await logAuditAction({
+      userId: adminUserId,
+      actionType: AuditAction.LEGAL_UPDATE_NOTIFIED,
+      actionDescription: `Sent legal update notification for "${pageName}" to ${sent} users`,
+      targetType: 'LegalPage',
+      newValue: { pageName, pageSlug, sent, failed, totalUsers: users.length },
+    });
+
+    return { sent, failed };
+  }
 }
 
 export const emailService = new EmailService();

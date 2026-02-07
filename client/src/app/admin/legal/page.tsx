@@ -12,6 +12,9 @@ export default function AdminLegalPagesPage() {
   const [editContent, setEditContent] = useState('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [notifyingSlug, setNotifyingSlug] = useState<string | null>(null);
+  const [showNotifyConfirm, setShowNotifyConfirm] = useState<string | null>(null);
+  const [notifying, setNotifying] = useState(false);
 
   useEffect(() => {
     fetchPages();
@@ -88,6 +91,27 @@ export default function AdminLegalPagesPage() {
       'contact': 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
     };
     return icons[slug] || 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
+  };
+
+  const handleNotifyUsers = async (slug: string) => {
+    setNotifying(true);
+    setMessage(null);
+    try {
+      const result = await api.notifyLegalUpdate(slug);
+      if (result.success && result.data) {
+        setMessage({
+          type: 'success',
+          text: `Notification sent to ${result.data.sent} users${result.data.failed > 0 ? ` (${result.data.failed} failed)` : ''}`
+        });
+      } else {
+        setMessage({ type: 'error', text: result.message || 'Failed to send notifications' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Network error while sending notifications' });
+    } finally {
+      setNotifying(false);
+      setShowNotifyConfirm(null);
+    }
   };
 
   if (loading) {
@@ -232,6 +256,17 @@ export default function AdminLegalPagesPage() {
                 >
                   Edit
                 </button>
+                <button
+                  onClick={() => setShowNotifyConfirm(page.slug)}
+                  className="px-3 py-2 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5"
+                  style={{ background: 'var(--graphite-800)', color: 'white' }}
+                  title="Send email notification to all users"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Notify
+                </button>
               </div>
             </div>
           ))}
@@ -240,6 +275,55 @@ export default function AdminLegalPagesPage() {
               <p className="text-sm" style={{ color: 'var(--graphite-400)' }}>No legal pages found</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Notify Confirmation Modal */}
+      {showNotifyConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="solid-card rounded-xl p-6 max-w-md w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'var(--graphite-100)' }}>
+                <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold" style={{ color: 'var(--graphite-900)' }}>Notify Users</h3>
+                <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>Send email notification</p>
+              </div>
+            </div>
+            <p className="text-sm mb-6" style={{ color: 'var(--graphite-600)' }}>
+              This will send an email notification about the <strong>{getSlugLabel(showNotifyConfirm)}</strong> update to all verified users. Are you sure?
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowNotifyConfirm(null)}
+                disabled={notifying}
+                className="px-4 py-2 text-sm font-medium rounded-lg transition-all"
+                style={{ background: 'var(--graphite-100)', color: 'var(--graphite-600)' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleNotifyUsers(showNotifyConfirm)}
+                disabled={notifying}
+                className="px-4 py-2 text-sm font-medium rounded-lg transition-all text-white flex items-center gap-2"
+                style={{ background: notifying ? 'var(--graphite-400)' : 'var(--teal-600)' }}
+              >
+                {notifying ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  'Yes, Send Notification'
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

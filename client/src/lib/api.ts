@@ -1025,6 +1025,13 @@ class ApiClient {
     });
   }
 
+  // Admin — send legal update notification to all users
+  async notifyLegalUpdate(slug: string): Promise<ApiResponse<{ sent: number; failed: number }>> {
+    return this.request(`/legal/${slug}/notify`, {
+      method: 'POST',
+    });
+  }
+
   // Export admin applications as CSV
   async exportApplicationsCSV(): Promise<void> {
     const token = this.getToken();

@@ -45,6 +45,7 @@ export enum AuditAction {
 
   // Legal Page Actions
   LEGAL_PAGE_UPDATED = 'LEGAL_PAGE_UPDATED',
+  LEGAL_UPDATE_NOTIFIED = 'LEGAL_UPDATE_NOTIFIED',
 
   // Registry Tracking Actions
   REGISTRY_SEARCH = 'REGISTRY_SEARCH',

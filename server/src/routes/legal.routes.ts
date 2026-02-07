@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate, authorize } from '../middleware/auth';
-import { getAllLegalPages, getLegalPage, updateLegalPage } from '../controllers/legal.controller';
+import { getAllLegalPages, getLegalPage, updateLegalPage, notifyLegalUpdate } from '../controllers/legal.controller';
 
 const router = Router();
 
@@ -12,5 +12,8 @@ router.get('/:slug', getLegalPage);
 
 // Admin only — update legal page content
 router.put('/:slug', authenticate, authorize('admin'), updateLegalPage);
+
+// Admin only — send email notification to users about legal update
+router.post('/:slug/notify', authenticate, authorize('admin'), notifyLegalUpdate);
 
 export default router;
