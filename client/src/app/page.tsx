@@ -182,7 +182,7 @@ export default function LandingPage() {
       </section>
 
       {/* Certification Process - 3 Steps */}
-      <section className="py-20" style={{ background: '#2d3748' }}>
+      <section className="py-20" style={{ background: 'var(--sidebar-bg)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-semibold text-white mb-3">
