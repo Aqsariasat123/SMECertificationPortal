@@ -44,47 +44,39 @@ export default function LandingPage() {
           </nav>
 
           {/* Right - User Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors"
+              className="px-3 py-2 text-xs font-medium rounded-lg transition-colors"
               style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg hidden sm:inline-flex"
-            >
-              Start Certification
-            </Link>
-            <Link
-              href="/register"
-              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg sm:hidden"
+              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg"
             >
               Start
             </Link>
           </div>
         </div>
 
-        {/* Mobile Navigation Bar */}
-        <div className="md:hidden border-t" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
-          <div className="flex justify-center gap-4 py-2 px-4">
-            <Link
-              href="/certification-standards"
-              className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
-              style={{ color: 'var(--graphite-600)' }}
-            >
-              Standards
-            </Link>
-            <Link
-              href="/registry/verify"
-              className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
-              style={{ color: 'var(--graphite-600)' }}
-            >
-              Verify Certificate
-            </Link>
-          </div>
+        {/* Mobile Navigation Bar - Always visible on small screens */}
+        <div className="border-t flex justify-center gap-4 py-2 px-4 lg:hidden" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
+          <Link
+            href="/certification-standards"
+            className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
+            style={{ color: 'var(--graphite-600)' }}
+          >
+            Standards
+          </Link>
+          <Link
+            href="/registry/verify"
+            className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
+            style={{ color: 'var(--graphite-600)' }}
+          >
+            Verify Certificate
+          </Link>
         </div>
       </header>
 
