@@ -162,47 +162,93 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* What Naywa Certification Represents */}
+      {/* Governance Grid - Certification Principles & Scope */}
       <section className="py-16" style={{ background: 'var(--background)' }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-xl font-semibold mb-8" style={{ color: 'var(--graphite-900)' }}>
-            What Naywa Certification Represents
-          </h2>
-          <div className="space-y-3">
-            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
-              An independent, documentation-based review of submitted business information.
-            </p>
-            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
-              Certification status is issued at a defined point in time and recorded in Naywa&apos;s official registry.
-            </p>
-          </div>
-        </div>
-      </section>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Left Column - Certification Principles */}
+            <div>
+              <h2 className="text-sm font-semibold mb-4 uppercase tracking-wide" style={{ color: 'var(--graphite-500)' }}>
+                Certification Principles
+              </h2>
+              <div className="space-y-4">
+                {/* Card 1 - Independent Review */}
+                <div
+                  className="p-5 rounded-lg"
+                  style={{ background: 'white', border: '1px solid var(--graphite-200)' }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ background: 'var(--teal-50)' }}
+                    >
+                      <svg className="w-4 h-4" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: 'var(--graphite-800)' }}>
+                        Independent Review
+                      </h3>
+                      <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>
+                        A documentation-based review of submitted business information conducted independently by Naywa.
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-      {/* Scope & Limitations */}
-      <section className="pb-16" style={{ background: 'var(--background)' }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="p-6 rounded-xl"
-            style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-200)' }}
-          >
-            <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--graphite-700)' }}>
-              Scope & Limitations of Certification
-            </h3>
-            <ul className="space-y-2">
-              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
-                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Certification does not constitute regulatory approval, licensing, or endorsement
-              </li>
-              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
-                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Certification does not guarantee future performance, outcomes, or compliance
-              </li>
-              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
-                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Verification confirms registry status only, based on available records
-              </li>
-            </ul>
+                {/* Card 2 - Point-in-Time Verification */}
+                <div
+                  className="p-5 rounded-lg"
+                  style={{ background: 'white', border: '1px solid var(--graphite-200)' }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ background: 'var(--teal-50)' }}
+                    >
+                      <svg className="w-4 h-4" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: 'var(--graphite-800)' }}>
+                        Point-in-Time Verification
+                      </h3>
+                      <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>
+                        Certification reflects status at the time of issuance and is recorded and verifiable via Naywa&apos;s official registry.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Scope & Limitations */}
+            <div>
+              <h2 className="text-sm font-semibold mb-4 uppercase tracking-wide" style={{ color: 'var(--graphite-500)' }}>
+                Scope & Limitations
+              </h2>
+              <div
+                className="p-5 rounded-lg h-full"
+                style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-200)' }}
+              >
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                    <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                    <span>Certification does not constitute regulatory approval, licensing, or endorsement</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                    <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                    <span>Certification does not guarantee future performance, outcomes, or compliance</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                    <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                    <span>Verification confirms registry status only, based on available records</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
