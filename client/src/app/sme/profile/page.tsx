@@ -70,6 +70,7 @@ export default function SMEProfilePage() {
 
   // Documents state
   const [documents, setDocuments] = useState<UploadedDocument[]>([]);
+  const [documentStatuses, setDocumentStatuses] = useState<Record<string, { status: string; feedback: string | null; reviewedAt: string | null; version: number }>>({});
   const [uploading, setUploading] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
@@ -376,8 +377,11 @@ export default function SMEProfilePage() {
     try {
       const result = await api.getDocuments();
       if (result.success && result.data) {
-        const data = result.data as { documents?: UploadedDocument[] };
+        const data = result.data as { documents?: UploadedDocument[]; documentStatuses?: Record<string, { status: string; feedback: string | null; reviewedAt: string | null; version: number }> };
         setDocuments(data.documents || []);
+        if (data.documentStatuses) {
+          setDocumentStatuses(data.documentStatuses);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch documents:', error);
@@ -1796,13 +1800,16 @@ export default function SMEProfilePage() {
 
                         const levelBadge = getLevelBadge(docType.level);
 
+                        const docStatus = documentStatuses[docType.type];
+                        const hasRevisionRequired = docStatus?.status === 'requires_revision';
+
                         return (
                           <div
                             key={docType.type}
                             className="p-4 rounded-xl border transition-all"
                             style={{
-                              borderColor: uploadedDoc ? 'var(--success-300)' : 'var(--graphite-200)',
-                              background: uploadedDoc ? 'var(--success-50)' : 'var(--white)'
+                              borderColor: hasRevisionRequired ? 'var(--danger-300)' : uploadedDoc ? 'var(--success-300)' : 'var(--graphite-200)',
+                              background: hasRevisionRequired ? 'var(--danger-50)' : uploadedDoc ? 'var(--success-50)' : 'var(--white)'
                             }}
                           >
                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
@@ -1811,10 +1818,14 @@ export default function SMEProfilePage() {
                                 <div
                                   className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
                                   style={{
-                                    background: uploadedDoc ? 'var(--success-100)' : 'var(--graphite-100)'
+                                    background: hasRevisionRequired ? 'var(--danger-100)' : uploadedDoc ? 'var(--success-100)' : 'var(--graphite-100)'
                                   }}
                                 >
-                                  {uploadedDoc ? (
+                                  {hasRevisionRequired ? (
+                                    <svg className="w-4 h-4" style={{ color: 'var(--danger-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                  ) : uploadedDoc ? (
                                     <svg className="w-4 h-4" style={{ color: 'var(--success-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
@@ -1838,19 +1849,42 @@ export default function SMEProfilePage() {
                                       <span className="w-1 h-1 rounded-full" style={{ background: levelBadge.dot }}></span>
                                       {docType.level.charAt(0).toUpperCase() + docType.level.slice(1)}
                                     </span>
+                                    {/* Document Review Status Badge */}
+                                    {uploadedDoc && documentStatuses[docType.type] && (
+                                      <span
+                                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                                        style={{
+                                          background: documentStatuses[docType.type].status === 'approved' ? 'var(--success-100)' :
+                                                     documentStatuses[docType.type].status === 'requires_revision' ? 'var(--danger-100)' : 'var(--graphite-100)',
+                                          color: documentStatuses[docType.type].status === 'approved' ? 'var(--success-700)' :
+                                                 documentStatuses[docType.type].status === 'requires_revision' ? 'var(--danger-700)' : 'var(--graphite-600)'
+                                        }}
+                                      >
+                                        {documentStatuses[docType.type].status === 'approved' ? 'Approved' :
+                                         documentStatuses[docType.type].status === 'requires_revision' ? 'Revision Required' : 'Pending Review'}
+                                      </span>
+                                    )}
                                   </div>
                                   <p className="text-xs mb-2" style={{ color: 'var(--graphite-500)' }}>
                                     {docType.description}
                                   </p>
                                   {uploadedDoc ? (
-                                    <p className="text-xs font-medium" style={{ color: 'var(--success-600)' }}>
-                                      <span className="inline-flex items-center gap-1">
-                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        {uploadedDoc.originalName} ({formatFileSize(uploadedDoc.size)})
-                                      </span>
-                                    </p>
+                                    <>
+                                      <p className="text-xs font-medium" style={{ color: 'var(--success-600)' }}>
+                                        <span className="inline-flex items-center gap-1">
+                                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                          </svg>
+                                          {uploadedDoc.originalName} ({formatFileSize(uploadedDoc.size)})
+                                        </span>
+                                      </p>
+                                      {/* Show revision feedback if document requires revision */}
+                                      {documentStatuses[docType.type]?.status === 'requires_revision' && documentStatuses[docType.type]?.feedback && (
+                                        <div className="mt-2 p-2 rounded-lg text-xs" style={{ background: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                                          <strong>Revision Required:</strong> {documentStatuses[docType.type].feedback}
+                                        </div>
+                                      )}
+                                    </>
                                   ) : (
                                     <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>
                                       Not uploaded

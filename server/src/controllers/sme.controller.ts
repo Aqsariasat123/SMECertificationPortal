@@ -877,7 +877,7 @@ export const getDocuments = async (req: AuthenticatedRequest, res: Response) => 
 
     const profile = await prisma.sMEProfile.findUnique({
       where: { userId },
-      select: { documents: true },
+      select: { id: true, documents: true },
     });
 
     if (!profile) {
@@ -906,6 +906,32 @@ export const getDocuments = async (req: AuthenticatedRequest, res: Response) => 
       (type) => !uploadedTypes.includes(type)
     );
 
+    // Get document statuses from DocumentVersion table
+    const documentVersions = await prisma.documentVersion.findMany({
+      where: {
+        smeProfileId: profile.id,
+        isLatest: true,
+      },
+      select: {
+        documentType: true,
+        status: true,
+        adminFeedback: true,
+        reviewedAt: true,
+        version: true,
+      },
+    });
+
+    // Create a map of document type to status
+    const documentStatuses: Record<string, { status: string; feedback: string | null; reviewedAt: Date | null; version: number }> = {};
+    documentVersions.forEach(dv => {
+      documentStatuses[dv.documentType] = {
+        status: dv.status,
+        feedback: dv.adminFeedback,
+        reviewedAt: dv.reviewedAt,
+        version: dv.version,
+      };
+    });
+
     return res.json({
       success: true,
       data: {
@@ -913,6 +939,7 @@ export const getDocuments = async (req: AuthenticatedRequest, res: Response) => 
         requiredDocuments: REQUIRED_DOCUMENTS,
         missingRequired,
         documentTypeLabels: DOCUMENT_TYPE_LABELS,
+        documentStatuses,
       },
     });
   } catch (error) {
