@@ -170,13 +170,10 @@ export default function LandingPage() {
           </h2>
           <div className="space-y-3">
             <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
-              Independent review of submitted business documentation
+              An independent, documentation-based review of submitted business information.
             </p>
             <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
-              Certification reflects assessment at a defined point in time
-            </p>
-            <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
-              Certification status is verifiable via Naywa&apos;s official registry
+              Certification status is issued at a defined point in time and recorded in Naywa&apos;s official registry.
             </p>
           </div>
         </div>
@@ -195,15 +192,15 @@ export default function LandingPage() {
             <ul className="space-y-2">
               <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
                 <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Certification reflects documentation review at a defined point in time
+                Certification does not constitute regulatory approval, licensing, or endorsement
               </li>
               <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
                 <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Certification does not constitute regulatory approval or endorsement
+                Certification does not guarantee future performance, outcomes, or compliance
               </li>
               <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
                 <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
-                Certification status is verifiable via Naywa&apos;s official registry
+                Verification confirms registry status only, based on available records
               </li>
             </ul>
           </div>
