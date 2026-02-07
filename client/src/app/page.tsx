@@ -10,6 +10,7 @@ export default function LandingPage() {
         style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)', borderBottom: '1px solid var(--graphite-200)' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+          {/* Left - Logo */}
           <Link href="/" className="flex items-center gap-2.5">
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -23,25 +24,31 @@ export default function LandingPage() {
               Naywa
             </span>
           </Link>
-          <nav className="flex items-center gap-3">
+
+          {/* Center - Public Trust Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/certification-standards"
-              className="px-3 py-2 text-sm font-medium transition-colors hidden sm:block"
+              className="px-4 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
               style={{ color: 'var(--graphite-600)' }}
             >
               Certification Standards
             </Link>
             <Link
               href="/registry/verify"
-              className="px-3 py-2 text-sm font-medium transition-colors hidden sm:block"
+              className="px-4 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
               style={{ color: 'var(--graphite-600)' }}
             >
               Verify a Certificate
             </Link>
+          </nav>
+
+          {/* Right - User Actions */}
+          <div className="flex items-center gap-3">
             <Link
               href="/login"
               className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
-              style={{ border: '1px solid var(--teal-300)', color: 'var(--teal-700)' }}
+              style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent' }}
             >
               Sign In
             </Link>
@@ -51,7 +58,7 @@ export default function LandingPage() {
             >
               Start Certification
             </Link>
-          </nav>
+          </div>
         </div>
       </header>
 
@@ -60,15 +67,20 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             {/* Registry Status Badge */}
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6"
-              style={{ background: 'var(--teal-50)', color: 'var(--teal-700)', border: '1px solid var(--teal-200)' }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: 'var(--teal-500)' }}
-              />
-              Registry Status: 500+ Certified Entities
+            <div className="mb-6">
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+                style={{ background: 'var(--teal-50)', color: 'var(--teal-700)', border: '1px solid var(--teal-200)' }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: 'var(--teal-500)' }}
+                />
+                Registry Status: 500+ Certified Entities
+              </div>
+              <p className="text-xs mt-1.5" style={{ color: 'var(--graphite-400)' }}>
+                As reflected in current registry records
+              </p>
             </div>
 
             <h1
@@ -137,6 +149,34 @@ export default function LandingPage() {
             <p className="text-base" style={{ color: 'var(--graphite-600)' }}>
               Certification status is verifiable via Naywa&apos;s official registry
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Scope & Limitations */}
+      <section className="pb-16" style={{ background: 'var(--background)' }}>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            className="p-6 rounded-xl"
+            style={{ background: 'var(--graphite-50)', border: '1px solid var(--graphite-200)' }}
+          >
+            <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--graphite-700)' }}>
+              Scope & Limitations of Certification
+            </h3>
+            <ul className="space-y-2">
+              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                Certification reflects documentation review at a defined point in time
+              </li>
+              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                Certification does not constitute regulatory approval or endorsement
+              </li>
+              <li className="flex items-start gap-2 text-sm" style={{ color: 'var(--graphite-600)' }}>
+                <span className="w-1 h-1 rounded-full mt-2 flex-shrink-0" style={{ background: 'var(--graphite-400)' }} />
+                Certification status is verifiable via Naywa&apos;s official registry
+              </li>
+            </ul>
           </div>
         </div>
       </section>
