@@ -182,7 +182,7 @@ export default function LandingPage() {
       </section>
 
       {/* Certification Process - 3 Steps */}
-      <section className="py-20" style={{ background: '#1a1d21' }}>
+      <section className="py-20" style={{ background: '#23282d' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-semibold text-white mb-3">
@@ -195,7 +195,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Step 1 */}
-            <div className="p-6 rounded-xl" style={{ background: '#2d3339' }}>
+            <div className="p-6 rounded-xl" style={{ background: '#2d3238' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
@@ -211,7 +211,7 @@ export default function LandingPage() {
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-xl" style={{ background: '#2d3339' }}>
+            <div className="p-6 rounded-xl" style={{ background: '#2d3238' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
@@ -227,7 +227,7 @@ export default function LandingPage() {
             </div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-xl" style={{ background: '#2d3339' }}>
+            <div className="p-6 rounded-xl" style={{ background: '#2d3238' }}>
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
                 style={{ background: 'var(--teal-600)' }}
