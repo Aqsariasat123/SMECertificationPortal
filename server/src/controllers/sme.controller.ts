@@ -1684,7 +1684,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     const qrSize = 60;
     const qrX = pageW - marginX - qrSize;
     doc.image(qrBuffer, qrX, curY, { width: qrSize, height: qrSize });
-    doc.fontSize(6).fillColor('#666').font('Helvetica').text('Scan to verify', qrX, curY + qrSize + 2, { width: qrSize, align: 'center' });
+    doc.fontSize(6).fillColor('#666').font('Helvetica').text('Scan to verify', qrX + 8, curY + qrSize + 2, { lineBreak: false });
 
     // Hash and URL on left
     doc.fontSize(7).fillColor('#888').font('Helvetica').text('DOCUMENT HASH (SHA-256)', marginX, curY);
@@ -1700,17 +1700,21 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.moveTo(marginX, footerY).lineTo(pageW - marginX, footerY).lineWidth(0.5).strokeColor('#eee').stroke();
 
     doc.fontSize(5.5).fillColor('#999').font('Helvetica').text(
-      'Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review.',
-      marginX, footerY + 8, { width: contentW - 90 }
+      'Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature.',
+      marginX, footerY + 8, { width: contentW - 100, continued: false }
     );
 
-    // Registry seal
+    // Registry seal - using simple rect and positioned text
     const sealX = pageW - marginX - 70;
     const sealY = footerY + 5;
     doc.rect(sealX, sealY, 70, 22).lineWidth(1).strokeColor('#4a8f87').stroke();
     doc.rect(sealX + 1, sealY + 1, 68, 20).lineWidth(0.5).strokeColor('#4a8f87').stroke();
-    doc.fontSize(5.5).fillColor('#4a8f87').font('Helvetica-Bold').text('NAYWA REGISTRY', sealX, sealY + 5, { width: 70, align: 'center' });
-    doc.fontSize(5).fillColor('#666').font('Helvetica').text('Verified Document', sealX, sealY + 13, { width: 70, align: 'center' });
+
+    // Manually center text in seal
+    doc.fontSize(5.5).fillColor('#4a8f87').font('Helvetica-Bold');
+    doc.text('NAYWA REGISTRY', sealX + 8, sealY + 5, { lineBreak: false });
+    doc.fontSize(5).fillColor('#666').font('Helvetica');
+    doc.text('Verified Document', sealX + 12, sealY + 13, { lineBreak: false });
 
     doc.end();
 
