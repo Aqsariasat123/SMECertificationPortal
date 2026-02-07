@@ -20,12 +20,12 @@ export default function LandingPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <span className="text-base font-semibold" style={{ color: 'var(--graphite-900)' }}>
+            <span className="text-base font-semibold hidden sm:block" style={{ color: 'var(--graphite-900)' }}>
               Naywa
             </span>
           </Link>
 
-          {/* Center - Public Trust Navigation */}
+          {/* Center - Public Trust Navigation (Desktop) */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/certification-standards"
@@ -44,19 +44,45 @@ export default function LandingPage() {
           </nav>
 
           {/* Right - User Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors"
               style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="btn-primary px-4 py-2 text-sm font-medium rounded-lg"
+              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg hidden sm:inline-flex"
             >
               Start Certification
+            </Link>
+            <Link
+              href="/register"
+              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg sm:hidden"
+            >
+              Start
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Bar */}
+        <div className="md:hidden border-t" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
+          <div className="flex justify-center gap-4 py-2 px-4">
+            <Link
+              href="/certification-standards"
+              className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
+              style={{ color: 'var(--graphite-600)' }}
+            >
+              Standards
+            </Link>
+            <Link
+              href="/registry/verify"
+              className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
+              style={{ color: 'var(--graphite-600)' }}
+            >
+              Verify Certificate
             </Link>
           </div>
         </div>
