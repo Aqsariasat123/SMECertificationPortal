@@ -44,25 +44,25 @@ export default function LandingPage() {
           </nav>
 
           {/* Right - User Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="px-3 py-2 text-xs font-medium rounded-lg transition-colors"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors"
               style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg"
+              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg"
             >
-              Start
+              Start Certification
             </Link>
           </div>
         </div>
 
-        {/* Mobile Navigation Bar - Always visible on small screens */}
-        <div className="border-t flex justify-center gap-4 py-2 px-4 lg:hidden" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
+        {/* Mobile Navigation Bar */}
+        <div className="flex justify-center gap-4 py-2 px-4 border-t md:hidden" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
           <Link
             href="/certification-standards"
             className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"

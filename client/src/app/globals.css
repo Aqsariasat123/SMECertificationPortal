@@ -206,6 +206,10 @@ input:focus, textarea:focus, select:focus {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .btn-primary:hover {
