@@ -44,18 +44,18 @@ export default function LandingPage() {
           </nav>
 
           {/* Right - User Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors"
-              style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent' }}
+              className="px-3 py-2 text-xs font-medium rounded-lg transition-colors"
+              style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '36px' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}
+              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '36px' }}
             >
               Start Certification
             </Link>
@@ -68,7 +68,7 @@ export default function LandingPage() {
             .mobile-nav-bar { display: none !important; }
           }
         `}</style>
-        <div className="mobile-nav-bar flex justify-center gap-4 py-2 px-4 border-t" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
+        <div className="mobile-nav-bar flex justify-center gap-6 py-3 px-4 border-t" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
           <Link
             href="/certification-standards"
             className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
@@ -87,7 +87,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-28 pb-16" style={{ background: 'var(--background)' }}>
+      <section className="pt-36 md:pt-28 pb-16" style={{ background: 'var(--background)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             {/* Registry Status Badge */}
