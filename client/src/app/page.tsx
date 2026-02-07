@@ -55,14 +55,20 @@ export default function LandingPage() {
             <Link
               href="/register"
               className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}
             >
               Start Certification
             </Link>
           </div>
         </div>
 
-        {/* Mobile Navigation Bar */}
-        <div className="flex justify-center gap-4 py-2 px-4 border-t md:hidden" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
+        {/* Mobile Navigation Bar - Using CSS media query */}
+        <style>{`
+          @media (min-width: 768px) {
+            .mobile-nav-bar { display: none !important; }
+          }
+        `}</style>
+        <div className="mobile-nav-bar flex justify-center gap-4 py-2 px-4 border-t" style={{ borderColor: 'var(--graphite-200)', background: 'var(--background)' }}>
           <Link
             href="/certification-standards"
             className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
