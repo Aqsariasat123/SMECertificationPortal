@@ -181,6 +181,89 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Certification Process - 3 Steps */}
+      <section className="py-20" style={{ background: '#2d3748' }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold text-white mb-3">
+              Certification Process
+            </h2>
+            <p className="text-base" style={{ color: '#a0aec0' }}>
+              The certification process follows a structured review of submitted documentation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+              <div
+                className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
+                style={{ background: 'var(--teal-600)' }}
+              >
+                1
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Application Submission
+              </h3>
+              <p className="text-sm" style={{ color: '#a0aec0' }}>
+                Businesses submit required documentation in accordance with Naywa&apos;s certification standards.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+              <div
+                className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
+                style={{ background: 'var(--teal-600)' }}
+              >
+                2
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Independent Review
+              </h3>
+              <p className="text-sm" style={{ color: '#a0aec0' }}>
+                Submitted materials are reviewed against internal assessment criteria at a defined point in time.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-6 rounded-xl" style={{ background: '#3d4a5c' }}>
+              <div
+                className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold text-lg mb-4"
+                style={{ background: 'var(--teal-600)' }}
+              >
+                3
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Certification Decision
+              </h3>
+              <p className="text-sm" style={{ color: '#a0aec0' }}>
+                Certification status is issued, deferred, or declined and recorded in Naywa&apos;s official registry.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Block */}
+          <div className="text-center mt-16">
+            <h3 className="text-2xl font-semibold text-white mb-3">
+              Ready to Get Certified?
+            </h3>
+            <p className="text-base mb-6" style={{ color: '#a0aec0' }}>
+              Verified entities are recorded in the official SME registry to establish institutional credibility.
+            </p>
+            <Link
+              href="/register"
+              className="btn-primary px-8 py-3.5 text-sm font-medium rounded-lg inline-flex items-center justify-center gap-2"
+            >
+              Start Certification
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <PublicFooter />
     </div>
