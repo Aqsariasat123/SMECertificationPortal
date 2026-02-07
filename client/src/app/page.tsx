@@ -25,7 +25,7 @@ export default function LandingPage() {
                 Naywa
               </span>
               <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>
-                SME Certification &amp; Registry Authority
+                SME Certification Registry
               </span>
             </div>
           </Link>
