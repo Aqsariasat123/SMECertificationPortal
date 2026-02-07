@@ -1614,7 +1614,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.font('Helvetica-Bold').fontSize(20).fillColor('#23282d');
     doc.text('NAYWA', marginX, curY, { lineBreak: false });
     doc.font('Helvetica').fontSize(9).fillColor('#666');
-    doc.text('SME Certification Authority', marginX, curY + 24, { lineBreak: false });
+    doc.text('SME Certification Registry', marginX, curY + 24, { lineBreak: false });
 
     // Right side certificate title
     doc.font('Helvetica-Bold').fontSize(10).fillColor('#4a8f87');
@@ -1628,7 +1628,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     // ═══════════════════════════════════════════════════════════════════
     curY += 20;
     doc.font('Helvetica').fontSize(9).fillColor('#555');
-    doc.text('This certificate attests that the entity named below has completed the Naywa SME certification process.', marginX, curY, { lineBreak: false });
+    doc.text('This certificate confirms that the entity named below has undergone Naywa\'s documentation-based SME certification process.', marginX, curY, { lineBreak: false });
 
     curY += 25;
     doc.font('Helvetica').fontSize(7).fillColor('#888');
@@ -1723,7 +1723,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.moveTo(marginX, footerY).lineTo(pageW - marginX, footerY).lineWidth(0.5).strokeColor('#eee').stroke();
 
     doc.font('Helvetica').fontSize(5.5).fillColor('#999');
-    doc.text('Digitally issued via Naywa Registry. This document does not require a physical signature.', marginX, footerY + 8, { lineBreak: false });
+    doc.text('Digitally issued via the Naywa Registry. This document confirms certification status at the time of issuance and does not require a physical signature.', marginX, footerY + 8, { lineBreak: false });
 
     // Registry seal
     const sealX = pageW - marginX - 70;
