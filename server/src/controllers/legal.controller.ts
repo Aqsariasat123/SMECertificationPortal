@@ -147,8 +147,7 @@ export const notifyLegalUpdate = async (req: Request, res: Response): Promise<vo
     // Get count of users to notify
     const userCount = await prisma.user.count({
       where: {
-        isActive: true,
-        emailVerified: true,
+        isVerified: true,
       },
     });
 

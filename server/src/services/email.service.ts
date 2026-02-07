@@ -904,11 +904,10 @@ class EmailService {
   ): Promise<{ sent: number; failed: number }> {
     const pageUrl = `${process.env.FRONTEND_URL}/${pageSlug}`;
 
-    // Get all active users
+    // Get all verified users
     const users = await prisma.user.findMany({
       where: {
-        isActive: true,
-        emailVerified: true,
+        isVerified: true,
       },
       select: {
         id: true,
