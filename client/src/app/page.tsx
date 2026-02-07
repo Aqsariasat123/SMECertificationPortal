@@ -47,15 +47,15 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="px-3 py-2 text-xs font-medium rounded-lg transition-colors"
-              style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'transparent', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '36px' }}
+              className="px-4 text-xs font-medium rounded-lg transition-colors"
+              style={{ border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)', background: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '38px' }}
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="btn-primary px-3 py-2 text-xs font-medium rounded-lg"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '36px' }}
+              className="btn-primary px-4 text-xs font-medium rounded-lg"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: '38px' }}
             >
               Start Certification
             </Link>
@@ -74,14 +74,14 @@ export default function LandingPage() {
             className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
             style={{ color: 'var(--graphite-600)' }}
           >
-            Standards
+            Certification Standards
           </Link>
           <Link
             href="/registry/verify"
             className="px-3 py-1.5 text-xs font-medium transition-colors rounded-lg"
             style={{ color: 'var(--graphite-600)' }}
           >
-            Verify Certificate
+            Verify a Certificate
           </Link>
         </div>
       </header>
