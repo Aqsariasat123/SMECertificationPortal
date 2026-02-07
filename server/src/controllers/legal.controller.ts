@@ -155,23 +155,25 @@ export const notifyLegalUpdate = async (req: Request, res: Response): Promise<vo
       res.json({
         success: true,
         message: 'No users to notify',
-        data: { sent: 0, failed: 0 },
+        data: { sent: 0, failed: 0, queued: 0 },
       });
       return;
     }
 
-    // Send bulk notification
-    const result = await emailService.sendBulkLegalUpdateNotification(
+    // Send response immediately, process emails in background
+    res.json({
+      success: true,
+      message: `Sending notifications to ${userCount} users in background`,
+      data: { queued: userCount },
+    });
+
+    // Send bulk notification in background (non-blocking)
+    emailService.sendBulkLegalUpdateNotification(
       page.title,
       page.slug,
       authReq.user.userId
-    );
+    ).catch(err => console.error('Background email sending failed:', err));
 
-    res.json({
-      success: true,
-      message: `Notification sent to ${result.sent} users`,
-      data: result,
-    });
   } catch (error) {
     console.error('Error sending legal update notification:', error);
     res.status(500).json({

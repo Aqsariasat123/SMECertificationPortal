@@ -98,11 +98,21 @@ export default function AdminLegalPagesPage() {
     setMessage(null);
     try {
       const result = await api.notifyLegalUpdate(slug);
-      if (result.success && result.data) {
-        setMessage({
-          type: 'success',
-          text: `Notification sent to ${result.data.sent} users${result.data.failed > 0 ? ` (${result.data.failed} failed)` : ''}`
-        });
+      if (result.success) {
+        const data = result.data as { sent?: number; failed?: number; queued?: number };
+        if (data?.queued) {
+          setMessage({
+            type: 'success',
+            text: `Notifications queued for ${data.queued} users. Emails will be sent in background.`
+          });
+        } else if (data?.sent !== undefined) {
+          setMessage({
+            type: 'success',
+            text: `Notification sent to ${data.sent} users${data.failed && data.failed > 0 ? ` (${data.failed} failed)` : ''}`
+          });
+        } else {
+          setMessage({ type: 'success', text: result.message || 'Notifications sent' });
+        }
       } else {
         setMessage({ type: 'error', text: result.message || 'Failed to send notifications' });
       }
