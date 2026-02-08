@@ -529,6 +529,12 @@ export default function SMECertificationPage() {
                     </p>
                   </div>
                 )}
+                {/* VAT Disclaimer */}
+                <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--graphite-100)' }}>
+                  <p className="text-xs" style={{ color: 'var(--graphite-400)' }}>
+                    VAT not applicable – not VAT registered under UAE VAT Law
+                  </p>
+                </div>
               </div>
 
               <button
@@ -576,6 +582,9 @@ export default function SMECertificationPage() {
             </p>
             <p className="text-xs mt-0.5" style={{ color: 'var(--success-600)' }}>
               {payment.invoiceNumber} - {formatCurrency(payment.amount, payment.currency)} on {formatPaymentDate(payment.paidAt)}
+            </p>
+            <p className="text-xs mt-1" style={{ color: 'var(--success-500)' }}>
+              VAT not applicable – not VAT registered under UAE VAT Law
             </p>
           </div>
         </div>
