@@ -1,0 +1,70 @@
+# SME Certification Portal - Claude Memory
+
+## Project Overview
+A full-stack SME (Small & Medium Enterprise) certification and registry management portal for Dubai/UAE.
+
+## Tech Stack
+- **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Backend:** Node.js + Express.js, PostgreSQL + Prisma ORM, JWT Authentication
+- **Ports:** Frontend :3001, Backend :5001
+
+## Key Features
+- SME Dashboard: Profile management, document uploads, certification application
+- Investor Dashboard: Browse certified SMEs, request introductions, messaging
+- Admin Dashboard: Review applications, manage users, support tickets, audit logs
+- Support System: Real-time chat between users and admin
+- Messaging: Real-time chat between investors and SMEs
+
+## Project Structure
+```
+SMECertificationPortal/
+├── client/          # Next.js frontend
+├── server/          # Express.js backend
+├── database/        # Database dumps and scripts
+├── backups/         # Database backups
+```
+
+## Key Files
+- `server/prisma/schema.prisma` - Database schema
+- `server/src/controllers/` - API controllers (admin, sme, auth, etc.)
+- `server/src/services/email.service.ts` - Email notifications
+- `server/src/utils/auditLogger.ts` - Audit logging
+- `client/src/app/admin/` - Admin dashboard pages
+- `client/src/app/sme/` - SME dashboard pages
+
+## Current Development Phase
+**Phase 1 Hardening** (v4.6) - Preparing for real SME onboarding
+
+### Recently Completed
+- Trade License Validation & Account Suspension (governance controls)
+- Legal notification emails (async)
+- isVerified field implementation
+- Legal page update email notifications
+
+### Pending Priority 1 (Critical)
+- Document Version History (DocumentVersion table)
+- Document-Level Status & Feedback
+- Audit Logging Enhancements (DOCUMENT_REPLACED, ADMIN_DOCUMENT_VIEWED, EMAIL_SENT)
+- Email Audit Log (EmailLog table)
+
+### Pending Priority 2 (Important)
+- Virus/Malware Scanning (file validation)
+- Internal Dimensions Progress Indicator (X/5 reviewed)
+- UBO Declaration & VAT Certificate documents
+
+## Brand Guidelines
+- Uses formal/professional tone for UAE government context
+- See BRAND_VOICE_UX_WRITING_GUIDE.md for UX writing standards
+
+## Commands
+```bash
+# Backend
+cd server && npm run dev
+
+# Frontend
+cd client && npm run dev
+
+# Database
+npx prisma db push
+npx prisma generate
+```
