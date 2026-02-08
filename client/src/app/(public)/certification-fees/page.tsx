@@ -16,7 +16,7 @@ There is no standard published rate. Fees are communicated directly to the appli
 
 ## Payment Process
 
-Payment is requested only after the certification application has been reviewed and approved. No payment is required at the time of application submission.
+Payment is requested only after the certification application has been reviewed and a certification decision has been reached. No payment is required at the time of application submission.
 
 Upon approval, the applicant will receive a payment request with the applicable fee amount and invoice details.
 
@@ -24,11 +24,13 @@ Upon approval, the applicant will receive a payment request with the applicable 
 
 Naywa is currently not registered for VAT under UAE VAT Law. As such, VAT is not applicable to certification fees at this time.
 
-VAT status is indicated on all invoices issued. Should VAT registration status change in the future, the applicable VAT rate (currently 5% under UAE VAT Law) will be applied and clearly reflected on invoices with a full breakdown.
+VAT status is indicated on all invoices issued. Should VAT registration status change in the future, the applicable VAT at the applicable rate under UAE VAT Law will be applied and clearly reflected on invoices with a full breakdown.
 
 ---
 
-*This page is provided for informational purposes only and does not constitute a fee schedule, price list, or contractual offer. All fees are subject to administrative determination and may be updated without prior notice.*`;
+*This page is provided for informational purposes only and does not constitute a fee schedule, price list, or contractual offer. All fees are subject to administrative determination and may be updated without prior notice.*
+
+*Certification outcomes are based solely on information submitted by the applicant and do not constitute verification of underlying facts beyond the scope of the assessment.*`;
 
 export default function CertificationFeesPage() {
   const [page, setPage] = useState<LegalPageData | null>(null);
