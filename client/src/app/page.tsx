@@ -10,43 +10,45 @@ export default function LandingPage() {
         style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)', borderBottom: '1px solid var(--graphite-200)' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-          {/* Left - Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center"
-              style={{ background: 'var(--teal-600)' }}
-            >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-base font-semibold block" style={{ color: 'var(--graphite-900)' }}>
-                Naywa
-              </span>
-              <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>
-                SME Certification Registry
-              </span>
-            </div>
-          </Link>
+          {/* Left - Logo + Registry Navigation (Authority Block) */}
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center"
+                style={{ background: 'var(--teal-600)' }}
+              >
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div className="hidden sm:block">
+                <span className="text-base font-semibold block" style={{ color: 'var(--graphite-900)' }}>
+                  Naywa
+                </span>
+                <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+                  SME Certification Registry
+                </span>
+              </div>
+            </Link>
 
-          {/* Center - Public Trust Navigation (Desktop) */}
-          <nav className="hidden md:flex items-center gap-1">
-            <Link
-              href="/certification-standards"
-              className="px-4 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
-              style={{ color: 'var(--graphite-600)' }}
-            >
-              Certification Standards
-            </Link>
-            <Link
-              href="/registry/verify"
-              className="px-4 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
-              style={{ color: 'var(--graphite-600)' }}
-            >
-              Verify a Certificate
-            </Link>
-          </nav>
+            {/* Registry Navigation (Desktop) */}
+            <nav className="hidden md:flex items-center gap-1">
+              <Link
+                href="/certification-standards"
+                className="px-3 py-1.5 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
+                style={{ color: 'var(--graphite-600)' }}
+              >
+                Certification Standards
+              </Link>
+              <Link
+                href="/registry/verify"
+                className="px-3 py-1.5 text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
+                style={{ color: 'var(--graphite-600)' }}
+              >
+                Verify a Certificate
+              </Link>
+            </nav>
+          </div>
 
           {/* Right - User Actions */}
           <div className="flex items-center gap-2">
