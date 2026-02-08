@@ -1094,6 +1094,43 @@ class ApiClient {
   }
 
   // ============================================
+  // Governance Controls
+  // ============================================
+
+  // Admin - suspend user account
+  async suspendUser(userId: string, reason: string): Promise<ApiResponse<AdminUser>> {
+    return this.request(`/admin/users/${userId}/suspend`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  // Admin - unsuspend user account
+  async unsuspendUser(userId: string): Promise<ApiResponse<AdminUser>> {
+    return this.request(`/admin/users/${userId}/unsuspend`, {
+      method: 'POST',
+    });
+  }
+
+  // Admin - get duplicate trade license attempts
+  async getDuplicateAttempts(params: { page?: number; limit?: number } = {}): Promise<ApiResponse<{
+    attempts: Array<{
+      id: string;
+      timestamp: string;
+      ipAddress: string | null;
+      details: { attemptedEmail?: string; tradeLicenseNumber?: string; existingProfileId?: string } | null;
+      description: string;
+    }>;
+    pagination: PaginationData;
+  }>> {
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+    const query = queryParams.toString();
+    return this.request(`/admin/governance/duplicate-attempts${query ? `?${query}` : ''}`);
+  }
+
+  // ============================================
   // Payment Management
   // ============================================
 

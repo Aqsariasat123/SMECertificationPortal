@@ -23,6 +23,10 @@ import {
   viewDocument,
   updateDocumentStatus,
   getDocumentStatuses,
+  // Governance Controls
+  suspendUser,
+  unsuspendUser,
+  getDuplicateAttempts,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -70,5 +74,12 @@ router.post('/kyc-applications/:id/review', reviewKycApplication);
 // Certificate management
 router.post('/certificates/:certificateId/revoke', revokeCertificate);
 router.post('/certificates/:certificateId/reissue', reissueCertificate);
+
+// Governance Controls: Account Suspension
+router.post('/users/:userId/suspend', suspendUser);
+router.post('/users/:userId/unsuspend', unsuspendUser);
+
+// Governance Controls: Duplicate Detection Visibility
+router.get('/governance/duplicate-attempts', getDuplicateAttempts);
 
 export default router;

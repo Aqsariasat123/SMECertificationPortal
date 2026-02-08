@@ -115,6 +115,37 @@ export async function register(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    // Check for duplicate Trade License Number (Governance Control)
+    if (role === 'sme' && tradeLicenseNumber) {
+      const existingLicense = await prisma.sMEProfile.findFirst({
+        where: { tradeLicenseNumber: tradeLicenseNumber.trim() },
+        select: { id: true, userId: true },
+      });
+
+      if (existingLicense) {
+        // Log duplicate attempt for admin visibility
+        await logAuditAction({
+          userId: 'SYSTEM',
+          actionType: AuditAction.DUPLICATE_TRADE_LICENSE_ATTEMPT,
+          actionDescription: `Duplicate trade license registration attempt: ${tradeLicenseNumber}`,
+          targetType: 'SMEProfile',
+          targetId: existingLicense.id,
+          ipAddress: req.ip || req.socket.remoteAddress,
+          newValue: {
+            attemptedEmail: email.toLowerCase(),
+            tradeLicenseNumber: tradeLicenseNumber,
+            existingProfileId: existingLicense.id,
+          },
+        });
+
+        res.status(409).json({
+          success: false,
+          message: 'This Trade License number is already registered in our system',
+        } as ApiResponse);
+        return;
+      }
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = generateRandomToken();
@@ -207,6 +238,24 @@ export async function login(req: Request, res: Response): Promise<void> {
       res.status(403).json({
         success: false,
         message: 'Please verify your email address before logging in',
+      } as ApiResponse);
+      return;
+    }
+
+    // Check if account is suspended (Governance Control)
+    if (user.accountStatus === 'suspended') {
+      // Log blocked login attempt
+      await logAuditAction({
+        userId: user.id,
+        actionType: AuditAction.LOGIN_BLOCKED_SUSPENDED,
+        actionDescription: 'Login attempt blocked - account suspended',
+        ipAddress: req.ip || req.socket.remoteAddress,
+        newValue: { suspendedReason: user.suspendedReason },
+      });
+
+      res.status(403).json({
+        success: false,
+        message: 'Your account has been suspended. Please contact support for assistance.',
       } as ApiResponse);
       return;
     }

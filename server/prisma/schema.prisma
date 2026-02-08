@@ -137,26 +137,37 @@ enum EmailStatus {
   failed            // Email failed to send
 }
 
+enum AccountStatus {
+  active            // Account is active and can login
+  suspended         // Account is suspended by admin, cannot login
+}
+
 // ============================================
 // MODELS
 // ============================================
 
 /// User model - Base user account for all roles
 model User {
-  id                    String    @id @default(uuid())
-  email                 String    @unique
+  id                    String        @id @default(uuid())
+  email                 String        @unique
   password              String
   role                  UserRole
   fullName              String
   phoneNumber           String?
   profilePicture        String?
-  isVerified            Boolean   @default(false)
+  isVerified            Boolean       @default(false)
   verificationToken     String?
   resetPasswordToken    String?
   resetPasswordExpires  DateTime?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
   lastLogin             DateTime?
+
+  // Account Status (Governance Control)
+  accountStatus         AccountStatus @default(active)
+  suspendedAt           DateTime?
+  suspendedBy           String?       // Admin user ID who suspended
+  suspendedReason       String?
 
   // Relations
   userProfile           UserProfile?
@@ -273,7 +284,7 @@ model SMEProfile {
 
   // ============ BASIC INFO (Existing + Enhanced) ============
   companyName         String?
-  tradeLicenseNumber  String?
+  tradeLicenseNumber  String?             @unique  // Governance: Prevent duplicate registrations
   companyDescription  String?
   industrySector      IndustrySector?
   foundingDate        DateTime?

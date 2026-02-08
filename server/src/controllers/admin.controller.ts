@@ -102,6 +102,9 @@ export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
           fullName: true,
           role: true,
           isVerified: true,
+          accountStatus: true,
+          suspendedAt: true,
+          suspendedReason: true,
           createdAt: true,
           lastLogin: true,
         },
@@ -2411,6 +2414,274 @@ export const updateDocumentStatus = async (req: AuthenticatedRequest, res: Respo
     return res.status(500).json({
       success: false,
       message: 'Failed to update document status',
+    });
+  }
+};
+
+// ============================================
+// GOVERNANCE CONTROLS: Account Suspension
+// ============================================
+
+// POST /api/admin/users/:userId/suspend - Suspend a user account
+export const suspendUser = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const targetUserId = req.params.userId as string;
+    const { reason } = req.body;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    if (!reason || reason.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'Suspension reason is required',
+      });
+    }
+
+    // Prevent admin from suspending themselves
+    if (adminId === targetUserId) {
+      return res.status(400).json({
+        success: false,
+        message: 'You cannot suspend your own account',
+      });
+    }
+
+    // Get the target user
+    const targetUser = await prisma.user.findUnique({
+      where: { id: targetUserId },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+        accountStatus: true,
+      },
+    });
+
+    if (!targetUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Prevent suspending other admins (optional protection)
+    if (targetUser.role === 'admin') {
+      return res.status(400).json({
+        success: false,
+        message: 'Admin accounts cannot be suspended',
+      });
+    }
+
+    // Check if already suspended
+    if (targetUser.accountStatus === 'suspended') {
+      return res.status(400).json({
+        success: false,
+        message: 'Account is already suspended',
+      });
+    }
+
+    // Suspend the account
+    const updatedUser = await prisma.user.update({
+      where: { id: targetUserId },
+      data: {
+        accountStatus: 'suspended',
+        suspendedAt: new Date(),
+        suspendedBy: adminId,
+        suspendedReason: reason.trim(),
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        role: true,
+        accountStatus: true,
+        suspendedAt: true,
+        suspendedReason: true,
+      },
+    });
+
+    // Log the action
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.ACCOUNT_SUSPENDED,
+      actionDescription: `Suspended account for ${targetUser.fullName} (${targetUser.email})`,
+      targetType: 'User',
+      targetId: targetUserId,
+      ipAddress: getClientIP(req),
+      newValue: {
+        userEmail: targetUser.email,
+        userName: targetUser.fullName,
+        userRole: targetUser.role,
+        reason: reason.trim(),
+        suspendedAt: new Date().toISOString(),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Account suspended for ${targetUser.fullName}`,
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error('Suspend user error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to suspend user account',
+    });
+  }
+};
+
+// POST /api/admin/users/:userId/unsuspend - Unsuspend (reactivate) a user account
+export const unsuspendUser = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    const targetUserId = req.params.userId as string;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized',
+      });
+    }
+
+    // Get the target user
+    const targetUser = await prisma.user.findUnique({
+      where: { id: targetUserId },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+        accountStatus: true,
+        suspendedReason: true,
+      },
+    });
+
+    if (!targetUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Check if not suspended
+    if (targetUser.accountStatus !== 'suspended') {
+      return res.status(400).json({
+        success: false,
+        message: 'Account is not suspended',
+      });
+    }
+
+    // Unsuspend the account
+    const updatedUser = await prisma.user.update({
+      where: { id: targetUserId },
+      data: {
+        accountStatus: 'active',
+        suspendedAt: null,
+        suspendedBy: null,
+        suspendedReason: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        role: true,
+        accountStatus: true,
+      },
+    });
+
+    // Log the action
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.ACCOUNT_UNSUSPENDED,
+      actionDescription: `Reactivated account for ${targetUser.fullName} (${targetUser.email})`,
+      targetType: 'User',
+      targetId: targetUserId,
+      ipAddress: getClientIP(req),
+      previousValue: {
+        accountStatus: 'suspended',
+        suspendedReason: targetUser.suspendedReason,
+      },
+      newValue: {
+        accountStatus: 'active',
+        reactivatedAt: new Date().toISOString(),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Account reactivated for ${targetUser.fullName}`,
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error('Unsuspend user error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to unsuspend user account',
+    });
+  }
+};
+
+// GET /api/admin/governance/duplicate-attempts - Get duplicate trade license attempts
+export const getDuplicateAttempts = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const skip = (page - 1) * limit;
+
+    const [attempts, total] = await Promise.all([
+      prisma.auditLog.findMany({
+        where: {
+          actionType: 'DUPLICATE_TRADE_LICENSE_ATTEMPT',
+        },
+        skip,
+        take: limit,
+        orderBy: { timestamp: 'desc' },
+        include: {
+          user: {
+            select: {
+              fullName: true,
+              email: true,
+            },
+          },
+        },
+      }),
+      prisma.auditLog.count({
+        where: {
+          actionType: 'DUPLICATE_TRADE_LICENSE_ATTEMPT',
+        },
+      }),
+    ]);
+
+    return res.json({
+      success: true,
+      data: {
+        attempts: attempts.map(a => ({
+          id: a.id,
+          timestamp: a.timestamp,
+          ipAddress: a.ipAddress,
+          details: a.newValue ? JSON.parse(a.newValue as string) : null,
+          description: a.actionDescription,
+        })),
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Get duplicate attempts error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch duplicate attempts',
     });
   }
 };

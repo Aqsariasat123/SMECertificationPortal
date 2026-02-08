@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
-import { AdminUser, PaginationData, UserRole } from '@/types';
+import { AdminUser, PaginationData, UserRole, AccountStatus } from '@/types';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -12,6 +12,12 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
+
+  // Suspension modal state
+  const [suspendModalOpen, setSuspendModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const [suspendReason, setSuspendReason] = useState('');
+  const [suspendLoading, setSuspendLoading] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -96,6 +102,77 @@ export default function AdminUsersPage() {
         Pending
       </span>
     );
+  };
+
+  const getAccountStatusBadge = (status: AccountStatus | undefined) => {
+    if (status === 'suspended') {
+      return (
+        <span className="badge badge-error">
+          <span
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ background: 'var(--error-500)' }}
+          />
+          Suspended
+        </span>
+      );
+    }
+    return (
+      <span className="badge badge-success">
+        <span
+          className="w-1.5 h-1.5 rounded-full"
+          style={{ background: 'var(--success-500)' }}
+        />
+        Active
+      </span>
+    );
+  };
+
+  const handleSuspendClick = (user: AdminUser) => {
+    setSelectedUser(user);
+    setSuspendReason('');
+    setSuspendModalOpen(true);
+  };
+
+  const handleSuspendConfirm = async () => {
+    if (!selectedUser || !suspendReason.trim()) return;
+
+    setSuspendLoading(true);
+    try {
+      const result = await api.suspendUser(selectedUser.id, suspendReason.trim());
+      if (result.success) {
+        // Update user in list
+        setUsers(prev => prev.map(u =>
+          u.id === selectedUser.id
+            ? { ...u, accountStatus: 'suspended' as AccountStatus, suspendedReason: suspendReason.trim() }
+            : u
+        ));
+        setSuspendModalOpen(false);
+        setSelectedUser(null);
+        setSuspendReason('');
+      }
+    } catch (error) {
+      console.error('Failed to suspend user:', error);
+    } finally {
+      setSuspendLoading(false);
+    }
+  };
+
+  const handleUnsuspend = async (user: AdminUser) => {
+    if (!confirm(`Are you sure you want to reactivate the account for ${user.fullName}?`)) return;
+
+    try {
+      const result = await api.unsuspendUser(user.id);
+      if (result.success) {
+        // Update user in list
+        setUsers(prev => prev.map(u =>
+          u.id === user.id
+            ? { ...u, accountStatus: 'active' as AccountStatus, suspendedReason: null }
+            : u
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to unsuspend user:', error);
+    }
   };
 
   const getStatIcon = (icon: string) => {
@@ -430,15 +507,17 @@ export default function AdminUsersPage() {
               <tr>
                 <th>User</th>
                 <th>Role</th>
-                <th>Status</th>
+                <th>Verified</th>
+                <th>Account</th>
                 <th>Joined</th>
                 <th>Last Login</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center">
+                  <td colSpan={7} className="py-12 text-center">
                     <div className="empty-state">
                       <svg
                         className="empty-state-icon"
@@ -482,6 +561,7 @@ export default function AdminUsersPage() {
                     </td>
                     <td>{getRoleBadge(user.role)}</td>
                     <td>{getStatusBadge(user.isVerified)}</td>
+                    <td>{getAccountStatusBadge(user.accountStatus)}</td>
                     <td>
                       <span
                         className="text-sm"
@@ -497,6 +577,26 @@ export default function AdminUsersPage() {
                       >
                         {user.lastLogin ? formatDate(user.lastLogin) : 'Never'}
                       </span>
+                    </td>
+                    <td>
+                      {user.role !== 'admin' && (
+                        user.accountStatus === 'suspended' ? (
+                          <button
+                            onClick={() => handleUnsuspend(user)}
+                            className="btn-success px-3 py-1.5 text-xs font-medium rounded-lg"
+                            title={`Suspended: ${user.suspendedReason || 'No reason provided'}`}
+                          >
+                            Unsuspend
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleSuspendClick(user)}
+                            className="btn-error px-3 py-1.5 text-xs font-medium rounded-lg"
+                          >
+                            Suspend
+                          </button>
+                        )
+                      )}
                     </td>
                   </tr>
                 ))
@@ -538,8 +638,12 @@ export default function AdminUsersPage() {
                     <span>{getRoleBadge(user.role)}</span>
                   </div>
                   <div className="mobile-card-row">
-                    <span className="mobile-card-label">Status</span>
+                    <span className="mobile-card-label">Verified</span>
                     <span>{getStatusBadge(user.isVerified)}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Account</span>
+                    <span>{getAccountStatusBadge(user.accountStatus)}</span>
                   </div>
                   <div className="mobile-card-row">
                     <span className="mobile-card-label">Joined</span>
@@ -549,6 +653,25 @@ export default function AdminUsersPage() {
                     <span className="mobile-card-label">Last Login</span>
                     <span className="text-sm" style={{ color: 'var(--foreground-muted)' }}>{user.lastLogin ? formatDate(user.lastLogin) : 'Never'}</span>
                   </div>
+                  {user.role !== 'admin' && (
+                    <div className="mobile-card-row pt-2">
+                      {user.accountStatus === 'suspended' ? (
+                        <button
+                          onClick={() => handleUnsuspend(user)}
+                          className="btn-success px-3 py-1.5 text-xs font-medium rounded-lg w-full"
+                        >
+                          Unsuspend Account
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleSuspendClick(user)}
+                          className="btn-error px-3 py-1.5 text-xs font-medium rounded-lg w-full"
+                        >
+                          Suspend Account
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -578,6 +701,59 @@ export default function AdminUsersPage() {
           </div>
         )}
       </div>
+
+      {/* Suspension Modal */}
+      {suspendModalOpen && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="fixed inset-0 bg-black/50"
+            onClick={() => setSuspendModalOpen(false)}
+          />
+          <div className="relative solid-card rounded-xl p-6 w-full max-w-md mx-4 shadow-xl">
+            <h3
+              className="text-lg font-semibold mb-4"
+              style={{ color: 'var(--graphite-900)' }}
+            >
+              Suspend Account
+            </h3>
+            <p className="text-sm mb-4" style={{ color: 'var(--foreground-muted)' }}>
+              You are about to suspend the account for{' '}
+              <strong style={{ color: 'var(--graphite-900)' }}>{selectedUser.fullName}</strong>.
+              They will not be able to login until unsuspended.
+            </p>
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                style={{ color: 'var(--graphite-700)' }}
+              >
+                Reason for suspension *
+              </label>
+              <textarea
+                value={suspendReason}
+                onChange={(e) => setSuspendReason(e.target.value)}
+                className="input-field w-full h-24 rounded-xl resize-none"
+                placeholder="Enter the reason for suspending this account..."
+                style={{ background: 'var(--graphite-50)' }}
+              />
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setSuspendModalOpen(false)}
+                className="btn-secondary px-4 py-2 rounded-lg font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSuspendConfirm}
+                disabled={!suspendReason.trim() || suspendLoading}
+                className="btn-error px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+              >
+                {suspendLoading ? 'Suspending...' : 'Suspend Account'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

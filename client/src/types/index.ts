@@ -294,12 +294,17 @@ export interface SMEProfileUpdateData {
 }
 
 // Admin Types
+export type AccountStatus = 'active' | 'suspended';
+
 export interface AdminUser {
   id: string;
   email: string;
   fullName: string;
   role: UserRole;
   isVerified: boolean;
+  accountStatus?: AccountStatus;
+  suspendedAt?: string | null;
+  suspendedReason?: string | null;
   createdAt: string;
   lastLogin: string | null;
 }

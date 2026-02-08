@@ -177,6 +177,39 @@ export const updateSMEProfile = async (req: AuthenticatedRequest, res: Response)
       });
     }
 
+    // Check for duplicate Trade License Number if being updated (Governance Control)
+    if (tradeLicenseNumber !== undefined &&
+        tradeLicenseNumber !== existingProfile.tradeLicenseNumber) {
+      const duplicateLicense = await prisma.sMEProfile.findFirst({
+        where: {
+          tradeLicenseNumber: tradeLicenseNumber.trim(),
+          id: { not: existingProfile.id }, // Exclude current profile
+        },
+        select: { id: true },
+      });
+
+      if (duplicateLicense) {
+        // Log duplicate attempt for admin visibility
+        await logAuditAction({
+          userId,
+          actionType: AuditAction.DUPLICATE_TRADE_LICENSE_ATTEMPT,
+          actionDescription: `Duplicate trade license update attempt: ${tradeLicenseNumber}`,
+          targetType: 'SMEProfile',
+          targetId: existingProfile.id,
+          ipAddress: getClientIP(req),
+          newValue: {
+            attemptedLicense: tradeLicenseNumber,
+            existingProfileId: duplicateLicense.id,
+          },
+        });
+
+        return res.status(409).json({
+          success: false,
+          message: 'This Trade License number is already registered in our system',
+        });
+      }
+    }
+
     // Prepare update data
     const updateData: Record<string, unknown> = {};
 
