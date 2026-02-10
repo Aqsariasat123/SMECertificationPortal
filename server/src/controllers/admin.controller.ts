@@ -2778,15 +2778,31 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
 
     if (type === 'near_expiry') {
       // Get certified SMEs with licenses expiring within 30 days
+      const now = new Date();
       const thirtyDaysFromNow = new Date();
       thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
+
+      console.log('near_expiry debug:', {
+        now: now.toISOString(),
+        thirtyDaysFromNow: thirtyDaysFromNow.toISOString(),
+      });
+
+      // Debug: Get all certified SMEs with license dates
+      const allCertified = await prisma.sMEProfile.findMany({
+        where: { certificationStatus: 'certified' },
+        select: { companyName: true, licenseExpiryDate: true },
+      });
+      console.log('All certified SMEs:', allCertified.map(s => ({
+        company: s.companyName,
+        expiry: s.licenseExpiryDate?.toISOString(),
+      })));
 
       const smes = await prisma.sMEProfile.findMany({
         where: {
           certificationStatus: 'certified',
           licenseExpiryDate: {
             not: null,
-            gt: new Date(),
+            gt: now,
             lte: thirtyDaysFromNow,
           },
         },
@@ -2799,6 +2815,8 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
         },
         orderBy: { licenseExpiryDate: 'asc' },
       });
+
+      console.log('near_expiry query result:', smes.length, 'items');
 
       data = smes.map(sme => {
         const daysUntilExpiry = Math.ceil((new Date(sme.licenseExpiryDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
