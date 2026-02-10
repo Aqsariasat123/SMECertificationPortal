@@ -946,6 +946,86 @@ class EmailService {
 
     return { sent, failed };
   }
+
+  // Send document notification email (for missing docs, expiry warnings, etc.)
+  async sendDocumentNotificationEmail(
+    email: string,
+    fullName: string,
+    companyName: string,
+    subject: string,
+    content: string,
+    notificationType: string,
+    context?: { userId?: string; smeProfileId?: string }
+  ): Promise<boolean> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+          .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+          .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+          .header { background: linear-gradient(135deg, #4a8f87 0%, #357a6d 100%); padding: 30px; text-align: center; }
+          .header h1 { color: white; margin: 0; font-size: 28px; font-weight: 600; }
+          .header p { color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px; }
+          .content { padding: 40px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 20px; }
+          .text { font-size: 15px; line-height: 1.6; color: #4b5563; margin-bottom: 15px; }
+          .info-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin: 25px 0; }
+          .info-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+          .info-value { font-size: 16px; color: #1f2937; font-weight: 500; }
+          .button-wrap { text-align: center; margin: 30px 0; }
+          .button { display: inline-block; background: #4a8f87; color: white !important; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 500; font-size: 15px; }
+          .footer { background: #f9fafb; padding: 25px 30px; text-align: center; border-top: 1px solid #e5e7eb; }
+          .footer p { margin: 0; font-size: 13px; color: #6b7280; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="card">
+            <div class="header">
+              <h1>Naywa</h1>
+              <p>SME Certification Portal</p>
+            </div>
+            <div class="content">
+              <div class="title">${subject}</div>
+              <p class="text">Dear ${fullName},</p>
+              ${content.split('\n').filter(line => line.trim()).map(line => `<p class="text">${line}</p>`).join('')}
+
+              <div class="info-box">
+                <div class="info-label">Company</div>
+                <div class="info-value">${companyName}</div>
+              </div>
+
+              <div class="button-wrap">
+                <a href="${process.env.FRONTEND_URL}/sme" class="button">Go to Dashboard</a>
+              </div>
+            </div>
+            <div class="footer">
+              <p>If you have any questions, please contact our support team.</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendEmail({
+      to: email,
+      subject: `${subject} - Naywa`,
+      html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: `document_notification_${notificationType}`,
+      recipientName: fullName,
+      metadata: { companyName, notificationType },
+    });
+  }
 }
 
 export const emailService = new EmailService();

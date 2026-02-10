@@ -2734,7 +2734,7 @@ export const getDocumentStatuses = async (req: AuthenticatedRequest, res: Respon
 // GET /api/admin/risk-details/:type - Get detailed risk data
 export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { type } = req.params;
+    const type = req.params.type as string;
 
     if (!['missing_docs', 'near_expiry', 'expired', 'rejections'].includes(type)) {
       return res.status(400).json({
@@ -2746,87 +2746,77 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
     let data: any[] = [];
 
     if (type === 'missing_docs') {
-      // Get certified SMEs with missing documents
-      const smes = await prisma.sMEProfile.findMany({
-        where: {
-          certificationStatus: 'certified',
-          OR: [
-            { documents: { equals: null } },
-            { documents: { equals: {} } },
-          ],
-        },
-        select: {
-          id: true,
-          companyName: true,
-          tradeLicenseNumber: true,
-          documents: true,
-          user: { select: { id: true, email: true, fullName: true } },
-        },
-      });
+      // Get certified SMEs with missing documents using raw SQL (same as analytics)
+      const smes = await prisma.$queryRaw<Array<{
+        id: string;
+        companyName: string | null;
+        tradeLicenseNumber: string | null;
+        userId: string;
+        userEmail: string;
+        userName: string;
+      }>>`
+        SELECT
+          sp.id,
+          sp."companyName",
+          sp."tradeLicenseNumber",
+          u.id as "userId",
+          u.email as "userEmail",
+          u."fullName" as "userName"
+        FROM sme_profiles sp
+        JOIN users u ON sp."userId" = u.id
+        WHERE sp."certificationStatus" = 'certified'
+          AND (sp.documents IS NULL OR sp.documents::text = 'null' OR sp.documents::text = '{}')
+      `;
 
       data = smes.map(sme => ({
         id: sme.id,
         companyName: sme.companyName,
         tradeLicenseNumber: sme.tradeLicenseNumber,
-        userId: sme.user.id,
-        userEmail: sme.user.email,
-        userName: sme.user.fullName,
+        userId: sme.userId,
+        userEmail: sme.userEmail,
+        userName: sme.userName,
         issue: 'No documents uploaded',
         missingDocs: ['Trade License', 'Registration Certificate', 'VAT Certificate'],
       }));
     }
 
     if (type === 'near_expiry') {
-      // Get certified SMEs with licenses expiring within 30 days
-      const now = new Date();
-      const thirtyDaysFromNow = new Date();
-      thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-
-      console.log('near_expiry debug:', {
-        now: now.toISOString(),
-        thirtyDaysFromNow: thirtyDaysFromNow.toISOString(),
-      });
-
-      // Debug: Get all certified SMEs with license dates
-      const allCertified = await prisma.sMEProfile.findMany({
-        where: { certificationStatus: 'certified' },
-        select: { companyName: true, licenseExpiryDate: true },
-      });
-      console.log('All certified SMEs:', allCertified.map(s => ({
-        company: s.companyName,
-        expiry: s.licenseExpiryDate?.toISOString(),
-      })));
-
-      const smes = await prisma.sMEProfile.findMany({
-        where: {
-          certificationStatus: 'certified',
-          licenseExpiryDate: {
-            not: null,
-            gt: now,
-            lte: thirtyDaysFromNow,
-          },
-        },
-        select: {
-          id: true,
-          companyName: true,
-          tradeLicenseNumber: true,
-          licenseExpiryDate: true,
-          user: { select: { id: true, email: true, fullName: true } },
-        },
-        orderBy: { licenseExpiryDate: 'asc' },
-      });
-
-      console.log('near_expiry query result:', smes.length, 'items');
+      // Get certified SMEs with licenses expiring within 30 days using raw SQL (same as analytics)
+      const smes = await prisma.$queryRaw<Array<{
+        id: string;
+        companyName: string | null;
+        tradeLicenseNumber: string | null;
+        licenseExpiryDate: Date;
+        userId: string;
+        userEmail: string;
+        userName: string;
+      }>>`
+        SELECT
+          sp.id,
+          sp."companyName",
+          sp."tradeLicenseNumber",
+          sp."licenseExpiryDate",
+          u.id as "userId",
+          u.email as "userEmail",
+          u."fullName" as "userName"
+        FROM sme_profiles sp
+        JOIN users u ON sp."userId" = u.id
+        WHERE sp."certificationStatus" = 'certified'
+          AND sp."licenseExpiryDate" IS NOT NULL
+          AND sp."licenseExpiryDate" > NOW()
+          AND sp."licenseExpiryDate" <= NOW() + INTERVAL '30 days'
+        ORDER BY sp."licenseExpiryDate" ASC
+      `;
 
       data = smes.map(sme => {
-        const daysUntilExpiry = Math.ceil((new Date(sme.licenseExpiryDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+        const daysUntilExpiry = Math.ceil((new Date(sme.licenseExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
         return {
           id: sme.id,
           companyName: sme.companyName,
           tradeLicenseNumber: sme.tradeLicenseNumber,
-          userId: sme.user.id,
-          userEmail: sme.user.email,
-          userName: sme.user.fullName,
+          userId: sme.userId,
+          userEmail: sme.userEmail,
+          userName: sme.userName,
           expiryDate: sme.licenseExpiryDate,
           daysUntilExpiry,
           issue: `Trade License expires in ${daysUntilExpiry} days`,
@@ -2835,34 +2825,41 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
     }
 
     if (type === 'expired') {
-      // Get certified SMEs with expired licenses
-      const smes = await prisma.sMEProfile.findMany({
-        where: {
-          certificationStatus: 'certified',
-          licenseExpiryDate: {
-            not: null,
-            lt: new Date(),
-          },
-        },
-        select: {
-          id: true,
-          companyName: true,
-          tradeLicenseNumber: true,
-          licenseExpiryDate: true,
-          user: { select: { id: true, email: true, fullName: true } },
-        },
-        orderBy: { licenseExpiryDate: 'desc' },
-      });
+      // Get certified SMEs with expired licenses using raw SQL (same as analytics)
+      const smes = await prisma.$queryRaw<Array<{
+        id: string;
+        companyName: string | null;
+        tradeLicenseNumber: string | null;
+        licenseExpiryDate: Date;
+        userId: string;
+        userEmail: string;
+        userName: string;
+      }>>`
+        SELECT
+          sp.id,
+          sp."companyName",
+          sp."tradeLicenseNumber",
+          sp."licenseExpiryDate",
+          u.id as "userId",
+          u.email as "userEmail",
+          u."fullName" as "userName"
+        FROM sme_profiles sp
+        JOIN users u ON sp."userId" = u.id
+        WHERE sp."certificationStatus" = 'certified'
+          AND sp."licenseExpiryDate" IS NOT NULL
+          AND sp."licenseExpiryDate" < NOW()
+        ORDER BY sp."licenseExpiryDate" DESC
+      `;
 
       data = smes.map(sme => {
-        const daysSinceExpiry = Math.ceil((new Date().getTime() - new Date(sme.licenseExpiryDate!).getTime()) / (1000 * 60 * 60 * 24));
+        const daysSinceExpiry = Math.ceil((new Date().getTime() - new Date(sme.licenseExpiryDate).getTime()) / (1000 * 60 * 60 * 24));
         return {
           id: sme.id,
           companyName: sme.companyName,
           tradeLicenseNumber: sme.tradeLicenseNumber,
-          userId: sme.user.id,
-          userEmail: sme.user.email,
-          userName: sme.user.fullName,
+          userId: sme.userId,
+          userEmail: sme.userEmail,
+          userName: sme.userName,
           expiryDate: sme.licenseExpiryDate,
           daysSinceExpiry,
           issue: `Trade License expired ${daysSinceExpiry} days ago`,
@@ -2871,35 +2868,42 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
     }
 
     if (type === 'rejections') {
-      // Get recently rejected applications (last 30 days)
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-      const smes = await prisma.sMEProfile.findMany({
-        where: {
-          certificationStatus: 'rejected',
-          updatedAt: { gte: thirtyDaysAgo },
-        },
-        select: {
-          id: true,
-          companyName: true,
-          tradeLicenseNumber: true,
-          reviewNotes: true,
-          updatedAt: true,
-          user: { select: { id: true, email: true, fullName: true } },
-        },
-        orderBy: { updatedAt: 'desc' },
-      });
+      // Get recently rejected applications (last 30 days) using raw SQL
+      const smes = await prisma.$queryRaw<Array<{
+        id: string;
+        companyName: string | null;
+        tradeLicenseNumber: string | null;
+        revisionNotes: string | null;
+        updatedAt: Date;
+        userId: string;
+        userEmail: string;
+        userName: string;
+      }>>`
+        SELECT
+          sp.id,
+          sp."companyName",
+          sp."tradeLicenseNumber",
+          sp."revisionNotes",
+          sp."updatedAt",
+          u.id as "userId",
+          u.email as "userEmail",
+          u."fullName" as "userName"
+        FROM sme_profiles sp
+        JOIN users u ON sp."userId" = u.id
+        WHERE sp."certificationStatus" = 'rejected'
+          AND sp."updatedAt" >= NOW() - INTERVAL '30 days'
+        ORDER BY sp."updatedAt" DESC
+      `;
 
       data = smes.map(sme => ({
         id: sme.id,
         companyName: sme.companyName,
         tradeLicenseNumber: sme.tradeLicenseNumber,
-        userId: sme.user.id,
-        userEmail: sme.user.email,
-        userName: sme.user.fullName,
+        userId: sme.userId,
+        userEmail: sme.userEmail,
+        userName: sme.userName,
         rejectedAt: sme.updatedAt,
-        reason: sme.reviewNotes || 'No reason provided',
+        reason: sme.revisionNotes || 'No reason provided',
         issue: 'Application rejected',
       }));
     }
@@ -2970,24 +2974,16 @@ export const notifySmeAboutDocuments = async (req: AuthenticatedRequest, res: Re
         content = customMessage || `Dear ${smeProfile.user.fullName},\n\nThis is an important notice regarding your SME certification for "${smeProfile.companyName}".\n\nPlease log in to your dashboard to review and address any pending items.\n\nIf you have any questions, please contact our support team.`;
     }
 
-    // Send email
-    await emailService.sendEmail({
-      to: smeProfile.user.email,
+    // Send email using the public method
+    await emailService.sendDocumentNotificationEmail(
+      smeProfile.user.email,
+      smeProfile.user.fullName,
+      smeProfile.companyName || 'Your Company',
       subject,
-      text: content,
-      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: #4a8f87; color: white; padding: 20px; text-align: center;">
-          <h1 style="margin: 0; font-size: 24px;">Naywa</h1>
-          <p style="margin: 5px 0 0; font-size: 12px;">SME Certification Portal</p>
-        </div>
-        <div style="padding: 30px; background: #f9fafb;">
-          ${content.split('\n').map(line => `<p style="margin: 0 0 15px; color: #374151; line-height: 1.6;">${line}</p>`).join('')}
-        </div>
-        <div style="background: #e5e7eb; padding: 15px; text-align: center; font-size: 12px; color: #6b7280;">
-          <p style="margin: 0;">This is an automated message from Naywa SME Certification Portal.</p>
-        </div>
-      </div>`,
-    });
+      content,
+      notificationType,
+      { userId: smeProfile.user.id, smeProfileId }
+    );
 
     // Log audit
     await logAuditAction({
