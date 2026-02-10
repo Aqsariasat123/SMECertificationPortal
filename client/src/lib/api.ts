@@ -1010,6 +1010,21 @@ class ApiClient {
     });
   }
 
+  // Admin — get detailed risk data
+  async getRiskDetails(type: 'missing_docs' | 'near_expiry' | 'expired' | 'rejections'): Promise<ApiResponse<{ data: RiskDetailItem[]; count: number }>> {
+    return this.request(`/admin/risk-details/${type}`, {
+      method: 'GET',
+    });
+  }
+
+  // Admin — notify SME about document issues
+  async notifySmeAboutDocuments(smeProfileId: string, notificationType: string, customMessage?: string): Promise<ApiResponse<{ message: string }>> {
+    return this.request('/admin/notify-sme', {
+      method: 'POST',
+      body: JSON.stringify({ smeProfileId, notificationType, customMessage }),
+    });
+  }
+
   // Admin — list all legal pages
   async getAllLegalPages(): Promise<ApiResponse<LegalPageData[]>> {
     return this.request('/legal', {

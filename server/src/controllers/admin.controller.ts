@@ -2730,3 +2730,267 @@ export const getDocumentStatuses = async (req: AuthenticatedRequest, res: Respon
     });
   }
 };
+
+// GET /api/admin/risk-details/:type - Get detailed risk data
+export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { type } = req.params;
+
+    if (!['missing_docs', 'near_expiry', 'expired', 'rejections'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid risk type. Must be: missing_docs, near_expiry, expired, or rejections',
+      });
+    }
+
+    let data: any[] = [];
+
+    if (type === 'missing_docs') {
+      // Get certified SMEs with missing documents
+      const smes = await prisma.sMEProfile.findMany({
+        where: {
+          certificationStatus: 'certified',
+          OR: [
+            { documents: { equals: null } },
+            { documents: { equals: {} } },
+          ],
+        },
+        select: {
+          id: true,
+          companyName: true,
+          tradeLicenseNumber: true,
+          documents: true,
+          user: { select: { id: true, email: true, fullName: true } },
+        },
+      });
+
+      data = smes.map(sme => ({
+        id: sme.id,
+        companyName: sme.companyName,
+        tradeLicenseNumber: sme.tradeLicenseNumber,
+        userId: sme.user.id,
+        userEmail: sme.user.email,
+        userName: sme.user.fullName,
+        issue: 'No documents uploaded',
+        missingDocs: ['Trade License', 'Registration Certificate', 'VAT Certificate'],
+      }));
+    }
+
+    if (type === 'near_expiry') {
+      // Get certified SMEs with licenses expiring within 30 days
+      const thirtyDaysFromNow = new Date();
+      thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
+
+      const smes = await prisma.sMEProfile.findMany({
+        where: {
+          certificationStatus: 'certified',
+          licenseExpiryDate: {
+            not: null,
+            gt: new Date(),
+            lte: thirtyDaysFromNow,
+          },
+        },
+        select: {
+          id: true,
+          companyName: true,
+          tradeLicenseNumber: true,
+          licenseExpiryDate: true,
+          user: { select: { id: true, email: true, fullName: true } },
+        },
+        orderBy: { licenseExpiryDate: 'asc' },
+      });
+
+      data = smes.map(sme => {
+        const daysUntilExpiry = Math.ceil((new Date(sme.licenseExpiryDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+        return {
+          id: sme.id,
+          companyName: sme.companyName,
+          tradeLicenseNumber: sme.tradeLicenseNumber,
+          userId: sme.user.id,
+          userEmail: sme.user.email,
+          userName: sme.user.fullName,
+          expiryDate: sme.licenseExpiryDate,
+          daysUntilExpiry,
+          issue: `Trade License expires in ${daysUntilExpiry} days`,
+        };
+      });
+    }
+
+    if (type === 'expired') {
+      // Get certified SMEs with expired licenses
+      const smes = await prisma.sMEProfile.findMany({
+        where: {
+          certificationStatus: 'certified',
+          licenseExpiryDate: {
+            not: null,
+            lt: new Date(),
+          },
+        },
+        select: {
+          id: true,
+          companyName: true,
+          tradeLicenseNumber: true,
+          licenseExpiryDate: true,
+          user: { select: { id: true, email: true, fullName: true } },
+        },
+        orderBy: { licenseExpiryDate: 'desc' },
+      });
+
+      data = smes.map(sme => {
+        const daysSinceExpiry = Math.ceil((new Date().getTime() - new Date(sme.licenseExpiryDate!).getTime()) / (1000 * 60 * 60 * 24));
+        return {
+          id: sme.id,
+          companyName: sme.companyName,
+          tradeLicenseNumber: sme.tradeLicenseNumber,
+          userId: sme.user.id,
+          userEmail: sme.user.email,
+          userName: sme.user.fullName,
+          expiryDate: sme.licenseExpiryDate,
+          daysSinceExpiry,
+          issue: `Trade License expired ${daysSinceExpiry} days ago`,
+        };
+      });
+    }
+
+    if (type === 'rejections') {
+      // Get recently rejected applications (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const smes = await prisma.sMEProfile.findMany({
+        where: {
+          certificationStatus: 'rejected',
+          updatedAt: { gte: thirtyDaysAgo },
+        },
+        select: {
+          id: true,
+          companyName: true,
+          tradeLicenseNumber: true,
+          reviewNotes: true,
+          updatedAt: true,
+          user: { select: { id: true, email: true, fullName: true } },
+        },
+        orderBy: { updatedAt: 'desc' },
+      });
+
+      data = smes.map(sme => ({
+        id: sme.id,
+        companyName: sme.companyName,
+        tradeLicenseNumber: sme.tradeLicenseNumber,
+        userId: sme.user.id,
+        userEmail: sme.user.email,
+        userName: sme.user.fullName,
+        rejectedAt: sme.updatedAt,
+        reason: sme.reviewNotes || 'No reason provided',
+        issue: 'Application rejected',
+      }));
+    }
+
+    return res.json({
+      success: true,
+      data,
+      count: data.length,
+    });
+  } catch (error) {
+    console.error('Get risk details error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get risk details',
+    });
+  }
+};
+
+// POST /api/admin/notify-sme - Send notification to SME about document issues
+export const notifySmeAboutDocuments = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { smeProfileId, notificationType, customMessage } = req.body;
+    const adminId = req.user!.userId;
+
+    if (!smeProfileId || !notificationType) {
+      return res.status(400).json({
+        success: false,
+        message: 'smeProfileId and notificationType are required',
+      });
+    }
+
+    // Get SME profile with user
+    const smeProfile = await prisma.sMEProfile.findUnique({
+      where: { id: smeProfileId },
+      include: { user: true },
+    });
+
+    if (!smeProfile) {
+      return res.status(404).json({
+        success: false,
+        message: 'SME profile not found',
+      });
+    }
+
+    // Determine email subject and content based on notification type
+    let subject = '';
+    let content = '';
+
+    switch (notificationType) {
+      case 'missing_docs':
+        subject = 'Action Required: Missing Documents for Your Certification';
+        content = customMessage || `Dear ${smeProfile.user.fullName},\n\nWe noticed that your SME certification profile for "${smeProfile.companyName}" is missing required documents.\n\nPlease log in to your dashboard and upload the necessary documents to maintain your certification status.\n\nRequired documents may include:\n- Trade License\n- Registration Certificate\n- VAT Certificate\n\nIf you have any questions, please contact our support team.`;
+        break;
+
+      case 'near_expiry':
+        const expiryDate = smeProfile.licenseExpiryDate ? new Date(smeProfile.licenseExpiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'soon';
+        subject = 'Reminder: Your Trade License is Expiring Soon';
+        content = customMessage || `Dear ${smeProfile.user.fullName},\n\nThis is a reminder that the Trade License for "${smeProfile.companyName}" will expire on ${expiryDate}.\n\nTo maintain your certification status, please upload your renewed Trade License before the expiry date.\n\nYou can update your documents by logging into your SME dashboard.\n\nIf you have any questions, please contact our support team.`;
+        break;
+
+      case 'expired':
+        subject = 'Urgent: Your Trade License Has Expired';
+        content = customMessage || `Dear ${smeProfile.user.fullName},\n\nWe would like to inform you that the Trade License for "${smeProfile.companyName}" has expired.\n\nYour certification status may be affected if the license is not renewed promptly. Please upload your renewed Trade License as soon as possible.\n\nYou can update your documents by logging into your SME dashboard.\n\nIf you have any questions, please contact our support team.`;
+        break;
+
+      default:
+        subject = 'Important Notice Regarding Your SME Certification';
+        content = customMessage || `Dear ${smeProfile.user.fullName},\n\nThis is an important notice regarding your SME certification for "${smeProfile.companyName}".\n\nPlease log in to your dashboard to review and address any pending items.\n\nIf you have any questions, please contact our support team.`;
+    }
+
+    // Send email
+    await emailService.sendEmail({
+      to: smeProfile.user.email,
+      subject,
+      text: content,
+      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: #4a8f87; color: white; padding: 20px; text-align: center;">
+          <h1 style="margin: 0; font-size: 24px;">Naywa</h1>
+          <p style="margin: 5px 0 0; font-size: 12px;">SME Certification Portal</p>
+        </div>
+        <div style="padding: 30px; background: #f9fafb;">
+          ${content.split('\n').map(line => `<p style="margin: 0 0 15px; color: #374151; line-height: 1.6;">${line}</p>`).join('')}
+        </div>
+        <div style="background: #e5e7eb; padding: 15px; text-align: center; font-size: 12px; color: #6b7280;">
+          <p style="margin: 0;">This is an automated message from Naywa SME Certification Portal.</p>
+        </div>
+      </div>`,
+    });
+
+    // Log audit
+    await logAuditAction({
+      userId: adminId,
+      actionType: AuditAction.EMAIL_SENT,
+      actionDescription: `Sent ${notificationType} notification to ${smeProfile.companyName}`,
+      targetType: 'SMEProfile',
+      targetId: smeProfileId,
+      ipAddress: getClientIP(req),
+      newValue: { notificationType, recipientEmail: smeProfile.user.email },
+    });
+
+    return res.json({
+      success: true,
+      message: `Notification sent successfully to ${smeProfile.user.email}`,
+    });
+  } catch (error) {
+    console.error('Notify SME error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to send notification',
+    });
+  }
+};

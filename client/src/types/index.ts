@@ -584,6 +584,26 @@ export interface LegalPageData {
   isPublished?: boolean;
 }
 
+// Risk & Compliance Detail Types
+export interface RiskDetailItem {
+  id: string;
+  companyName: string | null;
+  tradeLicenseNumber: string | null;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  issue: string;
+  // For missing docs
+  missingDocs?: string[];
+  // For near expiry / expired
+  expiryDate?: string;
+  daysUntilExpiry?: number;
+  daysSinceExpiry?: number;
+  // For rejections
+  rejectedAt?: string;
+  reason?: string;
+}
+
 export interface IntroductionRequest {
   id: string;
   smeId: string;

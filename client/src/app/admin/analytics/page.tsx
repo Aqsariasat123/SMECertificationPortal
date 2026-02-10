@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { AnalyticsData } from '@/types';
+import { AnalyticsData, RiskDetailItem } from '@/types';
 
 // Tooltip component
 function Tooltip({ text }: { text: string }) {
@@ -19,6 +19,14 @@ function Tooltip({ text }: { text: string }) {
   );
 }
 
+// Risk type labels
+const riskTypeLabels: Record<string, string> = {
+  missing_docs: 'Missing Documents',
+  near_expiry: 'Near Expiry',
+  expired: 'Expired Licenses',
+  rejections: 'Rejections',
+};
+
 export default function AdminAnalyticsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -30,9 +38,60 @@ export default function AdminAnalyticsPage() {
     try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return 'UTC'; }
   });
 
+  // Risk Details Modal state
+  const [riskModalOpen, setRiskModalOpen] = useState(false);
+  const [riskModalType, setRiskModalType] = useState<'missing_docs' | 'near_expiry' | 'expired' | 'rejections' | null>(null);
+  const [riskDetails, setRiskDetails] = useState<RiskDetailItem[]>([]);
+  const [riskDetailsLoading, setRiskDetailsLoading] = useState(false);
+  const [notifyingId, setNotifyingId] = useState<string | null>(null);
+  const [notifySuccess, setNotifySuccess] = useState<string | null>(null);
+
   useEffect(() => {
     fetchAnalytics();
   }, [timeRange, roleFilter, timezone]);
+
+  // Fetch risk details when modal opens
+  const openRiskModal = async (type: 'missing_docs' | 'near_expiry' | 'expired' | 'rejections') => {
+    setRiskModalType(type);
+    setRiskModalOpen(true);
+    setRiskDetailsLoading(true);
+    setNotifySuccess(null);
+
+    try {
+      const result = await api.getRiskDetails(type);
+      if (result.success && result.data) {
+        setRiskDetails(result.data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch risk details:', err);
+    } finally {
+      setRiskDetailsLoading(false);
+    }
+  };
+
+  const closeRiskModal = () => {
+    setRiskModalOpen(false);
+    setRiskModalType(null);
+    setRiskDetails([]);
+    setNotifySuccess(null);
+  };
+
+  const handleNotifySme = async (smeProfileId: string) => {
+    if (!riskModalType) return;
+
+    setNotifyingId(smeProfileId);
+    try {
+      const result = await api.notifySmeAboutDocuments(smeProfileId, riskModalType);
+      if (result.success) {
+        setNotifySuccess(`Notification sent successfully!`);
+        setTimeout(() => setNotifySuccess(null), 3000);
+      }
+    } catch (err) {
+      console.error('Failed to send notification:', err);
+    } finally {
+      setNotifyingId(null);
+    }
+  };
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -569,15 +628,15 @@ export default function AdminAnalyticsPage() {
         <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance<Tooltip text="Compliance signals — missing docs, expiring licenses, admin interventions. Click any card to view details." /></h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', href: '/admin/applications?status=certified&risk=missing_docs' },
-            { label: 'Near Expiry', value: analytics.riskCompliance.nearExpiry, desc: 'License expires within 30d', color: 'warning', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', href: '/admin/applications?status=certified&risk=near_expiry' },
-            { label: 'Expired Licenses', value: analytics.riskCompliance.expiredLicenses, desc: 'Certified with expired license', color: 'danger', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', href: '/admin/applications?status=certified&risk=expired' },
+            { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', riskType: 'missing_docs' as const },
+            { label: 'Near Expiry', value: analytics.riskCompliance.nearExpiry, desc: 'License expires within 30d', color: 'warning', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', riskType: 'near_expiry' as const },
+            { label: 'Expired Licenses', value: analytics.riskCompliance.expiredLicenses, desc: 'Certified with expired license', color: 'danger', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', riskType: 'expired' as const },
             { label: 'Admin Overrides', value: analytics.riskCompliance.adminOverrides, desc: `Visibility toggles (${timeRange}d)`, color: 'graphite', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', href: '/admin/audit-logs?action=visibility' },
-            { label: 'Rejections', value: analytics.riskCompliance.rejectionsPeriod, desc: `Cert rejections (${timeRange}d)`, color: 'danger', icon: 'M6 18L18 6M6 6l12 12', href: '/admin/applications?status=rejected' },
+            { label: 'Rejections', value: analytics.riskCompliance.rejectionsPeriod, desc: `Cert rejections (${timeRange}d)`, color: 'danger', icon: 'M6 18L18 6M6 6l12 12', riskType: 'rejections' as const },
           ].map((item) => (
             <div
               key={item.label}
-              onClick={() => router.push(item.href)}
+              onClick={() => 'riskType' in item && item.riskType ? openRiskModal(item.riskType) : router.push(item.href!)}
               className="solid-card rounded-xl p-4 cursor-pointer transition-all hover:shadow-md"
               style={{ borderLeft: `3px solid var(--${item.color}-400)` }}
             >
@@ -599,6 +658,188 @@ export default function AdminAnalyticsPage() {
           ))}
         </div>
       </div>
+
+      {/* Risk Details Modal */}
+      {riskModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="solid-card rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col" style={{ background: 'white' }}>
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'var(--graphite-200)' }}>
+              <div>
+                <h2 className="text-xl font-bold" style={{ color: 'var(--graphite-900)' }}>
+                  {riskModalType ? riskTypeLabels[riskModalType] : 'Risk Details'}
+                </h2>
+                <p className="text-sm mt-1" style={{ color: 'var(--graphite-500)' }}>
+                  {riskDetails.length} {riskDetails.length === 1 ? 'item' : 'items'} requiring attention
+                </p>
+              </div>
+              <button
+                onClick={closeRiskModal}
+                className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors"
+                style={{ background: 'var(--graphite-100)' }}
+              >
+                <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Success Banner */}
+            {notifySuccess && (
+              <div className="mx-6 mt-4 p-3 rounded-lg flex items-center gap-2" style={{ background: 'var(--success-50)', color: 'var(--success-700)' }}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-sm font-medium">{notifySuccess}</span>
+              </div>
+            )}
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {riskDetailsLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="p-4 rounded-xl animate-pulse" style={{ background: 'var(--graphite-50)' }}>
+                      <div className="h-5 rounded w-48 mb-2" style={{ background: 'var(--graphite-200)' }} />
+                      <div className="h-4 rounded w-full mb-2" style={{ background: 'var(--graphite-200)' }} />
+                      <div className="h-4 rounded w-24" style={{ background: 'var(--graphite-200)' }} />
+                    </div>
+                  ))}
+                </div>
+              ) : riskDetails.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12" style={{ color: 'var(--graphite-400)' }}>
+                  <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-lg font-medium">All clear!</p>
+                  <p className="text-sm mt-1">No issues found in this category</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {riskDetails.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-4 rounded-xl border"
+                      style={{ background: 'var(--graphite-50)', borderColor: 'var(--graphite-200)' }}
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-semibold" style={{ color: 'var(--graphite-900)' }}>
+                              {item.companyName || 'Unnamed Company'}
+                            </h3>
+                            {item.tradeLicenseNumber && (
+                              <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--graphite-200)', color: 'var(--graphite-600)' }}>
+                                {item.tradeLicenseNumber}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm mb-2" style={{ color: 'var(--graphite-600)' }}>{item.issue}</p>
+
+                          {/* Missing Docs List */}
+                          {item.missingDocs && item.missingDocs.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-xs font-medium mb-1" style={{ color: 'var(--graphite-500)' }}>Missing:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {item.missingDocs.map((doc, idx) => (
+                                  <span key={idx} className="text-xs px-2 py-1 rounded" style={{ background: 'var(--warning-100)', color: 'var(--warning-700)' }}>
+                                    {doc}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Expiry Info */}
+                          {item.expiryDate && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <svg className="w-4 h-4" style={{ color: (item.daysUntilExpiry ?? 0) <= 0 ? 'var(--danger-500)' : 'var(--warning-500)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="text-xs" style={{ color: (item.daysUntilExpiry ?? 0) <= 0 ? 'var(--danger-600)' : 'var(--warning-600)' }}>
+                                {(item.daysUntilExpiry ?? 0) <= 0
+                                  ? `Expired ${item.daysSinceExpiry} days ago`
+                                  : `Expires in ${item.daysUntilExpiry} days`
+                                } ({new Date(item.expiryDate).toLocaleDateString()})
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Rejection Info */}
+                          {item.rejectedAt && (
+                            <div className="mt-2">
+                              <p className="text-xs" style={{ color: 'var(--danger-600)' }}>
+                                Rejected on {new Date(item.rejectedAt).toLocaleDateString()}
+                                {item.reason && `: ${item.reason}`}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Contact Info */}
+                          <div className="mt-2 text-xs" style={{ color: 'var(--graphite-500)' }}>
+                            {item.userName} • {item.userEmail}
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 sm:flex-col">
+                          <button
+                            onClick={() => router.push(`/admin/applications/${item.id}`)}
+                            className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                            style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            View
+                          </button>
+                          {riskModalType !== 'rejections' && (
+                            <button
+                              onClick={() => handleNotifySme(item.id)}
+                              disabled={notifyingId === item.id}
+                              className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                              style={{ background: 'var(--teal-600)', color: 'white' }}
+                            >
+                              {notifyingId === item.id ? (
+                                <>
+                                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                  </svg>
+                                  Sending...
+                                </>
+                              ) : (
+                                <>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                  </svg>
+                                  Notify
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t" style={{ borderColor: 'var(--graphite-200)' }}>
+              <button
+                onClick={closeRiskModal}
+                className="w-full px-4 py-2.5 text-sm font-medium rounded-lg transition-colors"
+                style={{ background: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -27,6 +27,9 @@ import {
   suspendUser,
   unsuspendUser,
   getDuplicateAttempts,
+  // Risk & Compliance Details
+  getRiskDetails,
+  notifySmeAboutDocuments,
 } from '../controllers/admin.controller';
 
 const router = Router();
@@ -81,5 +84,9 @@ router.post('/users/:userId/unsuspend', unsuspendUser);
 
 // Governance Controls: Duplicate Detection Visibility
 router.get('/governance/duplicate-attempts', getDuplicateAttempts);
+
+// Risk & Compliance Details
+router.get('/risk-details/:type', getRiskDetails);
+router.post('/notify-sme', notifySmeAboutDocuments);
 
 export default router;
