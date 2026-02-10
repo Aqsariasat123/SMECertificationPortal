@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData, InternalDimensions, DimensionStatus, PaymentData } from '@/types';
+import { AdminApplication, AuditLogEntry, CertificationStatus, ReviewAction, CertificateData, InternalDimensions, DimensionStatus, PaymentData, CertificationDecision } from '@/types';
+import PillarScoringPanel from '@/components/admin/PillarScoringPanel';
 
 export default function ApplicationDetailPage() {
   const params = useParams();
@@ -1479,6 +1480,18 @@ export default function ApplicationDetailPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* 5-Pillar Certification Scoring (Admin-only) */}
+          {(application.certificationStatus === 'under_review' || application.certificationStatus === 'submitted' || application.certificationStatus === 'certified') && (
+            <PillarScoringPanel
+              smeProfileId={application.id}
+              companyName={application.companyName}
+              onDecisionCalculated={(decision: CertificationDecision) => {
+                console.log('Certification decision calculated:', decision);
+                // Optionally refresh the page or update state
+              }}
+            />
           )}
 
           {/* Timeline */}

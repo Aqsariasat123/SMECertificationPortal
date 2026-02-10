@@ -155,6 +155,32 @@ enum TwoFactorMethod {
 }
 
 // ============================================
+// CERTIFICATION SCORING ENUMS
+// ============================================
+
+enum CriterionRating {
+  not_rated         // Not yet assessed
+  green             // 3 points - No material risk
+  amber             // 2 points - Remediable risk
+  red               // 1 point - Structural/non-remediable risk
+}
+
+enum PillarStatus {
+  not_started       // Assessment not begun
+  in_progress       // Partially assessed
+  pass              // Score >= 2.50, no auto-fail
+  conditional       // Score 2.00-2.49 or specific conditions
+  fail              // Score < 2.00 or auto-fail triggered
+}
+
+enum CertificationOutcome {
+  pending           // Assessment not complete
+  certified         // All pillars PASS
+  conditional_certification  // One or more CONDITIONAL, no FAIL
+  not_certified     // Any FAIL or auto-fail triggered
+}
+
+// ============================================
 // MODELS
 // ============================================
 
@@ -203,6 +229,8 @@ model User {
   issuedCertificates    Certificate[]         @relation("IssuedCertificates")
   requestedPayments     Payment[]             @relation("PaymentRequestedBy")
   reviewedDocuments     DocumentVersion[]     @relation("DocumentReviewedBy")
+  pillarAssessments     PillarAssessment[]    @relation("PillarAssessedBy")
+  certificationDecisions CertificationDecision[] @relation("DecisionMadeBy")
 
   @@map("users")
 }
@@ -379,12 +407,14 @@ model SMEProfile {
   lastInternalReviewAt DateTime?          // When admin last updated internal review
 
   // Relations
-  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reviewedBy           User?                 @relation("ReviewedBy", fields: [reviewedById], references: [id])
-  introductionRequests IntroductionRequest[]
-  certificates         Certificate[]
-  payments             Payment[]
-  documentVersions     DocumentVersion[]
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy             User?                   @relation("ReviewedBy", fields: [reviewedById], references: [id])
+  introductionRequests   IntroductionRequest[]
+  certificates           Certificate[]
+  payments               Payment[]
+  documentVersions       DocumentVersion[]
+  pillarAssessments      PillarAssessment[]
+  certificationDecision  CertificationDecision?
 
   @@map("sme_profiles")
 }
@@ -665,4 +695,100 @@ model EmailLog {
   @@index([status])
   @@index([sentAt])
   @@map("email_logs")
+}
+
+// ============================================
+// CERTIFICATION SCORING MODELS
+// ============================================
+
+/// PillarAssessment model - Detailed scoring for each of the 5 certification pillars
+model PillarAssessment {
+  id                  String        @id @default(uuid())
+  smeProfileId        String
+  pillarNumber        Int           // 1-5
+  pillarName          String        // e.g., "Legal & Ownership Readiness"
+  pillarWeight        Decimal       @db.Decimal(5,4) // e.g., 0.25 for 25%
+
+  // Status and scoring
+  status              PillarStatus  @default(not_started)
+  weightedScore       Decimal?      @db.Decimal(5,2) // Calculated pillar score (1.00 - 3.00)
+
+  // Auto-fail tracking
+  autoFailTriggered   Boolean       @default(false)
+  autoFailReason      String?       @db.Text
+  autoFailCriteria    Json?         // Array of criteria codes that triggered auto-fail
+
+  // Sub-criteria scores - JSON structure:
+  // [{ code: "1.1", name: "Legal Existence", weight: 0.25, rating: "green"|"amber"|"red"|"not_rated", notes: "..." }, ...]
+  subCriteriaScores   Json?
+
+  // Assessor info
+  assessorNotes       String?       @db.Text
+  assessedById        String?
+  assessedAt          DateTime?
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  // Relations
+  smeProfile          SMEProfile    @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  assessedBy          User?         @relation("PillarAssessedBy", fields: [assessedById], references: [id])
+
+  @@unique([smeProfileId, pillarNumber])
+  @@index([smeProfileId])
+  @@index([status])
+  @@map("pillar_assessments")
+}
+
+/// CertificationDecision model - Final certification outcome and decision audit trail
+model CertificationDecision {
+  id                      String              @id @default(uuid())
+  smeProfileId            String              @unique
+
+  // Final outcome
+  outcome                 CertificationOutcome @default(pending)
+
+  // Decision factors
+  globalAutoFail          Boolean             @default(false)
+  globalAutoFailPillar    Int?                // Which pillar triggered global auto-fail (e.g., Pillar 5)
+  globalAutoFailReason    String?             @db.Text
+
+  // Pillar results summary
+  pillar1Status           PillarStatus        @default(not_started)
+  pillar1Score            Decimal?            @db.Decimal(5,2)
+  pillar2Status           PillarStatus        @default(not_started)
+  pillar2Score            Decimal?            @db.Decimal(5,2)
+  pillar3Status           PillarStatus        @default(not_started)
+  pillar3Score            Decimal?            @db.Decimal(5,2)
+  pillar4Status           PillarStatus        @default(not_started)
+  pillar4Score            Decimal?            @db.Decimal(5,2)
+  pillar5Status           PillarStatus        @default(not_started)
+  pillar5Score            Decimal?            @db.Decimal(5,2)
+
+  // Overall weighted score (sum of pillar scores * weights)
+  overallWeightedScore    Decimal?            @db.Decimal(5,2)
+
+  // Decision metadata
+  decidedAt               DateTime?
+  decidedById             String?
+  decisionNotes           String?             @db.Text
+  decisionPath            String?             // Which rule triggered: "auto_fail_p5", "pillar_fail", "conditional", "clean_pass"
+
+  // Regulatory disclaimer (must be included on certificate)
+  disclaimerAcknowledged  Boolean             @default(false)
+
+  // Remediation tracking (for CONDITIONAL outcomes)
+  remediationRequired     Json?               // Array of { pillarNumber, criteria, action }
+  remediationDeadline     DateTime?
+
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
+
+  // Relations
+  smeProfile              SMEProfile          @relation(fields: [smeProfileId], references: [id], onDelete: Cascade)
+  decidedBy               User?               @relation("DecisionMadeBy", fields: [decidedById], references: [id])
+
+  @@index([outcome])
+  @@index([smeProfileId])
+  @@map("certification_decisions")
 }

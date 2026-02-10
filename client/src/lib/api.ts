@@ -28,6 +28,10 @@ import {
   PaymentData,
   PaymentConfig,
   RiskDetailItem,
+  CertificationDefinitions,
+  PillarAssessment,
+  CertificationDecision,
+  ScoringSummary,
 } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
@@ -1279,6 +1283,81 @@ class ApiClient {
   // Admin: Cancel pending payment
   async cancelPayment(paymentId: string): Promise<ApiResponse<void>> {
     return this.request(`/payments/admin/${paymentId}/cancel`, { method: 'POST' });
+  }
+
+  // ============================================
+  // CERTIFICATION SCORING ENGINE ENDPOINTS
+  // ============================================
+
+  // Get pillar definitions (scoring rules)
+  async getCertificationDefinitions(): Promise<ApiResponse<CertificationDefinitions>> {
+    return this.request('/certification-scoring/definitions', { method: 'GET' });
+  }
+
+  // Initialize pillar assessments for an SME
+  async initializePillarAssessments(smeProfileId: string): Promise<ApiResponse<{ message: string }>> {
+    return this.request(`/certification-scoring/${smeProfileId}/initialize`, { method: 'POST' });
+  }
+
+  // Get all pillar assessments for an SME
+  async getPillarAssessments(smeProfileId: string): Promise<ApiResponse<PillarAssessment[]>> {
+    return this.request(`/certification-scoring/${smeProfileId}/assessments`, { method: 'GET' });
+  }
+
+  // Update a sub-criterion score
+  async updateCriterionScore(
+    smeProfileId: string,
+    pillarNumber: number,
+    criterionCode: string,
+    rating: 'not_rated' | 'green' | 'amber' | 'red',
+    notes?: string
+  ): Promise<ApiResponse<PillarAssessment>> {
+    return this.request(
+      `/certification-scoring/${smeProfileId}/pillar/${pillarNumber}/criterion/${criterionCode}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ rating, notes }),
+      }
+    );
+  }
+
+  // Update pillar assessor notes
+  async updatePillarNotes(
+    smeProfileId: string,
+    pillarNumber: number,
+    assessorNotes: string
+  ): Promise<ApiResponse<PillarAssessment>> {
+    return this.request(
+      `/certification-scoring/${smeProfileId}/pillar/${pillarNumber}/notes`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ assessorNotes }),
+      }
+    );
+  }
+
+  // Get certification decision
+  async getCertificationDecision(smeProfileId: string): Promise<ApiResponse<CertificationDecision | null>> {
+    return this.request(`/certification-scoring/${smeProfileId}/decision`, { method: 'GET' });
+  }
+
+  // Calculate and finalize certification decision
+  async calculateCertificationDecision(
+    smeProfileId: string,
+    decisionNotes?: string
+  ): Promise<ApiResponse<CertificationDecision>> {
+    return this.request(
+      `/certification-scoring/${smeProfileId}/decision/calculate`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ decisionNotes }),
+      }
+    );
+  }
+
+  // Get scoring summary for an SME
+  async getScoringSummary(smeProfileId: string): Promise<ApiResponse<ScoringSummary>> {
+    return this.request(`/certification-scoring/${smeProfileId}/summary`, { method: 'GET' });
   }
 }
 

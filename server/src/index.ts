@@ -16,6 +16,7 @@ import supportRoutes from './routes/support.routes';
 import legalRoutes from './routes/legal.routes';
 import verifyRoutes from './routes/verify.routes';
 import paymentRoutes from './routes/payment.routes';
+import certificationScoringRoutes from './routes/certificationScoring.routes';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -102,6 +103,7 @@ app.use('/api/support', supportRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/verify', verifyRoutes); // Public - no auth required
 app.use('/api/payments', paymentRoutes);
+app.use('/api/certification-scoring', certificationScoringRoutes);
 
 // 404 Handler
 app.use((req, res) => {

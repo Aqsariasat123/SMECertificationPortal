@@ -722,3 +722,142 @@ export interface PaymentConfig {
   formattedFee: string;
   stripeConfigured: boolean;
 }
+
+// ============================================
+// CERTIFICATION SCORING ENGINE TYPES
+// ============================================
+
+export type CriterionRating = 'not_rated' | 'green' | 'amber' | 'red';
+export type PillarStatus = 'not_started' | 'in_progress' | 'pass' | 'conditional' | 'fail';
+export type CertificationOutcome = 'pending' | 'certified' | 'conditional_certification' | 'not_certified';
+
+export interface SubCriterionDefinition {
+  code: string;
+  name: string;
+  weight: number;
+  description: string;
+  mandatoryEvidence: string[];
+  isAutoFailCriterion: boolean;
+  autoFailCondition: string | null;
+}
+
+export interface PillarDefinition {
+  pillarNumber: number;
+  name: string;
+  weight: number;
+  description: string;
+  passThreshold: number;
+  conditionalThreshold: number;
+  subCriteria: SubCriterionDefinition[];
+}
+
+export interface CertificationDefinitions {
+  pillars: PillarDefinition[];
+  disclaimer: string;
+  scoringGuide: {
+    green: { value: number; label: string; description: string };
+    amber: { value: number; label: string; description: string };
+    red: { value: number; label: string; description: string };
+  };
+  thresholds: {
+    pass: { min: number; label: string };
+    conditional: { min: number; max: number; label: string };
+    fail: { max: number; label: string };
+  };
+}
+
+export interface SubCriterionScore {
+  code: string;
+  name: string;
+  weight: number;
+  rating: CriterionRating;
+  notes?: string;
+}
+
+export interface PillarAssessment {
+  id: string;
+  smeProfileId: string;
+  pillarNumber: number;
+  pillarName: string;
+  pillarWeight: number;
+  status: PillarStatus;
+  weightedScore: number | null;
+  autoFailTriggered: boolean;
+  autoFailReason: string | null;
+  autoFailCriteria: string[] | null;
+  subCriteriaScores: SubCriterionScore[] | null;
+  assessorNotes: string | null;
+  assessedById: string | null;
+  assessedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  assessedBy?: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+  pillarDefinition?: PillarDefinition;
+}
+
+export interface CertificationDecision {
+  id: string;
+  smeProfileId: string;
+  outcome: CertificationOutcome;
+  globalAutoFail: boolean;
+  globalAutoFailPillar: number | null;
+  globalAutoFailReason: string | null;
+  pillar1Status: PillarStatus;
+  pillar1Score: number | null;
+  pillar2Status: PillarStatus;
+  pillar2Score: number | null;
+  pillar3Status: PillarStatus;
+  pillar3Score: number | null;
+  pillar4Status: PillarStatus;
+  pillar4Score: number | null;
+  pillar5Status: PillarStatus;
+  pillar5Score: number | null;
+  overallWeightedScore: number | null;
+  decidedAt: string | null;
+  decidedById: string | null;
+  decisionNotes: string | null;
+  decisionPath: string | null;
+  remediationRequired: Array<{
+    pillarNumber: number;
+    criteria: string;
+    action: string;
+  }> | null;
+  decidedBy?: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+}
+
+export interface ScoringSummary {
+  smeProfile: {
+    id: string;
+    companyName: string | null;
+    certificationStatus: string;
+  };
+  progress: {
+    totalPillars: number;
+    completedPillars: number;
+    totalCriteria: number;
+    ratedCriteria: number;
+    percentComplete: number;
+  };
+  pillars: Array<{
+    pillarNumber: number;
+    pillarName: string;
+    status: PillarStatus;
+    weightedScore: number | null;
+    autoFailTriggered: boolean;
+    autoFailReason: string | null;
+  }>;
+  decision: {
+    outcome: CertificationOutcome;
+    overallWeightedScore: number | null;
+    decisionPath: string | null;
+    decidedAt: string | null;
+  } | null;
+}
