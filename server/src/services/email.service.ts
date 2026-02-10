@@ -947,6 +947,79 @@ class EmailService {
     return { sent, failed };
   }
 
+  // Send 2FA OTP Email
+  async sendTwoFactorOTPEmail(
+    email: string,
+    fullName: string,
+    otpCode: string,
+    userId?: string
+  ): Promise<boolean> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background: #f8f9fa; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+          .header { background: #3a736d; color: white; padding: 35px 30px; text-align: center; }
+          .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+          .header p { margin: 6px 0 0; opacity: 0.85; font-size: 13px; }
+          .content { padding: 35px 30px; }
+          .title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 20px; }
+          .text { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+          .otp-box { background: #f9fafb; border: 2px solid #3a736d; border-radius: 12px; padding: 25px; margin: 30px 0; text-align: center; }
+          .otp-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+          .otp-code { font-size: 36px; font-weight: 700; color: #3a736d; letter-spacing: 8px; font-family: 'Courier New', monospace; }
+          .note { background: #fef3c7; border-radius: 6px; padding: 12px 15px; font-size: 13px; color: #92400e; margin: 20px 0; }
+          .footer { padding: 20px 30px; text-align: center; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="card">
+            <div class="header">
+              <h1>Naywa</h1>
+              <p>Two-Factor Authentication</p>
+            </div>
+            <div class="content">
+              <div class="title">Your Verification Code</div>
+              <p class="text">Hello ${fullName},</p>
+              <p class="text">You are attempting to sign in to your Naywa account. Use the verification code below to complete the process:</p>
+
+              <div class="otp-box">
+                <div class="otp-label">Verification Code</div>
+                <div class="otp-code">${otpCode}</div>
+              </div>
+
+              <div class="note">This code will expire in 5 minutes. If you did not request this code, please ignore this email and secure your account.</div>
+
+              <p class="text" style="font-size: 13px; color: #6b7280;">Do not share this code with anyone. Our team will never ask for your verification code.</p>
+            </div>
+            <div class="footer">
+              <p>This is an automated security notification.</p>
+              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendEmail({
+      to: email,
+      subject: 'Your Verification Code - Naywa',
+      html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: '2fa_otp',
+      recipientName: fullName,
+    });
+  }
+
   // Send document notification email (for missing docs, expiry warnings, etc.)
   async sendDocumentNotificationEmail(
     email: string,

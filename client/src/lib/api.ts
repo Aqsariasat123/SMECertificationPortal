@@ -102,6 +102,82 @@ class ApiClient {
     });
   }
 
+  async googleAuth(credential: string): Promise<ApiResponse<AuthResponse>> {
+    return this.request<AuthResponse>('/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ credential, role: 'user' }),
+    });
+  }
+
+  // ============================================
+  // TWO-FACTOR AUTHENTICATION (2FA)
+  // ============================================
+
+  // Verify 2FA OTP during login
+  async verify2FALogin(userId: string, otp: string): Promise<ApiResponse<AuthResponse>> {
+    return this.request<AuthResponse>('/auth/2fa/verify', {
+      method: 'POST',
+      body: JSON.stringify({ userId, otp }),
+    });
+  }
+
+  // Resend 2FA OTP
+  async resend2FAOTP(userId: string): Promise<ApiResponse> {
+    return this.request('/auth/2fa/resend', {
+      method: 'POST',
+      body: JSON.stringify({ userId }),
+    });
+  }
+
+  // Get 2FA status (authenticated)
+  async get2FAStatus(): Promise<ApiResponse<{ enabled: boolean; method: string | null }>> {
+    return this.request('/auth/2fa/status', {
+      method: 'GET',
+    });
+  }
+
+  // Enable 2FA - sends OTP for confirmation
+  async enable2FA(): Promise<ApiResponse> {
+    return this.request('/auth/2fa/enable', {
+      method: 'POST',
+    });
+  }
+
+  // Confirm 2FA setup with OTP
+  async confirm2FASetup(otp: string): Promise<ApiResponse> {
+    return this.request('/auth/2fa/confirm-setup', {
+      method: 'POST',
+      body: JSON.stringify({ otp }),
+    });
+  }
+
+  // Disable 2FA with password
+  async disable2FA(password: string): Promise<ApiResponse> {
+    return this.request('/auth/2fa/disable', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
+    });
+  }
+
+  // ============================================
+  // UAE PASS AUTHENTICATION
+  // ============================================
+
+  // Get UAE Pass authorization URL
+  async initUAEPassAuth(): Promise<ApiResponse<{ authUrl: string; state: string }>> {
+    return this.request('/auth/uaepass/init', {
+      method: 'GET',
+    });
+  }
+
+  // Handle UAE Pass callback (exchange code for token)
+  async uaePassCallback(code: string, state: string): Promise<ApiResponse<AuthResponse>> {
+    return this.request<AuthResponse>('/auth/uaepass/callback', {
+      method: 'POST',
+      body: JSON.stringify({ code, state }),
+    });
+  }
+
   async forgotPassword(data: ForgotPasswordData): Promise<ApiResponse> {
     return this.request('/auth/forgot-password', {
       method: 'POST',

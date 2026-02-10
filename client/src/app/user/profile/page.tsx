@@ -189,6 +189,18 @@ export default function UserProfilePage() {
   const [deleteError, setDeleteError] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // 2FA state
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [twoFactorLoading, setTwoFactorLoading] = useState(true);
+  const [show2FASetupModal, setShow2FASetupModal] = useState(false);
+  const [show2FADisableModal, setShow2FADisableModal] = useState(false);
+  const [otpForSetup, setOtpForSetup] = useState('');
+  const [passwordFor2FA, setPasswordFor2FA] = useState('');
+  const [twoFactorError, setTwoFactorError] = useState('');
+  const [twoFactorSuccess, setTwoFactorSuccess] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [processing2FA, setProcessing2FA] = useState(false);
+
   const [introductionRequests, setIntroductionRequests] = useState<IntroductionRequest[]>([]);
   const [requestsLoading, setRequestsLoading] = useState(true);
 
@@ -209,6 +221,99 @@ export default function UserProfilePage() {
   useEffect(() => {
     fetchIntroductionRequests();
   }, [fetchIntroductionRequests]);
+
+  // Fetch 2FA status
+  const fetch2FAStatus = useCallback(async () => {
+    setTwoFactorLoading(true);
+    try {
+      const result = await api.get2FAStatus();
+      if (result.success && result.data) {
+        setTwoFactorEnabled(result.data.enabled);
+      }
+    } catch (error) {
+      console.error('Failed to fetch 2FA status:', error);
+    } finally {
+      setTwoFactorLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetch2FAStatus();
+  }, [fetch2FAStatus]);
+
+  // Enable 2FA - Step 1: Send OTP
+  const handleEnable2FAStart = async () => {
+    setTwoFactorError('');
+    setProcessing2FA(true);
+    try {
+      const result = await api.enable2FA();
+      if (result.success) {
+        setOtpSent(true);
+        setShow2FASetupModal(true);
+      } else {
+        setTwoFactorError(result.message || 'Failed to send verification code');
+      }
+    } catch {
+      setTwoFactorError('Failed to send verification code');
+    } finally {
+      setProcessing2FA(false);
+    }
+  };
+
+  // Enable 2FA - Step 2: Confirm with OTP
+  const handleConfirm2FASetup = async () => {
+    if (!otpForSetup || otpForSetup.length !== 6) {
+      setTwoFactorError('Please enter the 6-digit code');
+      return;
+    }
+
+    setProcessing2FA(true);
+    setTwoFactorError('');
+    try {
+      const result = await api.confirm2FASetup(otpForSetup);
+      if (result.success) {
+        setTwoFactorEnabled(true);
+        setShow2FASetupModal(false);
+        setOtpForSetup('');
+        setOtpSent(false);
+        setTwoFactorSuccess('Two-factor authentication has been enabled');
+        setTimeout(() => setTwoFactorSuccess(''), 3000);
+      } else {
+        setTwoFactorError(result.message || 'Invalid verification code');
+      }
+    } catch {
+      setTwoFactorError('Failed to enable 2FA');
+    } finally {
+      setProcessing2FA(false);
+    }
+  };
+
+  // Disable 2FA
+  const handleDisable2FA = async () => {
+    if (!passwordFor2FA) {
+      setTwoFactorError('Please enter your password');
+      return;
+    }
+
+    setProcessing2FA(true);
+    setTwoFactorError('');
+    try {
+      const result = await api.disable2FA(passwordFor2FA);
+      if (result.success) {
+        setTwoFactorEnabled(false);
+        setShow2FADisableModal(false);
+        setPasswordFor2FA('');
+        setTwoFactorSuccess('Two-factor authentication has been disabled');
+        setTimeout(() => setTwoFactorSuccess(''), 3000);
+      } else {
+        setTwoFactorError(result.message || 'Failed to disable 2FA');
+      }
+    } catch {
+      setTwoFactorError('Failed to disable 2FA');
+    } finally {
+      setProcessing2FA(false);
+    }
+  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -839,7 +944,65 @@ export default function UserProfilePage() {
                 </div>
               </div>
 
-              {/* Phase 2: Two-Factor Authentication hidden for now */}
+              {/* Two-Factor Authentication */}
+              <div>
+                <h3 className="text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3 sm:mb-4" style={{ color: 'var(--graphite-900)' }}>Two-Factor Authentication</h3>
+
+                {/* 2FA Success Message */}
+                {twoFactorSuccess && (
+                  <div className="mb-4 rounded-xl p-4 flex items-center gap-3" style={{ backgroundColor: 'var(--success-50)', borderWidth: '1px', borderColor: 'var(--success-200)' }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--success-100)' }}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--success-600)' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm font-medium" style={{ color: 'var(--success-800)' }}>{twoFactorSuccess}</p>
+                  </div>
+                )}
+
+                <div className="p-4 sm:p-5 rounded-xl" style={{ backgroundColor: 'var(--graphite-50)', borderWidth: '1px', borderColor: 'var(--graphite-200)' }}>
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: twoFactorEnabled ? 'var(--success-100)' : 'var(--graphite-100)' }}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: twoFactorEnabled ? 'var(--success-600)' : 'var(--graphite-400)' }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm sm:text-base" style={{ color: 'var(--graphite-900)' }}>Email Verification Code</p>
+                        <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--graphite-500)' }}>
+                          {twoFactorEnabled
+                            ? 'A verification code will be sent to your email each time you sign in.'
+                            : 'Add an extra layer of security by requiring a verification code sent to your email when signing in.'}
+                        </p>
+                        {twoFactorEnabled && (
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: 'var(--success-100)', color: 'var(--success-700)' }}>
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--success-500)' }} />
+                              Enabled
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {twoFactorLoading ? (
+                      <div className="w-20 h-10 rounded-lg animate-pulse" style={{ backgroundColor: 'var(--graphite-200)' }} />
+                    ) : (
+                      <button
+                        onClick={twoFactorEnabled ? () => setShow2FADisableModal(true) : handleEnable2FAStart}
+                        disabled={processing2FA}
+                        className="w-full sm:w-auto px-4 py-2 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap flex-shrink-0 disabled:opacity-50"
+                        style={twoFactorEnabled
+                          ? { color: 'var(--danger-600)', borderWidth: '1px', borderColor: 'var(--danger-200)', backgroundColor: 'white' }
+                          : { color: 'var(--teal-600)', borderWidth: '1px', borderColor: 'var(--teal-200)', backgroundColor: 'white' }
+                        }
+                      >
+                        {processing2FA ? 'Processing...' : twoFactorEnabled ? 'Disable' : 'Enable'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               <hr style={{ borderColor: 'var(--graphite-200)' }} />
 
@@ -865,6 +1028,148 @@ export default function UserProfilePage() {
           )}
         </div>
       </div>
+
+      {/* 2FA Setup Modal */}
+      {show2FASetupModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--teal-100)' }}>
+                <svg className="w-6 h-6" style={{ color: 'var(--teal-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold" style={{ color: 'var(--graphite-900)' }}>Enable Two-Factor Authentication</h3>
+                <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>Enter the code sent to your email</p>
+              </div>
+            </div>
+
+            <p className="text-sm mb-4" style={{ color: 'var(--graphite-600)' }}>
+              A 6-digit verification code has been sent to <strong>{user?.email}</strong>. Enter it below to enable 2FA.
+            </p>
+
+            {twoFactorError && (
+              <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                {twoFactorError}
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--graphite-700)' }}>
+                Verification Code
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={otpForSetup}
+                onChange={(e) => {
+                  setOtpForSetup(e.target.value.replace(/\D/g, '').slice(0, 6));
+                  setTwoFactorError('');
+                }}
+                placeholder="Enter 6-digit code"
+                className="w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 text-center text-xl font-semibold tracking-widest"
+                style={{ borderColor: 'var(--graphite-200)', backgroundColor: 'white' }}
+              />
+              <p className="text-xs mt-2" style={{ color: 'var(--graphite-400)' }}>
+                The code will expire in 5 minutes
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShow2FASetupModal(false);
+                  setOtpForSetup('');
+                  setOtpSent(false);
+                  setTwoFactorError('');
+                }}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors"
+                style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm2FASetup}
+                disabled={processing2FA || otpForSetup.length !== 6}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors disabled:opacity-50"
+                style={{ backgroundColor: 'var(--teal-600)', color: 'white' }}
+              >
+                {processing2FA ? 'Verifying...' : 'Enable 2FA'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2FA Disable Modal */}
+      {show2FADisableModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--warning-100)' }}>
+                <svg className="w-6 h-6" style={{ color: 'var(--warning-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold" style={{ color: 'var(--graphite-900)' }}>Disable Two-Factor Authentication</h3>
+                <p className="text-sm" style={{ color: 'var(--graphite-500)' }}>This will reduce your account security</p>
+              </div>
+            </div>
+
+            <p className="text-sm mb-4" style={{ color: 'var(--graphite-600)' }}>
+              Disabling 2FA will make your account less secure. You&apos;ll only need your password to sign in. Enter your password to confirm.
+            </p>
+
+            {twoFactorError && (
+              <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: 'var(--danger-50)', color: 'var(--danger-700)' }}>
+                {twoFactorError}
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2" style={{ color: 'var(--graphite-700)' }}>
+                Your Password
+              </label>
+              <input
+                type="password"
+                value={passwordFor2FA}
+                onChange={(e) => {
+                  setPasswordFor2FA(e.target.value);
+                  setTwoFactorError('');
+                }}
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2"
+                style={{ borderColor: 'var(--graphite-200)', backgroundColor: 'white' }}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShow2FADisableModal(false);
+                  setPasswordFor2FA('');
+                  setTwoFactorError('');
+                }}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors"
+                style={{ backgroundColor: 'var(--graphite-100)', color: 'var(--graphite-700)' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDisable2FA}
+                disabled={processing2FA || !passwordFor2FA}
+                className="flex-1 px-4 py-3 rounded-xl font-semibold transition-colors disabled:opacity-50"
+                style={{ backgroundColor: 'var(--danger-600)', color: 'white' }}
+              >
+                {processing2FA ? 'Disabling...' : 'Disable 2FA'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Account Modal */}
       {showDeleteModal && (

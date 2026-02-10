@@ -82,6 +82,12 @@ export enum AuditAction {
   // Email Tracking
   EMAIL_SENT = 'EMAIL_SENT',
   EMAIL_FAILED = 'EMAIL_FAILED',
+
+  // Two-Factor Authentication
+  TWO_FACTOR_OTP_SENT = 'TWO_FACTOR_OTP_SENT',
+  TWO_FACTOR_ENABLED = 'TWO_FACTOR_ENABLED',
+  TWO_FACTOR_DISABLED = 'TWO_FACTOR_DISABLED',
+  TWO_FACTOR_FAILED = 'TWO_FACTOR_FAILED',
 }
 
 interface AuditLogParams {
