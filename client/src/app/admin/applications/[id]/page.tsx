@@ -31,6 +31,7 @@ export default function ApplicationDetailPage() {
   const [visibilityLoading, setVisibilityLoading] = useState(false);
   const [certActionLoading, setCertActionLoading] = useState(false);
   const [paymentActionLoading, setPaymentActionLoading] = useState(false);
+  const [paymentAmount, setPaymentAmount] = useState<string>('500.00');
 
   // Internal Review state
   const [internalDimensions, setInternalDimensions] = useState<InternalDimensions>({
@@ -274,11 +275,18 @@ export default function ApplicationDetailPage() {
   const handleRequestPayment = async () => {
     if (!application?.id) return;
 
+    const amount = parseFloat(paymentAmount);
+    if (isNaN(amount) || amount <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
     try {
       setPaymentActionLoading(true);
-      const result = await api.requestPayment(application.id);
+      const result = await api.requestPayment(application.id, amount);
       if (result.success) {
         setShowRequestPaymentModal(false);
+        setPaymentAmount('500.00');
         fetchPaymentData();
       } else {
         setError(result.message || 'Failed to request payment');
@@ -1666,28 +1674,41 @@ export default function ApplicationDetailPage() {
 
       {/* Request Payment Modal */}
       {showRequestPaymentModal && (
-        <Modal title="Request Certification Fee" onClose={() => setShowRequestPaymentModal(false)}>
+        <Modal title="Request Certification Fee" onClose={() => { setShowRequestPaymentModal(false); setPaymentAmount('500.00'); }}>
           <p style={{ color: 'var(--graphite-600)' }} className="mb-4">
-            You are about to request the certification fee from <strong>{application.companyName}</strong>.
+            Enter the certification fee amount for <strong>{application.companyName}</strong>.
           </p>
-          <div className="p-4 rounded-lg mb-4" style={{ background: 'var(--graphite-50)' }}>
-            <div className="flex items-center justify-between">
-              <span style={{ color: 'var(--graphite-600)' }}>Certification Fee</span>
-              <span className="font-semibold" style={{ color: 'var(--graphite-900)' }}>AED 500.00</span>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--graphite-700)' }}>
+              Certification Fee (AED)
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium" style={{ color: 'var(--graphite-500)' }}>
+                AED
+              </span>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={paymentAmount}
+                onChange={(e) => setPaymentAmount(e.target.value)}
+                className="input-field w-full pl-12 text-right font-semibold"
+                placeholder="0.00"
+              />
             </div>
           </div>
           <p className="text-sm mb-4" style={{ color: 'var(--graphite-500)' }}>
             The SME will be notified and can complete the payment through their dashboard.
           </p>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setShowRequestPaymentModal(false)} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
+            <button onClick={() => { setShowRequestPaymentModal(false); setPaymentAmount('500.00'); }} className="btn-secondary px-4 py-2.5 rounded-xl">Cancel</button>
             <button
               onClick={handleRequestPayment}
-              disabled={paymentActionLoading}
+              disabled={paymentActionLoading || !paymentAmount || parseFloat(paymentAmount) <= 0}
               className="px-5 py-2.5 rounded-xl font-semibold text-white disabled:opacity-50"
               style={{ background: 'var(--warning-600)' }}
             >
-              {paymentActionLoading ? 'Requesting...' : 'Request Payment'}
+              {paymentActionLoading ? 'Requesting...' : `Request AED ${parseFloat(paymentAmount || '0').toFixed(2)}`}
             </button>
           </div>
         </Modal>
