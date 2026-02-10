@@ -1,19 +1,32 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { AdminApplication, PaginationData, CertificationStatus } from '@/types';
 
 export default function AdminApplicationsPage() {
   const router = useRouter();
-  const [filter, setFilter] = useState('all');
+  const searchParams = useSearchParams();
+
+  // Read initial filter from URL params
+  const initialStatus = searchParams.get('status') || 'all';
+  const riskFilter = searchParams.get('risk');
+
+  const [filter, setFilter] = useState(initialStatus);
   const [searchTerm, setSearchTerm] = useState('');
   const [applications, setApplications] = useState<AdminApplication[]>([]);
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+
+  // Sync filter with URL params
+  useEffect(() => {
+    if (initialStatus && initialStatus !== filter) {
+      setFilter(initialStatus);
+    }
+  }, [initialStatus]);
 
   useEffect(() => {
     fetchApplications();
@@ -196,6 +209,34 @@ export default function AdminApplicationsPage() {
           );
         })}
       </div>
+
+      {/* Risk Filter Banner */}
+      {riskFilter && (
+        <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'var(--warning-50)', border: '1px solid var(--warning-200)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--warning-100)' }}>
+              <svg className="w-5 h-5" style={{ color: 'var(--warning-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-semibold text-sm" style={{ color: 'var(--warning-800)' }}>
+                {riskFilter === 'missing_docs' && 'Viewing: Certified SMEs with Missing Documents'}
+                {riskFilter === 'near_expiry' && 'Viewing: Licenses Expiring Within 30 Days'}
+                {riskFilter === 'expired' && 'Viewing: Certified SMEs with Expired Licenses'}
+              </p>
+              <p className="text-xs" style={{ color: 'var(--warning-600)' }}>Filtered from Risk & Compliance analytics</p>
+            </div>
+          </div>
+          <button
+            onClick={() => router.push('/admin/applications')}
+            className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
+            style={{ background: 'var(--warning-200)', color: 'var(--warning-800)' }}
+          >
+            Clear Filter
+          </button>
+        </div>
+      )}
 
       {/* Search and Filters */}
       <div className="solid-card rounded-xl p-5">

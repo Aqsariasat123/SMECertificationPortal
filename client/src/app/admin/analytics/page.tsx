@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { AnalyticsData } from '@/types';
 
@@ -19,6 +20,7 @@ function Tooltip({ text }: { text: string }) {
 }
 
 export default function AdminAnalyticsPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -564,23 +566,31 @@ export default function AdminAnalyticsPage() {
 
       {/* Risk & Compliance */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance<Tooltip text="Compliance signals — missing docs, expiring licenses, admin interventions" /></h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center" style={{ color: 'var(--graphite-500)' }}>Risk & Compliance<Tooltip text="Compliance signals — missing docs, expiring licenses, admin interventions. Click any card to view details." /></h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-            { label: 'Near Expiry', value: analytics.riskCompliance.nearExpiry, desc: 'License expires within 30d', color: 'warning', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-            { label: 'Expired Licenses', value: analytics.riskCompliance.expiredLicenses, desc: 'Certified with expired license', color: 'danger', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' },
-            { label: 'Admin Overrides', value: analytics.riskCompliance.adminOverrides, desc: `Visibility toggles (${timeRange}d)`, color: 'graphite', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
-            { label: 'Rejections', value: analytics.riskCompliance.rejectionsPeriod, desc: `Cert rejections (${timeRange}d)`, color: 'danger', icon: 'M6 18L18 6M6 6l12 12' },
+            { label: 'Missing Documents', value: analytics.riskCompliance.missingDocs, desc: 'Certified SMEs without docs', color: 'warning', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', href: '/admin/applications?status=certified&risk=missing_docs' },
+            { label: 'Near Expiry', value: analytics.riskCompliance.nearExpiry, desc: 'License expires within 30d', color: 'warning', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', href: '/admin/applications?status=certified&risk=near_expiry' },
+            { label: 'Expired Licenses', value: analytics.riskCompliance.expiredLicenses, desc: 'Certified with expired license', color: 'danger', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', href: '/admin/applications?status=certified&risk=expired' },
+            { label: 'Admin Overrides', value: analytics.riskCompliance.adminOverrides, desc: `Visibility toggles (${timeRange}d)`, color: 'graphite', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', href: '/admin/audit-logs?action=visibility' },
+            { label: 'Rejections', value: analytics.riskCompliance.rejectionsPeriod, desc: `Cert rejections (${timeRange}d)`, color: 'danger', icon: 'M6 18L18 6M6 6l12 12', href: '/admin/applications?status=rejected' },
           ].map((item) => (
-            <div key={item.label} className="solid-card rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-2">
+            <div
+              key={item.label}
+              onClick={() => router.push(item.href)}
+              className="solid-card rounded-xl p-4 cursor-pointer transition-all hover:shadow-md"
+              style={{ borderLeft: `3px solid var(--${item.color}-400)` }}
+            >
+              <div className="flex items-center justify-between mb-2">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ background: `var(--${item.color}-100)`, color: `var(--${item.color}-600)` }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                   </svg>
                 </div>
+                <svg className="w-4 h-4" style={{ color: 'var(--graphite-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
               <p className="text-2xl font-bold" style={{ color: item.value > 0 && (item.color === 'danger' || item.color === 'warning') ? `var(--${item.color}-600)` : 'var(--graphite-900)' }}>{item.value}</p>
               <p className="text-xs font-medium" style={{ color: 'var(--graphite-700)' }}>{item.label}</p>

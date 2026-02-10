@@ -1,15 +1,22 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { AuditLogEntry, PaginationData, UserRole } from '@/types';
 
 export default function AdminAuditLogsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Read initial action filter from URL params
+  const initialAction = searchParams.get('action') || '';
+
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [actionFilter, setActionFilter] = useState('');
+  const [actionFilter, setActionFilter] = useState(initialAction);
   const [currentPage, setCurrentPage] = useState(1);
   const [exporting, setExporting] = useState(false);
   const limit = 10;
@@ -30,14 +37,23 @@ export default function AdminAuditLogsPage() {
   const fetchAuditLogs = useCallback(async () => {
     setLoading(true);
     try {
+      // For "visibility" filter, don't pass actionType to backend - we'll filter client-side
+      const effectiveFilter = actionFilter === 'visibility' ? undefined : actionFilter;
       const result = await api.getAuditLogs({
         page: currentPage,
-        limit,
-        actionType: actionFilter || undefined,
+        limit: actionFilter === 'visibility' ? 100 : limit, // Fetch more for client-side filtering
+        actionType: effectiveFilter || undefined,
       });
 
       if (result.success && result.data) {
-        setLogs(result.data.logs);
+        let filteredLogs = result.data.logs;
+        // Filter for visibility toggles (LISTING_ENABLED and LISTING_DISABLED)
+        if (actionFilter === 'visibility') {
+          filteredLogs = result.data.logs.filter(
+            log => log.actionType === 'LISTING_ENABLED' || log.actionType === 'LISTING_DISABLED'
+          );
+        }
+        setLogs(filteredLogs);
         setPagination(result.data.pagination);
       }
     } catch (error) {
@@ -50,6 +66,16 @@ export default function AdminAuditLogsPage() {
   useEffect(() => {
     fetchAuditLogs();
   }, [fetchAuditLogs]);
+
+  // Sync action filter with URL params
+  useEffect(() => {
+    if (initialAction && initialAction !== actionFilter) {
+      setActionFilter(initialAction);
+    }
+  }, [initialAction]);
+
+  // Check if viewing admin overrides from analytics
+  const isAdminOverridesView = initialAction === 'LISTING_ENABLED' || initialAction === 'LISTING_DISABLED' || initialAction === 'visibility';
 
   // Filter logs client-side by search term
   const filteredLogs = logs.filter((log) => {
@@ -323,6 +349,30 @@ export default function AdminAuditLogsPage() {
           </div>
         ))}
       </div>
+
+      {/* Admin Overrides Banner */}
+      {isAdminOverridesView && (
+        <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'var(--graphite-100)', border: '1px solid var(--graphite-200)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--graphite-200)' }}>
+              <svg className="w-5 h-5" style={{ color: 'var(--graphite-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-semibold text-sm" style={{ color: 'var(--graphite-800)' }}>Viewing: Admin Visibility Overrides</p>
+              <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>Showing listing enabled/disabled actions from Risk & Compliance</p>
+            </div>
+          </div>
+          <button
+            onClick={() => router.push('/admin/audit-logs')}
+            className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
+            style={{ background: 'var(--graphite-200)', color: 'var(--graphite-700)' }}
+          >
+            Clear Filter
+          </button>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="solid-card rounded-xl p-5">
