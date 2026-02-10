@@ -2910,8 +2910,10 @@ export const getRiskDetails = async (req: AuthenticatedRequest, res: Response) =
 
     return res.json({
       success: true,
-      data,
-      count: data.length,
+      data: {
+        data,
+        count: data.length,
+      },
     });
   } catch (error) {
     console.error('Get risk details error:', error);
