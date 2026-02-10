@@ -1190,19 +1190,27 @@ export default function ApplicationDetailPage() {
                 Certification Fee
               </h3>
 
-              {!payment ? (
-                // No payment requested yet
+              {!payment || payment.status === 'failed' ? (
+                // No payment or previous payment was cancelled - allow new request
                 <div className="space-y-3">
-                  <div className="p-4 rounded-lg text-center" style={{ background: 'var(--graphite-50)' }}>
-                    <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>No payment requested yet</p>
-                    <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Request certification fee from this SME</p>
-                  </div>
+                  {payment?.status === 'failed' && (
+                    <div className="p-3 rounded-lg" style={{ background: 'var(--danger-50)', border: '1px solid var(--danger-200)' }}>
+                      <p className="text-xs font-medium" style={{ color: 'var(--danger-700)' }}>Previous payment was cancelled</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--danger-500)' }}>You can request a new payment below</p>
+                    </div>
+                  )}
+                  {!payment && (
+                    <div className="p-4 rounded-lg text-center" style={{ background: 'var(--graphite-50)' }}>
+                      <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>No payment requested yet</p>
+                      <p className="text-xs mt-1" style={{ color: 'var(--graphite-400)' }}>Request certification fee from this SME</p>
+                    </div>
+                  )}
                   <button
                     onClick={() => setShowRequestPaymentModal(true)}
                     className="w-full px-4 py-2.5 text-sm font-medium rounded-lg transition-all"
                     style={{ background: 'var(--warning-600)', color: 'white' }}
                   >
-                    Request Payment
+                    {payment?.status === 'failed' ? 'Request New Payment' : 'Request Payment'}
                   </button>
                 </div>
               ) : (
