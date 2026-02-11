@@ -80,18 +80,12 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-16"
         style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #D0E4E4' }}
       >
-        <Link href="/" className="flex items-center gap-2.5 no-underline">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <polyline points="9 12 11 14 15 10"/>
-            </svg>
-          </div>
+        <Link href="/" className="flex flex-col no-underline">
           <span className="font-semibold text-lg" style={{ color: '#111C1C' }}>Naywa</span>
-          <span className="text-sm font-normal hidden sm:inline" style={{ color: '#5A7070' }}>SME Certification Platform</span>
+          <span className="text-xs font-normal" style={{ color: '#5A7070' }}>SME Certification Platform</span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           <Link
             href="/login"
             className="btn-ghost px-5 py-2 text-sm font-medium rounded-lg transition-all no-underline"
@@ -101,8 +95,8 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/register"
-            className="btn-primary-nav px-5 py-2 text-sm font-semibold rounded-lg transition-all no-underline"
-            style={{ color: 'white', background: '#2D6A6A', border: 'none' }}
+            className="text-sm font-medium no-underline transition-colors hover:opacity-70"
+            style={{ color: '#5A7070' }}
           >
             Start Certification
           </Link>
@@ -350,35 +344,31 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="px-6 md:px-12 pt-10 pb-8" style={{ background: '#111C1C' }}>
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between flex-wrap gap-5 pb-7 mb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            <Link href="/" className="flex items-center gap-2.5 no-underline">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-              </div>
+          <div className="mb-8">
+            <Link href="/" className="no-underline">
               <span className="font-semibold text-base" style={{ color: 'white' }}>Naywa</span>
             </Link>
-
-            <ul className="flex gap-6 flex-wrap list-none m-0 p-0">
-              <li><Link href="/certification-standards" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Certification Standards</Link></li>
-              <li><Link href="/certification-fees" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Fees and Services</Link></li>
-              <li><Link href="/terms" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Terms of Service</Link></li>
-              <li><Link href="/privacy" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Privacy Policy</Link></li>
-              <li><Link href="/legal-notice" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Legal Notice</Link></li>
-              <li><Link href="/contact" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Contact</Link></li>
-              <li><span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>United Arab Emirates</span></li>
-            </ul>
           </div>
 
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <p className="text-xs max-w-2xl" style={{ color: 'rgba(255,255,255,0.25)', lineHeight: 1.65 }}>
-              Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
-            </p>
-            <p className="text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.25)' }}>
-              © 2026 Naywa. All rights reserved.
-            </p>
+          <div className="flex flex-wrap gap-x-8 gap-y-2 mb-8">
+            <Link href="/certification-standards" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Certification Standards</Link>
+            <Link href="/certification-fees" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Fees and Services</Link>
+            <Link href="/terms" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Terms of Service</Link>
+            <Link href="/privacy" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Privacy Policy</Link>
           </div>
+
+          <div className="flex flex-wrap gap-x-8 gap-y-2 mb-10">
+            <Link href="/legal-notice" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Legal Notice</Link>
+            <Link href="/contact" className="footer-link text-sm no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>Contact</Link>
+            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>United Arab Emirates</span>
+          </div>
+
+          <p className="text-xs max-w-3xl mb-6" style={{ color: 'rgba(255,255,255,0.35)', lineHeight: 1.7 }}>
+            Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
+          </p>
+          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            © 2026 Naywa. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
