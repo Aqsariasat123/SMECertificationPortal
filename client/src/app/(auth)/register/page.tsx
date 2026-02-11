@@ -115,10 +115,81 @@ export default function RegisterPage() {
 
   const currentStep = getCurrentStep();
 
+  // Progress Steps Component - Now at TOP of card
+  const ProgressSteps = () => (
+    <div className="flex items-center justify-center mb-10">
+      {/* Step 1 */}
+      <div className="flex flex-col items-center gap-1.5">
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+          style={{
+            background: currentStep >= 1 ? '#2D6A6A' : '#F5FAFA',
+            color: currentStep >= 1 ? 'white' : '#5A7070',
+            border: currentStep >= 1 ? 'none' : '1.5px solid #D0E4E4'
+          }}
+        >
+          1
+        </div>
+        <span
+          className="text-[11px] font-medium tracking-wide"
+          style={{ color: currentStep >= 1 ? '#2D6A6A' : '#5A7070', fontWeight: currentStep === 1 ? 600 : 500 }}
+        >
+          Type
+        </span>
+      </div>
+
+      {/* Connector */}
+      <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
+
+      {/* Step 2 */}
+      <div className="flex flex-col items-center gap-1.5">
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+          style={{
+            background: currentStep >= 2 ? '#2D6A6A' : '#F5FAFA',
+            color: currentStep >= 2 ? 'white' : '#5A7070',
+            border: currentStep >= 2 ? 'none' : '1.5px solid #D0E4E4'
+          }}
+        >
+          2
+        </div>
+        <span
+          className="text-[11px] font-medium tracking-wide"
+          style={{ color: currentStep >= 2 ? '#2D6A6A' : '#5A7070', fontWeight: currentStep === 2 ? 600 : 500 }}
+        >
+          Account
+        </span>
+      </div>
+
+      {/* Connector */}
+      <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
+
+      {/* Step 3 */}
+      <div className="flex flex-col items-center gap-1.5">
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+          style={{
+            background: currentStep >= 3 ? '#2D6A6A' : '#F5FAFA',
+            color: currentStep >= 3 ? 'white' : '#5A7070',
+            border: currentStep >= 3 ? 'none' : '1.5px solid #D0E4E4'
+          }}
+        >
+          3
+        </div>
+        <span
+          className="text-[11px] font-medium tracking-wide"
+          style={{ color: currentStep >= 3 ? '#2D6A6A' : '#5A7070', fontWeight: currentStep === 3 ? 600 : 500 }}
+        >
+          Details
+        </span>
+      </div>
+    </div>
+  );
+
   if (success) {
     return (
       <div
-        className="rounded-[20px] p-10 lg:p-12"
+        className="rounded-[20px] p-12"
         style={{
           background: 'white',
           border: '1px solid #D0E4E4',
@@ -136,8 +207,8 @@ export default function RegisterPage() {
             </svg>
           </div>
           <h1
-            className="text-[26px] font-bold mb-3 tracking-[-0.01em]"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+            className="text-2xl font-normal mb-2 tracking-[0.01em] leading-[1.3]"
+            style={{ fontFamily: "'Libre Baskerville', serif", color: '#111C1C' }}
           >
             Verification Email Sent
           </h1>
@@ -146,7 +217,7 @@ export default function RegisterPage() {
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all"
+            className="inline-flex items-center justify-center gap-1.5 w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all"
             style={{ background: '#2D6A6A' }}
           >
             Go to Login
@@ -159,80 +230,9 @@ export default function RegisterPage() {
     );
   }
 
-  // Progress Steps Component
-  const ProgressSteps = () => (
-    <div className="flex items-center justify-center mt-8 pt-6" style={{ borderTop: '1px solid #E8F4F4' }}>
-      {/* Step 1 */}
-      <div className="flex flex-col items-center">
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
-          style={{
-            background: currentStep >= 1 ? '#2D6A6A' : '#F5FAFA',
-            color: currentStep >= 1 ? 'white' : '#5A7070',
-            border: currentStep >= 1 ? 'none' : '1.5px solid #D0E4E4'
-          }}
-        >
-          1
-        </div>
-        <span
-          className="text-[11px] font-medium mt-1.5 tracking-wide"
-          style={{ color: currentStep >= 1 ? '#2D6A6A' : '#5A7070' }}
-        >
-          Type
-        </span>
-      </div>
-
-      {/* Connector */}
-      <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
-
-      {/* Step 2 */}
-      <div className="flex flex-col items-center">
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
-          style={{
-            background: currentStep >= 2 ? '#2D6A6A' : '#F5FAFA',
-            color: currentStep >= 2 ? 'white' : '#5A7070',
-            border: currentStep >= 2 ? 'none' : '1.5px solid #D0E4E4'
-          }}
-        >
-          2
-        </div>
-        <span
-          className="text-[11px] font-medium mt-1.5 tracking-wide"
-          style={{ color: currentStep >= 2 ? '#2D6A6A' : '#5A7070' }}
-        >
-          Account
-        </span>
-      </div>
-
-      {/* Connector */}
-      <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
-
-      {/* Step 3 */}
-      <div className="flex flex-col items-center">
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
-          style={{
-            background: currentStep >= 3 ? '#2D6A6A' : '#F5FAFA',
-            color: currentStep >= 3 ? 'white' : '#5A7070',
-            border: currentStep >= 3 ? 'none' : '1.5px solid #D0E4E4'
-          }}
-        >
-          3
-        </div>
-        <span
-          className="text-[11px] font-medium mt-1.5 tracking-wide"
-          style={{ color: currentStep >= 3 ? '#2D6A6A' : '#5A7070' }}
-        >
-          Details
-        </span>
-      </div>
-    </div>
-  );
-
   return (
     <div
-      className="rounded-[20px] p-10 lg:p-12"
+      className="rounded-[20px] p-12"
       style={{
         background: 'white',
         border: '1px solid #D0E4E4',
@@ -240,12 +240,15 @@ export default function RegisterPage() {
         animation: 'fadeUp 0.5s 0.1s both'
       }}
     >
+      {/* Progress Steps - Always at top */}
+      <ProgressSteps />
+
       {step === 1 ? (
         <>
           {/* Header */}
           <h2
-            className="text-[26px] font-bold text-center mb-2 tracking-[-0.01em]"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+            className="text-2xl font-normal text-center mb-2 tracking-[0.01em] leading-[1.3]"
+            style={{ fontFamily: "'Libre Baskerville', serif", color: '#111C1C' }}
           >
             Get Started
           </h2>
@@ -258,7 +261,7 @@ export default function RegisterPage() {
             {/* Certify a Business */}
             <div
               onClick={() => setSelectedOption('sme')}
-              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
+              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center relative"
               style={{
                 background: selectedOption === 'sme' ? '#E8F4F4' : 'white',
                 border: selectedOption === 'sme' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
@@ -280,7 +283,7 @@ export default function RegisterPage() {
             {/* Browse Certified Businesses */}
             <div
               onClick={() => setSelectedOption('user')}
-              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
+              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center relative"
               style={{
                 background: selectedOption === 'user' ? '#E8F4F4' : 'white',
                 border: selectedOption === 'user' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
@@ -296,13 +299,7 @@ export default function RegisterPage() {
                 </svg>
               </div>
               <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Browse Certified Businesses</p>
-              <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>Access the registry of verified SMEs.</p>
-              <span
-                className="inline-block mt-2.5 text-[10px] font-semibold tracking-wide uppercase px-2 py-1 rounded"
-                style={{ color: '#5A7070', background: '#F5FAFA', border: '1px solid #D0E4E4' }}
-              >
-                View only
-              </span>
+              <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>View certified entities recorded in Naywa&apos;s certification register.</p>
             </div>
           </div>
 
@@ -318,13 +315,13 @@ export default function RegisterPage() {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
-            <button
-              onClick={() => { setSelectedOption('user'); handleRoleSelect('user'); }}
-              className="h-[46px] rounded-[10px] font-medium text-sm transition-all"
+            <Link
+              href="/registry"
+              className="h-[46px] rounded-[10px] font-medium text-sm transition-all flex items-center justify-center"
               style={{ background: 'white', border: '1.5px solid #D0E4E4', color: '#2D6A6A' }}
             >
-              Access Registry
-            </button>
+              View Registry
+            </Link>
           </div>
 
           {/* Sign in */}
@@ -332,9 +329,6 @@ export default function RegisterPage() {
             Already have an account?{' '}
             <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
           </p>
-
-          {/* Progress Steps */}
-          <ProgressSteps />
         </>
       ) : role === 'sme' && smeSubStep === 1 ? (
         /* SME Step 2a - Company Information */
@@ -351,8 +345,8 @@ export default function RegisterPage() {
           </button>
 
           <h2
-            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+            className="text-2xl font-normal mb-2 tracking-[0.01em] leading-[1.3]"
+            style={{ fontFamily: "'Libre Baskerville', serif", color: '#111C1C' }}
           >
             Company Information
           </h2>
@@ -466,9 +460,6 @@ export default function RegisterPage() {
             Already have an account?{' '}
             <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
           </p>
-
-          {/* Progress Steps */}
-          <ProgressSteps />
         </>
       ) : (
         /* SME Step 2b (Personal) or User Step 2 */
@@ -485,8 +476,8 @@ export default function RegisterPage() {
           </button>
 
           <h2
-            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
-            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+            className="text-2xl font-normal mb-2 tracking-[0.01em] leading-[1.3]"
+            style={{ fontFamily: "'Libre Baskerville', serif", color: '#111C1C' }}
           >
             {role === 'sme' ? 'Personal Details' : 'Create Your Account'}
           </h2>
@@ -663,9 +654,6 @@ export default function RegisterPage() {
             Already have an account?{' '}
             <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
           </p>
-
-          {/* Progress Steps */}
-          <ProgressSteps />
         </>
       )}
 
