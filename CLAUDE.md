@@ -56,7 +56,39 @@ SMECertificationPortal/
 - Uses formal/professional tone for UAE government context
 - See BRAND_VOICE_UX_WRITING_GUIDE.md for UX writing standards
 
-## Commands
+## Production Deployment
+
+**Live URL:** https://sme.byredstone.com
+
+### Infrastructure
+- **Hosted on:** Isolated LXC container (VMID 106, name: `sme-portal`)
+- **LXC IP:** 10.10.10.241
+- **Proxmox Host:** 65.109.60.53 (Hetzner)
+- **Project Path:** /var/www/sme-portal
+
+### Server Access
+```bash
+# Via Proxmox host (recommended)
+ssh root@65.109.60.53
+pct exec 106 -- <command>
+
+# Direct SSH to LXC (from internal network only)
+ssh root@10.10.10.241
+```
+
+### PM2 Processes
+- `sme-server` - Backend API (port 5001)
+- `sme-client` - Next.js frontend (port 3000)
+
+### Useful Commands (on LXC)
+```bash
+pm2 list                    # Check process status
+pm2 logs                    # View logs
+pm2 restart all             # Restart services
+cd /var/www/sme-portal      # Project directory
+```
+
+## Local Development Commands
 ```bash
 # Backend
 cd server && npm run dev
