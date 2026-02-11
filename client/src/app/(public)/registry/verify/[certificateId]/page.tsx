@@ -206,163 +206,166 @@ export default function VerifyCertificatePage() {
         {/* Certificate Document - Matching PDF Template */}
         <div className="w-full max-w-[680px] rounded-xl overflow-hidden" style={{ background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
 
-          {/* HEADER - Dark teal (matching PDF) */}
-          <div className="relative overflow-hidden" style={{ background: '#2D6A6A', padding: '28px 32px 24px' }}>
+          {/* HEADER - Dark teal */}
+          <div className="relative overflow-hidden" style={{ background: '#2D6A6A', padding: '24px 32px 20px' }}>
             {/* Curved corner decoration */}
             <div className="absolute top-0 right-0" style={{ width: '180px', height: '180px', background: '#5DB5A8', borderRadius: '0 0 0 100%', opacity: 0.15 }} />
 
             <div className="relative z-10">
-              {/* Top row: Logo + Certificate Type */}
-              <div className="flex items-start justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-white font-semibold text-[15px]">Naywa</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.6)' }}>SME Certification Registry</p>
-                  </div>
+              {/* Logo + Title */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                  <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
                 </div>
-                <div className="text-right">
-                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>Certificate Type</p>
-                  <p className="text-[13px] font-semibold" style={{ color: '#5DB5A8' }}>SME Capital-Readiness</p>
+                <div>
+                  <p className="text-white font-bold text-[15px]">NAYWA</p>
+                  <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.6)' }}>Independent SME Certification Register</p>
+                  <p className="text-[10px] font-semibold" style={{ color: '#5DB5A8' }}>SME Capital-Readiness Certification</p>
                 </div>
               </div>
 
-              {/* Title + Issue Date */}
-              <div className="flex items-end justify-between">
-                <h1 className="text-[26px] font-bold text-white leading-tight" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif' }}>
-                  Certificate of SME Certification
-                </h1>
-                <div className="text-right flex-shrink-0 ml-4">
-                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>Issued</p>
-                  <p className="text-[13px] font-semibold" style={{ color: '#5DB5A8' }}>{formatDate(certificate.issuedAt)}</p>
-                </div>
-              </div>
+              {/* Title */}
+              <h1 className="text-[22px] font-bold text-white leading-tight">
+                Certificate of SME Certification
+              </h1>
             </div>
           </div>
 
           {/* BODY */}
-          <div className="p-8">
-            {/* Description */}
-            <p className="text-[12px] leading-[1.7] mb-7" style={{ color: '#5A7070' }}>
-              This certificate attests that the entity named below has successfully completed the Naywa SME certification process and meets the documentation and governance standards required for capital readiness assessment.
-            </p>
-
-            {/* Entity Name */}
+          <div className="p-6 md:p-8">
+            {/* Determination Statement */}
             <div className="mb-6">
-              <p className="text-[10px] font-semibold tracking-[0.12em] uppercase mb-2" style={{ color: '#2D6A6A' }}>Entity Name</p>
-              <p className="text-[36px] font-bold leading-none pb-2" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                {certificate.companyName}
+              <p className="text-[11px] leading-[1.7] mb-3" style={{ color: '#5A7070' }}>
+                This document confirms that the entity identified below has completed Naywa&apos;s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.
               </p>
-              <div className="w-[100px] h-[3px] mt-2" style={{ background: '#2D6A6A' }} />
+              <p className="text-[11px] leading-[1.7]" style={{ color: '#5A7070' }}>
+                Certification reflects review of submitted documentation against defined assessment standards and does not constitute regulatory approval, financial endorsement, or a guarantee of financing.
+              </p>
             </div>
 
-            {/* Trade License + Sector */}
-            <div className="grid grid-cols-2 gap-8 mb-7">
-              <div>
-                <p className="text-[10px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Trade License Number</p>
-                <p className="text-[15px] font-semibold" style={{ color: '#111C1C' }}>{certificate.tradeLicenseNumber}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Industry Sector</p>
-                <p className="text-[15px] font-semibold" style={{ color: '#111C1C' }}>{certificate.industrySector}</p>
-              </div>
-            </div>
-
-            {/* Certificate Info Box */}
-            <div className="rounded-lg overflow-hidden mb-7" style={{ background: '#F8FBFB', border: '1px solid #E8F0F0' }}>
-              <div className="flex" style={{ borderLeft: '4px solid #2D6A6A' }}>
-                <div className="flex-1 py-4 px-4" style={{ borderRight: '1px solid #E8F0F0' }}>
-                  <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Certificate ID</p>
-                  <p className="text-[12px] font-semibold tracking-wide" style={{ color: '#111C1C', fontFamily: 'monospace' }}>{certificate.certificateId}</p>
-                </div>
-                <div className="py-4 px-4" style={{ borderRight: '1px solid #E8F0F0', width: '80px' }}>
-                  <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Version</p>
-                  <p className="text-[13px] font-semibold" style={{ color: '#111C1C' }}>{certificate.version || 'v1.0'}</p>
-                </div>
-                <div className="py-4 px-4" style={{ borderRight: '1px solid #E8F0F0', width: '120px' }}>
-                  <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Issue Date</p>
-                  <p className="text-[12px] font-semibold" style={{ color: '#111C1C' }}>{formatDate(certificate.issuedAt)}</p>
-                </div>
-                <div className="py-4 px-4" style={{ borderRight: '1px solid #E8F0F0', width: '120px' }}>
-                  <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Expiry Date</p>
-                  <p className="text-[12px] font-semibold" style={{ color: '#111C1C' }}>{formatDate(certificate.expiresAt)}</p>
-                </div>
-                <div className="py-4 px-4" style={{ width: '100px' }}>
-                  <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>Status</p>
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full" style={{ background: config.bgColor, color: config.color }}>
-                    <span className="w-[6px] h-[6px] rounded-full" style={{ background: config.color }} />
-                    {config.label}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Pillars Assessed */}
-            <div className="mb-7">
-              <div className="flex items-center gap-3 mb-4">
-                <p className="text-[10px] font-semibold tracking-[0.12em] uppercase" style={{ color: '#2D6A6A' }}>Pillars Assessed</p>
+            {/* Entity Record */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Entity Record</p>
                 <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
               </div>
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-                <div className="space-y-2">
-                  {pillarsLeft.map((pillar, i) => (
-                    <div key={i} className="flex items-center gap-2.5">
-                      <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                      <p className="text-[12px]" style={{ color: '#1A2A2A' }}>{pillar}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="space-y-2">
-                  {pillarsRight.map((pillar, i) => (
-                    <div key={i} className="flex items-center gap-2.5">
-                      <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                      <p className="text-[12px]" style={{ color: '#1A2A2A' }}>{pillar}</p>
-                    </div>
-                  ))}
+              <div className="space-y-1.5">
+                <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                  Entity Name: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.companyName}</span>
+                </p>
+                <div className="flex flex-wrap gap-x-6">
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Trade License Number: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.tradeLicenseNumber}</span>
+                  </p>
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Industry Sector: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.industrySector}</span>
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Verification Box with QR Code */}
-            <div className="rounded-lg p-5" style={{ background: '#EFF7F6' }}>
-              <div className="flex gap-5">
-                <div className="flex-1 space-y-4">
+            {/* Certificate Record */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Certificate Record</p>
+                <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap gap-x-6">
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Certificate ID: <span className="font-semibold font-mono" style={{ color: '#111C1C' }}>{certificate.certificateId}</span>
+                  </p>
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Certificate Format Version: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.version || '1'}</span>
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-x-6">
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Issue Date: <span className="font-semibold" style={{ color: '#111C1C' }}>{formatDate(certificate.issuedAt)}</span>
+                  </p>
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Expiry Date: <span className="font-semibold" style={{ color: '#111C1C' }}>{formatDate(certificate.expiresAt)}</span>
+                  </p>
+                </div>
+                <p className="text-[11px] flex items-center gap-2" style={{ color: '#5A7070' }}>
+                  Current Status:
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: config.bgColor, color: config.color }}>
+                    <span className="w-[5px] h-[5px] rounded-full" style={{ background: config.color }} />
+                    {config.label}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Assessment Scope */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Assessment Scope</p>
+                <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
+              </div>
+              <p className="text-[11px] mb-2" style={{ color: '#5A7070' }}>Assessment conducted across the following structural pillars:</p>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1 mb-3">
+                {[...pillarsLeft, ...pillarsRight].map((pillar, i) => (
+                  <p key={i} className="text-[11px]" style={{ color: '#111C1C' }}>• {pillar}</p>
+                ))}
+              </div>
+              <p className="text-[10px]" style={{ color: '#5A7070' }}>
+                Certification confirms that documentation reviewed met the structured criteria applicable at the time of review.
+              </p>
+            </div>
+
+            {/* Integrity & Verification */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Integrity & Verification</p>
+                <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-1 space-y-3">
                   <div>
-                    <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1" style={{ color: '#5A7070' }}>Verification Hash</p>
-                    <p className="text-[11px] font-medium mb-1" style={{ color: '#1A2A2A', fontFamily: 'monospace' }}>{certificate.verificationHash}</p>
-                    <p className="text-[9px]" style={{ color: '#5A7070' }}>This hash uniquely identifies the certificate and supports integrity verification.</p>
+                    <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                      Verification Hash: <span className="font-mono text-[10px]" style={{ color: '#111C1C' }}>{certificate.verificationHash}</span>
+                    </p>
+                    <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
+                      This cryptographic hash uniquely identifies this certificate record and supports integrity validation.
+                    </p>
                   </div>
                   <div>
-                    <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1" style={{ color: '#5A7070' }}>Verification URL</p>
-                    <a href={verificationUrl} className="text-[11px] font-medium break-all" style={{ color: '#2D6A6A' }}>{verificationUrl}</a>
+                    <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                      Verification URL: <a href={verificationUrl} className="text-[10px] break-all" style={{ color: '#2D6A6A' }}>{verificationUrl}</a>
+                    </p>
+                    <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
+                      Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
+                    </p>
                   </div>
                 </div>
                 {/* QR Code */}
                 <div className="flex-shrink-0">
-                  <QRCodeSVG value={verificationUrl} size={75} />
+                  <QRCodeSVG value={verificationUrl} size={70} />
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* FOOTER - Dark teal (matching PDF) */}
-          <div style={{ background: '#2D6A6A', padding: '16px 32px' }}>
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-[9px] leading-[1.6]" style={{ color: 'rgba(255,255,255,0.6)', maxWidth: '420px' }}>
-                Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review. Verification confirms status recorded in Naywa&apos;s certification register at time of query.
-              </p>
-              <div className="flex-shrink-0 px-4 py-2 rounded" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                <p className="text-[10px] font-bold text-white">NAYWA CERTIFIED</p>
-                <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.5)' }}>Digital Verification Seal</p>
+            {/* Issuance Notice */}
+            <div className="mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Issuance Notice</p>
+                <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
               </div>
+              <p className="text-[10px]" style={{ color: '#5A7070' }}>
+                Digitally issued via Naywa&apos;s certification register.
+              </p>
+              <p className="text-[10px]" style={{ color: '#5A7070' }}>
+                This document is electronically generated and does not require a physical signature.
+              </p>
+            </div>
+
+            {/* Seal Line */}
+            <div className="inline-block px-4 py-2.5 rounded-lg" style={{ background: '#2D6A6A' }}>
+              <p className="text-[11px] font-bold text-white">NAYWA CERTIFIED</p>
+              <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital Verification Mark</p>
             </div>
           </div>
         </div>
