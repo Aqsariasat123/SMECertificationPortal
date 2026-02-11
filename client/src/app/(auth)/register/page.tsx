@@ -1,17 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 
 type UserRole = 'user' | 'sme';
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [smeSubStep, setSmeSubStep] = useState(1);
   const [role, setRole] = useState<UserRole | null>(null);
   const [selectedOption, setSelectedOption] = useState<UserRole | null>('sme');
+
+  // Handle URL parameter for direct registry signup
+  useEffect(() => {
+    const roleParam = searchParams.get('role');
+    if (roleParam === 'user') {
+      setRole('user');
+      setSelectedOption('user');
+      setStep(2);
+    }
+  }, [searchParams]);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -322,13 +334,13 @@ export default function RegisterPage() {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
-            <Link
-              href="/registry/verify"
+            <button
+              onClick={() => { setSelectedOption('user'); handleRoleSelect('user'); }}
               className="h-[46px] rounded-[10px] font-medium text-xs md:text-sm transition-all flex items-center justify-center px-2"
               style={{ background: 'white', border: '1.5px solid #D0E4E4', color: '#2D6A6A' }}
             >
               View Registry
-            </Link>
+            </button>
           </div>
 
           {/* Sign in */}
