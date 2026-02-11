@@ -70,7 +70,7 @@ export default function LandingPage() {
         </Link>
 
         <ul className="nav-links hidden md:flex items-center gap-8 list-none m-0 p-0">
-          <li><Link href="#pillars" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
+          <li><Link href="/certification-standards" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
           <li><Link href="#process" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Process</Link></li>
           <li><Link href="/registry/verify" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
         </ul>
@@ -333,11 +333,13 @@ export default function LandingPage() {
             </Link>
 
             <ul className="flex gap-6 flex-wrap list-none m-0 p-0">
-              {['Certification Standards', 'Fees and Services', 'Terms of Service', 'Privacy Policy', 'Legal Notice', 'Contact', 'United Arab Emirates'].map((link) => (
-                <li key={link}>
-                  <Link href="#" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>{link}</Link>
-                </li>
-              ))}
+              <li><Link href="/certification-standards" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Certification Standards</Link></li>
+              <li><Link href="/certification-fees" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Fees and Services</Link></li>
+              <li><Link href="/terms" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Terms of Service</Link></li>
+              <li><Link href="/privacy" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Privacy Policy</Link></li>
+              <li><Link href="/legal-notice" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Legal Notice</Link></li>
+              <li><Link href="/contact" className="footer-link text-xs no-underline transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>Contact</Link></li>
+              <li><span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>United Arab Emirates</span></li>
             </ul>
           </div>
 
