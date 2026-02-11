@@ -319,12 +319,12 @@ export default function LandingPage() {
             </Link>
             <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
               <li><Link href="/certification-standards" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
-              <li><Link href="/certification-fees" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
-              <li><Link href="/terms" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
-              <li><Link href="/privacy" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
-              <li><Link href="/legal-notice" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
+              <li><Link href="/certification-fees" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees and Services</Link></li>
+              <li><Link href="/terms" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms of Service</Link></li>
+              <li><Link href="/privacy" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy Policy</Link></li>
+              <li><Link href="/legal-notice" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal Notice</Link></li>
               <li><Link href="/contact" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
-              <li><span className="text-[12px] md:text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>UAE</span></li>
+              <li><span className="text-[12px] md:text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>United Arab Emirates</span></li>
             </ul>
           </div>
           <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-end">
