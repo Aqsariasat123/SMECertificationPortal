@@ -1623,45 +1623,45 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     const contentW = pageW - marginX * 2;
 
     // ══════════════════════════════════════════════════════════════
-    // HEADER - Teal #2D6A6A
+    // HEADER - Light mint green background (matching reference)
     // ══════════════════════════════════════════════════════════════
     const headerH = 140;
-    doc.rect(0, 0, pageW, headerH).fill('#2D6A6A');
+    doc.rect(0, 0, pageW, headerH).fill('#E8F4F3');
 
-    // Curved corner decoration
+    // Curved corner decoration (teal)
     doc.save();
-    doc.circle(pageW + 30, -30, 160).fillOpacity(0.25).fill('#4A9090');
+    doc.circle(pageW + 30, -30, 160).fillOpacity(0.4).fill('#5DB5A8');
     doc.restore();
 
-    // Logo box with checkmark
+    // Logo box with checkmark (teal box)
     let y = 32;
-    doc.roundedRect(marginX, y, 36, 36, 8).fillOpacity(0.15).fill('#FFFFFF');
+    doc.fillOpacity(1).roundedRect(marginX, y, 36, 36, 8).fill('#2D6A6A');
     doc.save();
     doc.translate(marginX + 9, y + 12);
     doc.path('M4 9 L8 13 L16 5').lineWidth(2.5).strokeColor('#FFFFFF').stroke();
     doc.restore();
 
-    // Naywa text
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(15).fillColor('#FFFFFF');
+    // Naywa text (dark)
+    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(15).fillColor('#111C1C');
     doc.text('Naywa', marginX + 46, y + 6);
-    doc.font('Helvetica').fontSize(9).fillColor('#FFFFFF').fillOpacity(0.55);
+    doc.font('Helvetica').fontSize(9).fillColor('#5A7070');
     doc.text('SME Certification Registry', marginX + 46, y + 22);
 
     // Certificate Type (right)
-    doc.fillOpacity(0.5).font('Helvetica').fontSize(8).fillColor('#FFFFFF');
+    doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
     doc.text('CERTIFICATE TYPE', pageW - marginX - 110, y, { width: 110, align: 'right' });
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(11).fillColor('#5DB5A8');
+    doc.font('Helvetica-Bold').fontSize(11).fillColor('#2D6A6A');
     doc.text('SME Capital-Readiness', pageW - marginX - 110, y + 13, { width: 110, align: 'right' });
 
-    // Title
+    // Title (dark teal)
     y = 85;
-    doc.font('Helvetica-Bold').fontSize(24).fillColor('#FFFFFF');
+    doc.font('Helvetica-Bold').fontSize(24).fillColor('#2D6A6A');
     doc.text('Certificate of SME Certification', marginX, y);
 
     // Issued (right)
-    doc.fillOpacity(0.5).font('Helvetica').fontSize(8).fillColor('#FFFFFF');
+    doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
     doc.text('ISSUED', pageW - marginX - 110, y, { width: 110, align: 'right' });
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(11).fillColor('#5DB5A8');
+    doc.font('Helvetica-Bold').fontSize(11).fillColor('#2D6A6A');
     doc.text(formatCertificateDate(certificate.issuedAt), pageW - marginX - 110, y + 13, { width: 110, align: 'right' });
 
     // ══════════════════════════════════════════════════════════════
@@ -1783,22 +1783,22 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.text(verificationUrl, marginX + halfC + 10, y + 28, { width: halfC - 30 });
 
     // ══════════════════════════════════════════════════════════════
-    // FOOTER
+    // FOOTER - Light background (matching reference)
     // ══════════════════════════════════════════════════════════════
     const footerH = 55;
     const footerY = pageH - footerH;
-    doc.rect(0, footerY, pageW, footerH).fill('#2D6A6A');
+    doc.rect(0, footerY, pageW, footerH).fill('#E8F4F3');
 
-    doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.6);
+    doc.fillOpacity(1).font('Helvetica').fontSize(7).fillColor('#5A7070');
     doc.text('Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review. Verification confirms status recorded in Naywa\'s certification register at time of query.', marginX, footerY + 16, { width: 340, lineGap: 2 });
 
-    // NAYWA CERTIFIED seal
+    // NAYWA CERTIFIED seal (teal box)
     const sealX = pageW - marginX - 100;
     const sealY2 = footerY + 12;
-    doc.fillOpacity(0.1).roundedRect(sealX, sealY2, 100, 32, 4).fill('#FFFFFF');
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF');
+    doc.fillOpacity(1).roundedRect(sealX, sealY2, 100, 32, 4).fill('#2D6A6A');
+    doc.font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF');
     doc.text('NAYWA CERTIFIED', sealX + 10, sealY2 + 7);
-    doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.5);
+    doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.7);
     doc.text('Digital Verification Seal', sealX + 10, sealY2 + 20);
 
     doc.end();

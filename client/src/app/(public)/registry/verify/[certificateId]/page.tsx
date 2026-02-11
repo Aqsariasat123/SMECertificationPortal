@@ -206,39 +206,39 @@ export default function VerifyCertificatePage() {
         {/* Certificate Document */}
         <div className="w-full max-w-[680px] rounded-xl overflow-hidden" style={{ background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
 
-          {/* HEADER - Exact match to PDF */}
-          <div className="relative overflow-hidden" style={{ background: '#2D6A6A', padding: '28px 32px 24px' }}>
-            {/* Curved corner decoration */}
-            <div className="absolute top-0 right-0" style={{ width: '180px', height: '180px', background: '#3D8B8B', borderRadius: '0 0 0 100%', opacity: 0.4 }} />
+          {/* HEADER - Light mint green (matching reference) */}
+          <div className="relative overflow-hidden" style={{ background: '#E8F4F3', padding: '28px 32px 24px' }}>
+            {/* Curved corner decoration (teal) */}
+            <div className="absolute top-0 right-0" style={{ width: '180px', height: '180px', background: '#5DB5A8', borderRadius: '0 0 0 100%', opacity: 0.4 }} />
 
             <div className="relative z-10">
               {/* Top row: Logo + Certificate Type */}
               <div className="flex items-start justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#2D6A6A' }}>
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
                   </div>
                   <div>
-                    <p className="text-white font-semibold text-[15px]">Naywa</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.55)' }}>SME Certification Registry</p>
+                    <p className="font-semibold text-[15px]" style={{ color: '#111C1C' }}>Naywa</p>
+                    <p className="text-[11px]" style={{ color: '#5A7070' }}>SME Certification Registry</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>Certificate Type</p>
-                  <p className="text-[13px] font-semibold" style={{ color: '#5DB5A8' }}>SME Capital-Readiness</p>
+                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: '#5A7070' }}>Certificate Type</p>
+                  <p className="text-[13px] font-semibold" style={{ color: '#2D6A6A' }}>SME Capital-Readiness</p>
                 </div>
               </div>
 
               {/* Title + Issue Date */}
               <div className="flex items-end justify-between">
-                <h1 className="text-[26px] font-bold text-white leading-tight" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif' }}>
+                <h1 className="text-[26px] font-bold leading-tight" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#2D6A6A' }}>
                   Certificate of SME Certification
                 </h1>
                 <div className="text-right flex-shrink-0 ml-4">
-                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>Issued</p>
-                  <p className="text-[13px] font-semibold" style={{ color: '#5DB5A8' }}>{formatDate(certificate.issuedAt)}</p>
+                  <p className="text-[9px] font-medium tracking-[0.12em] uppercase mb-1" style={{ color: '#5A7070' }}>Issued</p>
+                  <p className="text-[13px] font-semibold" style={{ color: '#2D6A6A' }}>{formatDate(certificate.issuedAt)}</p>
                 </div>
               </div>
             </div>
@@ -347,15 +347,15 @@ export default function VerifyCertificatePage() {
             </div>
           </div>
 
-          {/* FOOTER */}
-          <div style={{ background: '#2D6A6A', padding: '16px 32px' }}>
+          {/* FOOTER - Light background (matching reference) */}
+          <div style={{ background: '#E8F4F3', padding: '16px 32px' }}>
             <div className="flex items-center justify-between gap-4">
-              <p className="text-[9px] leading-[1.6]" style={{ color: 'rgba(255,255,255,0.6)', maxWidth: '420px' }}>
+              <p className="text-[9px] leading-[1.6]" style={{ color: '#5A7070', maxWidth: '420px' }}>
                 Digitally issued via Naywa Registry. This document is electronically generated and does not require a physical signature. Certification reflects assessment based on documentation at time of review. Verification confirms status recorded in Naywa&apos;s certification register at time of query.
               </p>
-              <div className="flex-shrink-0 px-4 py-2 rounded" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <div className="flex-shrink-0 px-4 py-2 rounded" style={{ background: '#2D6A6A' }}>
                 <p className="text-[10px] font-bold text-white">NAYWA CERTIFIED</p>
-                <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.5)' }}>Digital Verification Seal</p>
+                <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital Verification Seal</p>
               </div>
             </div>
           </div>
