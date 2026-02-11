@@ -26,7 +26,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
       <div className="max-w-5xl mx-auto">
         {/* Top Section */}
         <div
-          className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-6 md:gap-12 items-start pb-9 mb-7"
+          className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 items-start pb-9 mb-7"
           style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
         >
           {/* Logo */}
@@ -44,7 +44,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
           </Link>
 
           {/* Links */}
-          <ul className="flex flex-wrap gap-x-7 gap-y-2 list-none m-0 p-0 pt-1">
+          <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 28px' }}>
             <li>
               <Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
                 Certification Standards
@@ -75,12 +75,12 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
                 Contact
               </Link>
             </li>
+            <li>
+              <span className="text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                United Arab Emirates
+              </span>
+            </li>
           </ul>
-
-          {/* Geo */}
-          <p className="text-xs tracking-[0.06em] text-right pt-1" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            United Arab Emirates
-          </p>
         </div>
 
         {/* Bottom Section */}
