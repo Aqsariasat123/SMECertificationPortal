@@ -1680,28 +1680,25 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     y += 36;
     doc.text('Certification reflects review of submitted documentation against defined assessment standards and does not constitute regulatory approval, financial endorsement, or a guarantee of financing.', marginX, y, { width: contentW, lineGap: 2 });
 
-    // Entity Record Section
+    // Entity Name - Large with underline (like PDF reference)
     y += 35;
-    doc.font('Helvetica-Bold').fontSize(9).fillColor('#2D6A6A');
-    doc.text('ENTITY RECORD', marginX, y);
-    doc.moveTo(marginX + 80, y + 5).lineTo(pageW - marginX, y + 5).lineWidth(0.5).strokeColor('#D0E4E4').stroke();
+    doc.font('Helvetica').fontSize(8).fillColor('#2D6A6A');
+    doc.text('ENTITY NAME', marginX, y);
+    y += 12;
+    doc.font('Helvetica-Bold').fontSize(26).fillColor('#111C1C');
+    doc.text(certificate.companyName, marginX, y);
+    y += 32;
+    doc.moveTo(marginX, y).lineTo(marginX + 200, y).lineWidth(2).strokeColor('#2D6A6A').stroke();
 
-    y += 16;
-    doc.font('Helvetica').fontSize(9).fillColor('#5A7070');
-    doc.text('Entity Name:', marginX, y);
-    doc.font('Helvetica-Bold').fontSize(9).fillColor('#111C1C');
-    doc.text(certificate.companyName, marginX + 65, y);
-
-    y += 14;
-    doc.font('Helvetica').fontSize(9).fillColor('#5A7070');
-    doc.text('Trade License Number:', marginX, y);
-    doc.font('Helvetica-Bold').fontSize(9).fillColor('#111C1C');
-    doc.text(certificate.tradeLicenseNumber, marginX + 110, y);
-
-    doc.font('Helvetica').fontSize(9).fillColor('#5A7070');
-    doc.text('Industry Sector:', marginX + 220, y);
-    doc.font('Helvetica-Bold').fontSize(9).fillColor('#111C1C');
-    doc.text(formatSector(certificate.industrySector), marginX + 300, y);
+    // Trade License + Industry Sector Row
+    y += 18;
+    doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
+    doc.text('TRADE LICENSE NUMBER', marginX, y);
+    doc.text('INDUSTRY SECTOR', marginX + 200, y);
+    y += 12;
+    doc.font('Helvetica-Bold').fontSize(13).fillColor('#111C1C');
+    doc.text(certificate.tradeLicenseNumber, marginX, y);
+    doc.text(formatSector(certificate.industrySector), marginX + 200, y);
 
     // Certificate Record Section
     y += 22;
