@@ -64,8 +64,8 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section
-        className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden"
-        style={{ padding: '120px 24px 80px', background: '#FFFFFF' }}
+        className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden pt-20 md:pt-[120px] px-6 pb-16 md:pb-20"
+        style={{ background: '#FFFFFF' }}
       >
         <div
           className="absolute pointer-events-none"
