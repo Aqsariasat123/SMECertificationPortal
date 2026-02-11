@@ -43,7 +43,7 @@ export default function PublicLayout({
           </li>
           <li>
             <Link
-              href="/process"
+              href="/#process"
               className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]"
               style={{ color: '#5A7070' }}
             >
