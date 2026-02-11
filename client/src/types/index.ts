@@ -632,7 +632,7 @@ export interface AdminIntroductionRequest {
 }
 
 // Certificate Types
-export type CertificateStatusType = 'active' | 'expired' | 'revoked';
+export type CertificateStatusType = 'active' | 'expired' | 'revoked' | 'deferred';
 
 export interface CertificateData {
   id: string;
