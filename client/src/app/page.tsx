@@ -76,10 +76,10 @@ export default function LandingPage() {
           }}
         />
         {/* Mobile nav links */}
-        <div className="flex md:hidden items-center gap-4 mb-6" style={{ opacity: 0, animation: 'fadeUp 0.7s 0.05s forwards' }}>
-          <Link href="/certification-standards" className="text-[11px] font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Standards</Link>
-          <Link href="#process" className="text-[11px] font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link>
-          <Link href="/registry/verify" className="text-[11px] font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify</Link>
+        <div className="flex md:hidden items-center gap-5 mb-6" style={{ opacity: 0, animation: 'fadeUp 0.7s 0.05s forwards' }}>
+          <Link href="/certification-standards" className="text-[13px] font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link>
+          <Link href="#process" className="text-[13px] font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link>
+          <Link href="/registry/verify" className="text-[13px] font-semibold no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#2D6A6A' }}>Verify a Certificate</Link>
         </div>
 
         <p
