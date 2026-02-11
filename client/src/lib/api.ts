@@ -1059,7 +1059,7 @@ class ApiClient {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'SME-Certificate.pdf';
+      a.download = 'Naywa-Certificate.pdf';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
