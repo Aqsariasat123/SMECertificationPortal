@@ -1799,6 +1799,13 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
     doc.text('Verification confirms the status recorded in Naywa\'s certification register at the time of query.', marginX, y, { width: 340 });
 
+    // Verified at timestamp
+    y += 14;
+    const now = new Date();
+    const verifiedAt = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' (UTC+4)';
+    doc.font('Helvetica-Bold').fontSize(8).fillColor('#2D6A6A');
+    doc.text('Verified at: ' + verifiedAt, marginX, y);
+
     // Issuance Notice Section
     y += 22;
     doc.font('Helvetica-Bold').fontSize(9).fillColor('#2D6A6A');

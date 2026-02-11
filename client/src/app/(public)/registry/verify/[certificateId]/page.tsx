@@ -336,6 +336,9 @@ export default function VerifyCertificatePage() {
                     <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
                       Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
                     </p>
+                    <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
+                      Verified at: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })} (UTC+4)
+                    </p>
                   </div>
                 </div>
                 {/* QR Code */}
