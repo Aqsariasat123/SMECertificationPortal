@@ -65,7 +65,7 @@ export default function PublicLayout({
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/login"
-            className="px-3 md:px-5 py-2 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
             style={{ color: '#2D6A6A', border: '1.5px solid #2D6A6A', background: 'none' }}
           >
             Sign In
