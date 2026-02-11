@@ -38,10 +38,10 @@ export default function LandingPage() {
           </div>
         </Link>
 
-        <ul className="hidden md:flex items-center gap-4 md:gap-8 list-none m-0 p-0">
-          <li><Link href="/certification-standards" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
-          <li><Link href="#process" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
-          <li><Link href="/registry/verify" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
+        <ul className="flex items-center gap-3 md:gap-8 list-none m-0 p-0">
+          <li><Link href="/certification-standards" className="text-[10px] md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Standards</Link></li>
+          <li><Link href="#process" className="text-[10px] md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
+          <li><Link href="/registry/verify" className="text-[10px] md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Verify</Link></li>
         </ul>
 
         <div className="flex items-center gap-2 md:gap-3">

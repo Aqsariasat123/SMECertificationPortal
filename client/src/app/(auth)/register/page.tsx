@@ -311,20 +311,20 @@ export default function RegisterPage() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-2 gap-2 mb-6">
             <button
               onClick={handleContinue}
-              className="h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
+              className="h-[46px] rounded-[10px] font-semibold text-xs md:text-sm text-white transition-all flex items-center justify-center gap-1 overflow-hidden px-2"
               style={{ background: '#2D6A6A' }}
             >
-              Start Certification
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <span className="truncate">Start Certification</span>
+              <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
             <Link
-              href="/registry"
-              className="h-[46px] rounded-[10px] font-medium text-sm transition-all flex items-center justify-center"
+              href="/registry/verify"
+              className="h-[46px] rounded-[10px] font-medium text-xs md:text-sm transition-all flex items-center justify-center px-2"
               style={{ background: 'white', border: '1.5px solid #D0E4E4', color: '#2D6A6A' }}
             >
               View Registry
