@@ -57,6 +57,7 @@ export default function VerifyCertificatePage() {
   const [error, setError] = useState<string | null>(null);
   const [certificate, setCertificate] = useState<CertificateVerification | null>(null);
   const [searchInput, setSearchInput] = useState(certificateId);
+  const [verifiedAt, setVerifiedAt] = useState<string>('');
 
   const verificationUrl = `https://naywa.ae/registry/verify/${certificateId}`;
 
@@ -67,6 +68,11 @@ export default function VerifyCertificatePage() {
       const response = await api.verifyCertificate(certificateId);
       if (response.success && response.data) {
         setCertificate(response.data);
+        // Set verification timestamp
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+        setVerifiedAt(`${dateStr}, ${timeStr} (UTC+4)`);
       } else {
         setError(response.message || 'Certificate not found');
       }
@@ -336,9 +342,11 @@ export default function VerifyCertificatePage() {
                     <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
                       Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
                     </p>
-                    <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
-                      Verified at: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })} (UTC+4)
-                    </p>
+                    {verifiedAt && (
+                      <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
+                        Verified at: {verifiedAt}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {/* QR Code */}
