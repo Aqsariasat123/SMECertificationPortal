@@ -140,11 +140,11 @@ export default function VerifyCertificatePage() {
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
-                  placeholder="Enter Certificate ID — e.g. SME-CERT-E099E930"
-                  className="flex-1 border-none outline-none py-4 px-5 text-[15px]"
+                  placeholder="Enter Certificate ID"
+                  className="flex-1 border-none outline-none py-3 md:py-4 px-4 md:px-5 text-[13px] md:text-[15px]"
                   style={{ color: '#1A2A2A', background: 'transparent' }}
                 />
-                <button type="submit" className="px-7 text-sm font-semibold" style={{ background: '#2D6A6A', color: 'white' }}>
+                <button type="submit" className="px-4 md:px-7 text-xs md:text-sm font-semibold" style={{ background: '#2D6A6A', color: 'white' }}>
                   Verify
                 </button>
               </div>
@@ -152,7 +152,7 @@ export default function VerifyCertificatePage() {
           </div>
 
           <div className="w-full max-w-[600px]">
-            <div className="rounded-2xl p-10 text-center" style={{ background: 'white', border: '1px solid #D0E4E4' }}>
+            <div className="rounded-2xl p-6 md:p-10 text-center" style={{ background: 'white', border: '1px solid #D0E4E4' }}>
               <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: config.bgColor }}>
                 <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke={config.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {isDeferred ? (
@@ -198,11 +198,11 @@ export default function VerifyCertificatePage() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
-                placeholder="Enter Certificate ID — e.g. SME-CERT-E099E930"
-                className="flex-1 border-none outline-none py-3 px-5 text-[14px]"
+                placeholder="Enter Certificate ID"
+                className="flex-1 border-none outline-none py-3 px-4 md:px-5 text-[13px] md:text-[14px]"
                 style={{ color: '#1A2A2A', background: 'transparent' }}
               />
-              <button type="submit" className="px-6 text-sm font-semibold" style={{ background: '#2D6A6A', color: 'white' }}>
+              <button type="submit" className="px-4 md:px-6 text-xs md:text-sm font-semibold" style={{ background: '#2D6A6A', color: 'white' }}>
                 Verify
               </button>
             </div>
@@ -213,7 +213,7 @@ export default function VerifyCertificatePage() {
         <div className="w-full max-w-[680px] rounded-xl overflow-hidden" style={{ background: 'white', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
 
           {/* HEADER - Dark teal */}
-          <div className="relative overflow-hidden" style={{ background: '#2D6A6A', padding: '24px 32px 20px' }}>
+          <div className="relative overflow-hidden p-5 md:p-6 md:px-8" style={{ background: '#2D6A6A' }}>
             {/* Curved corner decoration */}
             <div className="absolute top-0 right-0" style={{ width: '180px', height: '180px', background: '#5DB5A8', borderRadius: '0 0 0 100%', opacity: 0.15 }} />
 
@@ -254,13 +254,13 @@ export default function VerifyCertificatePage() {
             {/* Entity Name - Large with underline */}
             <div className="mb-6">
               <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-2" style={{ color: '#2D6A6A' }}>ENTITY NAME</p>
-              <p className="text-[28px] font-bold leading-tight pb-2" style={{ color: '#111C1C', fontFamily: 'var(--font-playfair), Playfair Display, serif', borderBottom: '2px solid #2D6A6A', display: 'inline-block', minWidth: '200px' }}>
+              <p className="text-[20px] md:text-[28px] font-bold leading-tight pb-2" style={{ color: '#111C1C', fontFamily: 'var(--font-playfair), Playfair Display, serif', borderBottom: '2px solid #2D6A6A', display: 'inline-block', minWidth: '200px' }}>
                 {certificate.companyName}
               </p>
             </div>
 
             {/* Trade License + Industry Sector Row */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
               <div>
                 <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>TRADE LICENSE NUMBER</p>
                 <p className="text-[15px] font-semibold" style={{ color: '#111C1C' }}>{certificate.tradeLicenseNumber}</p>
@@ -309,7 +309,7 @@ export default function VerifyCertificatePage() {
                 <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
               </div>
               <p className="text-[11px] mb-2" style={{ color: '#5A7070' }}>Assessment conducted across the following structural pillars:</p>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-1 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 mb-3">
                 {[...pillarsLeft, ...pillarsRight].map((pillar, i) => (
                   <p key={i} className="text-[11px]" style={{ color: '#111C1C' }}>• {pillar}</p>
                 ))}

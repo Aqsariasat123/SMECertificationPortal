@@ -75,8 +75,8 @@ export default function VerifyCertificateLandingPage() {
                   setCertificateId(e.target.value.toUpperCase());
                   setError('');
                 }}
-                placeholder="Enter Certificate ID — e.g. SME-CERT-E099E930"
-                className="flex-1 border-none outline-none py-4 px-5 text-[15px] tracking-[0.02em]"
+                placeholder="Enter Certificate ID"
+                className="flex-1 border-none outline-none py-3 md:py-4 px-4 md:px-5 text-[13px] md:text-[15px] tracking-[0.02em]"
                 style={{
                   fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
                   color: '#1A2A2A',
@@ -87,7 +87,7 @@ export default function VerifyCertificateLandingPage() {
               />
               <button
                 type="submit"
-                className="px-7 text-sm font-semibold whitespace-nowrap transition-colors"
+                className="px-4 md:px-7 text-xs md:text-sm font-semibold whitespace-nowrap transition-colors"
                 style={{ background: '#2D6A6A', color: 'white', border: 'none' }}
               >
                 Verify

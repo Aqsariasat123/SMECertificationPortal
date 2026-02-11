@@ -44,17 +44,17 @@ export default function LandingPage() {
           <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/login"
-            className="px-5 py-2 text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
+            className="px-3 md:px-5 py-2 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
             style={{ color: '#2D6A6A', border: '1.5px solid #2D6A6A', background: 'none' }}
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="px-5 py-2.5 text-sm font-semibold rounded-lg transition-all no-underline hover:bg-[#3D8B8B]"
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-semibold rounded-lg transition-all no-underline hover:bg-[#3D8B8B] whitespace-nowrap"
             style={{ color: 'white', background: '#2D6A6A', border: 'none' }}
           >
             Start Certification
@@ -298,9 +298,9 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-14 px-6 md:px-12" style={{ background: '#111C1C' }}>
+      <footer className="py-10 md:py-14 px-6 md:px-12" style={{ background: '#111C1C' }}>
         <div className="max-w-[1040px] mx-auto">
-          <div className="grid md:grid-cols-[140px_1fr] gap-6 items-start pb-9 mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="flex flex-col md:grid md:grid-cols-[140px_1fr] gap-6 items-start pb-7 md:pb-9 mb-6 md:mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
             <Link href="/" className="flex items-center gap-2.5 no-underline">
               <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center flex-shrink-0" style={{ background: '#2D6A6A' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -310,21 +310,21 @@ export default function LandingPage() {
               </div>
               <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
             </Link>
-            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 24px' }}>
-              <li><Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
-              <li><Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees and Services</Link></li>
-              <li><Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms of Service</Link></li>
-              <li><Link href="/privacy" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy Policy</Link></li>
-              <li><Link href="/legal-notice" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal Notice</Link></li>
-              <li><Link href="/contact" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
-              <li><span className="text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>United Arab Emirates</span></li>
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
+              <li><Link href="/certification-standards" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
+              <li><Link href="/certification-fees" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
+              <li><Link href="/terms" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
+              <li><Link href="/privacy" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
+              <li><Link href="/legal-notice" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
+              <li><Link href="/contact" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
+              <li><span className="text-[12px] md:text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>UAE</span></li>
             </ul>
           </div>
-          <div className="grid md:grid-cols-[1fr_auto] gap-6 items-end">
-            <p className="text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
+          <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-end">
+            <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
               Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
             </p>
-            <p className="text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>© 2026 Naywa. All rights reserved.</p>
+            <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>© 2026 Naywa. All rights reserved.</p>
           </div>
         </div>
       </footer>

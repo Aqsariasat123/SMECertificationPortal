@@ -7,9 +7,9 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2" style={{ background: '#F5FAFA' }}>
-      {/* LEFT PANEL - Dark Branding */}
+      {/* LEFT PANEL - Dark Branding (hidden on mobile) */}
       <div
-        className="relative flex flex-col justify-between p-10 lg:p-[40px_52px] overflow-hidden"
+        className="hidden lg:flex relative flex-col justify-between p-10 lg:p-[40px_52px] overflow-hidden"
         style={{ background: '#111C1C' }}
       >
         {/* Subtle background texture - top right glow */}
@@ -163,18 +163,18 @@ export default function AuthLayout({
         </div>
 
         {/* Footer Links */}
-        <div className="absolute bottom-5 left-0 right-0 flex items-center justify-center gap-4 px-6">
-          <Link href="/terms" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Terms</Link>
-          <span style={{ color: '#D0E4E4' }}>·</span>
-          <Link href="/privacy" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Privacy</Link>
-          <span style={{ color: '#D0E4E4' }}>·</span>
-          <Link href="/certification-standards" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link>
-          <span style={{ color: '#D0E4E4' }}>·</span>
-          <Link href="/certification-fees" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Fees</Link>
-          <span style={{ color: '#D0E4E4' }}>·</span>
-          <Link href="/legal-notice" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Legal Notice</Link>
-          <span style={{ color: '#D0E4E4' }}>·</span>
-          <Link href="/contact" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link>
+        <div className="absolute bottom-4 left-0 right-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 md:px-6">
+          <Link href="/terms" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Terms</Link>
+          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <Link href="/privacy" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Privacy</Link>
+          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <Link href="/certification-standards" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Standards</Link>
+          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <Link href="/certification-fees" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Fees</Link>
+          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <Link href="/legal-notice" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Legal</Link>
+          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <Link href="/contact" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link>
         </div>
       </div>
     </div>

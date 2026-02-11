@@ -62,17 +62,17 @@ export default function PublicLayout({
         </ul>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/login"
-            className="px-5 py-2 text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
+            className="px-3 md:px-5 py-2 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
             style={{ color: '#2D6A6A', border: '1.5px solid #2D6A6A', background: 'none' }}
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="px-5 py-2.5 text-sm font-semibold rounded-lg no-underline transition-all hover:opacity-90"
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-semibold rounded-lg no-underline transition-all hover:opacity-90 whitespace-nowrap"
             style={{ color: 'white', background: '#2D6A6A' }}
           >
             Start Certification

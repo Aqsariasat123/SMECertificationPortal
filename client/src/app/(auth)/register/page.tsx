@@ -189,7 +189,7 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div
-        className="rounded-[20px] p-12"
+        className="rounded-[20px] p-6 sm:p-10 lg:p-12"
         style={{
           background: 'white',
           border: '1px solid #D0E4E4',
@@ -207,7 +207,7 @@ export default function RegisterPage() {
             </svg>
           </div>
           <h1
-            className="text-2xl font-normal mb-2 tracking-[0.01em] leading-[1.3]"
+            className="text-xl sm:text-2xl font-normal mb-2 tracking-[0.01em] leading-[1.3]"
             style={{ fontFamily: "'Libre Baskerville', serif", color: '#111C1C' }}
           >
             Verification Email Sent
@@ -257,7 +257,7 @@ export default function RegisterPage() {
           </p>
 
           {/* Options */}
-          <div className="grid grid-cols-2 gap-3.5 mb-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-7">
             {/* Certify a Business */}
             <div
               onClick={() => setSelectedOption('sme')}
@@ -311,7 +311,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             <button
               onClick={handleContinue}
               className="h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
@@ -512,7 +512,7 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>First Name</label>
                 <input

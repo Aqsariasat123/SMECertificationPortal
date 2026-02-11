@@ -218,7 +218,7 @@ export default function LoginPage() {
   if (twoFactorPending) {
     return (
       <div
-        className="rounded-[20px] p-10 lg:p-12"
+        className="rounded-[20px] p-6 sm:p-10 lg:p-12"
         style={{
           background: 'white',
           border: '1px solid #D0E4E4',
@@ -236,7 +236,7 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1
-            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
+            className="text-xl sm:text-[26px] font-bold mb-2 tracking-[-0.01em]"
             style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
           >
             Two-Factor Authentication
@@ -346,7 +346,7 @@ export default function LoginPage() {
       )}
 
       <div
-        className="rounded-[20px] p-10 lg:p-12"
+        className="rounded-[20px] p-6 sm:p-10 lg:p-12"
         style={{
           background: 'white',
           border: '1px solid #D0E4E4',
@@ -356,7 +356,7 @@ export default function LoginPage() {
       >
         <div className="mb-8">
           <h1
-            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
+            className="text-xl sm:text-[26px] font-bold mb-2 tracking-[-0.01em]"
             style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
           >
             Welcome Back
