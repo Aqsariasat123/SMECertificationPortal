@@ -1654,15 +1654,15 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.text('SME Capital-Readiness Certification', marginX + 48, y + 30);
 
     // Right side: Certificate Type + Issued Date
-    doc.fillOpacity(1).font('Helvetica').fontSize(8).fillColor('#FFFFFF').fillOpacity(0.5);
+    doc.fillOpacity(1).font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.5);
     doc.text('CERTIFICATE TYPE', pageW - marginX - 120, y, { width: 120, align: 'right' });
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(11).fillColor('#5DB5A8');
-    doc.text('SME Capital-Readiness', pageW - marginX - 120, y + 12, { width: 120, align: 'right' });
+    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(10).fillColor('#5DB5A8');
+    doc.text('SME Capital-Readiness', pageW - marginX - 120, y + 10, { width: 120, align: 'right' });
 
-    doc.font('Helvetica').fontSize(8).fillColor('#FFFFFF').fillOpacity(0.5);
-    doc.text('ISSUED', pageW - marginX - 120, y + 32, { width: 120, align: 'right' });
-    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(11).fillColor('#FFFFFF');
-    doc.text(formatCertificateDate(certificate.issuedAt), pageW - marginX - 120, y + 44, { width: 120, align: 'right' });
+    doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.5);
+    doc.text('ISSUED', pageW - marginX - 120, y + 28, { width: 120, align: 'right' });
+    doc.fillOpacity(1).font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF');
+    doc.text(formatCertificateDate(certificate.issuedAt), pageW - marginX - 120, y + 38, { width: 120, align: 'right' });
 
     // Main Title
     y = 95;
@@ -1677,11 +1677,11 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     // Determination Statement
     doc.fillOpacity(1).font('Helvetica').fontSize(9).fillColor('#5A7070');
     doc.text('This document confirms that the entity identified below has completed Naywa\'s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.', marginX, y, { width: contentW, lineGap: 2 });
-    y += 32;
+    y += 36;
     doc.text('Certification reflects review of submitted documentation against defined assessment standards and does not constitute regulatory approval, financial endorsement, or a guarantee of financing.', marginX, y, { width: contentW, lineGap: 2 });
 
     // Entity Record Section
-    y += 30;
+    y += 35;
     doc.font('Helvetica-Bold').fontSize(9).fillColor('#2D6A6A');
     doc.text('ENTITY RECORD', marginX, y);
     doc.moveTo(marginX + 80, y + 5).lineTo(pageW - marginX, y + 5).lineWidth(0.5).strokeColor('#D0E4E4').stroke();
@@ -1704,6 +1704,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.text(formatSector(certificate.industrySector), marginX + 300, y);
 
     // Certificate Record Section
+    y += 22;
     doc.font('Helvetica-Bold').fontSize(9).fillColor('#2D6A6A');
     doc.text('CERTIFICATE RECORD', marginX, y);
     doc.moveTo(marginX + 110, y + 5).lineTo(pageW - marginX, y + 5).lineWidth(0.5).strokeColor('#D0E4E4').stroke();
