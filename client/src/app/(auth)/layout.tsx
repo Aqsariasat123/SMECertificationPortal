@@ -73,7 +73,7 @@ export default function AuthLayout({
               <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-1.5">
             <span className="text-lg font-semibold text-white leading-none">Naywa</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>SME Certification Platform</span>
           </div>

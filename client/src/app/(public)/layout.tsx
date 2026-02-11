@@ -24,7 +24,7 @@ export default function PublicLayout({
               <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-1.5">
             <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>Naywa</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: '#5A7070' }}>SME Certification Platform</span>
           </div>

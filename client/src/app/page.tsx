@@ -32,7 +32,7 @@ export default function LandingPage() {
               <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-1.5">
             <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>Naywa</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: '#5A7070' }}>SME Certification Platform</span>
           </div>
@@ -300,7 +300,7 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="py-14 px-6 md:px-12" style={{ background: '#111C1C' }}>
         <div className="max-w-[1040px] mx-auto">
-          <div className="grid md:grid-cols-[180px_1fr] gap-6 items-start pb-9 mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="grid md:grid-cols-[140px_1fr] gap-6 items-start pb-9 mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
             <Link href="/" className="flex items-center gap-2.5 no-underline">
               <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center flex-shrink-0" style={{ background: '#2D6A6A' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -310,7 +310,7 @@ export default function LandingPage() {
               </div>
               <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
             </Link>
-            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 28px' }}>
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 24px' }}>
               <li><Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
               <li><Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees and Services</Link></li>
               <li><Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms of Service</Link></li>
