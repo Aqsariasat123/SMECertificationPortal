@@ -22,75 +22,33 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
   }
 
   return (
-    <footer className="px-6 md:px-12 pt-[52px] pb-9" style={{ background: '#111C1C' }}>
-      <div className="max-w-5xl mx-auto">
-        {/* Top Section */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 items-start pb-9 mb-7"
-          style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
-        >
-          {/* Logo */}
+    <footer className="py-14 px-6 md:px-12" style={{ background: '#111C1C' }}>
+      <div className="max-w-[1040px] mx-auto">
+        <div className="grid md:grid-cols-[180px_1fr] gap-6 items-start pb-9 mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <div
-              className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center flex-shrink-0"
-              style={{ background: '#2D6A6A' }}
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center flex-shrink-0" style={{ background: '#2D6A6A' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 <polyline points="9 12 11 14 15 10"/>
               </svg>
             </div>
-            <span className="font-semibold text-base" style={{ color: 'white' }}>Naywa</span>
+            <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
           </Link>
-
-          {/* Links */}
           <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 28px' }}>
-            <li>
-              <Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Certification Standards
-              </Link>
-            </li>
-            <li>
-              <Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Fees and Services
-              </Link>
-            </li>
-            <li>
-              <Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Terms of Service
-              </Link>
-            </li>
-            <li>
-              <Link href="/privacy" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link href="/legal-notice" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Legal Notice
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                Contact
-              </Link>
-            </li>
-            <li>
-              <span className="text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                United Arab Emirates
-              </span>
-            </li>
+            <li><Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
+            <li><Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees and Services</Link></li>
+            <li><Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms of Service</Link></li>
+            <li><Link href="/privacy" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy Policy</Link></li>
+            <li><Link href="/legal-notice" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal Notice</Link></li>
+            <li><Link href="/contact" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
+            <li><span className="text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>United Arab Emirates</span></li>
           </ul>
         </div>
-
-        {/* Bottom Section */}
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-end">
+        <div className="grid md:grid-cols-[1fr_auto] gap-6 items-end">
           <p className="text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only. Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
+            Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
           </p>
-          <p className="text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            &copy; {new Date().getFullYear()} Naywa. All rights reserved.
-          </p>
+          <p className="text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>&copy; {new Date().getFullYear()} Naywa. All rights reserved.</p>
         </div>
       </div>
     </footer>
