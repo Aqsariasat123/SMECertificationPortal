@@ -15,8 +15,9 @@ export default function PublicLayout({
       >
         <Link href="/" className="flex items-center gap-2.5 no-underline">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
             </svg>
           </div>
           <span className="font-semibold text-base" style={{ color: '#111C1C' }}>Naywa</span>
