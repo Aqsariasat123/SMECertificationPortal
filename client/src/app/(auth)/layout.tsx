@@ -6,8 +6,64 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2" style={{ background: '#F5FAFA' }}>
-      {/* LEFT PANEL - Dark Branding (hidden on mobile) */}
+    <div className="min-h-screen flex flex-col lg:grid lg:grid-cols-2" style={{ background: '#F5FAFA' }}>
+      {/* MOBILE HEADER - Branding (visible only on mobile) */}
+      <div
+        className="lg:hidden relative overflow-hidden px-6 py-8"
+        style={{ background: '#111C1C' }}
+      >
+        {/* Background glow */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: '-100px',
+            right: '-100px',
+            width: '300px',
+            height: '300px',
+            background: 'radial-gradient(ellipse, rgba(45,106,106,0.20) 0%, transparent 65%)',
+          }}
+        />
+
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 no-underline relative z-10 mb-6">
+          <div
+            className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0"
+            style={{ background: '#2D6A6A' }}
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-base font-semibold text-white leading-none">Naywa</span>
+            <span className="text-[10px] leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>SME Certification Platform</span>
+          </div>
+        </Link>
+
+        {/* Headline */}
+        <h1
+          className="text-[24px] font-bold leading-[1.15] tracking-[-0.02em] text-white relative z-10"
+          style={{ fontFamily: 'var(--font-playfair), serif' }}
+        >
+          Structure your business for <span style={{ color: '#3D8B8B' }}>institutional review.</span>
+        </h1>
+        <p
+          className="text-[12px] leading-[1.6] mt-3 relative z-10"
+          style={{ color: 'rgba(255,255,255,0.5)' }}
+        >
+          Naywa assesses your business against criteria aligned with institutional review standards used by UAE banks and financial institutions.
+        </p>
+
+        {/* Feature Pills */}
+        <div className="flex flex-wrap gap-2 mt-4 relative z-10">
+          <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ background: 'rgba(45,106,106,0.25)', color: '#5DB5A8' }}>Five-Pillar Assessment</span>
+          <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ background: 'rgba(45,106,106,0.25)', color: '#5DB5A8' }}>Verifiable Certification</span>
+          <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ background: 'rgba(45,106,106,0.25)', color: '#5DB5A8' }}>Independent Review</span>
+        </div>
+      </div>
+
+      {/* LEFT PANEL - Dark Branding (hidden on mobile, visible on desktop) */}
       <div
         className="hidden lg:flex relative flex-col justify-between p-10 lg:p-[40px_52px] overflow-hidden"
         style={{ background: '#111C1C' }}
@@ -155,25 +211,25 @@ export default function AuthLayout({
 
       {/* RIGHT PANEL - Form Area */}
       <div
-        className="flex flex-col items-center justify-center p-10 lg:p-12 relative overflow-y-auto"
+        className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative overflow-y-auto"
         style={{ background: '#F5FAFA' }}
       >
-        <div className="w-full max-w-[460px]">
+        <div className="w-full max-w-[460px] pb-12">
           {children}
         </div>
 
         {/* Footer Links */}
         <div className="absolute bottom-4 left-0 right-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 md:px-6">
           <Link href="/terms" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Terms</Link>
-          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/privacy" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Privacy</Link>
-          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/certification-standards" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Standards</Link>
-          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/certification-fees" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Fees</Link>
-          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/legal-notice" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Legal</Link>
-          <span className="hidden md:inline" style={{ color: '#D0E4E4' }}>·</span>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/contact" className="text-[10px] md:text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link>
         </div>
       </div>

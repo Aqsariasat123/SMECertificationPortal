@@ -257,7 +257,7 @@ export default function RegisterPage() {
           </p>
 
           {/* Options */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-7">
+          <div className="grid grid-cols-2 gap-3.5 mb-7">
             {/* Certify a Business */}
             <div
               onClick={() => setSelectedOption('sme')}
@@ -311,7 +311,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-2 gap-3 mb-6">
             <button
               onClick={handleContinue}
               className="h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
@@ -512,7 +512,7 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>First Name</label>
                 <input

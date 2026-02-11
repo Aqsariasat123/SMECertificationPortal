@@ -38,16 +38,16 @@ export default function LandingPage() {
           </div>
         </Link>
 
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          <li><Link href="/certification-standards" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
-          <li><Link href="#process" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
-          <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
+        <ul className="hidden md:flex items-center gap-4 md:gap-8 list-none m-0 p-0">
+          <li><Link href="/certification-standards" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
+          <li><Link href="#process" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
+          <li><Link href="/registry/verify" className="text-xs md:text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A] whitespace-nowrap" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
         </ul>
 
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/login"
-            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
+            className="px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4] whitespace-nowrap"
             style={{ color: '#2D6A6A', border: '1.5px solid #2D6A6A', background: 'none' }}
           >
             Sign In
