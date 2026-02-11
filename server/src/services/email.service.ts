@@ -465,6 +465,169 @@ class EmailService {
     });
   }
 
+  // Submission Received - sent when SME submits documents for certification review
+  async sendSubmissionReceivedEmail(
+    email: string,
+    fullName: string,
+    companyName: string,
+    applicationId: string,
+    context?: { userId?: string; smeProfileId?: string }
+  ): Promise<boolean> {
+    const dashboardUrl = `${process.env.FRONTEND_URL}/sme/certification`;
+    const timestamp = new Date().toLocaleString('en-AE', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+      timeZone: 'Asia/Dubai'
+    });
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1A2A2A; margin: 0; padding: 0; background: #F5FAFA; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(45,106,106,0.08); }
+          .header { background: #2D6A6A; color: white; padding: 40px 35px; }
+          .header h1 { margin: 0 0 6px; font-size: 22px; font-weight: 600; }
+          .header p { margin: 0; opacity: 0.75; font-size: 13px; }
+          .status-badge { display: inline-block; background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 12px; letter-spacing: 0.3px; }
+          .content { padding: 40px 35px; }
+          .title { font-size: 18px; font-weight: 600; color: #111C1C; margin-bottom: 16px; }
+          .text { color: #5A7070; font-size: 14px; margin-bottom: 16px; line-height: 1.75; }
+          .meta-box { background: #F5FAFA; border: 1px solid #D0E4E4; border-radius: 12px; padding: 20px; margin: 24px 0; }
+          .meta-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E8F4F4; }
+          .meta-row:last-child { border-bottom: none; }
+          .meta-label { color: #5A7070; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .meta-value { color: #111C1C; font-size: 13px; font-weight: 600; }
+          .divider { height: 1px; background: #D0E4E4; margin: 28px 0; }
+          .section-title { font-size: 14px; font-weight: 600; color: #2D6A6A; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .review-item { display: flex; align-items: flex-start; margin-bottom: 10px; padding-left: 16px; }
+          .review-dash { color: #2D6A6A; margin-right: 10px; font-weight: 600; }
+          .review-text { color: #5A7070; font-size: 13px; line-height: 1.5; }
+          .outcomes-grid { margin: 20px 0; }
+          .outcome-item { background: #F5FAFA; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+          .outcome-title { font-size: 14px; font-weight: 600; color: #111C1C; margin-bottom: 6px; }
+          .outcome-title.certified { color: #059669; }
+          .outcome-title.deferred { color: #D97706; }
+          .outcome-title.declined { color: #DC2626; }
+          .outcome-desc { color: #5A7070; font-size: 13px; line-height: 1.5; }
+          .next-box { background: #E8F4F4; border-left: 4px solid #2D6A6A; border-radius: 0 10px 10px 0; padding: 18px 22px; margin: 24px 0; }
+          .next-title { font-size: 12px; font-weight: 600; color: #2D6A6A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+          .next-text { color: #111C1C; font-size: 14px; line-height: 1.6; margin: 0; }
+          .button-wrap { text-align: center; margin: 32px 0 10px; }
+          .button { display: inline-block; padding: 14px 40px; background: #2D6A6A; color: #ffffff !important; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 14px; }
+          .disclaimer { background: #F5FAFA; border-top: 1px solid #D0E4E4; padding: 24px 35px; }
+          .disclaimer p { color: #5A7070; font-size: 11px; line-height: 1.6; margin: 0; }
+          .footer { padding: 20px 35px; text-align: center; }
+          .footer p { color: #5A7070; font-size: 12px; margin: 0; }
+          .auto-note { color: #5A7070; font-size: 11px; margin-top: 20px; font-style: italic; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="card">
+            <div class="header">
+              <h1>Naywa Certification</h1>
+              <p>certification@naywa.ae</p>
+              <div class="status-badge">Status: Under Review</div>
+            </div>
+            <div class="content">
+              <p class="text">We confirm receipt of your documentation package. Your submission has entered the independent certification review phase.</p>
+
+              <div class="meta-box">
+                <div class="meta-row">
+                  <span class="meta-label">Timestamp</span>
+                  <span class="meta-value">${timestamp}</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">Reference ID</span>
+                  <span class="meta-value">${applicationId}</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label">Estimated Completion</span>
+                  <span class="meta-value">3–5 business days</span>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <p class="section-title">Assessment Process</p>
+              <p class="text">Your file will be evaluated across Naywa's Five-Pillar Framework in accordance with our structured assessment criteria. Review covers:</p>
+
+              <div class="review-item">
+                <span class="review-dash">—</span>
+                <span class="review-text">Structural completeness of submitted documentation</span>
+              </div>
+              <div class="review-item">
+                <span class="review-dash">—</span>
+                <span class="review-text">Internal consistency across submitted records</span>
+              </div>
+              <div class="review-item">
+                <span class="review-dash">—</span>
+                <span class="review-text">Alignment with institutional documentation and disclosure standards</span>
+              </div>
+
+              <div class="divider"></div>
+
+              <p class="section-title">Possible Outcomes</p>
+              <p class="text">Upon completion, a formal determination will be recorded in Naywa's certification register:</p>
+
+              <div class="outcomes-grid">
+                <div class="outcome-item">
+                  <p class="outcome-title certified">Certified</p>
+                  <p class="outcome-desc">Operational readiness confirmed across assessed pillars. Certification issued and recorded.</p>
+                </div>
+                <div class="outcome-item">
+                  <p class="outcome-title deferred">Deferred</p>
+                  <p class="outcome-desc">Documentation gaps or inconsistencies identified. Additional information will be requested within a defined remediation window.</p>
+                </div>
+                <div class="outcome-item">
+                  <p class="outcome-title declined">Declined</p>
+                  <p class="outcome-desc">Critical deficiencies identified across one or more pillars. Re-application permitted after a minimum 30-day review interval.</p>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <p class="section-title">What Happens Next</p>
+              <div class="next-box">
+                <p class="next-text">You will be notified by email once a determination has been recorded. You may monitor your application status at any time via your workspace.</p>
+              </div>
+
+              <div class="button-wrap">
+                <a href="${dashboardUrl}" class="button">View Application Status</a>
+              </div>
+
+              <p class="auto-note">This is an automated notification. For support, contact support@naywa.ae.</p>
+            </div>
+            <div class="disclaimer">
+              <p>Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.</p>
+            </div>
+            <div class="footer">
+              <p><strong>Naywa</strong> — United Arab Emirates</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendEmail({
+      to: email,
+      subject: `Submission Received — Certification Review Initiated (Ref: ${context?.userId || applicationId})`,
+      html,
+    }, {
+      entityType: 'SMEProfile',
+      entityId: context?.smeProfileId,
+      userId: context?.userId,
+      emailType: 'submission_received',
+      recipientName: fullName,
+      metadata: { companyName, applicationId, timestamp },
+    });
+  }
+
   // Verification In Progress - sent when admin starts reviewing
   async sendVerificationInProgressEmail(email: string, fullName: string, companyName: string, context?: { userId?: string; smeProfileId?: string }): Promise<boolean> {
     const dashboardUrl = `${process.env.FRONTEND_URL}/sme/certification`;

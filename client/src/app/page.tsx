@@ -80,20 +80,10 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-16"
         style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #D0E4E4' }}
       >
-        <Link href="/" className="flex items-center gap-2.5 no-underline">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <span className="font-semibold text-base" style={{ color: '#111C1C' }}>Naywa</span>
+        <Link href="/" className="flex items-center gap-3 no-underline">
+          <span className="font-semibold text-lg" style={{ color: '#111C1C' }}>Naywa</span>
+          <span className="text-sm font-normal hidden sm:inline" style={{ color: '#5A7070' }}>SME Certification Platform</span>
         </Link>
-
-        <ul className="nav-links hidden md:flex items-center gap-8 list-none m-0 p-0">
-          <li><Link href="/certification-standards" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
-          <li><a href="#process" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Process</a></li>
-          <li><Link href="/registry/verify" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
-        </ul>
 
         <div className="flex items-center gap-3">
           <Link
@@ -193,8 +183,20 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* TAGLINE */}
+      <section className="py-20 px-6 text-center" style={{ background: 'white', borderTop: '1px solid #D0E4E4' }}>
+        <div className="max-w-3xl mx-auto reveal">
+          <h2 className="font-playfair font-bold mb-3" style={{ fontSize: 'clamp(28px, 4vw, 44px)', lineHeight: 1.2, color: '#111C1C' }}>
+            The foundation was always there.
+          </h2>
+          <p className="font-playfair font-bold italic" style={{ fontSize: 'clamp(24px, 3.5vw, 38px)', lineHeight: 1.2, color: '#5A7070' }}>
+            Naywa makes it visible.
+          </p>
+        </div>
+      </section>
+
       {/* BRAND STORY */}
-      <section className="py-24 px-6" style={{ background: 'white', borderTop: '1px solid #D0E4E4', borderBottom: '1px solid #D0E4E4' }}>
+      <section className="py-24 px-6" style={{ background: 'white', borderBottom: '1px solid #D0E4E4' }}>
         <div className="max-w-5xl mx-auto">
           <div className="reveal brand-inner grid gap-20 items-center" style={{ gridTemplateColumns: '1fr 380px' }}>
             <div>

@@ -506,13 +506,15 @@ export const submitCertification = async (req: AuthenticatedRequest, res: Respon
       },
     });
 
-    // Send application submitted email
+    // Send submission received email
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (user) {
-      await emailService.sendApplicationSubmittedEmail(
+      await emailService.sendSubmissionReceivedEmail(
         user.email,
         user.fullName,
-        profile.companyName || 'Your Company'
+        profile.companyName || 'Your Company',
+        profile.id,
+        { userId, smeProfileId: profile.id }
       );
     }
 
