@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import PublicFooter from '@/components/PublicFooter';
 
 export default function AuthLayout({
   children,
@@ -7,90 +6,130 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
-    <div className="flex-1 flex flex-col lg:flex-row">
-      {/* Branding Panel - Top on mobile, Left on desktop */}
+    <div className="min-h-screen flex flex-col lg:flex-row overflow-hidden" style={{ background: '#F5FAFA' }}>
+      {/* Left Panel - Dark Branding */}
       <div
-        className="w-full lg:w-5/12 text-white flex flex-col justify-between p-6 lg:p-10 relative overflow-hidden"
+        className="w-full lg:w-1/2 text-white flex flex-col justify-between p-8 lg:p-12 relative overflow-hidden"
+        style={{ background: '#111C1C', minHeight: 'auto' }}
       >
-        {/* Background Image - Neutral Business/Document imagery */}
+        {/* Subtle background gradients */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: 'url(/auth-bg.jpg)' }}
+          className="absolute -top-48 -right-48 w-[600px] h-[600px] pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse, rgba(45,106,106,0.18) 0%, transparent 65%)' }}
         />
-        {/* Dark overlay for text readability */}
         <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, rgba(35, 40, 45, 0.92) 0%, rgba(35, 40, 45, 0.85) 100%)' }}
-        />
-        {/* Subtle accent line on right edge (desktop only) */}
-        <div
-          className="hidden lg:block absolute top-0 right-0 w-[1px] h-full"
-          style={{ background: 'var(--teal-600)', opacity: 0.4 }}
+          className="absolute -bottom-24 -left-24 w-[400px] h-[400px] pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse, rgba(45,106,106,0.10) 0%, transparent 65%)' }}
         />
 
-        {/* Content */}
-        <div className="relative z-10">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center"
-              style={{ background: 'var(--teal-600)' }}
-            >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <span className="font-medium text-white">Naywa</span>
-          </Link>
-        </div>
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 relative z-10">
+          <div
+            className="w-9 h-9 rounded-lg flex items-center justify-center"
+            style={{ background: '#2D6A6A' }}
+          >
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <span className="text-lg font-semibold text-white" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Naywa</span>
+        </Link>
 
-        <div className="relative z-10 space-y-4 lg:space-y-6 mt-6 lg:mt-0">
-          <h1 className="text-xl lg:text-2xl font-semibold leading-tight text-white">
-            Naywa
-            <span className="block mt-1 text-base font-normal" style={{ color: 'var(--teal-400)' }}>SME Readiness & Certification for UAE Businesses</span>
+        {/* Main Content */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center py-8 lg:py-10">
+          <p
+            className="text-xs font-semibold tracking-[0.16em] uppercase mb-5"
+            style={{ color: '#3D8B8B' }}
+          >
+            SME Certification Platform
+          </p>
+          <h1
+            className="text-[clamp(28px,3.5vw,44px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+            style={{ fontFamily: 'var(--font-playfair), serif', color: 'white' }}
+          >
+            Structure your<br/>business for<br/><span style={{ color: '#3D8B8B' }}>institutional review.</span>
           </h1>
-          <p className="text-sm max-w-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
-            Get verified and listed in the official registry. Build credibility for your business.
+          <p
+            className="text-sm leading-relaxed max-w-[360px] mb-8"
+            style={{ color: 'rgba(255,255,255,0.45)' }}
+          >
+            Naywa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers.
           </p>
 
-          <div className="space-y-2 lg:space-y-3 pt-2 lg:pt-4">
-            <div className="flex items-center gap-3">
-              <svg className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--teal-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>Verified certification process</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <svg className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--teal-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>Public registry listing</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <svg className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--teal-400)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>Secure document handling</span>
-            </div>
-          </div>
+          {/* Feature List */}
+          <ul className="space-y-3.5">
+            <li className="flex items-start gap-3">
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={{ background: 'rgba(45,106,106,0.25)' }}
+              >
+                <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <strong className="block mb-0.5 font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>Five-Pillar Assessment Framework</strong>
+                Evidence-based evaluation across legal, financial, governance, and operational dimensions.
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={{ background: 'rgba(45,106,106,0.25)' }}
+              >
+                <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <strong className="block mb-0.5 font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>Verifiable Certification</strong>
+                Recorded in Naywa's certification register and shareable with any institution.
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={{ background: 'rgba(45,106,106,0.25)' }}
+              >
+                <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <strong className="block mb-0.5 font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>Independent Review</strong>
+                Fixed criteria. No subjectivity. No relationship considerations.
+              </div>
+            </li>
+          </ul>
         </div>
 
-        <p className="relative z-10 text-xs mt-4 lg:mt-0" style={{ color: 'rgba(255,255,255,0.4)' }}>
-          500+ businesses certified across UAE
+        {/* Footer Disclaimer */}
+        <p
+          className="relative z-10 text-[11px] leading-relaxed pt-5"
+          style={{ color: 'rgba(255,255,255,0.2)', borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval or a guarantee of financing. Certification reflects status at the time of issuance only.
         </p>
       </div>
 
-      {/* Form Panel - Bottom on mobile, Right on desktop */}
+      {/* Right Panel - Form Area */}
       <div
-        className="w-full lg:w-7/12 flex items-start lg:items-center justify-center p-6 py-8 lg:py-10 lg:min-h-screen overflow-y-auto"
-        style={{ background: 'var(--background)' }}
+        className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 lg:p-12 relative overflow-y-auto"
+        style={{ background: '#F5FAFA' }}
       >
-        <div className="w-full max-w-xl">
+        <div className="w-full max-w-[460px]">
           {children}
         </div>
+
+        {/* Footer Links */}
+        <div className="absolute bottom-5 flex flex-wrap gap-5 justify-center">
+          <Link href="/terms" className="text-[11px] transition-colors" style={{ color: '#5A7070' }}>Terms</Link>
+          <Link href="/privacy" className="text-[11px] transition-colors" style={{ color: '#5A7070' }}>Privacy</Link>
+          <Link href="/certification-fees" className="text-[11px] transition-colors" style={{ color: '#5A7070' }}>Fees</Link>
+          <Link href="/legal-notice" className="text-[11px] transition-colors" style={{ color: '#5A7070' }}>Legal Notice</Link>
+          <Link href="/contact" className="text-[11px] transition-colors" style={{ color: '#5A7070' }}>Contact</Link>
+        </div>
       </div>
-    </div>
-    <PublicFooter compact />
     </div>
   );
 }

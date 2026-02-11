@@ -9,8 +9,9 @@ type UserRole = 'user' | 'sme';
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [smeSubStep, setSmeSubStep] = useState(1); // 1 = Company Info, 2 = Personal Info
+  const [smeSubStep, setSmeSubStep] = useState(1);
   const [role, setRole] = useState<UserRole | null>(null);
+  const [selectedOption, setSelectedOption] = useState<UserRole | null>('sme');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -31,6 +32,12 @@ export default function RegisterPage() {
     setRole(selectedRole);
     setStep(2);
     setSmeSubStep(1);
+  };
+
+  const handleContinue = () => {
+    if (selectedOption) {
+      handleRoleSelect(selectedOption);
+    }
   };
 
   const handleCompanyInfoContinue = () => {
@@ -99,29 +106,52 @@ export default function RegisterPage() {
     }
   };
 
+  // Calculate current step for progress indicator
+  const getCurrentStep = () => {
+    if (step === 1) return 1;
+    if (step === 2 && role === 'sme' && smeSubStep === 1) return 2;
+    return 3;
+  };
+
+  const currentStep = getCurrentStep();
+
   if (success) {
     return (
-      <div className="glass-card rounded-xl p-8 sm:p-10">
+      <div
+        className="rounded-[20px] p-10 lg:p-12"
+        style={{
+          background: 'white',
+          border: '1px solid #D0E4E4',
+          boxShadow: '0 4px 32px rgba(45,106,106,0.07)',
+          animation: 'fadeUp 0.5s 0.1s both'
+        }}
+      >
         <div className="text-center">
           <div
-            className="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-6"
-            style={{ background: 'var(--success-50)' }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+            style={{ background: '#E8F4F4' }}
           >
-            <svg className="w-8 h-8" style={{ color: 'var(--success-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-8 h-8" style={{ color: '#2D6A6A' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-semibold mb-3" style={{ color: 'var(--graphite-900)' }}>Verification Email Sent</h1>
-          <p className="mb-8 max-w-sm mx-auto" style={{ color: 'var(--foreground-muted)' }}>
-            A verification link has been sent to <span className="font-medium" style={{ color: 'var(--graphite-700)' }}>{formData.email}</span>. Check your inbox to verify your credentials.
+          <h1
+            className="text-[26px] font-bold mb-3 tracking-[-0.01em]"
+            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+          >
+            Verification Email Sent
+          </h1>
+          <p className="text-sm mb-8 max-w-sm mx-auto leading-relaxed" style={{ color: '#5A7070' }}>
+            A verification link has been sent to <span className="font-medium" style={{ color: '#111C1C' }}>{formData.email}</span>. Check your inbox to verify your credentials.
           </p>
           <Link
             href="/login"
-            className="btn-primary inline-flex items-center justify-center gap-2 w-full h-11 rounded-lg"
+            className="inline-flex items-center justify-center gap-2 w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all"
+            style={{ background: '#2D6A6A' }}
           >
             Go to Login
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </Link>
         </div>
@@ -130,248 +160,223 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="glass-card rounded-xl p-8 sm:p-10">
-      {/* Mobile Logo */}
-      <div className="lg:hidden text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-3">
+    <div
+      className="rounded-[20px] p-10 lg:p-12"
+      style={{
+        background: 'white',
+        border: '1px solid #D0E4E4',
+        boxShadow: '0 4px 32px rgba(45,106,106,0.07)',
+        animation: 'fadeUp 0.5s 0.1s both'
+      }}
+    >
+      {/* Progress Steps */}
+      <div className="flex items-center justify-center mb-10">
+        {/* Step 1 */}
+        <div className="flex flex-col items-center">
           <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center"
-            style={{ background: 'var(--teal-600)' }}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+            style={{
+              background: currentStep >= 1 ? '#2D6A6A' : '#F5FAFA',
+              color: currentStep >= 1 ? 'white' : '#5A7070',
+              border: currentStep >= 1 ? 'none' : '1.5px solid #D0E4E4'
+            }}
           >
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
+            1
           </div>
-          <span className="text-lg font-semibold" style={{ color: 'var(--graphite-900)' }}>Naywa</span>
-        </Link>
-      </div>
+          <span
+            className="text-[11px] font-medium mt-1.5 tracking-wide"
+            style={{ color: currentStep >= 1 ? '#2D6A6A' : '#5A7070' }}
+          >
+            Type
+          </span>
+        </div>
 
-      {/* Progress Steps with Labels */}
-      <div className="mb-8">
-        <div className="flex items-center justify-center gap-2">
-          {/* Step 1 - Account Type */}
-          <div className="flex flex-col items-center">
-            <div
-              className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-              style={{
-                background: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-200)',
-                color: step >= 1 ? 'white' : 'var(--graphite-500)'
-              }}
-            >
-              1
-            </div>
-            <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 1 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-              Type
-            </span>
-          </div>
+        {/* Connector */}
+        <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
+
+        {/* Step 2 */}
+        <div className="flex flex-col items-center">
           <div
-            className="w-8 h-1 rounded-full mb-5"
-            style={{ background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)' }}
-          />
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+            style={{
+              background: currentStep >= 2 ? '#2D6A6A' : '#F5FAFA',
+              color: currentStep >= 2 ? 'white' : '#5A7070',
+              border: currentStep >= 2 ? 'none' : '1.5px solid #D0E4E4'
+            }}
+          >
+            2
+          </div>
+          <span
+            className="text-[11px] font-medium mt-1.5 tracking-wide"
+            style={{ color: currentStep >= 2 ? '#2D6A6A' : '#5A7070' }}
+          >
+            Account
+          </span>
+        </div>
 
-          {/* Step 2 - Company Info (SME only) or Personal (Investor) */}
-          {role === 'sme' || step === 1 ? (
-            <>
-              <div className="flex flex-col items-center">
-                <div
-                  className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-                  style={{
-                    background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
-                    color: step >= 2 ? 'white' : 'var(--graphite-500)'
-                  }}
-                >
-                  2
-                </div>
-                <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                  {role === 'sme' ? 'Company' : 'Account'}
-                </span>
-              </div>
-              {(role === 'sme' || step === 1) && (
-                <>
-                  <div
-                    className="w-8 h-1 rounded-full mb-5"
-                    style={{ background: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-200)' }}
-                  />
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-                      style={{
-                        background: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-200)',
-                        color: (step === 2 && smeSubStep >= 2) ? 'white' : 'var(--graphite-500)'
-                      }}
-                    >
-                      3
-                    </div>
-                    <span className="text-xs mt-1.5 font-medium" style={{ color: (step === 2 && smeSubStep >= 2) ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                      Personal
-                    </span>
-                  </div>
-                </>
-              )}
-            </>
-          ) : (
-            <div className="flex flex-col items-center">
-              <div
-                className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium"
-                style={{
-                  background: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-200)',
-                  color: step >= 2 ? 'white' : 'var(--graphite-500)'
-                }}
-              >
-                2
-              </div>
-              <span className="text-xs mt-1.5 font-medium" style={{ color: step >= 2 ? 'var(--teal-600)' : 'var(--graphite-400)' }}>
-                Account
-              </span>
-            </div>
-          )}
+        {/* Connector */}
+        <div className="w-12 h-[1px] mx-1 mb-[18px]" style={{ background: '#D0E4E4' }} />
+
+        {/* Step 3 */}
+        <div className="flex flex-col items-center">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all"
+            style={{
+              background: currentStep >= 3 ? '#2D6A6A' : '#F5FAFA',
+              color: currentStep >= 3 ? 'white' : '#5A7070',
+              border: currentStep >= 3 ? 'none' : '1.5px solid #D0E4E4'
+            }}
+          >
+            3
+          </div>
+          <span
+            className="text-[11px] font-medium mt-1.5 tracking-wide"
+            style={{ color: currentStep >= 3 ? '#2D6A6A' : '#5A7070' }}
+          >
+            Details
+          </span>
         </div>
       </div>
 
       {step === 1 ? (
         <>
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>Get Started</h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>Select how you'd like to use the Naywa platform.</p>
-          </div>
+          {/* Header */}
+          <h2
+            className="text-[26px] font-bold text-center mb-2 tracking-[-0.01em]"
+            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+          >
+            Get Started
+          </h2>
+          <p className="text-sm text-center mb-9 leading-relaxed" style={{ color: '#5A7070' }}>
+            Select how you would like to use the Naywa platform.
+          </p>
 
-          <div className="grid grid-cols-2 gap-5 mb-6">
-            {/* Certification Path */}
+          {/* Options */}
+          <div className="grid grid-cols-2 gap-3.5 mb-7">
+            {/* Certify a Business */}
             <div
-              onClick={() => handleRoleSelect('sme')}
-              className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
+              onClick={() => setSelectedOption('sme')}
+              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
               style={{
-                background: 'white',
-                border: '1px solid var(--graphite-200)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-300)';
-                e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(58, 115, 109, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--graphite-200)';
-                e.currentTarget.style.boxShadow = 'none';
+                background: selectedOption === 'sme' ? '#E8F4F4' : 'white',
+                border: selectedOption === 'sme' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
               }}
             >
-              {/* Shield with Checkmark Icon */}
-              <div className="flex justify-center mb-5">
-                <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Shield */}
-                  <path d="M32 4L8 14V30C8 44.36 18.12 57.54 32 60C45.88 57.54 56 44.36 56 30V14L32 4Z" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2.5"/>
-                  {/* Inner shield highlight */}
-                  <path d="M32 10L14 18V30C14 41.5 22.4 51.8 32 54C41.6 51.8 50 41.5 50 30V18L32 10Z" fill="#5eb6af" fillOpacity="0.3"/>
-                  {/* Checkmark */}
-                  <path d="M22 32L28 38L42 24" stroke="#3a736d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: selectedOption === 'sme' ? 'rgba(45,106,106,0.15)' : '#E8F4F4' }}
+              >
+                <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <polyline points="9 12 11 14 15 10"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Certify a Business</h3>
-              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Get certified to access the official registry and new opportunities.</p>
+              <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Certify a Business</p>
+              <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>Get certified and receive a verifiable record of your capital-readiness status.</p>
             </div>
 
-            {/* Registry Browser Path */}
+            {/* Browse Certified Businesses */}
             <div
-              onClick={() => handleRoleSelect('user')}
-              className="p-6 py-8 rounded-xl text-center transition-all duration-200 hover:shadow-lg group cursor-pointer flex flex-col"
+              onClick={() => setSelectedOption('user')}
+              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
               style={{
-                background: 'white',
-                border: '1px solid var(--graphite-200)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--teal-300)';
-                e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(58, 115, 109, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--graphite-200)';
-                e.currentTarget.style.boxShadow = 'none';
+                background: selectedOption === 'user' ? '#E8F4F4' : 'white',
+                border: selectedOption === 'user' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
+                opacity: selectedOption === 'user' ? 1 : 0.75
               }}
             >
-              {/* Search/List Icon */}
-              <div className="flex justify-center mb-5">
-                <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Document/List background */}
-                  <rect x="12" y="8" width="40" height="48" rx="3" fill="#e8f5f3" stroke="#3a736d" strokeWidth="2.5"/>
-                  {/* List lines */}
-                  <rect x="20" y="18" width="24" height="3" rx="1.5" fill="#5eb6af"/>
-                  <rect x="20" y="26" width="18" height="3" rx="1.5" fill="#5eb6af"/>
-                  <rect x="20" y="34" width="20" height="3" rx="1.5" fill="#5eb6af"/>
-                  {/* Magnifying glass */}
-                  <circle cx="44" cy="44" r="10" fill="white" stroke="#3a736d" strokeWidth="2.5"/>
-                  <circle cx="44" cy="44" r="5" fill="#e8f5f3"/>
-                  <line x1="51" y1="51" x2="58" y2="58" stroke="#3a736d" strokeWidth="3" strokeLinecap="round"/>
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: selectedOption === 'user' ? 'rgba(45,106,106,0.15)' : '#E8F4F4' }}
+              >
+                <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--graphite-900)' }}>Browse Certified Businesses</h3>
-              <p className="text-sm" style={{ color: 'var(--foreground-muted)' }}>Access the registry of verified SMEs.</p>
-              <p className="text-xs mt-2 italic" style={{ color: 'var(--graphite-500)' }}>View-only access</p>
+              <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Browse Certified Businesses</p>
+              <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>Access the registry of verified SMEs.</p>
+              <span
+                className="inline-block mt-2.5 text-[10px] font-semibold tracking-wide uppercase px-2 py-1 rounded"
+                style={{ color: '#5A7070', background: '#F5FAFA', border: '1px solid #D0E4E4' }}
+              >
+                View only
+              </span>
             </div>
           </div>
 
-          {/* Action Buttons - Same Line */}
-          <div className="flex gap-3">
+          {/* Actions */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
             <button
-              onClick={() => handleRoleSelect('sme')}
-              className="flex-1 py-3 px-4 rounded-lg font-medium text-white transition-all duration-200"
-              style={{ background: 'var(--teal-600)' }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--teal-700)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'var(--teal-600)'}
+              onClick={handleContinue}
+              className="h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
+              style={{ background: '#2D6A6A' }}
             >
               Start Certification
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
             </button>
             <button
-              onClick={() => handleRoleSelect('user')}
-              className="flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200"
-              style={{ background: 'white', border: '1px solid var(--graphite-300)', color: 'var(--graphite-700)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--teal-400)'; e.currentTarget.style.color = 'var(--teal-600)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--graphite-300)'; e.currentTarget.style.color = 'var(--graphite-700)'; }}
+              onClick={() => { setSelectedOption('user'); handleRoleSelect('user'); }}
+              className="h-[46px] rounded-[10px] font-medium text-sm transition-all"
+              style={{ background: 'white', border: '1.5px solid #D0E4E4', color: '#2D6A6A' }}
             >
               Access Registry
             </button>
           </div>
+
+          {/* Sign in */}
+          <p className="text-center text-[13px]" style={{ color: '#5A7070' }}>
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
+          </p>
         </>
       ) : role === 'sme' && smeSubStep === 1 ? (
         /* SME Step 2a - Company Information */
         <>
-          <div className="mb-8">
-            <button
-              onClick={() => { setError(''); setStep(1); }}
-              className="flex items-center gap-2 text-sm mb-4 transition-colors"
-              style={{ color: 'var(--foreground-muted)' }}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to account type
-            </button>
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              Company Information
-            </h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
-              Enter your business details to get started with certification.
-            </p>
-          </div>
+          <button
+            onClick={() => { setError(''); setStep(1); }}
+            className="flex items-center gap-2 text-sm mb-6 transition-colors"
+            style={{ color: '#5A7070' }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to account type
+          </button>
+
+          <h2
+            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
+            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+          >
+            Company Information
+          </h2>
+          <p className="text-sm mb-8 leading-relaxed" style={{ color: '#5A7070' }}>
+            Enter your business details to get started with certification.
+          </p>
 
           {error && (
             <div
-              className="mb-6 p-4 rounded-lg flex items-center gap-3"
-              style={{ background: 'var(--danger-50)', border: '1px solid var(--danger-100)' }}
+              className="mb-6 p-4 rounded-xl flex items-center gap-3"
+              style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}
             >
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'var(--danger-100)' }}
+                style={{ background: '#FEE2E2' }}
               >
-                <svg className="w-4 h-4" style={{ color: 'var(--danger-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" style={{ color: '#DC2626' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-sm font-medium" style={{ color: 'var(--danger-600)' }}>{error}</p>
+              <p className="text-sm font-medium" style={{ color: '#DC2626' }}>{error}</p>
             </div>
           )}
 
           <div className="space-y-4">
             <div>
-              <label className="input-label block">Company Name</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Company Name</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
@@ -380,17 +385,17 @@ export default function RegisterPage() {
                   type="text"
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="input-field w-full"
-                  style={{ paddingLeft: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="Enter your company name"
                 />
               </div>
             </div>
 
             <div>
-              <label className="input-label block">Trade License Number</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Trade License Number</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -399,17 +404,17 @@ export default function RegisterPage() {
                   type="text"
                   value={formData.tradeLicenseNumber}
                   onChange={(e) => setFormData({ ...formData, tradeLicenseNumber: e.target.value })}
-                  className="input-field w-full"
-                  style={{ paddingLeft: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="Enter trade license number"
                 />
               </div>
             </div>
 
             <div>
-              <label className="input-label block">Industry Sector</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Industry Sector</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -417,8 +422,8 @@ export default function RegisterPage() {
                 <select
                   value={formData.industrySector}
                   onChange={(e) => setFormData({ ...formData, industrySector: e.target.value })}
-                  className="input-field w-full appearance-none cursor-pointer"
-                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-10 transition-all outline-none appearance-none cursor-pointer"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                 >
                   <option value="">Select industry sector</option>
                   <option value="technology">Technology</option>
@@ -431,7 +436,7 @@ export default function RegisterPage() {
                   <option value="education">Education</option>
                   <option value="other">Other</option>
                 </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -442,78 +447,86 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={handleCompanyInfoContinue}
-              className="w-full h-11 font-medium rounded-lg transition-all duration-200 btn-teal"
+              className="w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-2"
+              style={{ background: '#2D6A6A' }}
             >
-              <span className="flex items-center justify-center gap-2">
-                Save & Continue
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
+              Save & Continue
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
             </button>
           </div>
+
+          <p className="text-center text-[13px] mt-8" style={{ color: '#5A7070' }}>
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
+          </p>
         </>
       ) : (
-        /* SME Step 2b (Personal) or Investor Step 2 */
+        /* SME Step 2b (Personal) or User Step 2 */
         <>
-          <div className="mb-8">
-            <button
-              onClick={() => { setError(''); role === 'sme' ? setSmeSubStep(1) : setStep(1); }}
-              className="flex items-center gap-2 text-sm mb-4 transition-colors"
-              style={{ color: 'var(--foreground-muted)' }}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              {role === 'sme' ? 'Back to company info' : 'Back to account type'}
-            </button>
-            <h1 className="text-2xl font-semibold" style={{ color: 'var(--graphite-900)' }}>
-              {role === 'sme' ? 'Personal Details' : 'Secure Your Access'}
-            </h1>
-            <p className="mt-2" style={{ color: 'var(--foreground-muted)' }}>
-              {role === 'sme'
-                ? 'Set up your login credentials to complete setup.'
-                : 'Enter your details to access the SME registry'}
-            </p>
-          </div>
+          <button
+            onClick={() => { setError(''); role === 'sme' ? setSmeSubStep(1) : setStep(1); }}
+            className="flex items-center gap-2 text-sm mb-6 transition-colors"
+            style={{ color: '#5A7070' }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            {role === 'sme' ? 'Back to company info' : 'Back to account type'}
+          </button>
+
+          <h2
+            className="text-[26px] font-bold mb-2 tracking-[-0.01em]"
+            style={{ fontFamily: 'var(--font-playfair), serif', color: '#111C1C' }}
+          >
+            {role === 'sme' ? 'Personal Details' : 'Create Your Account'}
+          </h2>
+          <p className="text-sm mb-8 leading-relaxed" style={{ color: '#5A7070' }}>
+            {role === 'sme'
+              ? 'Set up your login credentials to complete setup.'
+              : 'Enter your details to access the SME registry.'}
+          </p>
 
           {error && (
             <div
-              className="mb-6 p-4 rounded-lg flex items-center gap-3"
-              style={{ background: 'var(--danger-50)', border: '1px solid var(--danger-100)' }}
+              className="mb-6 p-4 rounded-xl flex items-center gap-3"
+              style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}
             >
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'var(--danger-100)' }}
+                style={{ background: '#FEE2E2' }}
               >
-                <svg className="w-4 h-4" style={{ color: 'var(--danger-600)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" style={{ color: '#DC2626' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-sm font-medium" style={{ color: 'var(--danger-600)' }}>{error}</p>
+              <p className="text-sm font-medium" style={{ color: '#DC2626' }}>{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="input-label block">First Name</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>First Name</label>
                 <input
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="input-field w-full"
+                  className="w-full h-[46px] rounded-[10px] text-sm px-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="John"
                   disabled={isLoading}
                 />
               </div>
               <div>
-                <label className="input-label block">Last Name</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Last Name</label>
                 <input
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="input-field w-full"
+                  className="w-full h-[46px] rounded-[10px] text-sm px-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="Doe"
                   disabled={isLoading}
                 />
@@ -521,9 +534,9 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="input-label block">Email address</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Email address</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
@@ -532,8 +545,8 @@ export default function RegisterPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="input-field w-full"
-                  style={{ paddingLeft: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="you@example.com"
                   disabled={isLoading}
                 />
@@ -541,9 +554,9 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="input-label block">Password</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Password</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
@@ -552,8 +565,8 @@ export default function RegisterPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="input-field w-full"
-                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-10 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="Min. 8 characters"
                   disabled={isLoading}
                 />
@@ -561,7 +574,7 @@ export default function RegisterPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: 'var(--graphite-400)' }}
+                  style={{ color: '#5A7070' }}
                 >
                   {showPassword ? (
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -578,9 +591,9 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="input-label block">Confirm Password</label>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#111C1C' }}>Confirm Password</label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--graphite-400)' }}>
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#5A7070' }}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
@@ -589,66 +602,68 @@ export default function RegisterPage() {
                   type="password"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  className="input-field w-full"
-                  style={{ paddingLeft: '2.5rem' }}
+                  className="w-full h-[46px] rounded-[10px] text-sm pl-10 pr-4 transition-all outline-none"
+                  style={{ border: '1.5px solid #D0E4E4', background: 'white' }}
                   placeholder="Confirm your password"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer">
+            <label className="flex items-start gap-3 cursor-pointer pt-2">
               <input
                 type="checkbox"
                 checked={formData.agreeTerms}
                 onChange={(e) => setFormData({ ...formData, agreeTerms: e.target.checked })}
                 className="w-4 h-4 rounded mt-0.5"
-                style={{ borderColor: 'var(--graphite-300)', accentColor: 'var(--teal-600)' }}
+                style={{ accentColor: '#2D6A6A' }}
               />
-              <span className="text-sm" style={{ color: 'var(--graphite-600)' }}>
+              <span className="text-sm leading-relaxed" style={{ color: '#5A7070' }}>
                 I agree to the{' '}
-                <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--teal-600)' }} className="font-medium">Terms of Service</a>
+                <Link href="/terms" target="_blank" className="font-medium" style={{ color: '#2D6A6A' }}>Terms of Service</Link>
                 {' '}and acknowledge the{' '}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--teal-600)' }} className="font-medium">Privacy Policy</a>.
+                <Link href="/privacy" target="_blank" className="font-medium" style={{ color: '#2D6A6A' }}>Privacy Policy</Link>.
               </span>
             </label>
 
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full h-11 font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-                role === 'sme' ? 'btn-teal' : 'btn-primary'
-              }`}
+              className="w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: '#2D6A6A' }}
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
+                <>
                   <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
                   Completing setup...
-                </span>
+                </>
               ) : (
-                <span className="flex items-center justify-center gap-2">
+                <>
                   Complete Setup
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
-                </span>
+                </>
               )}
             </button>
           </form>
+
+          <p className="text-center text-[13px] mt-8" style={{ color: '#5A7070' }}>
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium" style={{ color: '#2D6A6A' }}>Sign in</Link>
+          </p>
         </>
       )}
 
-      <div className="mt-8 text-center">
-        <p style={{ color: 'var(--graphite-600)' }}>
-          Already have an account?{' '}
-          <Link href="/login" className="font-medium transition-colors" style={{ color: 'var(--teal-600)' }}>
-            Sign in
-          </Link>
-        </p>
-      </div>
+      <style jsx>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }
