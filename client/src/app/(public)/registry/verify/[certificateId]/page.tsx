@@ -245,24 +245,23 @@ export default function VerifyCertificatePage() {
               </p>
             </div>
 
-            {/* Entity Record */}
-            <div className="mb-5">
-              <div className="flex items-center gap-3 mb-3">
-                <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Entity Record</p>
-                <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
+            {/* Entity Name - Large with underline */}
+            <div className="mb-6">
+              <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-2" style={{ color: '#2D6A6A' }}>ENTITY NAME</p>
+              <p className="text-[28px] font-bold leading-tight pb-2" style={{ color: '#111C1C', fontFamily: 'var(--font-playfair), Playfair Display, serif', borderBottom: '2px solid #2D6A6A', display: 'inline-block', minWidth: '200px' }}>
+                {certificate.companyName}
+              </p>
+            </div>
+
+            {/* Trade License + Industry Sector Row */}
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>TRADE LICENSE NUMBER</p>
+                <p className="text-[15px] font-semibold" style={{ color: '#111C1C' }}>{certificate.tradeLicenseNumber}</p>
               </div>
-              <div className="space-y-1.5">
-                <p className="text-[11px]" style={{ color: '#5A7070' }}>
-                  Entity Name: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.companyName}</span>
-                </p>
-                <div className="flex flex-wrap gap-x-6">
-                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
-                    Trade License Number: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.tradeLicenseNumber}</span>
-                  </p>
-                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
-                    Industry Sector: <span className="font-semibold" style={{ color: '#111C1C' }}>{certificate.industrySector}</span>
-                  </p>
-                </div>
+              <div>
+                <p className="text-[9px] font-semibold tracking-[0.1em] uppercase mb-1.5" style={{ color: '#5A7070' }}>INDUSTRY SECTOR</p>
+                <p className="text-[15px] font-semibold" style={{ color: '#111C1C' }}>{certificate.industrySector}</p>
               </div>
             </div>
 
