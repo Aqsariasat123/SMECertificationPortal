@@ -310,7 +310,7 @@ export default function LandingPage() {
               </div>
               <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
             </Link>
-            <ul className="flex flex-wrap gap-2 gap-x-7 list-none m-0 p-0 pt-1">
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '8px 28px' }}>
               <li><Link href="/certification-standards" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
               <li><Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees and Services</Link></li>
               <li><Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms of Service</Link></li>

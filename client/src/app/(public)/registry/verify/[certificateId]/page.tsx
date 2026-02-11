@@ -28,7 +28,7 @@ const stateConfig = {
     iconPath: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
     label: 'Certification Expired',
     badge: 'Expired',
-    desc: 'This certificate has passed its expiry date and is no longer active in the register.',
+    desc: 'Certificate has expired as of', // Date will be appended dynamically
     headerBg: '#111C1C',
     bannerBg: '#FDF3E3',
     bannerBorder: 'rgba(146,98,10,0.2)',
@@ -42,7 +42,7 @@ const stateConfig = {
     iconPath: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
     label: 'Certificate Revoked',
     badge: 'Revoked',
-    desc: "This certificate has been revoked. It is no longer recognised by Naywa's certification register.",
+    desc: 'This certificate has been revoked.',
     headerBg: '#2A1515',
     bannerBg: '#FAEAEA',
     bannerBorder: 'rgba(139,32,32,0.25)',
@@ -56,7 +56,7 @@ const stateConfig = {
     iconPath: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
     label: 'Certification Deferred',
     badge: 'Deferred',
-    desc: 'This application is under review. Certification has not yet been issued or declined.',
+    desc: 'Certification review incomplete. Status: Deferred.',
     headerBg: '#111C1C',
     bannerBg: '#FDF3E3',
     bannerBorder: 'rgba(146,98,10,0.2)',
@@ -71,7 +71,7 @@ const notFoundConfig = {
   iconPath: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
   label: 'No Record Found',
   badge: 'Not Found',
-  desc: "No certificate matching this ID was found in Naywa's certification register.",
+  desc: 'No certificate record found matching this ID.',
   bannerBg: '#F5FAFA',
   bannerBorder: '#D0E4E4',
   iconBg: 'rgba(90,112,112,0.1)',
@@ -285,7 +285,7 @@ export default function VerifyCertificatePage() {
                 No Record Found
               </p>
               <p className="text-sm leading-[1.7] max-w-[360px] mx-auto mb-6" style={{ color: '#5A7070' }}>
-                No certificate matching this ID was found in Naywa&apos;s certification register. Please check the ID and try again.
+                No certificate record found matching this ID. Please check the ID and try again.
               </p>
               <span
                 className="inline-block text-xs px-5 py-3 rounded-lg"
@@ -426,7 +426,7 @@ export default function VerifyCertificatePage() {
                 {config.label}
               </p>
               <p className="text-[13px] leading-[1.4]" style={{ color: '#5A7070' }}>
-                {config.desc}
+                {status === 'expired' ? `${config.desc} ${formatDate(certificate.expiresAt)}.` : config.desc}
               </p>
             </div>
             <span

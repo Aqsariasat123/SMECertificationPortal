@@ -290,6 +290,13 @@ export default function RegisterPage() {
                 opacity: selectedOption === 'user' ? 1 : 0.75
               }}
             >
+              {/* Read Only Tag */}
+              <span
+                className="absolute top-3 right-3 text-[9px] font-semibold tracking-[0.08em] uppercase px-2 py-1 rounded"
+                style={{ background: '#F5FAFA', color: '#5A7070', border: '1px solid #D0E4E4' }}
+              >
+                Read only
+              </span>
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
                 style={{ background: selectedOption === 'user' ? 'rgba(45,106,106,0.15)' : '#E8F4F4' }}
