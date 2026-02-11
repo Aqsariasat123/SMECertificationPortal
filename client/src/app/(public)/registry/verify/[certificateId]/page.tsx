@@ -325,33 +325,27 @@ export default function VerifyCertificatePage() {
                 <p className="text-[10px] font-bold tracking-[0.1em] uppercase" style={{ color: '#2D6A6A' }}>Integrity & Verification</p>
                 <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
               </div>
-              <div className="flex gap-4">
-                <div className="flex-1 space-y-3">
-                  <div>
-                    <p className="text-[11px]" style={{ color: '#5A7070' }}>
-                      Verification Hash: <span className="font-mono text-[10px]" style={{ color: '#111C1C' }}>{certificate.verificationHash}</span>
-                    </p>
-                    <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
-                      This cryptographic hash uniquely identifies this certificate record and supports integrity validation.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px]" style={{ color: '#5A7070' }}>
-                      Verification URL: <a href={verificationUrl} className="text-[10px] break-all" style={{ color: '#2D6A6A' }}>{verificationUrl}</a>
-                    </p>
-                    <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
-                      Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
-                    </p>
-                    {verifiedAt && (
-                      <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
-                        Verified at: {verifiedAt}
-                      </p>
-                    )}
-                  </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Verification Hash: <span className="font-mono text-[10px]" style={{ color: '#111C1C' }}>{certificate.verificationHash}</span>
+                  </p>
+                  <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
+                    This cryptographic hash uniquely identifies this certificate record and supports integrity validation.
+                  </p>
                 </div>
-                {/* QR Code */}
-                <div className="flex-shrink-0">
-                  <QRCodeSVG value={verificationUrl} size={70} />
+                <div>
+                  <p className="text-[11px]" style={{ color: '#5A7070' }}>
+                    Verification URL: <a href={verificationUrl} className="text-[10px] break-all" style={{ color: '#2D6A6A' }}>{verificationUrl}</a>
+                  </p>
+                  <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
+                    Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
+                  </p>
+                  {verifiedAt && (
+                    <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
+                      Verified at: {verifiedAt}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -370,10 +364,16 @@ export default function VerifyCertificatePage() {
               </p>
             </div>
 
-            {/* Seal Line */}
-            <div className="inline-block px-4 py-2.5 rounded-lg" style={{ background: '#2D6A6A' }}>
-              <p className="text-[11px] font-bold text-white">NAYWA CERTIFIED</p>
-              <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital Verification Mark</p>
+            {/* Bottom: Seal + QR Code */}
+            <div className="flex items-end justify-between">
+              <div className="inline-block px-4 py-2.5 rounded-lg" style={{ background: '#2D6A6A' }}>
+                <p className="text-[11px] font-bold text-white">NAYWA CERTIFIED</p>
+                <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital Verification Mark</p>
+              </div>
+              {/* QR Code - Bottom Right */}
+              <div className="flex-shrink-0">
+                <QRCodeSVG value={verificationUrl} size={70} />
+              </div>
             </div>
           </div>
         </div>

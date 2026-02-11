@@ -1773,12 +1773,6 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.moveTo(marginX + 130, y + 5).lineTo(pageW - marginX, y + 5).lineWidth(0.5).strokeColor('#D0E4E4').stroke();
 
     y += 16;
-    // QR Code (right side)
-    const qrSize = 60;
-    const qrX = pageW - marginX - qrSize - 10;
-    const qrY = y;
-    doc.image(qrDataUrl, qrX, qrY, { width: qrSize, height: qrSize });
-
     // Hash
     doc.font('Helvetica').fontSize(9).fillColor('#5A7070');
     doc.text('Verification Hash:', marginX, y);
@@ -1818,13 +1812,18 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     y += 12;
     doc.text('This document is electronically generated and does not require a physical signature.', marginX, y);
 
-    // Seal Line
+    // Seal Line + QR Code (bottom right)
     y += 25;
     doc.roundedRect(marginX, y, 130, 36, 6).fill('#2D6A6A');
     doc.font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF');
     doc.text('NAYWA CERTIFIED', marginX + 14, y + 9);
     doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.7);
     doc.text('Digital Verification Mark', marginX + 14, y + 22);
+
+    // QR Code - Bottom Right
+    const qrSize = 55;
+    const qrX = pageW - marginX - qrSize;
+    doc.image(qrDataUrl, qrX, y - 10, { width: qrSize, height: qrSize });
 
     doc.end();
 
