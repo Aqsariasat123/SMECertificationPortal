@@ -54,8 +54,8 @@ export const metadata: Metadata = {
     description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
   },
 };
 
