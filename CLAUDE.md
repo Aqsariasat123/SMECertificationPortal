@@ -58,34 +58,27 @@ SMECertificationPortal/
 
 ## Production Deployment
 
-**Live URL:** https://sme.byredstone.com
+**Live URL:** https://naywa.ae (Primary)
+**Legacy URL:** https://sme.byredstone.com
 
-### Infrastructure
-- **Hosted on:** Isolated LXC container (VMID 106, name: `sme-portal`)
-- **LXC IP:** 10.10.10.241
-- **Proxmox Host:** 65.109.60.53 (Hetzner)
-- **Project Path:** /var/www/sme-portal
+> **Full deployment documentation:** See `NAYWA_DEVELOPMENT.md` for complete server access, deployment commands, database operations, and troubleshooting.
 
-### Server Access
+### Quick Reference
+- **LXC Container:** VMID 106, IP `10.10.10.241`
+- **Proxmox Host:** `65.109.60.53`
+- **Project Path:** `/var/www/sme-portal`
+
+### Quick Commands
 ```bash
-# Via Proxmox host (recommended)
+# Check status
 ssh root@65.109.60.53
-pct exec 106 -- <command>
+pct exec 106 -- pm2 list
 
-# Direct SSH to LXC (from internal network only)
-ssh root@10.10.10.241
-```
+# Restart services
+pct exec 106 -- pm2 restart all
 
-### PM2 Processes
-- `sme-server` - Backend API (port 5001)
-- `sme-client` - Next.js frontend (port 3000)
-
-### Useful Commands (on LXC)
-```bash
-pm2 list                    # Check process status
-pm2 logs                    # View logs
-pm2 restart all             # Restart services
-cd /var/www/sme-portal      # Project directory
+# View logs
+pct exec 106 -- pm2 logs --lines 50
 ```
 
 ## Local Development Commands
