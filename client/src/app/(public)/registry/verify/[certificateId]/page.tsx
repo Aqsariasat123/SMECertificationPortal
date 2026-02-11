@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { CertificateVerification } from '@/types';
@@ -89,11 +89,13 @@ const pillars = [
 
 export default function VerifyCertificatePage() {
   const params = useParams();
+  const router = useRouter();
   const certificateId = params.certificateId as string;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [certificate, setCertificate] = useState<CertificateVerification | null>(null);
+  const [searchInput, setSearchInput] = useState(certificateId);
 
   useEffect(() => {
     const fetchCertificate = async () => {
@@ -113,8 +115,17 @@ export default function VerifyCertificatePage() {
 
     if (certificateId) {
       fetchCertificate();
+      setSearchInput(certificateId);
     }
   }, [certificateId]);
+
+  const handleVerify = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedId = searchInput.trim().toUpperCase();
+    if (trimmedId && trimmedId !== certificateId) {
+      router.push(`/registry/verify/${trimmedId}`);
+    }
+  };
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('en-US', {
@@ -131,7 +142,7 @@ export default function VerifyCertificatePage() {
         <div className="text-center">
           <div
             className="w-10 h-10 border-3 border-t-transparent rounded-full mx-auto mb-4 animate-spin"
-            style={{ borderColor: '#2D6A6A', borderTopColor: 'transparent' }}
+            style={{ borderColor: '#2D6A6A', borderTopColor: 'transparent', borderWidth: '3px' }}
           />
           <p style={{ color: '#5A7070' }}>Verifying certificate...</p>
         </div>
@@ -143,7 +154,7 @@ export default function VerifyCertificatePage() {
   if (error || !certificate) {
     return (
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 py-16 px-6 flex flex-col items-center" style={{ paddingTop: '56px' }}>
+        <main className="flex-1 py-20 px-6 flex flex-col items-center" style={{ paddingTop: '96px' }}>
           {/* Header */}
           <div className="text-center max-w-[520px] mb-12" style={{ animation: 'fadeUp 0.6s 0.1s both' }}>
             <p className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: '#2D6A6A' }}>
@@ -160,8 +171,48 @@ export default function VerifyCertificatePage() {
             </p>
           </div>
 
+          {/* Search Box */}
+          <div className="w-full max-w-[540px] mb-12" style={{ animation: 'fadeUp 0.6s 0.2s both' }}>
+            <p className="text-xs text-center mb-3 leading-[1.5]" style={{ color: '#5A7070' }}>
+              Verification confirms the current status recorded in Naywa&apos;s certification register.
+            </p>
+            <form onSubmit={handleVerify}>
+              <div
+                className="flex overflow-hidden rounded-xl transition-all"
+                style={{
+                  background: 'white',
+                  border: '1.5px solid #D0E4E4',
+                  boxShadow: '0 2px 12px rgba(45,106,106,0.07)',
+                }}
+              >
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
+                  placeholder="Enter Certificate ID — e.g. SME-CERT-E099E930"
+                  className="flex-1 border-none outline-none py-4 px-5 text-[15px] tracking-[0.02em]"
+                  style={{
+                    fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                    color: '#1A2A2A',
+                    background: 'transparent',
+                  }}
+                />
+                <button
+                  type="submit"
+                  className="px-7 text-sm font-semibold whitespace-nowrap transition-colors"
+                  style={{ background: '#2D6A6A', color: 'white', border: 'none' }}
+                >
+                  Verify
+                </button>
+              </div>
+            </form>
+            <p className="text-[11px] text-center mt-2.5 tracking-[0.02em]" style={{ color: '#5A7070' }}>
+              Verification is available to any party. No account required.
+            </p>
+          </div>
+
           {/* Result */}
-          <div className="w-full max-w-[680px]" style={{ animation: 'fadeUp 0.4s both' }}>
+          <div className="w-full max-w-[680px]" style={{ animation: 'fadeUp 0.6s 0.3s both' }}>
             {/* Status Banner */}
             <div
               className="flex items-center gap-3.5 p-4 px-6 rounded-t-xl"
@@ -284,7 +335,7 @@ export default function VerifyCertificatePage() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <main className="flex-1 py-16 px-6 flex flex-col items-center" style={{ paddingTop: '56px' }}>
+      <main className="flex-1 py-20 px-6 flex flex-col items-center" style={{ paddingTop: '96px' }}>
         {/* Header */}
         <div className="text-center max-w-[520px] mb-12" style={{ animation: 'fadeUp 0.6s 0.1s both' }}>
           <p className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: '#2D6A6A' }}>
@@ -301,8 +352,48 @@ export default function VerifyCertificatePage() {
           </p>
         </div>
 
+        {/* Search Box */}
+        <div className="w-full max-w-[540px] mb-12" style={{ animation: 'fadeUp 0.6s 0.2s both' }}>
+          <p className="text-xs text-center mb-3 leading-[1.5]" style={{ color: '#5A7070' }}>
+            Verification confirms the current status recorded in Naywa&apos;s certification register.
+          </p>
+          <form onSubmit={handleVerify}>
+            <div
+              className="flex overflow-hidden rounded-xl transition-all"
+              style={{
+                background: 'white',
+                border: '1.5px solid #D0E4E4',
+                boxShadow: '0 2px 12px rgba(45,106,106,0.07)',
+              }}
+            >
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
+                placeholder="Enter Certificate ID — e.g. SME-CERT-E099E930"
+                className="flex-1 border-none outline-none py-4 px-5 text-[15px] tracking-[0.02em]"
+                style={{
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                  color: '#1A2A2A',
+                  background: 'transparent',
+                }}
+              />
+              <button
+                type="submit"
+                className="px-7 text-sm font-semibold whitespace-nowrap transition-colors"
+                style={{ background: '#2D6A6A', color: 'white', border: 'none' }}
+              >
+                Verify
+              </button>
+            </div>
+          </form>
+          <p className="text-[11px] text-center mt-2.5 tracking-[0.02em]" style={{ color: '#5A7070' }}>
+            Verification is available to any party. No account required.
+          </p>
+        </div>
+
         {/* Result */}
-        <div className="w-full max-w-[680px]" style={{ animation: 'fadeUp 0.4s both' }}>
+        <div className="w-full max-w-[680px]" style={{ animation: 'fadeUp 0.6s 0.3s both' }}>
           {/* Status Banner */}
           <div
             className="flex items-center gap-3.5 p-4 px-6 rounded-t-xl"
@@ -417,7 +508,7 @@ export default function VerifyCertificatePage() {
             <div className="px-9">
               {/* Meta Grid */}
               <div className="grid grid-cols-2" style={{ borderBottom: '1px solid #D0E4E4' }}>
-                <div className="py-5.5 pr-7" style={{ borderRight: '1px solid #D0E4E4' }}>
+                <div className="py-[22px] pr-7" style={{ borderRight: '1px solid #D0E4E4' }}>
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Certificate ID
                   </p>
@@ -428,7 +519,7 @@ export default function VerifyCertificatePage() {
                     {certificate.certificateId}
                   </p>
                 </div>
-                <div className="py-5.5 pl-7">
+                <div className="py-[22px] pl-7">
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Certification Status
                   </p>
@@ -440,7 +531,7 @@ export default function VerifyCertificatePage() {
                     {config.badge}
                   </span>
                 </div>
-                <div className="py-5.5 pr-7" style={{ borderRight: '1px solid #D0E4E4', borderTop: '1px solid #D0E4E4' }}>
+                <div className="py-[22px] pr-7" style={{ borderRight: '1px solid #D0E4E4', borderTop: '1px solid #D0E4E4' }}>
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Issue Date
                   </p>
@@ -448,7 +539,7 @@ export default function VerifyCertificatePage() {
                     {formatDate(certificate.issuedAt)}
                   </p>
                 </div>
-                <div className="py-5.5 pl-7" style={{ borderTop: '1px solid #D0E4E4' }}>
+                <div className="py-[22px] pl-7" style={{ borderTop: '1px solid #D0E4E4' }}>
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Expiry Date
                   </p>
@@ -456,7 +547,7 @@ export default function VerifyCertificatePage() {
                     {formatDate(certificate.expiresAt)}
                   </p>
                 </div>
-                <div className="py-5.5 pr-7" style={{ borderRight: '1px solid #D0E4E4', borderTop: '1px solid #D0E4E4' }}>
+                <div className="py-[22px] pr-7" style={{ borderRight: '1px solid #D0E4E4', borderTop: '1px solid #D0E4E4' }}>
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Sector
                   </p>
@@ -464,7 +555,7 @@ export default function VerifyCertificatePage() {
                     {certificate.industrySector}
                   </p>
                 </div>
-                <div className="py-5.5 pl-7" style={{ borderTop: '1px solid #D0E4E4' }}>
+                <div className="py-[22px] pl-7" style={{ borderTop: '1px solid #D0E4E4' }}>
                   <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-1.5" style={{ color: '#5A7070' }}>
                     Jurisdiction
                   </p>
@@ -475,7 +566,7 @@ export default function VerifyCertificatePage() {
               </div>
 
               {/* Pillars Assessed */}
-              <div className="py-5.5" style={{ borderBottom: '1px solid #D0E4E4' }}>
+              <div className="py-[22px]" style={{ borderBottom: '1px solid #D0E4E4' }}>
                 <p className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-3.5" style={{ color: '#5A7070' }}>
                   Pillars Assessed
                 </p>
@@ -509,7 +600,7 @@ export default function VerifyCertificatePage() {
 
             {/* Card Footer */}
             <div
-              className="px-9 py-4.5 flex items-center justify-between gap-4"
+              className="px-9 py-[18px] flex items-center justify-between gap-4"
               style={{ background: '#F5FAFA', borderTop: '1px solid #D0E4E4' }}
             >
               <p className="text-[11px] leading-[1.6] max-w-[480px]" style={{ color: '#5A7070' }}>
