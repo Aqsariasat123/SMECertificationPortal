@@ -26,7 +26,7 @@ export default function LandingPage() {
                   Naywa
                 </span>
                 <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>
-                  SME Certification Registry
+                  SME Certification Platform
                 </span>
               </div>
             </Link>
@@ -97,40 +97,47 @@ export default function LandingPage() {
       <section className="pt-36 md:pt-28 pb-16" style={{ background: 'var(--background)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
-            {/* Registry Status Badge */}
-            <div className="mb-6">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
-                style={{ background: 'var(--teal-50)', color: 'var(--teal-700)', border: '1px solid var(--teal-200)' }}
+            {/* Layer 1 - Brand Label */}
+            <p
+              className="text-sm font-medium uppercase tracking-widest mb-4"
+              style={{ color: 'var(--graphite-400)' }}
+            >
+              Naywa
+            </p>
+
+            {/* Layer 2 - Main Headline */}
+            <h1
+              className="text-4xl sm:text-5xl font-bold tracking-tight mb-6"
+              style={{ color: 'var(--graphite-900)', lineHeight: 1.1, letterSpacing: '-0.02em' }}
+            >
+              Certified. Structured. Capital-ready.
+            </h1>
+
+            {/* Layer 3 - Subheadline */}
+            <div className="mb-4">
+              <p
+                className="text-xl sm:text-2xl font-medium"
+                style={{ color: 'var(--graphite-700)', lineHeight: 1.4 }}
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: 'var(--teal-500)' }}
-                />
-                Registry Status: 500+ Certified Entities
-              </div>
-              <p className="text-xs mt-1.5" style={{ color: 'var(--graphite-400)' }}>
-                As reflected in current registry records
+                Banks don&apos;t fund potential. They fund proof.
+              </p>
+              <p
+                className="text-xl sm:text-2xl font-medium"
+                style={{ color: 'var(--teal-600)', lineHeight: 1.4 }}
+              >
+                Naywa closes the gap.
               </p>
             </div>
 
-            <h1
-              className="text-4xl sm:text-5xl font-semibold tracking-tight mb-4"
-              style={{ color: 'var(--graphite-900)', lineHeight: 1.15 }}
-            >
-              Naywa
-              <span className="block text-2xl sm:text-3xl mt-2 font-medium" style={{ color: 'var(--teal-600)' }}>
-                SME Readiness & Certification Platform
-              </span>
-            </h1>
-
+            {/* Layer 4 - Qualifier Line */}
             <p
-              className="text-base mb-8"
-              style={{ color: 'var(--foreground-muted)' }}
+              className="text-sm mb-8"
+              style={{ color: 'var(--graphite-500)' }}
             >
-              An independent, documentation-based certification framework for SMEs.
+              For businesses preparing for bank, investor, or institutional review.
             </p>
 
+            {/* Layer 5 - CTA Button */}
             <Link
               href="/register"
               className="btn-primary px-8 py-3.5 text-sm font-medium rounded-lg inline-flex items-center justify-center gap-2"
@@ -144,23 +151,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Metrics Section */}
+      {/* Framework Descriptor Line */}
       <section style={{ background: 'white', borderTop: '1px solid var(--graphite-100)', borderBottom: '1px solid var(--graphite-100)' }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-            <div className="text-center">
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>500+</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Certified SMEs</p>
-            </div>
-            <div className="text-center sm:border-x" style={{ borderColor: 'var(--graphite-200)' }}>
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>98%</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Application Completion</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-semibold" style={{ color: 'var(--graphite-900)' }}>~24h</p>
-              <p className="text-sm mt-1" style={{ color: 'var(--foreground-muted)' }}>Typical Review</p>
-            </div>
-          </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <p
+            className="text-center text-sm"
+            style={{ color: '#888888' }}
+          >
+            Five-Pillar Framework · Independent Assessment · Point-in-Time Verification
+          </p>
         </div>
       </section>
 
@@ -323,7 +322,7 @@ export default function LandingPage() {
               Ready to Get Certified?
             </h3>
             <p className="text-base mb-6" style={{ color: '#a0aec0' }}>
-              Verified entities are recorded in the official SME registry to establish institutional credibility.
+              Submit your documentation for an independent review. Certified entities receive a verifiable record of their capital-readiness status.
             </p>
             <Link
               href="/register"

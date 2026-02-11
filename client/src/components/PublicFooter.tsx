@@ -55,7 +55,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
         {/* Disclaimer */}
         <div className="mt-6 pt-4 text-center" style={{ borderTop: '1px solid var(--graphite-700)' }}>
           <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
-            Naywa certification is an independent assessment and does not constitute regulatory approval, legal advice, or a guarantee of performance.
+            Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
           </p>
         </div>
       </div>
