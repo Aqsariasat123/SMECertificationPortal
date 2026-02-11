@@ -1,10 +1,30 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function LandingPage() {
+  // Scroll reveal animation
+  useEffect(() => {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
       {/* Custom Styles */}
       <style>{`
+        html { scroll-behavior: smooth; }
         .font-playfair { font-family: var(--font-playfair), 'Playfair Display', serif; }
         .font-dm { font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
 
@@ -71,7 +91,7 @@ export default function LandingPage() {
 
         <ul className="nav-links hidden md:flex items-center gap-8 list-none m-0 p-0">
           <li><Link href="/certification-standards" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
-          <li><Link href="#process" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Process</Link></li>
+          <li><a href="#process" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Process</a></li>
           <li><Link href="/registry/verify" className="nav-link text-sm font-medium no-underline transition-colors" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
         </ul>
 
@@ -146,13 +166,13 @@ export default function LandingPage() {
       {/* PILLARS */}
       <section id="pillars" className="py-24 px-6" style={{ background: '#F5FAFA' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Assessment Framework</p>
-          <h2 className="font-playfair font-bold mb-5" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C', letterSpacing: '-0.01em' }}>What Naywa Certifies</h2>
-          <p className="text-base mb-14 max-w-2xl" style={{ color: '#5A7070', lineHeight: 1.75 }}>
+          <p className="reveal text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Assessment Framework</p>
+          <h2 className="reveal font-playfair font-bold mb-5" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C', letterSpacing: '-0.01em' }}>What Naywa Certifies</h2>
+          <p className="reveal text-base mb-14 max-w-2xl" style={{ color: '#5A7070', lineHeight: 1.75 }}>
             Naywa&apos;s assessment framework evaluates your business across five structured pillars — core dimensions typically examined by financial institutions when reviewing an SME for financing or partnership.
           </p>
 
-          <div className="grid gap-px rounded-2xl overflow-hidden" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', background: '#D0E4E4', border: '1px solid #D0E4E4' }}>
+          <div className="reveal grid gap-px rounded-2xl overflow-hidden" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', background: '#D0E4E4', border: '1px solid #D0E4E4' }}>
             {[
               { num: '01', name: 'Legal & Ownership Readiness' },
               { num: '02', name: 'Financial Discipline' },
@@ -167,7 +187,7 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <p className="mt-7 text-sm max-w-2xl" style={{ color: '#5A7070', lineHeight: 1.65 }}>
+          <p className="reveal mt-7 text-sm max-w-2xl" style={{ color: '#5A7070', lineHeight: 1.65 }}>
             Each pillar is assessed against documented evidence. Certification is issued, deferred, or declined based on <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>what your records demonstrate</strong> — not projections or intent.
           </p>
         </div>
@@ -176,7 +196,7 @@ export default function LandingPage() {
       {/* BRAND STORY */}
       <section className="py-24 px-6" style={{ background: 'white', borderTop: '1px solid #D0E4E4', borderBottom: '1px solid #D0E4E4' }}>
         <div className="max-w-5xl mx-auto">
-          <div className="brand-inner grid gap-20 items-center" style={{ gridTemplateColumns: '1fr 380px' }}>
+          <div className="reveal brand-inner grid gap-20 items-center" style={{ gridTemplateColumns: '1fr 380px' }}>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>The Name</p>
               <h2 className="font-playfair font-bold mb-5" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C' }}>
@@ -215,8 +235,8 @@ export default function LandingPage() {
       {/* PRINCIPLES */}
       <section id="principles" className="py-24 px-6" style={{ background: 'white' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Certification Principles</p>
-          <h2 className="font-playfair font-bold mb-14" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C' }}>How the Assessment Works</h2>
+          <p className="reveal text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Certification Principles</p>
+          <h2 className="reveal font-playfair font-bold mb-14" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C' }}>How the Assessment Works</h2>
 
           <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
             {[
@@ -236,7 +256,7 @@ export default function LandingPage() {
                 body: 'Every pillar score is derived from submitted documentation. If a document is absent, the relevant criterion is scored accordingly. The framework does not infer or assume.'
               }
             ].map((principle) => (
-              <div key={principle.title} className="principle-card p-9 rounded-2xl transition-all" style={{ border: '1px solid #D0E4E4', background: 'white' }}>
+              <div key={principle.title} className="reveal principle-card p-9 rounded-2xl transition-all" style={{ border: '1px solid #D0E4E4', background: 'white' }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style={{ background: '#E8F4F4' }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                     {principle.icon}
@@ -253,9 +273,9 @@ export default function LandingPage() {
       {/* PROCESS */}
       <section id="process" className="py-24 px-6" style={{ background: '#111C1C' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#3D8B8B', letterSpacing: '0.16em' }}>Certification Process</p>
-          <h2 className="font-playfair font-bold mb-5" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: 'white' }}>Three Steps to Certification</h2>
-          <p className="text-base mb-14 max-w-2xl" style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
+          <p className="reveal text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#3D8B8B', letterSpacing: '0.16em' }}>Certification Process</p>
+          <h2 className="reveal font-playfair font-bold mb-5" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: 'white' }}>Three Steps to Certification</h2>
+          <p className="reveal text-base mb-14 max-w-2xl" style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
             The certification process follows a structured review of submitted documentation.
           </p>
 
@@ -267,7 +287,7 @@ export default function LandingPage() {
               { num: '2', title: 'Review', body: 'Submitted materials are reviewed against internal assessment criteria at a defined point in time.' },
               { num: '3', title: 'Certification Decision', body: 'Certification status is issued, deferred, or declined and recorded in Naywa\'s certification register.' }
             ].map((step) => (
-              <div key={step.num} className="text-center px-6">
+              <div key={step.num} className="reveal text-center px-6">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-7 font-playfair text-xl font-bold relative z-10" style={{ background: '#2D6A6A', color: 'white' }}>
                   {step.num}
                 </div>
@@ -282,10 +302,10 @@ export default function LandingPage() {
       {/* SCOPE */}
       <section className="py-24 px-6" style={{ background: '#F5FAFA' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Scope & Limitations</p>
-          <h2 className="font-playfair font-bold mb-12" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C' }}>What Certification Means</h2>
+          <p className="reveal text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#2D6A6A', letterSpacing: '0.16em' }}>Scope & Limitations</p>
+          <h2 className="reveal font-playfair font-bold mb-12" style={{ fontSize: 'clamp(28px, 4vw, 42px)', lineHeight: 1.15, color: '#111C1C' }}>What Certification Means</h2>
 
-          <div className="p-12 rounded-2xl max-w-3xl" style={{ border: '1px solid #D0E4E4', background: 'white' }}>
+          <div className="reveal p-12 rounded-2xl max-w-3xl" style={{ border: '1px solid #D0E4E4', background: 'white' }}>
             <p className="text-sm mb-5" style={{ color: '#5A7070', lineHeight: 1.8 }}>
               Naywa certification is an independent, documentation-based assessment conducted by a private entity. It is important to understand what it does and does not represent.
             </p>
@@ -303,15 +323,15 @@ export default function LandingPage() {
       <section className="py-24 px-6 text-center relative overflow-hidden" style={{ background: '#2D6A6A' }}>
         <div className="absolute top-[-300px] left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full" style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 65%)' }}></div>
 
-        <h2 className="font-playfair font-bold mb-4 relative" style={{ fontSize: 'clamp(32px, 5vw, 52px)', lineHeight: 1.1, color: 'white' }}>
+        <h2 className="reveal font-playfair font-bold mb-4 relative" style={{ fontSize: 'clamp(32px, 5vw, 52px)', lineHeight: 1.1, color: 'white' }}>
           Ready to Get Certified?
         </h2>
-        <p className="text-base max-w-lg mx-auto mb-10 relative" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>
+        <p className="reveal text-base max-w-lg mx-auto mb-10 relative" style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>
           Submit your documentation for an independent review. Certified entities receive a verifiable record of their capital-readiness status.
         </p>
         <Link
           href="/register"
-          className="btn-cta px-9 py-3.5 text-sm font-semibold rounded-xl inline-flex items-center gap-2 no-underline transition-all relative"
+          className="reveal btn-cta px-9 py-3.5 text-sm font-semibold rounded-xl inline-flex items-center gap-2 no-underline transition-all relative"
           style={{ color: '#2D6A6A', background: 'white', border: 'none' }}
         >
           Start Certification

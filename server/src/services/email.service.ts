@@ -1020,6 +1020,120 @@ class EmailService {
     });
   }
 
+  // SME Workspace Activated - sent when SME account is verified
+  async sendSMEWorkspaceActivatedEmail(
+    email: string,
+    fullName: string,
+    userId: string,
+    companyName?: string
+  ): Promise<boolean> {
+    const workspaceUrl = `${process.env.FRONTEND_URL}/sme`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1A2A2A; margin: 0; padding: 0; background: #F5FAFA; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(45,106,106,0.08); }
+          .header { background: #2D6A6A; color: white; padding: 40px 35px; }
+          .header h1 { margin: 0 0 6px; font-size: 22px; font-weight: 600; }
+          .header p { margin: 0; opacity: 0.75; font-size: 13px; }
+          .content { padding: 40px 35px; }
+          .welcome { font-size: 15px; color: #2D6A6A; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .text { color: #5A7070; font-size: 14px; margin-bottom: 20px; line-height: 1.75; }
+          .divider { height: 1px; background: #D0E4E4; margin: 28px 0; }
+          .pillars-title { font-size: 13px; font-weight: 600; color: #111C1C; margin-bottom: 16px; }
+          .pillar-item { display: flex; align-items: flex-start; margin-bottom: 12px; }
+          .pillar-bullet { width: 6px; height: 6px; background: #2D6A6A; border-radius: 50%; margin-top: 7px; margin-right: 12px; flex-shrink: 0; }
+          .pillar-text { color: #5A7070; font-size: 13px; line-height: 1.5; }
+          .pillar-text strong { color: #111C1C; font-weight: 600; }
+          .next-step-box { background: #E8F4F4; border-radius: 12px; padding: 20px 24px; margin: 28px 0; }
+          .next-step-label { font-size: 11px; font-weight: 600; color: #2D6A6A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+          .next-step-text { color: #111C1C; font-size: 14px; line-height: 1.6; margin: 0; }
+          .button-wrap { text-align: center; margin: 32px 0 10px; }
+          .button { display: inline-block; padding: 14px 40px; background: #2D6A6A; color: #ffffff !important; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 14px; }
+          .disclaimer { background: #F5FAFA; border-top: 1px solid #D0E4E4; padding: 24px 35px; }
+          .disclaimer p { color: #5A7070; font-size: 11px; line-height: 1.6; margin: 0; }
+          .footer { padding: 20px 35px; text-align: center; }
+          .footer p { color: #5A7070; font-size: 12px; margin: 0; }
+          .ref { color: #5A7070; font-size: 11px; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="card">
+            <div class="header">
+              <h1>Naywa</h1>
+              <p>SME Certification Platform</p>
+            </div>
+            <div class="content">
+              <p class="welcome">Welcome to Naywa.</p>
+              <p class="text">Your entity profile has been successfully created. Your certification workspace is now active.</p>
+              <p class="text">Naywa operates as a structured, documentation-based assessment of operational readiness. To achieve certification, your business must demonstrate compliance across five pillars:</p>
+
+              <div style="margin: 24px 0;">
+                <div class="pillar-item">
+                  <div class="pillar-bullet"></div>
+                  <div class="pillar-text"><strong>Legal & Ownership Readiness</strong> (Trade License, MOA, UBO)</div>
+                </div>
+                <div class="pillar-item">
+                  <div class="pillar-bullet"></div>
+                  <div class="pillar-text"><strong>Financial Discipline</strong> (Bank Statements, Audited Financials)</div>
+                </div>
+                <div class="pillar-item">
+                  <div class="pillar-bullet"></div>
+                  <div class="pillar-text"><strong>Business Model & Unit Economics</strong> (Margin Analysis, Cost Structure)</div>
+                </div>
+                <div class="pillar-item">
+                  <div class="pillar-bullet"></div>
+                  <div class="pillar-text"><strong>Governance & Controls</strong> (Signing Authority, Internal Controls)</div>
+                </div>
+                <div class="pillar-item">
+                  <div class="pillar-bullet"></div>
+                  <div class="pillar-text"><strong>Data Integrity, Auditability & Information Reliability</strong> (VAT Reconciliation, Record Consistency)</div>
+                </div>
+              </div>
+
+              <div class="next-step-box">
+                <p class="next-step-label">Next Step</p>
+                <p class="next-step-text">Your document vault is now open. Please begin by uploading your Trade License and the last six months of bank statements to initiate your preliminary certification review.</p>
+              </div>
+
+              <div class="button-wrap">
+                <a href="${workspaceUrl}" class="button">Enter Workspace</a>
+              </div>
+
+              <p class="ref">Ref: ${userId}</p>
+            </div>
+            <div class="disclaimer">
+              <p><strong>Note:</strong> Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution.</p>
+            </div>
+            <div class="footer">
+              <p><strong>Naywa</strong> — United Arab Emirates</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendEmail({
+      to: email,
+      subject: `Naywa Certification – Assessment Workspace Activated (Ref: ${userId})`,
+      html,
+    }, {
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      emailType: 'sme_workspace_activated',
+      recipientName: fullName,
+      metadata: { companyName },
+    });
+  }
+
   // Send document notification email (for missing docs, expiry warnings, etc.)
   async sendDocumentNotificationEmail(
     email: string,

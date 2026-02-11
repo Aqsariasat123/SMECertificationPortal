@@ -7,45 +7,47 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--background)' }}>
-      {/* Header */}
-      <header
-        className="sticky top-0 z-50 py-3 px-4 sm:px-6"
-        style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', borderBottom: '1px solid var(--graphite-200)' }}
+    <div className="min-h-screen flex flex-col" style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
+      {/* Header - matches landing page nav */}
+      <nav
+        className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 h-16"
+        style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #D0E4E4' }}
       >
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'var(--teal-600)' }}
-            >
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <span className="text-sm font-medium" style={{ color: 'var(--graphite-900)' }}>Naywa</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-lg"
-              style={{ color: 'var(--teal-600)' }}
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="text-sm font-medium px-4 py-2 rounded-lg text-white"
-              style={{ background: 'var(--teal-600)' }}
-            >
-              Get Started
-            </Link>
+        <Link href="/" className="flex items-center gap-2.5 no-underline">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
           </div>
+          <span className="font-semibold text-base" style={{ color: '#111C1C' }}>Naywa</span>
+        </Link>
+
+        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
+          <li><Link href="/certification-standards" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
+          <li><Link href="/#process" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
+          <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
+        </ul>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="px-5 py-2 text-sm font-medium rounded-lg transition-all no-underline hover:bg-[#E8F4F4]"
+            style={{ color: '#2D6A6A', border: '1.5px solid #2D6A6A', background: 'none' }}
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/register"
+            className="px-5 py-2 text-sm font-semibold rounded-lg transition-all no-underline hover:bg-[#3D8B8B]"
+            style={{ color: 'white', background: '#2D6A6A', border: 'none' }}
+          >
+            Start Certification
+          </Link>
         </div>
-      </header>
+      </nav>
 
       {/* Content */}
-      <main className="flex-1">
+      <main className="flex-1" style={{ background: '#FFFFFF' }}>
         {children}
       </main>
 

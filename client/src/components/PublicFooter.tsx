@@ -7,14 +7,14 @@ interface PublicFooterProps {
 export default function PublicFooter({ compact = false }: PublicFooterProps) {
   if (compact) {
     return (
-      <footer className="py-4 px-6 text-center" style={{ borderTop: '1px solid var(--graphite-200)' }}>
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs" style={{ color: 'var(--graphite-500)' }}>
-          <Link href="/terms" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Terms</Link>
-          <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Privacy</Link>
-          <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Certification Standards</Link>
-          <Link href="/certification-fees" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Fees</Link>
-          <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Legal Notice</Link>
-          <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-500)' }}>Contact</Link>
+      <footer className="py-4 px-6 text-center" style={{ borderTop: '1px solid #D0E4E4', background: '#F5FAFA' }}>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs" style={{ color: '#5A7070' }}>
+          <Link href="/terms" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Terms</Link>
+          <Link href="/privacy" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Privacy</Link>
+          <Link href="/certification-standards" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Certification Standards</Link>
+          <Link href="/certification-fees" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Fees</Link>
+          <Link href="/legal-notice" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Legal Notice</Link>
+          <Link href="/contact" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Contact</Link>
           <span>&copy; {new Date().getFullYear()} Naywa</span>
         </div>
       </footer>
@@ -22,40 +22,35 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
   }
 
   return (
-    <footer className="py-8" style={{ background: 'var(--sidebar-bg)' }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'var(--teal-600)' }}
-            >
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+    <footer className="px-6 md:px-12 pt-10 pb-8" style={{ background: '#111C1C' }}>
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center justify-between flex-wrap gap-5 pb-7 mb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
             </div>
-            <span className="text-sm font-medium text-white">Naywa</span>
-          </div>
+            <span className="font-semibold text-base" style={{ color: 'white' }}>Naywa</span>
+          </Link>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs">
-            <Link href="/certification-standards" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Certification Standards</Link>
-            <Link href="/certification-fees" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Fees and Services</Link>
-            <Link href="/terms" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Terms of Service</Link>
-            <Link href="/privacy" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Privacy Policy</Link>
-            <Link href="/legal-notice" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Legal Notice</Link>
-            <Link href="/contact" className="hover:underline" style={{ color: 'var(--graphite-400)' }}>Contact</Link>
-          </div>
-
-          <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--graphite-500)' }}>
-            <span>United Arab Emirates</span>
-            <span>&copy; {new Date().getFullYear()} Naywa. All rights reserved</span>
-          </div>
+          <ul className="flex gap-6 flex-wrap list-none m-0 p-0">
+            <li><Link href="/certification-standards" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Certification Standards</Link></li>
+            <li><Link href="/certification-fees" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Fees and Services</Link></li>
+            <li><Link href="/terms" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Terms of Service</Link></li>
+            <li><Link href="/privacy" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Privacy Policy</Link></li>
+            <li><Link href="/legal-notice" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Legal Notice</Link></li>
+            <li><Link href="/contact" className="text-xs no-underline transition-colors hover:text-white/75" style={{ color: 'rgba(255,255,255,0.4)' }}>Contact</Link></li>
+            <li><span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>United Arab Emirates</span></li>
+          </ul>
         </div>
 
-        {/* Disclaimer */}
-        <div className="mt-6 pt-4 text-center" style={{ borderTop: '1px solid var(--graphite-700)' }}>
-          <p className="text-xs" style={{ color: 'var(--graphite-500)' }}>
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <p className="text-xs max-w-2xl" style={{ color: 'rgba(255,255,255,0.25)', lineHeight: 1.65 }}>
             Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
+          </p>
+          <p className="text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.25)' }}>
+            &copy; {new Date().getFullYear()} Naywa. All rights reserved.
           </p>
         </div>
       </div>
