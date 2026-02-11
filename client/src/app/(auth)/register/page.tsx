@@ -283,20 +283,13 @@ export default function RegisterPage() {
             {/* Browse Certified Businesses */}
             <div
               onClick={() => setSelectedOption('user')}
-              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center relative"
+              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
               style={{
                 background: selectedOption === 'user' ? '#E8F4F4' : 'white',
                 border: selectedOption === 'user' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
                 opacity: selectedOption === 'user' ? 1 : 0.75
               }}
             >
-              {/* Read Only Tag */}
-              <span
-                className="absolute top-3 right-3 text-[9px] font-semibold tracking-[0.08em] uppercase px-2 py-1 rounded"
-                style={{ background: '#F5FAFA', color: '#5A7070', border: '1px solid #D0E4E4' }}
-              >
-                Read only
-              </span>
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
                 style={{ background: selectedOption === 'user' ? 'rgba(45,106,106,0.15)' : '#E8F4F4' }}
@@ -306,7 +299,14 @@ export default function RegisterPage() {
                 </svg>
               </div>
               <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Browse Certified Businesses</p>
-              <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>View certified entities recorded in Naywa&apos;s certification register.</p>
+              <p className="text-xs leading-[1.55] mb-2" style={{ color: '#5A7070' }}>View certified entities recorded in Naywa&apos;s certification register.</p>
+              {/* Read Only Tag - centered below text */}
+              <span
+                className="inline-block text-[8px] font-semibold tracking-[0.08em] uppercase px-2 py-0.5 rounded"
+                style={{ background: '#F5FAFA', color: '#5A7070', border: '1px solid #D0E4E4' }}
+              >
+                Read only
+              </span>
             </div>
           </div>
 

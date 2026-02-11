@@ -163,12 +163,17 @@ export default function AuthLayout({
         </div>
 
         {/* Footer Links */}
-        <div className="absolute bottom-5 flex flex-wrap gap-5 justify-center">
+        <div className="absolute bottom-5 left-0 right-0 flex items-center justify-center gap-4 px-6">
           <Link href="/terms" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Terms</Link>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/privacy" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Privacy</Link>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/certification-standards" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/certification-fees" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Fees</Link>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/legal-notice" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Legal Notice</Link>
+          <span style={{ color: '#D0E4E4' }}>·</span>
           <Link href="/contact" className="text-[11px] transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link>
         </div>
       </div>
