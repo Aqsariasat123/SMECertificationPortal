@@ -163,7 +163,7 @@ export default function VerifyCertificatePage() {
                 {isDeferred ? 'Certification Deferred' : 'No Record Found'}
               </p>
               <p className="text-sm leading-[1.7] max-w-[380px] mx-auto mb-6" style={{ color: '#5A7070' }}>
-                {isDeferred ? 'Certification review incomplete. Status: Deferred.' : config.description}
+                {isDeferred ? 'Certification review incomplete. Status: Deferred.' : 'No certificate record found matching this ID.'}
               </p>
             </div>
             <div className="mt-6 text-center">
