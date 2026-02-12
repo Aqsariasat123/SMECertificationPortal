@@ -1,4 +1,4 @@
-# SME Certification Portal - Claude Memory
+# SME Certification Portal - Server Documentation
 
 ## Project Overview
 A full-stack SME (Small & Medium Enterprise) certification and registry management portal for Dubai/UAE.
