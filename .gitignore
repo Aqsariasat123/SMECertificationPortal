@@ -45,3 +45,13 @@ server/uploads/*
 # Prisma
 server/prisma/*.db
 server/prisma/*.db-journal
+
+# Documentation (local only - not for production)
+BRAND_VOICE_UX_WRITING_GUIDE.md
+BRAND_VOICE_UX_WRITING_GUIDE.pdf
+DEPLOYMENT.md
+DEVELOPMENT_PLAN.md
+NAYWA_DEVELOPMENT.md
+SERVER.md
+development-plan.md
+README.md
