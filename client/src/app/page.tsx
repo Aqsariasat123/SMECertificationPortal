@@ -173,7 +173,7 @@ export default function LandingPage() {
             style={{ top: '50%', right: '-40px', transform: 'translateY(-50%)', fontFamily: 'var(--font-playfair), Playfair Display, serif', fontSize: 'clamp(260px, 35vw, 440px)', fontWeight: 900, color: '#2D6A6A', opacity: 0.06, lineHeight: 1 }}
             aria-hidden="true"
           >
-            نيوا
+            نايوا
           </div>
           <div className="max-w-[1040px] mx-auto relative z-10">
             <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4 flex items-center gap-3.5" style={{ color: '#3D8B8B' }}>
@@ -181,7 +181,7 @@ export default function LandingPage() {
               <span className="flex-1 max-w-[48px] h-[1px]" style={{ background: '#2D6A6A', opacity: 0.4 }} />
             </p>
             <h2 className="reveal text-[clamp(40px,6vw,72px)] font-black leading-[1.05] tracking-[-0.025em] mb-4 max-w-[600px]" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>
-              Naiwa — <span className="italic" style={{ color: '#3D8B8B' }}>نيوا</span>
+              Naiwa — <span className="italic" style={{ color: '#3D8B8B' }}>نايوا</span>
             </h2>
             <p className="reveal text-[13px] tracking-[0.2em] uppercase mb-16" style={{ color: 'rgba(255,255,255,0.18)' }}>A mountain beneath the sea</p>
             <div className="reveal grid md:grid-cols-2 gap-12 pt-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
@@ -208,7 +208,7 @@ export default function LandingPage() {
               The foundation was always there.<br/>
               <span className="font-normal italic" style={{ color: 'rgba(255,255,255,0.45)' }}>Naiwa makes it visible.</span>
             </p>
-            <p className="hidden md:block text-[64px] font-black leading-none select-none whitespace-nowrap" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: 'rgba(255,255,255,0.12)' }} aria-hidden="true">نيوا</p>
+            <p className="hidden md:block text-[64px] font-black leading-none select-none whitespace-nowrap" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: 'rgba(255,255,255,0.12)' }} aria-hidden="true">نايوا</p>
           </div>
         </div>
       </section>
