@@ -1,9 +1,9 @@
 /**
- * Naywa SME Capital-Readiness Certification Scoring Engine
+ * Naiwa SME Capital-Readiness Certification Scoring Engine
  * Version: 1.2
  *
  * This implements the deterministic state machine for certification decisions
- * as specified in the Naywa Certification Decision Logic V1.2
+ * as specified in the Naiwa Certification Decision Logic V1.2
  *
  * IMPORTANT: This logic is mandatory, non-negotiable, and override-safe.
  */
@@ -517,7 +517,7 @@ export interface DecisionResult {
 
 /**
  * Execute the deterministic state machine for certification decision
- * As per Naywa Certification Decision Logic V1.2
+ * As per Naiwa Certification Decision Logic V1.2
  */
 export function executeCertificationDecision(
   pillarResults: {

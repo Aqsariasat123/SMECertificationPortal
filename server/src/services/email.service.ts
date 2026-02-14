@@ -50,7 +50,7 @@ class EmailService {
       }
 
       await this.transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@naywa.ae',
+        from: process.env.EMAIL_FROM || 'noreply@naiwa.ae',
         to: options.to,
         subject: options.subject,
         html: options.html,
@@ -146,13 +146,13 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>SME Readiness & Certification Platform</p>
             </div>
             <div class="content">
               <div class="title">Verify Your Credentials</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">You have initiated account setup for the Naywa platform.</p>
+              <p class="text">You have initiated account setup for the Naiwa platform.</p>
               <p class="text">To secure your account and proceed, please verify your email address by clicking the button below.</p>
               <div class="button-wrap">
                 <a href="${verifyUrl}" class="button">Verify Email Address</a>
@@ -163,7 +163,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>If you didn't request this, you can safely ignore this email.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Verify Your Credentials - Naywa',
+      subject: 'Verify Your Credentials - Naiwa',
       html,
     }, {
       entityType: 'User',
@@ -214,7 +214,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Password Reset</p>
             </div>
             <div class="content">
@@ -230,7 +230,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Need help? Contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -240,7 +240,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Reset Your Password - Naywa',
+      subject: 'Reset Your Password - Naiwa',
       html,
     }, {
       entityType: 'User',
@@ -314,7 +314,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>SME Readiness & Certification Platform</p>
             </div>
             <div class="content">
@@ -336,7 +336,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Questions? Contact our support team anytime.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -346,7 +346,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: role === 'sme' ? 'Account Verified - Naywa' : 'Registry Access Granted - Naywa',
+      subject: role === 'sme' ? 'Account Verified - Naiwa' : 'Registry Access Granted - Naiwa',
       html,
     }, {
       entityType: 'User',
@@ -398,7 +398,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Certification Application</p>
             </div>
             <div class="content">
@@ -443,7 +443,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Expected review time: 24-48 business hours</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -453,7 +453,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Application Received - Naywa',
+      subject: 'Application Received - Naiwa',
       html,
     }, {
       entityType: 'SMEProfile',
@@ -529,8 +529,8 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa Certification</h1>
-              <p>certification@naywa.ae</p>
+              <h1>Naiwa Certification</h1>
+              <p>certification@naiwa.ae</p>
               <div class="status-badge">Status: Under Review</div>
             </div>
             <div class="content">
@@ -554,7 +554,7 @@ class EmailService {
               <div class="divider"></div>
 
               <p class="section-title">Assessment Process</p>
-              <p class="text">Your file will be evaluated across Naywa's Five-Pillar Framework in accordance with our structured assessment criteria. Review covers:</p>
+              <p class="text">Your file will be evaluated across Naiwa's Five-Pillar Framework in accordance with our structured assessment criteria. Review covers:</p>
 
               <div class="review-item">
                 <span class="review-dash">—</span>
@@ -572,7 +572,7 @@ class EmailService {
               <div class="divider"></div>
 
               <p class="section-title">Possible Outcomes</p>
-              <p class="text">Upon completion, a formal determination will be recorded in Naywa's certification register:</p>
+              <p class="text">Upon completion, a formal determination will be recorded in Naiwa's certification register:</p>
 
               <div class="outcomes-grid">
                 <div class="outcome-item">
@@ -600,13 +600,13 @@ class EmailService {
                 <a href="${dashboardUrl}" class="button">View Application Status</a>
               </div>
 
-              <p class="auto-note">This is an automated notification. For support, contact support@naywa.ae.</p>
+              <p class="auto-note">This is an automated notification. For support, contact support@naiwa.ae.</p>
             </div>
             <div class="disclaimer">
-              <p>Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.</p>
+              <p>Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.</p>
             </div>
             <div class="footer">
-              <p><strong>Naywa</strong> — United Arab Emirates</p>
+              <p><strong>Naiwa</strong> — United Arab Emirates</p>
             </div>
           </div>
         </div>
@@ -662,7 +662,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Certification Status Update</p>
             </div>
             <div class="content">
@@ -688,7 +688,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Expected completion: 24-48 business hours</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -698,7 +698,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Your Application is Under Review - Naywa',
+      subject: 'Your Application is Under Review - Naiwa',
       html,
     }, {
       entityType: 'SMEProfile',
@@ -748,7 +748,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Certification Approved</p>
             </div>
             <div class="content">
@@ -788,7 +788,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Thank you for being part of the UAE SME ecosystem.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -798,7 +798,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Congratulations! Your Business is Certified - Naywa',
+      subject: 'Congratulations! Your Business is Certified - Naiwa',
       html,
     }, {
       entityType: 'SMEProfile',
@@ -845,7 +845,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Application Update Required</p>
             </div>
             <div class="content">
@@ -872,7 +872,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>Need help? Contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -882,7 +882,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Action Required: Update Your Application - Naywa',
+      subject: 'Action Required: Update Your Application - Naiwa',
       html,
     }, {
       entityType: 'SMEProfile',
@@ -931,7 +931,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Application Status Update</p>
             </div>
             <div class="content">
@@ -959,8 +959,8 @@ class EmailService {
               </div>
             </div>
             <div class="footer">
-              <p>We appreciate your interest in the Naywa.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p>We appreciate your interest in the Naiwa.</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -970,7 +970,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Application Status Update - Naywa',
+      subject: 'Application Status Update - Naiwa',
       html,
     }, {
       entityType: 'SMEProfile',
@@ -1016,7 +1016,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Policy Update Notice</p>
             </div>
             <div class="content">
@@ -1037,7 +1037,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>If you have any questions, please contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -1047,7 +1047,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: `Policy Update: ${pageName} - Naywa`,
+      subject: `Policy Update: ${pageName} - Naiwa`,
       html,
     }, {
       entityType: 'User',
@@ -1143,13 +1143,13 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>Two-Factor Authentication</p>
             </div>
             <div class="content">
               <div class="title">Your Verification Code</div>
               <p class="text">Hello ${fullName},</p>
-              <p class="text">You are attempting to sign in to your Naywa account. Use the verification code below to complete the process:</p>
+              <p class="text">You are attempting to sign in to your Naiwa account. Use the verification code below to complete the process:</p>
 
               <div class="otp-box">
                 <div class="otp-label">Verification Code</div>
@@ -1162,7 +1162,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>This is an automated security notification.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -1172,7 +1172,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: 'Your Verification Code - Naywa',
+      subject: 'Your Verification Code - Naiwa',
       html,
     }, {
       entityType: 'User',
@@ -1229,13 +1229,13 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>SME Certification Platform</p>
             </div>
             <div class="content">
-              <p class="welcome">Welcome to Naywa.</p>
+              <p class="welcome">Welcome to Naiwa.</p>
               <p class="text">Your entity profile has been successfully created. Your certification workspace is now active.</p>
-              <p class="text">Naywa operates as a structured, documentation-based assessment of operational readiness. To achieve certification, your business must demonstrate compliance across five pillars:</p>
+              <p class="text">Naiwa operates as a structured, documentation-based assessment of operational readiness. To achieve certification, your business must demonstrate compliance across five pillars:</p>
 
               <div style="margin: 24px 0;">
                 <div class="pillar-item">
@@ -1272,10 +1272,10 @@ class EmailService {
               <p class="ref">Ref: ${userId}</p>
             </div>
             <div class="disclaimer">
-              <p><strong>Note:</strong> Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution.</p>
+              <p><strong>Note:</strong> Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution.</p>
             </div>
             <div class="footer">
-              <p><strong>Naywa</strong> — United Arab Emirates</p>
+              <p><strong>Naiwa</strong> — United Arab Emirates</p>
             </div>
           </div>
         </div>
@@ -1285,7 +1285,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: `Naywa Certification – Assessment Workspace Activated (Ref: ${userId})`,
+      subject: `Naiwa Certification – Assessment Workspace Activated (Ref: ${userId})`,
       html,
     }, {
       entityType: 'User',
@@ -1336,7 +1336,7 @@ class EmailService {
         <div class="container">
           <div class="card">
             <div class="header">
-              <h1>Naywa</h1>
+              <h1>Naiwa</h1>
               <p>SME Certification Portal</p>
             </div>
             <div class="content">
@@ -1355,7 +1355,7 @@ class EmailService {
             </div>
             <div class="footer">
               <p>If you have any questions, please contact our support team.</p>
-              <p style="margin-top: 10px;"><strong>Naywa</strong> - UAE</p>
+              <p style="margin-top: 10px;"><strong>Naiwa</strong> - UAE</p>
             </div>
           </div>
         </div>
@@ -1365,7 +1365,7 @@ class EmailService {
 
     return this.sendEmail({
       to: email,
-      subject: `${subject} - Naywa`,
+      subject: `${subject} - Naiwa`,
       html,
     }, {
       entityType: 'SMEProfile',

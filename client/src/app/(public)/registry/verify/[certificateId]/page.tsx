@@ -59,7 +59,7 @@ export default function VerifyCertificatePage() {
   const [searchInput, setSearchInput] = useState(certificateId);
   const [verifiedAt, setVerifiedAt] = useState<string>('');
 
-  const verificationUrl = `https://naywa.ae/registry/verify/${certificateId}`;
+  const verificationUrl = `https://naiwa.ae/registry/verify/${certificateId}`;
 
   useEffect(() => {
     const fetchCertificate = async () => {
@@ -129,7 +129,7 @@ export default function VerifyCertificatePage() {
               Certificate Verification
             </p>
             <h1 className="text-[clamp(28px,4vw,42px)] font-bold leading-[1.1] mb-3.5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-              Verify a Naywa Certificate
+              Verify a Naiwa Certificate
             </h1>
           </div>
 
@@ -226,7 +226,7 @@ export default function VerifyCertificatePage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-white font-bold text-[15px]">NAYWA</p>
+                  <p className="text-white font-bold text-[15px]">NAIWA</p>
                   <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.6)' }}>Independent SME Certification Register</p>
                   <p className="text-[10px] font-semibold" style={{ color: '#5DB5A8' }}>SME Capital-Readiness Certification</p>
                 </div>
@@ -244,7 +244,7 @@ export default function VerifyCertificatePage() {
             {/* Determination Statement */}
             <div className="mb-6">
               <p className="text-[11px] leading-[1.7] mb-3" style={{ color: '#5A7070' }}>
-                This document confirms that the entity identified below has completed Naywa&apos;s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.
+                This document confirms that the entity identified below has completed Naiwa&apos;s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.
               </p>
               <p className="text-[11px] leading-[1.7]" style={{ color: '#5A7070' }}>
                 Certification reflects review of submitted documentation against defined assessment standards and does not constitute regulatory approval, financial endorsement, or a guarantee of financing.
@@ -339,7 +339,7 @@ export default function VerifyCertificatePage() {
                     Verification URL: <a href={verificationUrl} className="text-[10px] break-all" style={{ color: '#2D6A6A' }}>{verificationUrl}</a>
                   </p>
                   <p className="text-[10px] mt-0.5" style={{ color: '#5A7070' }}>
-                    Verification confirms the status recorded in Naywa&apos;s certification register at the time of query.
+                    Verification confirms the status recorded in Naiwa&apos;s certification register at the time of query.
                   </p>
                   {verifiedAt && (
                     <p className="text-[10px] mt-1.5 font-medium" style={{ color: '#2D6A6A' }}>
@@ -357,7 +357,7 @@ export default function VerifyCertificatePage() {
                 <div className="flex-1 h-[1px]" style={{ background: '#D0E4E4' }} />
               </div>
               <p className="text-[10px]" style={{ color: '#5A7070' }}>
-                Digitally issued via Naywa&apos;s certification register.
+                Digitally issued via Naiwa&apos;s certification register.
               </p>
               <p className="text-[10px]" style={{ color: '#5A7070' }}>
                 This document is electronically generated and does not require a physical signature.
@@ -367,7 +367,7 @@ export default function VerifyCertificatePage() {
             {/* Bottom: Seal + QR Code */}
             <div className="flex items-end justify-between">
               <div className="inline-block px-4 py-2.5 rounded-lg" style={{ background: '#2D6A6A' }}>
-                <p className="text-[11px] font-bold text-white">NAYWA CERTIFIED</p>
+                <p className="text-[11px] font-bold text-white">NAIWA CERTIFIED</p>
                 <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital Verification Mark</p>
               </div>
               {/* QR Code - Bottom Right */}

@@ -43,10 +43,10 @@ export default function VerifyCertificateLandingPage() {
             className="text-[clamp(28px,4vw,42px)] font-bold leading-[1.1] mb-3.5 tracking-[-0.01em]"
             style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
           >
-            Verify a Naywa Certificate
+            Verify a Naiwa Certificate
           </h1>
           <p className="text-sm leading-[1.7]" style={{ color: '#5A7070' }}>
-            Enter a Certificate ID to retrieve its current status from Naywa&apos;s certification register.
+            Enter a Certificate ID to retrieve its current status from Naiwa&apos;s certification register.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export default function VerifyCertificateLandingPage() {
           style={{ animation: 'fadeUp 0.6s 0.2s both' }}
         >
           <p className="text-xs text-center mb-3 leading-[1.5]" style={{ color: '#5A7070' }}>
-            Verification confirms the current status recorded in Naywa&apos;s certification register.
+            Verification confirms the current status recorded in Naiwa&apos;s certification register.
           </p>
 
           <form onSubmit={handleSubmit}>

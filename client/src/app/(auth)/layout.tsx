@@ -36,7 +36,7 @@ export default function AuthLayout({
             </svg>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-base font-semibold text-white leading-none">Naywa</span>
+            <span className="text-base font-semibold text-white leading-none">Naiwa</span>
             <span className="text-[10px] leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>SME Certification Platform</span>
           </div>
         </Link>
@@ -52,7 +52,7 @@ export default function AuthLayout({
           className="text-[12px] leading-[1.6] mt-3 relative z-10"
           style={{ color: 'rgba(255,255,255,0.5)' }}
         >
-          Naywa assesses your business against criteria aligned with institutional review standards used by UAE banks and financial institutions.
+          Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks and financial institutions.
         </p>
 
         {/* Feature Pills */}
@@ -130,7 +130,7 @@ export default function AuthLayout({
             </svg>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="text-lg font-semibold text-white leading-none">Naywa</span>
+            <span className="text-lg font-semibold text-white leading-none">Naiwa</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>SME Certification Platform</span>
           </div>
         </Link>
@@ -147,7 +147,7 @@ export default function AuthLayout({
             className="text-sm leading-[1.75] max-w-[360px] mb-10"
             style={{ color: 'rgba(255,255,255,0.45)' }}
           >
-            Naywa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers.
+            Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers.
           </p>
 
           {/* Feature List */}
@@ -177,7 +177,7 @@ export default function AuthLayout({
               </div>
               <div className="text-[13px] leading-[1.5]" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 <strong className="block mb-0.5 font-medium" style={{ color: 'rgba(255,255,255,0.85)' }}>Verifiable Certification</strong>
-                Recorded in Naywa&apos;s certification register and shareable with any institution.
+                Recorded in Naiwa&apos;s certification register and shareable with any institution.
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -205,7 +205,7 @@ export default function AuthLayout({
             borderTop: '1px solid rgba(255,255,255,0.06)',
           }}
         >
-          Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval or a guarantee of financing. Certification reflects status at the time of issuance only.
+          Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval or a guarantee of financing. Certification reflects status at the time of issuance only.
         </div>
       </div>
 

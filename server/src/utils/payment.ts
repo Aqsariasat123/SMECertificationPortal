@@ -27,12 +27,12 @@ export function generatePaymentId(): string {
 
 /**
  * Generate a unique invoice number
- * Format: NAYWA-INV-XXXXXXXX (8 random hex characters)
+ * Format: NAIWA-INV-XXXXXXXX (8 random hex characters)
  */
 export function generateInvoiceNumber(): string {
   const randomBytes = crypto.randomBytes(4);
   const hexString = randomBytes.toString('hex').toUpperCase();
-  return `NAYWA-INV-${hexString}`;
+  return `NAIWA-INV-${hexString}`;
 }
 
 /**
@@ -61,7 +61,7 @@ export async function createPaymentIntent(
       currency: currency.toLowerCase(),
       metadata: {
         ...metadata,
-        platform: 'Naywa SME Certification',
+        platform: 'Naiwa SME Certification',
       },
       description: 'SME Certification Fee',
       automatic_payment_methods: {

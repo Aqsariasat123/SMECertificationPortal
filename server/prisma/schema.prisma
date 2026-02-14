@@ -590,7 +590,7 @@ model Payment {
   failureReason       String?       // Reason for failure
 
   // Invoice/Receipt
-  invoiceNumber       String?       // NAYWA-INV-XXXXXXXX
+  invoiceNumber       String?       // NAIWA-INV-XXXXXXXX
   receiptUrl          String?       // URL to payment receipt
 
   // Timestamps

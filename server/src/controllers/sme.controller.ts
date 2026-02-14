@@ -1598,7 +1598,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     const certStatus = computeCertificateStatus(certificate.status as 'active' | 'expired' | 'revoked', certificate.expiresAt);
     if (certStatus === 'revoked') return res.status(400).json({ success: false, message: 'Certificate has been revoked' });
 
-    const verificationUrl = `https://naywa.ae/registry/verify/${certificate.certificateId}`;
+    const verificationUrl = `https://naiwa.ae/registry/verify/${certificate.certificateId}`;
     const formatSector = (s: string) => s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
     // Status config
@@ -1619,7 +1619,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     // PDF - A4 Portrait
     const doc = new PDFDocument({ size: 'A4', layout: 'portrait', margins: { top: 0, bottom: 0, left: 0, right: 0 } });
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=Naywa-Certificate-${certificate.certificateId}.pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename=Naiwa-Certificate-${certificate.certificateId}.pdf`);
     doc.pipe(res);
 
     const pageW = 595, pageH = 842, marginX = 50;
@@ -1645,9 +1645,9 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     doc.path('M4 9 L8 13 L16 5').lineWidth(2.5).strokeColor('#FFFFFF').stroke();
     doc.restore();
 
-    // NAYWA text with subtitle
+    // NAIWA text with subtitle
     doc.font('Helvetica-Bold').fontSize(16).fillColor('#FFFFFF');
-    doc.text('NAYWA', marginX + 48, y + 4);
+    doc.text('NAIWA', marginX + 48, y + 4);
     doc.font('Helvetica').fontSize(8).fillColor('#FFFFFF').fillOpacity(0.6);
     doc.text('Independent SME Certification Register', marginX + 48, y + 19);
     doc.fillOpacity(1).font('Helvetica-Bold').fontSize(8).fillColor('#5DB5A8');
@@ -1676,7 +1676,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     // Determination Statement
     doc.fillOpacity(1).font('Helvetica').fontSize(9).fillColor('#5A7070');
-    doc.text('This document confirms that the entity identified below has completed Naywa\'s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.', marginX, y, { width: contentW, lineGap: 2 });
+    doc.text('This document confirms that the entity identified below has completed Naiwa\'s independent, documentation-based assessment and met the structured criteria defined under the SME Capital-Readiness Framework at the time of determination.', marginX, y, { width: contentW, lineGap: 2 });
     y += 36;
     doc.text('Certification reflects review of submitted documentation against defined assessment standards and does not constitute regulatory approval, financial endorsement, or a guarantee of financing.', marginX, y, { width: contentW, lineGap: 2 });
 
@@ -1791,7 +1791,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     y += 12;
     doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
-    doc.text('Verification confirms the status recorded in Naywa\'s certification register at the time of query.', marginX, y, { width: 340 });
+    doc.text('Verification confirms the status recorded in Naiwa\'s certification register at the time of query.', marginX, y, { width: 340 });
 
     // Issuance Notice Section
     y += 22;
@@ -1801,7 +1801,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
 
     y += 16;
     doc.font('Helvetica').fontSize(8).fillColor('#5A7070');
-    doc.text('Digitally issued via Naywa\'s certification register.', marginX, y);
+    doc.text('Digitally issued via Naiwa\'s certification register.', marginX, y);
     y += 12;
     doc.text('This document is electronically generated and does not require a physical signature.', marginX, y);
 
@@ -1809,7 +1809,7 @@ export const downloadCertificate = async (req: AuthenticatedRequest, res: Respon
     y += 25;
     doc.roundedRect(marginX, y, 130, 36, 6).fill('#2D6A6A');
     doc.font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF');
-    doc.text('NAYWA CERTIFIED', marginX + 14, y + 9);
+    doc.text('NAIWA CERTIFIED', marginX + 14, y + 9);
     doc.font('Helvetica').fontSize(7).fillColor('#FFFFFF').fillOpacity(0.7);
     doc.text('Digital Verification Mark', marginX + 14, y + 22);
 
