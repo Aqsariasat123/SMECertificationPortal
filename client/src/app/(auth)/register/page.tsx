@@ -256,20 +256,18 @@ export default function RegisterPage() {
             Select how you would like to use the Naiwa platform.
           </p>
 
-          {/* Options */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-7">
-            {/* Certify a Business */}
+          {/* Certify a Business Card */}
+          <div className="mb-7">
             <div
-              onClick={() => setSelectedOption('sme')}
-              className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center relative"
+              className="rounded-[14px] p-5 pt-7 pb-6 text-center max-w-sm mx-auto"
               style={{
-                background: selectedOption === 'sme' ? '#E8F4F4' : 'white',
-                border: selectedOption === 'sme' ? '1.5px solid #2D6A6A' : '1.5px solid #D0E4E4',
+                background: '#E8F4F4',
+                border: '1.5px solid #2D6A6A',
               }}
             >
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
-                style={{ background: selectedOption === 'sme' ? 'rgba(45,106,106,0.15)' : '#E8F4F4' }}
+                style={{ background: 'rgba(45,106,106,0.15)' }}
               >
                 <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -279,8 +277,9 @@ export default function RegisterPage() {
               <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Certify a Business</p>
               <p className="text-xs leading-[1.55]" style={{ color: '#5A7070' }}>Get certified and receive a verifiable record of your capital-readiness status.</p>
             </div>
+          </div>
 
-            {/* Browse Certified Businesses */}
+          {/* PHASE 2 - Browse Certified Businesses Card (Hidden for now)
             <div
               onClick={() => setSelectedOption('user')}
               className="rounded-[14px] p-5 pt-7 pb-6 cursor-pointer transition-all text-center"
@@ -300,7 +299,6 @@ export default function RegisterPage() {
               </div>
               <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Browse Certified Businesses</p>
               <p className="text-xs leading-[1.55] mb-2" style={{ color: '#5A7070' }}>View certified entities recorded in Naiwa&apos;s certification register.</p>
-              {/* Read Only Tag - centered below text */}
               <span
                 className="inline-block text-[8px] font-semibold tracking-[0.08em] uppercase px-2 py-0.5 rounded"
                 style={{ background: '#F5FAFA', color: '#5A7070', border: '1px solid #D0E4E4' }}
@@ -308,13 +306,13 @@ export default function RegisterPage() {
                 Read only
               </span>
             </div>
-          </div>
+          END PHASE 2 */}
 
-          {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+          {/* Action Button */}
+          <div className="mb-6">
             <button
               onClick={handleContinue}
-              className="h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
+              className="w-full h-[46px] rounded-[10px] font-semibold text-sm text-white transition-all flex items-center justify-center gap-1.5"
               style={{ background: '#2D6A6A' }}
             >
               Start Certification
@@ -322,6 +320,8 @@ export default function RegisterPage() {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
+
+            {/* PHASE 2 - View Registry Button (Hidden for now)
             <Link
               href="/registry"
               className="h-[46px] rounded-[10px] font-medium text-sm transition-all flex items-center justify-center"
@@ -329,6 +329,7 @@ export default function RegisterPage() {
             >
               View Registry
             </Link>
+            END PHASE 2 */}
           </div>
 
           {/* Sign in */}
