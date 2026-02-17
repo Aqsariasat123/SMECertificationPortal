@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 export default function MethodologyPage() {
   const processSteps = [
-    { number: '01', title: 'Application Submission', description: 'Businesses submit required documentation in accordance with Naiwa\'s certification standards. The application workspace guides you through evidence requirements for each pillar.', duration: 'Day 1' },
-    { number: '02', title: 'Evidence Review', description: 'Submitted materials are reviewed against internal assessment criteria. Each document is evaluated for completeness, authenticity, and alignment with pillar requirements.', duration: '5-10 Days' },
+    { number: '01', title: 'Application Submission', description: 'Businesses submit required documentation in accordance with Naiwa\'s certification standards. The application workspace guides you through document requirements for each pillar.', duration: 'Day 1' },
+    { number: '02', title: 'Document Review', description: 'Submitted materials are reviewed against internal assessment criteria. Each document is evaluated for completeness, authenticity, and alignment with pillar requirements.', duration: '5-10 Days' },
     { number: '03', title: 'Pillar Assessment', description: 'Each of the five pillars is assessed independently using deterministic scoring logic. Pillar states are computed based on sub-criterion ratings.', duration: '3-5 Days' },
     { number: '04', title: 'Certification Decision', description: 'Final certification status is derived from the combination of pillar states. The outcome is recorded in Naiwa\'s certification register.', duration: 'Day 15-20' },
   ];
