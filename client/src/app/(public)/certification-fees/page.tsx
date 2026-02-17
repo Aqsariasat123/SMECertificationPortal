@@ -6,7 +6,7 @@ import type { LegalPageData } from '@/types';
 
 const DEFAULT_CONTENT = `## Overview
 
-Naywa provides an independent, documentation-based certification service for small and medium enterprises. This page provides general information about certification fees for transparency purposes.
+Naiwa provides an independent, documentation-based certification service for small and medium enterprises. This page provides general information about certification fees for transparency purposes.
 
 ## Fee Determination
 
@@ -22,7 +22,7 @@ Upon approval, the applicant will receive a payment request with the applicable 
 
 ## VAT Information
 
-Naywa is currently not registered for VAT under UAE VAT Law. As such, VAT is not applicable to certification fees at this time.
+Naiwa is currently not registered for VAT under UAE VAT Law. As such, VAT is not applicable to certification fees at this time.
 
 VAT status is indicated on all invoices issued. Should VAT registration status change in the future, the applicable VAT at the applicable rate under UAE VAT Law will be applied and clearly reflected on invoices with a full breakdown.
 

@@ -15,7 +15,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
           <Link href="/certification-fees" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Fees</Link>
           <Link href="/legal-notice" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Legal</Link>
           <Link href="/contact" className="hover:text-[#2D6A6A] transition-colors" style={{ color: '#5A7070' }}>Contact</Link>
-          <span>&copy; {new Date().getFullYear()} Naywa</span>
+          <span>&copy; {new Date().getFullYear()} Naiwa</span>
         </div>
       </footer>
     );
@@ -32,7 +32,7 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
                 <polyline points="9 12 11 14 15 10"/>
               </svg>
             </div>
-            <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
+            <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
           </Link>
           <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
             <li><Link href="/certification-standards" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Standards</Link></li>
@@ -46,9 +46,9 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
         </div>
         <div className="flex flex-col md:flex-row md:justify-between gap-3 md:gap-6 md:items-end">
           <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
-            Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
+            Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
           </p>
-          <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>&copy; {new Date().getFullYear()} Naywa. All rights reserved.</p>
+          <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>&copy; {new Date().getFullYear()} Naiwa. All rights reserved.</p>
         </div>
       </div>
     </footer>

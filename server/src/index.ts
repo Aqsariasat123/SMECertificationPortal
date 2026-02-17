@@ -88,7 +88,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    service: 'Naywa API'
+    service: 'Naiwa API'
   });
 });
 
@@ -120,7 +120,7 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════════════╗
-║       Naywa - Backend API                              ║
+║       Naiwa - Backend API                              ║
 ╠════════════════════════════════════════════════════════╣
 ║  Server running on: http://localhost:${PORT}              ║
 ║  Environment: ${process.env.NODE_ENV || 'development'}                          ║

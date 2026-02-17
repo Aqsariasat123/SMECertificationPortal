@@ -33,7 +33,7 @@ export default function LandingPage() {
             </svg>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>Naywa</span>
+            <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>Naiwa</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: '#5A7070' }}>SME Certification Platform</span>
           </div>
         </Link>
@@ -79,7 +79,7 @@ export default function LandingPage() {
           className="text-[13px] font-semibold tracking-[0.18em] uppercase mb-6"
           style={{ color: '#2D6A6A', opacity: 0, animation: 'fadeUp 0.7s 0.1s forwards' }}
         >
-          Naywa — SME Certification Platform
+          Naiwa — SME Certification Platform
         </p>
         <h1
           className="text-[clamp(48px,7vw,84px)] font-black leading-[1.05] tracking-[-0.02em] mb-7"
@@ -92,13 +92,13 @@ export default function LandingPage() {
           style={{ color: '#5A7070', opacity: 0, animation: 'fadeUp 0.7s 0.3s forwards' }}
         >
           A bank decline does not always reflect business viability. In many cases, it reflects documentation gaps between your records and institutional review standards.<br/>
-          <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naywa bridges that gap with structured, evidence-based certification.</strong>
+          <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naiwa bridges that gap with structured, evidence-based certification.</strong>
         </p>
         <p
           className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px]"
           style={{ color: '#5A7070', opacity: 0, animation: 'fadeUp 0.7s 0.35s forwards' }}
         >
-          Naywa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers — and issues a verifiable certification that speaks their language.
+          Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers — and issues a verifiable certification that speaks their language.
         </p>
         <p
           className="text-[13px] mt-7"
@@ -132,9 +132,9 @@ export default function LandingPage() {
       <section id="pillars" className="py-24 px-6" style={{ background: '#F5FAFA' }}>
         <div className="max-w-[1040px] mx-auto">
           <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#2D6A6A' }}>Assessment Framework</p>
-          <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>What Naywa Certifies</h2>
+          <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>What Naiwa Certifies</h2>
           <p className="reveal text-base leading-[1.75] max-w-[640px]" style={{ color: '#5A7070' }}>
-            Naywa&apos;s assessment framework evaluates your business across five structured pillars — core dimensions typically examined by financial institutions when reviewing an SME for financing or partnership.
+            Naiwa&apos;s assessment framework evaluates your business across five structured pillars — core dimensions typically examined by financial institutions when reviewing an SME for financing or partnership.
           </p>
           <div className="reveal grid grid-cols-2 md:grid-cols-5 gap-[1px] mt-14 rounded-2xl overflow-hidden" style={{ background: '#D0E4E4', border: '1px solid #D0E4E4' }}>
             {[
@@ -166,7 +166,7 @@ export default function LandingPage() {
             style={{ top: '50%', right: '-40px', transform: 'translateY(-50%)', fontFamily: 'var(--font-playfair), Playfair Display, serif', fontSize: 'clamp(260px, 35vw, 440px)', fontWeight: 900, color: '#2D6A6A', opacity: 0.06, lineHeight: 1 }}
             aria-hidden="true"
           >
-            نيوا
+            نايوا
           </div>
           <div className="max-w-[1040px] mx-auto relative z-10">
             <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4 flex items-center gap-3.5" style={{ color: '#3D8B8B' }}>
@@ -174,20 +174,20 @@ export default function LandingPage() {
               <span className="flex-1 max-w-[48px] h-[1px]" style={{ background: '#2D6A6A', opacity: 0.4 }} />
             </p>
             <h2 className="reveal text-[clamp(40px,6vw,72px)] font-black leading-[1.05] tracking-[-0.025em] mb-4 max-w-[600px]" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>
-              Naywa — <span className="italic" style={{ color: '#3D8B8B' }}>نيوا</span>
+              Naiwa — <span className="italic" style={{ color: '#3D8B8B' }}>نايوا</span>
             </h2>
             <p className="reveal text-[13px] tracking-[0.2em] uppercase mb-16" style={{ color: 'rgba(255,255,255,0.18)' }}>A mountain beneath the sea</p>
             <div className="reveal grid md:grid-cols-2 gap-12 pt-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
               <div>
                 <p className="text-[10px] font-semibold tracking-[0.18em] uppercase mb-3.5" style={{ color: '#3D8B8B', opacity: 0.65 }}>Origin</p>
                 <p className="text-[15px] leading-[1.9]" style={{ color: 'rgba(255,255,255,0.42)' }}>
-                  Naywa is a term rooted in Emirati maritime heritage. It describes a mountain beneath the sea — a formation invisible from the surface, known only to those who sail toward it and dive deep enough to find it. For generations, UAE seamen navigated by these hidden landmarks. Unseen, yet foundational to every voyage.
+                  Naiwa is a term rooted in Emirati maritime heritage. It describes a mountain beneath the sea — a formation invisible from the surface, known only to those who sail toward it and dive deep enough to find it. For generations, UAE seamen navigated by these hidden landmarks. Unseen, yet foundational to every voyage.
                 </p>
               </div>
               <div>
                 <p className="text-[10px] font-semibold tracking-[0.18em] uppercase mb-3.5" style={{ color: '#3D8B8B', opacity: 0.65 }}>The Parallel</p>
                 <p className="text-[15px] leading-[1.9]" style={{ color: 'rgba(255,255,255,0.42)' }}>
-                  A business&apos;s true foundation — its legal structure, financial discipline, governance, and operational integrity — is rarely visible from the outside. Institutions cannot fund what they cannot see. <strong style={{ color: 'rgba(255,255,255,0.72)', fontWeight: 500 }}>Naywa exists to surface it.</strong> To bring what is beneath into a form that banks, investors, and capital providers can assess and trust.
+                  A business&apos;s true foundation — its legal structure, financial discipline, governance, and operational integrity — is rarely visible from the outside. Institutions cannot fund what they cannot see. <strong style={{ color: 'rgba(255,255,255,0.72)', fontWeight: 500 }}>Naiwa exists to surface it.</strong> To bring what is beneath into a form that banks, investors, and capital providers can assess and trust.
                 </p>
               </div>
             </div>
@@ -199,9 +199,9 @@ export default function LandingPage() {
           <div className="max-w-[960px] mx-auto grid md:grid-cols-[1fr_auto] gap-12 items-center relative z-10">
             <p className="text-[clamp(22px,3vw,32px)] font-bold leading-[1.35] tracking-[-0.01em]" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>
               The foundation was always there.<br/>
-              <span className="font-normal italic" style={{ color: 'rgba(255,255,255,0.45)' }}>Naywa makes it visible.</span>
+              <span className="font-normal italic" style={{ color: 'rgba(255,255,255,0.45)' }}>Naiwa makes it visible.</span>
             </p>
-            <p className="hidden md:block text-[64px] font-black leading-none select-none whitespace-nowrap" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: 'rgba(255,255,255,0.12)' }} aria-hidden="true">نيوا</p>
+            <p className="hidden md:block text-[64px] font-black leading-none select-none whitespace-nowrap" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: 'rgba(255,255,255,0.12)' }} aria-hidden="true">نايوا</p>
           </div>
         </div>
       </section>
@@ -216,12 +216,12 @@ export default function LandingPage() {
               {
                 icon: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
                 title: 'Independent Review',
-                body: "Naywa's assessment is conducted against fixed internal criteria. Reviewers evaluate submitted documentation only — no external influence on the outcome."
+                body: "Naiwa's assessment is conducted against fixed internal criteria. Reviewers evaluate submitted documentation only — no external influence on the outcome."
               },
               {
                 icon: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
                 title: 'Point-in-Time Verification',
-                body: "Certification reflects the documented state of your business at the time of submission. It is recorded in Naywa's certification register and remains verifiable by any institution you choose to share it with."
+                body: "Certification reflects the documented state of your business at the time of submission. It is recorded in Naiwa's certification register and remains verifiable by any institution you choose to share it with."
               },
               {
                 icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>,
@@ -250,9 +250,9 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-0 mt-14 relative">
             <div className="hidden md:block absolute h-[1px] top-7" style={{ left: 'calc(16.66% + 20px)', right: 'calc(16.66% + 20px)', background: 'linear-gradient(90deg, #2D6A6A 0%, #3D8B8B 50%, #2D6A6A 100%)' }} />
             {[
-              { num: '1', title: 'Application Submission', body: "Businesses submit required documentation in accordance with Naywa's certification standards." },
+              { num: '1', title: 'Application Submission', body: "Businesses submit required documentation in accordance with Naiwa's certification standards." },
               { num: '2', title: 'Review', body: 'Submitted materials are reviewed against internal assessment criteria at a defined point in time.' },
-              { num: '3', title: 'Certification Decision', body: "Certification status is issued, deferred, or declined and recorded in Naywa's certification register." },
+              { num: '3', title: 'Certification Decision', body: "Certification status is issued, deferred, or declined and recorded in Naiwa's certification register." },
             ].map((s) => (
               <div key={s.num} className="reveal text-center px-6">
                 <div
@@ -275,9 +275,9 @@ export default function LandingPage() {
           <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#2D6A6A' }}>Scope & Limitations</p>
           <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>What Certification Means</h2>
           <div className="reveal max-w-[760px] p-12 mt-12 rounded-2xl" style={{ border: '1px solid #D0E4E4', background: '#FFFFFF' }}>
-            <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Naywa certification is an independent, documentation-based assessment conducted by a private entity. It is important to understand what it does and does not represent.</p>
-            <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Certification confirms that your submitted documentation meets Naywa&apos;s structured assessment criteria at the time of review. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>It does not constitute regulatory approval, a government endorsement, or a guarantee of financing.</strong> It does not predict future business performance or ongoing compliance.</p>
-            <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>Institutions that receive your certificate are responsible for their own due diligence and lending or partnership decisions. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naywa operates as assessment infrastructure — not as an intermediary, broker, or advisor.</strong></p>
+            <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Naiwa certification is an independent, documentation-based assessment conducted by a private entity. It is important to understand what it does and does not represent.</p>
+            <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Certification confirms that your submitted documentation meets Naiwa&apos;s structured assessment criteria at the time of review. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>It does not constitute regulatory approval, a government endorsement, or a guarantee of financing.</strong> It does not predict future business performance or ongoing compliance.</p>
+            <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>Institutions that receive your certificate are responsible for their own due diligence and lending or partnership decisions. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naiwa operates as assessment infrastructure — not as an intermediary, broker, or advisor.</strong></p>
           </div>
         </div>
       </section>
@@ -308,7 +308,7 @@ export default function LandingPage() {
                   <polyline points="9 12 11 14 15 10"/>
                 </svg>
               </div>
-              <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naywa</span>
+              <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
             </Link>
             <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
               <li><Link href="/certification-standards" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
@@ -322,9 +322,9 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-end">
             <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
-              Naywa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
+              Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
             </p>
-            <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>© 2026 Naywa. All rights reserved.</p>
+            <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>© 2026 Naiwa. All rights reserved.</p>
           </div>
         </div>
       </footer>

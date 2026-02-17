@@ -29,14 +29,14 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: 'Naywa – SME Readiness & Certification Platform',
-    template: '%s | Naywa',
+    default: 'Naiwa – SME Readiness & Certification Platform',
+    template: '%s | Naiwa',
   },
-  description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified, gain credibility, and access new opportunities. Trusted by businesses across the UAE.',
-  keywords: ['Naywa', 'SME certification', 'UAE business', 'business certification', 'SME registry', 'registry access', 'business credibility'],
-  authors: [{ name: 'Naywa' }],
-  creator: 'Naywa',
-  publisher: 'Naywa',
+  description: 'Naiwa – UAE SME Readiness & Certification Platform. Get certified, gain credibility, and access new opportunities. Trusted by businesses across the UAE.',
+  keywords: ['Naiwa', 'SME certification', 'UAE business', 'business certification', 'SME registry', 'registry access', 'business credibility'],
+  authors: [{ name: 'Naiwa' }],
+  creator: 'Naiwa',
+  publisher: 'Naiwa',
   robots: {
     index: true,
     follow: true,
@@ -44,14 +44,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_AE',
-    siteName: 'Naywa',
-    title: 'Naywa – SME Readiness & Certification Platform',
-    description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
+    siteName: 'Naiwa',
+    title: 'Naiwa – SME Readiness & Certification Platform',
+    description: 'Naiwa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Naywa – SME Readiness & Certification Platform',
-    description: 'Naywa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
+    title: 'Naiwa – SME Readiness & Certification Platform',
+    description: 'Naiwa – UAE SME Readiness & Certification Platform. Get certified and access opportunities',
   },
   icons: {
     icon: '/icon.png',

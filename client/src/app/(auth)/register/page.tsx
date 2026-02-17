@@ -253,7 +253,7 @@ export default function RegisterPage() {
             Get Started
           </h2>
           <p className="text-sm text-center mb-9 leading-relaxed" style={{ color: '#5A7070' }}>
-            Select how you would like to use the Naywa platform.
+            Select how you would like to use the Naiwa platform.
           </p>
 
           {/* Options */}
@@ -299,7 +299,7 @@ export default function RegisterPage() {
                 </svg>
               </div>
               <p className="text-sm font-semibold mb-1.5 leading-tight" style={{ color: '#111C1C' }}>Browse Certified Businesses</p>
-              <p className="text-xs leading-[1.55] mb-2" style={{ color: '#5A7070' }}>View certified entities recorded in Naywa&apos;s certification register.</p>
+              <p className="text-xs leading-[1.55] mb-2" style={{ color: '#5A7070' }}>View certified entities recorded in Naiwa&apos;s certification register.</p>
               {/* Read Only Tag - centered below text */}
               <span
                 className="inline-block text-[8px] font-semibold tracking-[0.08em] uppercase px-2 py-0.5 rounded"

@@ -10,15 +10,15 @@ const legalPages = [
 **Version:** 1.0
 
 ## 1. Introduction
-These Terms of Service ("Terms") govern access to and use of Naywa (the "Platform"), an SME readiness, certification, and registry service. By accessing or using the Platform, you agree to be bound by these Terms. If you do not agree, you must not use the Platform.
+These Terms of Service ("Terms") govern access to and use of Naiwa (the "Platform"), an SME readiness, certification, and registry service. By accessing or using the Platform, you agree to be bound by these Terms. If you do not agree, you must not use the Platform.
 
 ## 2. Nature of the Platform
-**Naywa provides:**
+**Naiwa provides:**
 - SME readiness assessment
 - Certification based on submitted documentation
 - Inclusion in a read-only SME registry
 
-**Naywa does not:**
+**Naiwa does not:**
 - Facilitate fundraising or investment
 - Act as a marketplace or broker
 - Provide financial, legal, or investment advice
@@ -32,18 +32,18 @@ You represent that:
 - You are authorized to act on behalf of the SME
 - You will keep credentials secure
 
-Naywa may suspend or terminate access if information is misleading, incomplete, or violates these Terms.
+Naiwa may suspend or terminate access if information is misleading, incomplete, or violates these Terms.
 
 ## 4. Certification Process
 - Certification decisions are based on documentation submitted and internal review
-- Naywa reserves the right to approve, reject, revoke, or suspend certification
+- Naiwa reserves the right to approve, reject, revoke, or suspend certification
 - Certification may have an expiry date and require renewal
 - Any material change to SME information may invalidate certification and require re-review
 
 ## 5. Registry
 - The registry is read-only for users and partners
 - Inclusion does not imply endorsement, investment worthiness, or performance ranking
-- Naywa controls visibility and may remove or suspend listings at its discretion
+- Naiwa controls visibility and may remove or suspend listings at its discretion
 
 ## 6. Certificates
 - Certificates are issued digitally and may be downloaded as PDFs
@@ -52,32 +52,32 @@ Naywa may suspend or terminate access if information is misleading, incomplete, 
 - Misuse or misrepresentation of a certificate may result in revocation
 
 ## 7. Data & Privacy
-Use of the Platform is subject to the Privacy Policy. Naywa processes data solely for certification, registry, compliance, and operational purposes.
+Use of the Platform is subject to the Privacy Policy. Naiwa processes data solely for certification, registry, compliance, and operational purposes.
 
 ## 8. Limitation of Liability
 To the fullest extent permitted by law:
-- Naywa is not liable for business outcomes, losses, or missed opportunities
-- Naywa does not warrant uninterrupted or error-free operation
+- Naiwa is not liable for business outcomes, losses, or missed opportunities
+- Naiwa does not warrant uninterrupted or error-free operation
 - Use of the Platform is at your own risk
 
 ## 9. Modifications
-Naywa may update these Terms periodically. Continued use constitutes acceptance of revised Terms.
+Naiwa may update these Terms periodically. Continued use constitutes acceptance of revised Terms.
 
 ## 10. Governing Law
 These Terms are governed by the laws of the United Arab Emirates, unless otherwise stated.
 
 ## 11. Contact
-For certification or platform inquiries only: support@naywa.ae`,
+For certification or platform inquiries only: support@naiwa.ae`,
   },
   {
     slug: 'privacy',
     title: 'Privacy Policy',
-    content: `**Platform:** Naywa
+    content: `**Platform:** Naiwa
 **Version:** 1.0
 **Effective Date:** [Insert Date]
 
 ## 1. Introduction
-This Privacy Policy explains how Naywa ("we", "us", "our") collects, uses, stores, and protects personal and business information when you access or use the Naywa platform (the "Platform").
+This Privacy Policy explains how Naiwa ("we", "us", "our") collects, uses, stores, and protects personal and business information when you access or use the Naiwa platform (the "Platform").
 
 By using the Platform, you acknowledge and agree to the practices described in this Privacy Policy.
 
@@ -122,7 +122,7 @@ We collect and process information only for the following purposes:
 - Ensuring platform security and auditability
 - Complying with legal, regulatory, or internal governance requirements
 
-Naywa does not use personal data for:
+Naiwa does not use personal data for:
 - Advertising
 - Profiling
 - Marketing campaigns
@@ -134,10 +134,10 @@ Certain non-personal SME information may appear in the public or partner-accessi
 Inclusion in the registry:
 - Does not imply endorsement
 - Does not rank or compare SMEs
-- Is subject to visibility controls and removal at Naywa's discretion
+- Is subject to visibility controls and removal at Naiwa's discretion
 
 ## 6. Data Sharing
-Naywa does not sell, rent, or trade personal data.
+Naiwa does not sell, rent, or trade personal data.
 
 Information may be shared only:
 - With internal administrators for certification and compliance
@@ -181,28 +181,28 @@ We may update this Privacy Policy from time to time. Updated versions will be po
 Continued use of the Platform constitutes acceptance of the updated Policy.
 
 ## 12. Contact
-For privacy or data-related inquiries only: support@naywa.ae`,
+For privacy or data-related inquiries only: support@naiwa.ae`,
   },
   {
     slug: 'legal-notice',
     title: 'Legal Notice',
-    content: `**Platform:** Naywa
+    content: `**Platform:** Naiwa
 **Version:** 1.0
 **Effective Date:** [Insert Date]
 
 ## 1. Platform Status
-Naywa is a digital platform providing SME readiness assessment, certification, and registry services.
+Naiwa is a digital platform providing SME readiness assessment, certification, and registry services.
 
-**Naywa is not:**
+**Naiwa is not:**
 - A government authority
 - A financial institution
 - An investment platform
 - A marketplace or broker
 
-Any reference to "certification" relates solely to Naywa's internal review process and does not represent a government license, approval, or endorsement.
+Any reference to "certification" relates solely to Naiwa's internal review process and does not represent a government license, approval, or endorsement.
 
 ## 2. No Financial or Investment Services
-Naywa does not:
+Naiwa does not:
 - Facilitate fundraising or capital raising
 - Collect or transfer funds
 - Match investors and businesses
@@ -216,18 +216,18 @@ Certification or inclusion in the registry:
 - Does not imply performance ranking or endorsement
 - Reflects a point-in-time review based on submitted information
 
-Naywa makes no warranties regarding outcomes.
+Naiwa makes no warranties regarding outcomes.
 
 ## 4. Accuracy of Information
-While reasonable efforts are made to review submitted information, Naywa relies on the accuracy and completeness of data provided by users.
+While reasonable efforts are made to review submitted information, Naiwa relies on the accuracy and completeness of data provided by users.
 
-Naywa is not responsible for:
+Naiwa is not responsible for:
 - False or misleading submissions
 - Third-party reliance on registry information
 - Decisions made based on registry listings
 
 ## 5. Limitation of Liability
-To the fullest extent permitted by law, Naywa shall not be liable for:
+To the fullest extent permitted by law, Naiwa shall not be liable for:
 - Business losses
 - Indirect or consequential damages
 - Decisions or actions taken by users or third parties
@@ -235,7 +235,7 @@ To the fullest extent permitted by law, Naywa shall not be liable for:
 Use of the platform is at the user's own risk.
 
 ## 6. Intellectual Property
-All platform content, trademarks, logos, and materials are the property of Naywa unless otherwise stated.
+All platform content, trademarks, logos, and materials are the property of Naiwa unless otherwise stated.
 
 Unauthorized use is prohibited.
 
@@ -243,16 +243,16 @@ Unauthorized use is prohibited.
 This Legal Notice is governed by the laws of the United Arab Emirates, unless otherwise required by applicable regulations.
 
 ## 8. Contact
-For legal or compliance inquiries only: support@naywa.ae`,
+For legal or compliance inquiries only: support@naiwa.ae`,
   },
   {
     slug: 'contact',
     title: 'Contact',
-    content: `## Contact Naywa
+    content: `## Contact Naiwa
 
 For certification, registry, or platform-related inquiries, please contact us using the details below.
 
-**Email:** support@naywa.ae
+**Email:** support@naiwa.ae
 
 ## Scope of Support
 - Certification process questions
@@ -260,7 +260,7 @@ For certification, registry, or platform-related inquiries, please contact us us
 - Account or technical support
 
 ## Please Note
-Naywa does not provide:
+Naiwa does not provide:
 - Investment advice
 - Funding assistance
 - Partnership matchmaking`,

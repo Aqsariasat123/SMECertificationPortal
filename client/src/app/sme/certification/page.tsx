@@ -287,7 +287,7 @@ export default function SMECertificationPage() {
           {/* Body Copy */}
           <div className="space-y-4 mb-8">
             <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
-              To complete Naywa certification, your business will be required to submit documentation for review across the following areas.
+              To complete Naiwa certification, your business will be required to submit documentation for review across the following areas.
             </p>
             <p className="text-base" style={{ color: 'var(--graphite-700)' }}>
               Exact requirements may vary depending on your company type, sector, and operational profile.
@@ -344,7 +344,7 @@ export default function SMECertificationPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p className="text-sm" style={{ color: 'var(--graphite-600)' }}>
-                  All information provided is reviewed as part of Naywa&apos;s certification process and assessed at a specific point in time.
+                  All information provided is reviewed as part of Naiwa&apos;s certification process and assessed at a specific point in time.
                 </p>
               </div>
             </div>

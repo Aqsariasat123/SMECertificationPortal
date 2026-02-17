@@ -71,7 +71,7 @@ export default function DashboardShell({ children, navItems, title }: DashboardS
                 </svg>
               </div>
               <div>
-                <span className="text-white font-medium text-sm block">Naywa</span>
+                <span className="text-white font-medium text-sm block">Naiwa</span>
                 <span className="text-xs" style={{ color: 'var(--graphite-500)' }}>Portal</span>
               </div>
             </Link>
