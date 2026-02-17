@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import PublicFooter from '@/components/PublicFooter';
 
-export default function CertificationScopePage() {
+export default function LimitationOfLiabilityPage() {
   return (
-    <div style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
+    <div style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#F5FAFA' }}>
       {/* NAV */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-16"
@@ -50,319 +50,306 @@ export default function CertificationScopePage() {
         </div>
       </nav>
 
-      {/* Breadcrumb & Header */}
-      <section className="pt-24 pb-8 px-6 md:px-12" style={{ background: '#F5FAFA', borderBottom: '1px solid #D0E4E4' }}>
+      {/* Header */}
+      <section className="pt-28 pb-12 px-6 md:px-12">
         <div className="max-w-[900px] mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
-            <Link href="/" className="no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>
-              Naiwa Platform
-            </Link>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#5A7070" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-            <Link href="/framework" className="no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>
-              Framework
-            </Link>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#5A7070" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-            <span style={{ color: '#2D6A6A', fontWeight: 500 }}>Certification Scope</span>
-          </nav>
-
-          {/* Document Header */}
-          <div className="flex items-start justify-between gap-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#2D6A6A' }}>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                  </svg>
-                </div>
-                <span className="text-[11px] font-semibold tracking-[0.16em] uppercase" style={{ color: '#2D6A6A' }}>Official Document</span>
-              </div>
-              <h1
-                className="text-[clamp(28px,4vw,42px)] font-bold leading-[1.1] tracking-[-0.02em] mb-4"
-                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
-              >
-                Certification Scope
-              </h1>
-              <p className="text-base leading-[1.7]" style={{ color: '#5A7070' }}>
-                This document defines the scope, applicability, and boundaries of the Naiwa SME Certification Program.
-              </p>
-            </div>
-            <div className="hidden md:block text-right flex-shrink-0">
-              <p className="text-xs mb-1" style={{ color: '#5A7070' }}>Document Version</p>
-              <p className="text-sm font-semibold" style={{ color: '#111C1C' }}>v1.0</p>
-              <p className="text-xs mt-3 mb-1" style={{ color: '#5A7070' }}>Effective Date</p>
-              <p className="text-sm font-semibold" style={{ color: '#111C1C' }}>February 2026</p>
-            </div>
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-px w-16" style={{ background: '#D0E4E4' }} />
+            <span className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: '#5A7070' }}>Legal Document</span>
           </div>
+          <h1
+            className="text-[clamp(32px,5vw,48px)] font-bold leading-[1.1] mb-6"
+            style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+          >
+            Limitation of Liability & Certification Scope
+          </h1>
+          <p className="text-sm" style={{ color: '#5A7070' }}>
+            Last updated: February 2026
+          </p>
         </div>
       </section>
 
-      {/* Document Content */}
-      <section className="py-12 md:py-16 px-6 md:px-12" style={{ background: '#FFFFFF' }}>
+      {/* Content */}
+      <section className="pb-20 px-6 md:px-12">
         <div className="max-w-[900px] mx-auto">
-          {/* Table of Contents */}
-          <div className="mb-12 p-6 rounded-xl" style={{ background: '#F5FAFA', border: '1px solid #D0E4E4' }}>
-            <h2 className="text-sm font-semibold mb-4" style={{ color: '#111C1C' }}>Contents</h2>
-            <ol className="list-none m-0 p-0 space-y-2">
-              {[
-                'Purpose and Objective',
-                'Eligible Entities',
-                'Geographic Scope',
-                'Assessment Dimensions',
-                'Exclusions and Limitations',
-                'Certification Validity',
-                'Amendment and Updates'
-              ].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href={`#section-${index + 1}`}
-                    className="flex items-center gap-3 text-sm no-underline transition-colors hover:text-[#2D6A6A]"
-                    style={{ color: '#5A7070' }}
-                  >
-                    <span className="font-mono text-xs" style={{ color: '#2D6A6A' }}>{String(index + 1).padStart(2, '0')}</span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </div>
+          <div className="bg-white rounded-xl p-8 md:p-12 space-y-10" style={{ border: '1px solid #D0E4E4' }}>
 
-          {/* Section 1 */}
-          <div id="section-1" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>01</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Purpose and Objective
-              </h2>
+            {/* Scope Cards */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="p-6 rounded-lg" style={{ background: '#F5FAFA', border: '1px solid #E8F4F4' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: '#E8F4F4' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3v18M3 12h18"/>
+                    <path d="M3 6h18M3 18h18"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold mb-2" style={{ color: '#111C1C' }}>Certification Scope</h3>
+                <p className="text-sm" style={{ color: '#5A7070' }}>
+                  Defines what NAIWA certification covers and represents within the UAE SME ecosystem.
+                </p>
+              </div>
+              <div className="p-6 rounded-lg" style={{ background: '#F5FAFA', border: '1px solid #E8F4F4' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: '#E8F4F4' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                </div>
+                <h3 className="font-semibold mb-2" style={{ color: '#111C1C' }}>Liability Limitations</h3>
+                <p className="text-sm" style={{ color: '#5A7070' }}>
+                  Outlines the boundaries of NAIWA&apos;s responsibility and liability in certification matters.
+                </p>
+              </div>
             </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>1.1</strong> The Naiwa SME Certification Program provides an independent, documentation-based assessment of small and medium enterprises operating within the United Arab Emirates.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>1.2</strong> The certification evaluates operational readiness across five standardized pillars: Legal & Ownership Readiness, Financial Discipline, Business Model & Unit Economics, Governance Controls & Risk, and Data Integrity & Auditability.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>1.3</strong> The objective is to establish a consistent, verifiable standard that enables enterprises to demonstrate their operational maturity to financial institutions, government entities, and commercial partners.
-              </p>
-            </div>
-          </div>
 
-          {/* Section 2 */}
-          <div id="section-2" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>02</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Eligible Entities
+            {/* Certification Scope Definition */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                1. Certification Scope Definition
               </h2>
-            </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>2.1</strong> Certification is available to enterprises that meet the following criteria:
-              </p>
-              <ul className="space-y-3 ml-8">
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#2D6A6A' }} />
-                  Registered as a legal entity within the United Arab Emirates
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#2D6A6A' }} />
-                  Hold a valid trade license issued by a recognized UAE authority
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#2D6A6A' }} />
-                  Operational for a minimum of twelve (12) months
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#2D6A6A' }} />
-                  Classified as a Small or Medium Enterprise under UAE Ministry of Economy definitions
-                </li>
-              </ul>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>2.2</strong> Free zone and mainland entities are both eligible, subject to providing documentation appropriate to their licensing jurisdiction.
-              </p>
-            </div>
-          </div>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>
+                  NAIWA certification is a documentation-based assessment that evaluates an enterprise&apos;s operational readiness across five standardized pillars. The certification represents a point-in-time evaluation based on submitted evidence.
+                </p>
 
-          {/* Section 3 */}
-          <div id="section-3" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>03</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Geographic Scope
-              </h2>
-            </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>3.1</strong> The certification program currently operates within the United Arab Emirates, covering all seven emirates: Abu Dhabi, Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, and Fujairah.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>3.2</strong> Enterprises operating across multiple emirates may apply for certification based on their primary place of registration.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>3.3</strong> Expansion to additional Gulf Cooperation Council (GCC) jurisdictions is under consideration and will be announced separately.
-              </p>
-            </div>
-          </div>
+                <div className="p-6 rounded-lg my-6" style={{ background: '#E8F4F4', border: '1px solid #D0E4E4' }}>
+                  <h4 className="font-semibold mb-3" style={{ color: '#2D6A6A' }}>Within Scope of Certification</h4>
+                  <ul className="text-sm space-y-2" style={{ color: '#3D8B8B' }}>
+                    <li>• Verification of submitted documentation against assessment criteria</li>
+                    <li>• Evaluation across five standardized pillars</li>
+                    <li>• Point-in-time compliance status determination</li>
+                    <li>• Issuance of verifiable certification records</li>
+                    <li>• Inclusion in the public verification registry</li>
+                  </ul>
+                </div>
 
-          {/* Section 4 */}
-          <div id="section-4" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>04</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Assessment Dimensions
-              </h2>
+                <div className="p-6 rounded-lg my-6" style={{ background: '#F5F5F5', border: '1px solid #E5E5E5' }}>
+                  <h4 className="font-semibold mb-3" style={{ color: '#111C1C' }}>Outside Scope of Certification</h4>
+                  <ul className="text-sm space-y-2" style={{ color: '#5A7070' }}>
+                    <li>• Ongoing monitoring or continuous compliance assessment</li>
+                    <li>• Financial, legal, or investment advice</li>
+                    <li>• Guarantee of business performance or outcomes</li>
+                    <li>• Government or regulatory endorsement</li>
+                    <li>• Facilitation of funding, investment, or partnerships</li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>4.1</strong> Assessment is conducted across five standardized pillars, each carrying equal weight in the final certification determination:
-              </p>
-              <div className="space-y-4 mt-6">
-                {[
-                  { pillar: 'Pillar 1', title: 'Legal & Ownership Readiness', desc: 'Verification of corporate structure, licensing, and ownership documentation aligned with UAE commercial regulations.' },
-                  { pillar: 'Pillar 2', title: 'Financial Discipline', desc: 'Assessment of financial record-keeping, audit trails, and compliance with accepted accounting standards.' },
-                  { pillar: 'Pillar 3', title: 'Business Model & Unit Economics', desc: 'Evaluation of operational sustainability, revenue models, and economic viability indicators.' },
-                  { pillar: 'Pillar 4', title: 'Governance, Controls & Risk', desc: 'Review of internal controls, risk management frameworks, and corporate governance practices.' },
-                  { pillar: 'Pillar 5', title: 'Data Integrity & Auditability', desc: 'Verification of data management practices, system controls, and audit readiness.' }
-                ].map((item, index) => (
-                  <div key={index} className="p-5 rounded-lg" style={{ background: '#F5FAFA', border: '1px solid #E8F4F4' }}>
-                    <div className="flex items-start gap-4">
-                      <span className="text-sm font-semibold whitespace-nowrap" style={{ color: '#2D6A6A' }}>{item.pillar}</span>
-                      <div>
-                        <h4 className="font-semibold mb-1" style={{ color: '#111C1C' }}>{item.title}</h4>
-                        <p className="text-sm" style={{ color: '#5A7070' }}>{item.desc}</p>
-                      </div>
-                    </div>
+
+            {/* Assessment Methodology Limitations */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                2. Assessment Methodology Limitations
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>
+                  The NAIWA assessment methodology is subject to the following inherent limitations:
+                </p>
+                <ul className="list-disc pl-6 space-y-3">
+                  <li>
+                    <strong style={{ color: '#111C1C' }}>Documentation Reliance:</strong> Assessment is based solely on submitted documentation. NAIWA does not independently verify the authenticity or accuracy of source documents.
+                  </li>
+                  <li>
+                    <strong style={{ color: '#111C1C' }}>Point-in-Time Assessment:</strong> Certification reflects status at the time of evaluation and does not account for subsequent changes to the enterprise&apos;s circumstances.
+                  </li>
+                  <li>
+                    <strong style={{ color: '#111C1C' }}>Framework Boundaries:</strong> Assessment is limited to the five-pillar framework and does not evaluate aspects outside these defined criteria.
+                  </li>
+                  <li>
+                    <strong style={{ color: '#111C1C' }}>No Predictive Capability:</strong> Certification does not predict future performance, compliance, or business outcomes.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Limitation of Liability */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                3. Limitation of Liability
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+
+                <div className="flex gap-4 p-6 rounded-lg my-4" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
+                  <svg className="w-6 h-6 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <div className="text-sm" style={{ color: '#92400E' }}>
+                    <p className="font-semibold mb-1">Important Legal Notice</p>
+                    <p>NAIWA certification is provided &quot;as is&quot; without warranties of any kind. Users rely on certification information at their own risk.</p>
                   </div>
-                ))}
-              </div>
-              <p className="text-[15px] leading-[1.8] mt-6" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>4.2</strong> Detailed assessment criteria for each pillar are published in the <Link href="/framework" className="no-underline font-medium" style={{ color: '#2D6A6A' }}>Framework Documentation</Link>.
-              </p>
-            </div>
-          </div>
+                </div>
 
-          {/* Section 5 */}
-          <div id="section-5" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>05</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Exclusions and Limitations
-              </h2>
-            </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>5.1</strong> The following are explicitly outside the scope of Naiwa certification:
-              </p>
-              <ul className="space-y-3 ml-8">
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#DC2626' }} />
-                  Government or regulatory approval of any kind
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#DC2626' }} />
-                  Guarantee of financing, investment, or commercial success
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#DC2626' }} />
-                  Endorsement by any government body or financial institution
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#DC2626' }} />
-                  Validation of product quality, service delivery, or customer satisfaction
-                </li>
-                <li className="flex items-start gap-3 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                  <span className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0" style={{ background: '#DC2626' }} />
-                  Industry-specific regulatory compliance (healthcare, finance, etc.)
-                </li>
-              </ul>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>5.2</strong> Certification reflects operational status at the time of assessment only and does not constitute ongoing monitoring or surveillance.
-              </p>
-            </div>
-          </div>
+                <h3 className="font-semibold mt-6 mb-3" style={{ color: '#111C1C' }}>Exclusion of Damages</h3>
+                <p>NAIWA shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from:</p>
+                <ul className="list-disc pl-6 space-y-2 mt-3">
+                  <li>Use or reliance on certification status or information</li>
+                  <li>Decisions made based on certification outcomes</li>
+                  <li>Business losses, lost profits, or lost opportunities</li>
+                  <li>Third-party claims arising from certification status</li>
+                  <li>Errors, omissions, or inaccuracies in assessment</li>
+                </ul>
 
-          {/* Section 6 */}
-          <div id="section-6" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>06</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Certification Validity
-              </h2>
-            </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>6.1</strong> Upon successful completion of assessment, certification is valid for twelve (12) months from the date of issuance.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>6.2</strong> Certified enterprises may apply for renewal within ninety (90) days prior to expiration.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>6.3</strong> Certification may be revoked prior to expiration if material misrepresentation is discovered or if the enterprise undergoes significant structural changes that affect pillar compliance.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>6.4</strong> All active certifications are verifiable through the <Link href="/registry/verify" className="no-underline font-medium" style={{ color: '#2D6A6A' }}>Public Verification Registry</Link>.
-              </p>
-            </div>
-          </div>
+                <h3 className="font-semibold mt-6 mb-3" style={{ color: '#111C1C' }}>Cap on Liability</h3>
+                <p>In jurisdictions that do not allow complete exclusion of liability, NAIWA&apos;s total liability shall not exceed:</p>
+                <ul className="list-disc pl-6 space-y-2 mt-3">
+                  <li>The certification fee paid by the enterprise, or</li>
+                  <li>AED 10,000, whichever is lower</li>
+                </ul>
 
-          {/* Section 7 */}
-          <div id="section-7" className="mb-12 scroll-mt-24">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="font-mono text-sm font-semibold px-3 py-1 rounded" style={{ background: '#E8F4F4', color: '#2D6A6A' }}>07</span>
-              <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>
-                Amendment and Updates
-              </h2>
-            </div>
-            <div className="md:ml-16 space-y-4">
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>7.1</strong> This Certification Scope document may be amended from time to time to reflect changes in regulatory requirements, market conditions, or operational enhancements.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>7.2</strong> Material amendments will be communicated to certified enterprises and applicants with reasonable advance notice.
-              </p>
-              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
-                <strong style={{ color: '#111C1C' }}>7.3</strong> The current version of this document supersedes all previous versions.
-              </p>
-            </div>
-          </div>
-
-          {/* Document Footer */}
-          <div className="mt-16 pt-8" style={{ borderTop: '1px solid #D0E4E4' }}>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <p className="text-xs" style={{ color: '#5A7070' }}>
-                For questions regarding certification scope, contact <Link href="/contact" className="no-underline font-medium" style={{ color: '#2D6A6A' }}>our team</Link>.
-              </p>
-              <div className="flex items-center gap-6">
-                <Link
-                  href="/framework"
-                  className="flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]"
-                  style={{ color: '#5A7070' }}
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                  </svg>
-                  Back to Framework
-                </Link>
-                <Link
-                  href="/certification-fees"
-                  className="flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]"
-                  style={{ color: '#5A7070' }}
-                >
-                  Certification Fees
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
+                <h3 className="font-semibold mt-6 mb-3" style={{ color: '#111C1C' }}>Third-Party Claims</h3>
+                <p>NAIWA bears no liability for claims, actions, or demands brought by third parties who rely on certification status for their own decisions, including but not limited to financial institutions, investors, or commercial partners.</p>
               </div>
             </div>
+
+            {/* Exclusions */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                4. Exclusions
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>The limitations of liability set forth herein do not apply to:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Liability arising from gross negligence or willful misconduct by NAIWA</li>
+                  <li>Liability that cannot be excluded under applicable law</li>
+                  <li>Fraud or fraudulent misrepresentation by NAIWA</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Indemnification */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                5. Indemnification
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>Certified enterprises agree to indemnify, defend, and hold harmless NAIWA from any claims, losses, or damages arising from:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Misrepresentation of certification status</li>
+                  <li>Use of certification beyond its stated scope</li>
+                  <li>Submission of fraudulent or misleading documentation</li>
+                  <li>Violation of these terms or applicable law</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Force Majeure */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                6. Force Majeure
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>
+                  NAIWA shall not be liable for any failure or delay in performing its obligations where such failure or delay results from circumstances beyond its reasonable control, including but not limited to natural disasters, government actions, system failures, or other force majeure events.
+                </p>
+              </div>
+            </div>
+
+            {/* Governing Law */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                7. Governing Law
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>
+                  This document and any disputes arising from or relating to NAIWA certification shall be governed by and construed in accordance with the laws of the United Arab Emirates. The courts of Dubai shall have exclusive jurisdiction over any disputes.
+                </p>
+              </div>
+            </div>
+
+            {/* Severability */}
+            <div>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                8. Severability
+              </h2>
+              <div className="space-y-4 text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                <p>
+                  If any provision of this document is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall continue in full force and effect.
+                </p>
+              </div>
+            </div>
+
+            {/* Related Documents */}
+            <div className="pt-6" style={{ borderTop: '1px solid #E5E7EB' }}>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                Related Documents
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Link href="/terms" className="flex items-center gap-3 p-4 rounded-lg transition-colors hover:bg-[#F5FAFA]" style={{ background: '#FAFAFA', border: '1px solid #E5E7EB' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  <span className="text-sm" style={{ color: '#5A7070' }}>Terms of Use</span>
+                </Link>
+                <Link href="/certification-standards" className="flex items-center gap-3 p-4 rounded-lg transition-colors hover:bg-[#F5FAFA]" style={{ background: '#FAFAFA', border: '1px solid #E5E7EB' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  <span className="text-sm" style={{ color: '#5A7070' }}>Certification Disclaimer</span>
+                </Link>
+                <Link href="/privacy" className="flex items-center gap-3 p-4 rounded-lg transition-colors hover:bg-[#F5FAFA]" style={{ background: '#FAFAFA', border: '1px solid #E5E7EB' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  <span className="text-sm" style={{ color: '#5A7070' }}>Privacy Policy</span>
+                </Link>
+                <Link href="/methodology" className="flex items-center gap-3 p-4 rounded-lg transition-colors hover:bg-[#F5FAFA]" style={{ background: '#FAFAFA', border: '1px solid #E5E7EB' }}>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  <span className="text-sm" style={{ color: '#5A7070' }}>Methodology</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div className="pt-6" style={{ borderTop: '1px solid #E5E7EB' }}>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              >
+                Questions?
+              </h2>
+              <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>
+                For questions regarding this document or NAIWA&apos;s liability policies, please contact us at{' '}
+                <a href="mailto:legal@naiwa.ae" className="font-medium no-underline hover:underline" style={{ color: '#2D6A6A' }}>
+                  legal@naiwa.ae
+                </a>
+              </p>
+            </div>
+
           </div>
         </div>
       </section>
