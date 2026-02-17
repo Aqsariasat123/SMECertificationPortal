@@ -32,33 +32,11 @@ export default function PublicLayout({
 
         {/* Center Links - hidden on mobile */}
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          <li>
-            <Link
-              href="/certification-standards"
-              className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]"
-              style={{ color: '#5A7070' }}
-            >
-              Certification Standards
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/#process"
-              className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]"
-              style={{ color: '#5A7070' }}
-            >
-              Process
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/registry/verify"
-              className="text-sm font-semibold no-underline"
-              style={{ color: '#2D6A6A' }}
-            >
-              Verify a Certificate
-            </Link>
-          </li>
+          <li><Link href="/about" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>About</Link></li>
+          <li><Link href="/methodology" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Methodology</Link></li>
+          <li><Link href="/framework" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Framework</Link></li>
+          <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify</Link></li>
+          <li><Link href="/contact" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link></li>
         </ul>
 
         {/* Actions */}
