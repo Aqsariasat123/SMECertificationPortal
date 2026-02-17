@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import PublicFooter from '@/components/PublicFooter';
 
 export default function LandingPage() {
   useEffect(() => {
@@ -325,59 +326,7 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* FOOTER - Landing Page Style */}
-      <footer style={{ background: '#1A2D2D' }}>
-        {/* Main Footer Row */}
-        <div className="px-6 md:px-12 py-8 md:py-10">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
-              {/* Logo */}
-              <Link href="/" className="flex items-center gap-2.5 no-underline flex-shrink-0">
-                <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center" style={{ background: 'rgba(61,139,139,0.15)', border: '1px solid rgba(61,139,139,0.3)' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <polyline points="9 12 11 14 15 10"/>
-                  </svg>
-                </div>
-                <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
-              </Link>
-
-              {/* Navigation Links */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                <Link href="/about" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>About</Link>
-                <Link href="/methodology" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Methodology</Link>
-                <Link href="/framework" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Framework</Link>
-                <Link href="/registry/verify" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Verify</Link>
-                <Link href="/contact" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Contact</Link>
-              </div>
-
-              {/* Spacer */}
-              <div className="hidden md:block flex-1" />
-
-              {/* Legal Links */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <Link href="/certification-scope" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Scope</Link>
-                <Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Fees</Link>
-                <Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Terms</Link>
-                <Link href="/privacy" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Privacy</Link>
-                <Link href="/legal-notice" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Legal</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar with Disclaimer */}
-        <div className="px-6 md:px-12 py-6" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-[11px] leading-[1.7] max-w-[700px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
-              Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
-            </p>
-            <p className="text-[11px] whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.25)' }}>
-              &copy; {new Date().getFullYear()} Naiwa. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter />
 
       <style jsx>{`
         @keyframes fadeUp {
