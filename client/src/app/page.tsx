@@ -39,9 +39,11 @@ export default function LandingPage() {
         </Link>
 
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          <li><Link href="/certification-standards" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Certification Standards</Link></li>
-          <li><Link href="#process" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Process</Link></li>
-          <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify a Certificate</Link></li>
+          <li><Link href="/about" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>About</Link></li>
+          <li><Link href="/methodology" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Methodology</Link></li>
+          <li><Link href="/framework" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Framework</Link></li>
+          <li><Link href="/registry/verify" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Verify</Link></li>
+          <li><Link href="/contact" className="text-sm font-medium no-underline transition-colors hover:text-[#2D6A6A]" style={{ color: '#5A7070' }}>Contact</Link></li>
         </ul>
 
         <div className="flex items-center gap-2 md:gap-3">
@@ -153,6 +155,14 @@ export default function LandingPage() {
           <p className="reveal text-sm leading-[1.65] max-w-[680px] mt-7" style={{ color: '#5A7070' }}>
             Each pillar is assessed against documented evidence. Certification is issued, deferred, or declined based on <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>what your records demonstrate</strong> — not projections or intent.
           </p>
+          <Link
+            href="/framework"
+            className="reveal inline-flex items-center gap-2 mt-6 text-sm font-medium no-underline transition-colors hover:gap-3"
+            style={{ color: '#2D6A6A' }}
+          >
+            View Full Framework
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </Link>
         </div>
       </section>
 
@@ -238,6 +248,16 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          <div className="reveal text-center mt-10">
+            <Link
+              href="/methodology"
+              className="inline-flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:gap-3"
+              style={{ color: '#2D6A6A' }}
+            >
+              View Full Methodology
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -278,6 +298,14 @@ export default function LandingPage() {
             <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Naiwa certification is an independent, documentation-based assessment conducted by a private entity. It is important to understand what it does and does not represent.</p>
             <p className="text-[15px] leading-[1.8] mb-5" style={{ color: '#5A7070' }}>Certification confirms that your submitted documentation meets Naiwa&apos;s structured assessment criteria at the time of review. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>It does not constitute regulatory approval, a government endorsement, or a guarantee of financing.</strong> It does not predict future business performance or ongoing compliance.</p>
             <p className="text-[15px] leading-[1.8]" style={{ color: '#5A7070' }}>Institutions that receive your certificate are responsible for their own due diligence and lending or partnership decisions. <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naiwa operates as assessment infrastructure — not as an intermediary, broker, or advisor.</strong></p>
+            <Link
+              href="/certification-scope"
+              className="inline-flex items-center gap-2 mt-6 text-sm font-medium no-underline transition-colors hover:gap-3"
+              style={{ color: '#2D6A6A' }}
+            >
+              View Full Certification Scope
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
           </div>
         </div>
       </section>
@@ -310,15 +338,22 @@ export default function LandingPage() {
               </div>
               <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
             </Link>
+            <div className="flex flex-col md:flex-row md:gap-12">
             <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
-              <li><Link href="/certification-standards" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Standards</Link></li>
+              <li><Link href="/about" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>About</Link></li>
+              <li><Link href="/methodology" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Methodology</Link></li>
+              <li><Link href="/framework" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Framework</Link></li>
+              <li><Link href="/registry/verify" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Verify</Link></li>
+              <li><Link href="/contact" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
+            </ul>
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
+              <li><Link href="/certification-scope" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Scope</Link></li>
               <li><Link href="/certification-fees" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
               <li><Link href="/terms" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
               <li><Link href="/privacy" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
               <li><Link href="/legal-notice" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
-              <li><Link href="/contact" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
-              <li><span className="text-[12px] md:text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>UAE</span></li>
             </ul>
+          </div>
           </div>
           <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-end">
             <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>

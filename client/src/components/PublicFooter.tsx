@@ -34,15 +34,24 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
             </div>
             <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
           </Link>
-          <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
-            <li><Link href="/certification-standards" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Standards</Link></li>
-            <li><Link href="/certification-fees" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
-            <li><Link href="/terms" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
-            <li><Link href="/privacy" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
-            <li><Link href="/legal-notice" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
-            <li><Link href="/contact" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
-            <li><span className="text-[11px] md:text-[13px]" style={{ color: 'rgba(255,255,255,0.45)' }}>UAE</span></li>
-          </ul>
+          <div className="flex flex-col md:flex-row md:gap-12">
+            {/* Platform Links */}
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
+              <li><Link href="/about" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>About</Link></li>
+              <li><Link href="/methodology" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Methodology</Link></li>
+              <li><Link href="/framework" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Framework</Link></li>
+              <li><Link href="/registry/verify" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Verify</Link></li>
+              <li><Link href="/contact" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
+            </ul>
+            {/* Legal Links */}
+            <ul className="flex flex-wrap list-none m-0 p-0 pt-1 md:pt-1" style={{ gap: '6px 16px' }}>
+              <li><Link href="/certification-scope" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Certification Scope</Link></li>
+              <li><Link href="/certification-fees" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
+              <li><Link href="/terms" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
+              <li><Link href="/privacy" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
+              <li><Link href="/legal-notice" className="text-[11px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
+            </ul>
+          </div>
         </div>
         <div className="flex flex-col md:flex-row md:justify-between gap-3 md:gap-6 md:items-end">
           <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
