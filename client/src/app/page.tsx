@@ -284,41 +284,56 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-10 md:py-14 px-6 md:px-12" style={{ background: '#111C1C' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <div className="flex flex-col md:grid md:grid-cols-[140px_1fr] gap-6 items-start pb-7 md:pb-9 mb-6 md:mb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <Link href="/" className="flex items-center gap-2.5 no-underline">
-              <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center flex-shrink-0" style={{ background: '#2D6A6A' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  <polyline points="9 12 11 14 15 10"/>
-                </svg>
+      {/* FOOTER - Landing Page Style */}
+      <footer style={{ background: '#1A2D2D' }}>
+        {/* Main Footer Row */}
+        <div className="px-6 md:px-12 py-8 md:py-10">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2.5 no-underline flex-shrink-0">
+                <div className="w-[34px] h-[34px] rounded-lg flex items-center justify-center" style={{ background: 'rgba(61,139,139,0.15)', border: '1px solid rgba(61,139,139,0.3)' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                </div>
+                <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
+              </Link>
+
+              {/* Navigation Links */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <Link href="/about" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>About</Link>
+                <Link href="/methodology" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Methodology</Link>
+                <Link href="/framework" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Framework</Link>
+                <Link href="/registry/verify" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Verify</Link>
+                <Link href="/contact" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.5)' }}>Contact</Link>
               </div>
-              <span className="font-semibold text-base" style={{ color: '#FFFFFF' }}>Naiwa</span>
-            </Link>
-            <div className="flex flex-col md:flex-row md:gap-12">
-            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
-              <li><Link href="/about" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>About</Link></li>
-              <li><Link href="/methodology" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Methodology</Link></li>
-              <li><Link href="/framework" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Framework</Link></li>
-              <li><Link href="/registry/verify" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Verify</Link></li>
-              <li><Link href="/contact" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Contact</Link></li>
-            </ul>
-            <ul className="flex flex-wrap list-none m-0 p-0 pt-1" style={{ gap: '6px 16px' }}>
-              <li><Link href="/certification-scope" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Scope</Link></li>
-              <li><Link href="/certification-fees" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Fees</Link></li>
-              <li><Link href="/terms" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Terms</Link></li>
-              <li><Link href="/privacy" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Privacy</Link></li>
-              <li><Link href="/legal-notice" className="text-[12px] md:text-[13px] no-underline transition-colors hover:text-white/80" style={{ color: 'rgba(255,255,255,0.45)' }}>Legal</Link></li>
-            </ul>
+
+              {/* Spacer */}
+              <div className="hidden md:block flex-1" />
+
+              {/* Legal Links */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <Link href="/certification-scope" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Scope</Link>
+                <Link href="/certification-fees" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Fees</Link>
+                <Link href="/terms" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Terms</Link>
+                <Link href="/privacy" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Privacy</Link>
+                <Link href="/legal-notice" className="text-[13px] no-underline transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.4)' }}>Legal</Link>
+              </div>
+            </div>
           </div>
-          </div>
-          <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-end">
-            <p className="text-[10px] md:text-[11px] leading-[1.7] max-w-[680px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
+        </div>
+
+        {/* Bottom Bar with Disclaimer */}
+        <div className="px-6 md:px-12 py-6" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <p className="text-[11px] leading-[1.7] max-w-[700px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
               Naiwa certification is an independent, documentation-based assessment. It does not constitute regulatory approval, a guarantee of financing, or an endorsement by any government body or financial institution. Certification reflects status at the time of issuance only.
             </p>
-            <p className="text-[10px] md:text-xs whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.22)' }}>© 2026 Naiwa. All rights reserved.</p>
+            <p className="text-[11px] whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              &copy; {new Date().getFullYear()} Naiwa. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
