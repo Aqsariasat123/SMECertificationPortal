@@ -25,7 +25,7 @@ export default function PublicLayout({
             </svg>
           </div>
           <div className="flex flex-col gap-1.5">
-            <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>Naiwa</span>
+            <span className="font-semibold text-lg leading-none" style={{ color: '#111C1C' }}>NAIWA</span>
             <span className="text-[11px] leading-none tracking-wide" style={{ color: '#5A7070' }}>SME Certification Platform</span>
           </div>
         </Link>
