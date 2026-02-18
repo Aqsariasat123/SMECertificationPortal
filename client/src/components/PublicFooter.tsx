@@ -155,12 +155,6 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
                   Disclaimer
                 </Link>
               </div>
-              {/* Language Switcher */}
-              <div className="flex items-center gap-2 text-[11px]">
-                <span style={{ color: 'rgba(255,255,255,0.4)' }}>English</span>
-                <span style={{ color: 'rgba(255,255,255,0.15)' }}>|</span>
-                <span style={{ color: 'rgba(255,255,255,0.25)' }}>عربي</span>
-              </div>
             </div>
           </div>
         </div>
