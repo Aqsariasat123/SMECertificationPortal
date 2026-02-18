@@ -5,26 +5,58 @@ import Link from 'next/link';
 export default function AboutPage() {
   return (
     <div style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
-      {/* Hero Section */}
-      <section className="pt-12 pb-16 px-6 md:px-12" style={{ background: '#FFFFFF' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <div className="max-w-[720px]">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-px w-12" style={{ background: '#D0E4E4' }} />
-              <span className="text-[11px] font-semibold tracking-[0.16em] uppercase" style={{ color: '#2D6A6A' }}>About Naiwa</span>
-            </div>
-            <h1
-              className="text-[clamp(36px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
-              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
-            >
-              Independent SME Certification for the UAE Market
-            </h1>
-            <p className="text-lg leading-[1.75]" style={{ color: '#5A7070' }}>
-              Naiwa provides structured, documentation-based assessment services for small and medium enterprises operating within the United Arab Emirates.
-            </p>
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/hero/about-hero.jpg)',
+            backgroundPosition: 'center 40%',
+          }}
+        />
+        {/* Dark Overlay - 25% */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'rgba(11, 26, 26, 0.75)' }}
+        />
+        {/* Top Gradient - 0-20% extra darkness */}
+        <div
+          className="absolute inset-x-0 top-0 h-[30%]"
+          style={{ background: 'linear-gradient(to bottom, rgba(11, 26, 26, 0.5) 0%, transparent 100%)' }}
+        />
+
+        {/* Content - Centered */}
+        <div className="relative z-10 max-w-[900px] mx-auto px-6 md:px-12 text-center">
+          <div
+            className="inline-flex items-center gap-3 mb-6"
+            style={{ animation: 'fadeUp 0.6s ease-out forwards' }}
+          >
+            <div className="h-px w-8 md:w-12" style={{ background: 'rgba(255,255,255,0.3)' }} />
+            <span className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>About Naiwa</span>
+            <div className="h-px w-8 md:w-12" style={{ background: 'rgba(255,255,255,0.3)' }} />
           </div>
+          <h1
+            className="text-[clamp(32px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+            style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', animation: 'fadeUp 0.6s 0.1s ease-out both', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}
+          >
+            Independent SME Certification for the UAE Market
+          </h1>
+          <p
+            className="text-[clamp(16px,1.8vw,20px)] leading-[1.75] max-w-[640px] mx-auto"
+            style={{ color: 'rgba(255,255,255,0.8)', animation: 'fadeUp 0.6s 0.2s ease-out both', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}
+          >
+            Naiwa provides structured, documentation-based assessment services for small and medium enterprises operating within the United Arab Emirates.
+          </p>
         </div>
       </section>
+
+      <style jsx>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
       {/* Origin Story - The Name */}
       <section className="py-20 px-6 md:px-12 relative overflow-hidden" style={{ background: '#111C1C' }}>
