@@ -4,24 +4,45 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PublicFooter from '@/components/PublicFooter';
 
-// Hero slider images with their overlay opacities
+// Hero slider - images with unique content per slide
 const heroSlides = [
-  { image: '/hero/hero-1.jpg', overlay: 0.15 },  // Staircase symmetry - 15%
-  { image: '/hero/hero-2.jpg', overlay: 0.15 },  // Black & white symmetry - 15%
-  { image: '/hero/hero-3.jpg', overlay: 0.12 },  // Institution water/fountains - 10-12%
-  { image: '/hero/hero-4.png', overlay: 0.18 },  // UAE skyline golden hour - 18%
+  {
+    image: '/hero/hero-4.png',  // Golden hour - UAE skyline
+    headline: 'Certified. Structured. Capital-Ready.',
+    subtext: "A bank decline doesn't always reflect business viability. It reflects documentation gaps. Naiwa bridges that gap through structured institutional assessment.",
+  },
+  {
+    image: '/hero/hero-2.jpg',  // Black & white symmetry
+    headline: 'Where Documentation Meets Institutional Standards.',
+    subtext: 'We assess your business against the same structural criteria used by UAE banks, financial institutions, and capital providers.',
+  },
+  {
+    image: '/hero/hero-3.jpg',  // Institution water/fountains
+    headline: 'Structured for Institutional Review.',
+    subtext: 'An independent SME certification platform designed to evaluate readiness, structure governance, and prepare businesses for institutional evaluation.',
+  },
+  {
+    image: '/hero/hero-1.jpg',  // Staircase symmetry (Hero)
+    headline: 'Built for the UAE Market. Backed by Independence.',
+    subtext: 'Aligned with UAE regulatory frameworks. Free from commercial affiliations or external bias.',
+  },
 ];
 
 export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Auto-advance slider every 7 seconds
+  // Auto-advance slider every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 7000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // Navigation handlers
+  const goToSlide = (index: number) => setCurrentSlide(index);
+  const goToPrev = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  const goToNext = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
 
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal');
@@ -85,14 +106,14 @@ export default function LandingPage() {
 
       {/* HERO WITH IMAGE SLIDER */}
       <section
-        className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden"
+        className="min-h-screen flex flex-col justify-center relative overflow-hidden"
         style={{ padding: '120px 24px 80px' }}
       >
         {/* Background Image Slider */}
         {heroSlides.map((slide, index) => (
           <div
             key={index}
-            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+            className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
             style={{
               opacity: currentSlide === index ? 1 : 0,
               zIndex: 0,
@@ -105,59 +126,94 @@ export default function LandingPage() {
                 backgroundImage: `url(${slide.image})`,
               }}
             />
-            {/* Dark Overlay */}
+            {/* Dark Overlay - consistent 25% */}
             <div
               className="absolute inset-0"
               style={{
-                background: `rgba(0, 0, 0, ${slide.overlay})`,
+                background: 'linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.20) 100%)',
               }}
             />
           </div>
         ))}
 
-        {/* Content - Static, stays on top */}
-        <div className="relative z-10">
-          <p
-            className="text-[13px] font-semibold tracking-[0.18em] uppercase mb-6"
-            style={{ color: '#FFFFFF', opacity: 0, animation: 'fadeUp 0.7s 0.1s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-          >
-            Naiwa — SME Certification Platform
-          </p>
-          <h1
-            className="text-[clamp(48px,7vw,84px)] font-black leading-[1.05] tracking-[-0.02em] mb-7"
-            style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', opacity: 0, animation: 'fadeUp 0.7s 0.2s forwards', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
-          >
-            Certified.<br/><em className="not-italic" style={{ color: '#7FBFBF' }}>Structured.</em><br/>Capital-Ready.
-          </h1>
-          <p
-            className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px] mx-auto mb-3"
-            style={{ color: 'rgba(255,255,255,0.9)', opacity: 0, animation: 'fadeUp 0.7s 0.3s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-          >
-            A bank decline does not always reflect business viability. In many cases, it reflects documentation gaps between your records and institutional review standards.<br/>
-            <strong style={{ color: '#FFFFFF', fontWeight: 600 }}>Naiwa bridges that gap with structured, evidence-based certification.</strong>
-          </p>
-          <p
-            className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px] mx-auto"
-            style={{ color: 'rgba(255,255,255,0.9)', opacity: 0, animation: 'fadeUp 0.7s 0.35s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-          >
-            Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers — and issues a verifiable certification that speaks their language.
-          </p>
-          <p
-            className="text-[13px] mt-7"
-            style={{ color: 'rgba(255,255,255,0.75)', opacity: 0, animation: 'fadeUp 0.7s 0.4s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-          >
-            For UAE businesses preparing for bank, investor, or institutional review.
-          </p>
-          <div className="flex gap-3.5 justify-center flex-wrap mt-9" style={{ opacity: 0, animation: 'fadeUp 0.7s 0.45s forwards' }}>
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px]"
-              style={{ color: '#2D6A6A', background: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}
+        {/* Content - Left aligned, changes per slide */}
+        <div className="relative z-10 max-w-[1200px] mx-auto w-full px-6 md:px-12">
+          <div className="max-w-[680px]">
+            <p
+              key={`label-${currentSlide}`}
+              className="text-[12px] font-semibold tracking-[0.2em] uppercase mb-5"
+              style={{ color: 'rgba(255,255,255,0.7)', animation: 'fadeUp 0.6s ease-out forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
             >
-              Start Certification
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
+              Naiwa — SME Certification Platform
+            </p>
+            <h1
+              key={`headline-${currentSlide}`}
+              className="text-[clamp(36px,5.5vw,64px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', animation: 'fadeUp 0.6s 0.1s ease-out both', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
+            >
+              {heroSlides[currentSlide].headline}
+            </h1>
+            <p
+              key={`subtext-${currentSlide}`}
+              className="text-[clamp(16px,1.8vw,20px)] leading-[1.7] mb-8"
+              style={{ color: 'rgba(255,255,255,0.85)', animation: 'fadeUp 0.6s 0.2s ease-out both', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+            >
+              {heroSlides[currentSlide].subtext}
+            </p>
+            <div
+              key={`cta-${currentSlide}`}
+              style={{ animation: 'fadeUp 0.6s 0.3s ease-out both' }}
+            >
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px]"
+                style={{ color: '#2D6A6A', background: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}
+              >
+                Start Certification
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPrev}
+          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
+          aria-label="Previous slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button
+          onClick={goToNext}
+          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
+          aria-label="Next slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+
+        {/* Navigation Dots */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className="transition-all"
+              style={{
+                width: currentSlide === index ? '32px' : '10px',
+                height: '10px',
+                borderRadius: '5px',
+                background: currentSlide === index ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </section>
 
