@@ -440,6 +440,90 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* STATISTICS STRIP */}
+      <section className="py-16 px-6" style={{ background: '#FFFFFF', borderTop: '1px solid #D0E4E4', borderBottom: '1px solid #D0E4E4' }}>
+        <div className="max-w-[1040px] mx-auto">
+          <div className="reveal grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+            {[
+              { value: '5', label: 'Assessment Pillars', desc: 'Structured evaluation dimensions' },
+              { value: '100%', label: 'Independent', desc: 'No commercial affiliations' },
+              { value: '12', label: 'Month Validity', desc: 'Certification cycle period' },
+              { value: 'UAE', label: 'Market Aligned', desc: 'Local regulatory standards' },
+            ].map((stat, i) => (
+              <div key={i} className="text-center">
+                <p className="text-[clamp(32px,4vw,48px)] font-bold leading-none mb-2" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#2D6A6A' }}>{stat.value}</p>
+                <p className="text-[14px] font-semibold mb-1" style={{ color: '#111C1C' }}>{stat.label}</p>
+                <p className="text-[12px]" style={{ color: '#5A7070' }}>{stat.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST INDICATORS */}
+      <section className="py-20 px-6" style={{ background: '#111C1C' }}>
+        <div className="max-w-[1040px] mx-auto">
+          <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4 text-center" style={{ color: '#3D8B8B' }}>Why Trust Naiwa</p>
+          <h2 className="reveal text-[clamp(24px,3vw,32px)] font-bold leading-[1.2] tracking-[-0.01em] mb-12 text-center" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>Built on Principles of Integrity</h2>
+
+          <div className="reveal grid md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                ),
+                title: 'Independent Assessment',
+                desc: 'No external funding, partnerships, or commercial relationships that could influence certification outcomes.',
+              },
+              {
+                icon: (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                  </svg>
+                ),
+                title: 'Point-in-Time Verification',
+                desc: 'Certification reflects documented state at time of assessment. No forward-looking claims or guarantees.',
+              },
+              {
+                icon: (
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                ),
+                title: 'Evidence-Based Only',
+                desc: 'Every assessment decision derived from submitted documentation. No assumptions or projections.',
+              },
+            ].map((item, i) => (
+              <div key={i} className="p-8 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-5" style={{ background: 'rgba(61,139,139,0.15)' }}>
+                  {item.icon}
+                </div>
+                <p className="text-[16px] font-semibold mb-3" style={{ color: '#FFFFFF' }}>{item.title}</p>
+                <p className="text-[14px] leading-[1.7]" style={{ color: 'rgba(255,255,255,0.5)' }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="reveal mt-12 pt-10 flex flex-wrap justify-center gap-8 md:gap-12" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            {[
+              'UAE Regulatory Aligned',
+              'Immutable Audit Trail',
+              'Public Verification Registry',
+              'Deterministic Outcomes',
+            ].map((badge, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#3D8B8B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span className="text-[13px] font-medium" style={{ color: 'rgba(255,255,255,0.7)' }}>{badge}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SCOPE */}
       <section className="py-24 px-6" style={{ background: '#F5FAFA' }}>
         <div className="max-w-[1040px] mx-auto">
