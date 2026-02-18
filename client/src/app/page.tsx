@@ -181,10 +181,11 @@ export default function LandingPage() {
         {heroSlides.map((slide, index) => (
           <div
             key={index}
-            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+            className="absolute inset-0"
             style={{
               opacity: currentSlide === index ? 1 : 0,
               zIndex: 0,
+              transition: 'opacity 3s cubic-bezier(0.4, 0, 0.2, 1)',
             }}
           >
             {/* Background Image */}
@@ -218,7 +219,6 @@ export default function LandingPage() {
               {heroSlides.map((slide, index) => (
                 <div
                   key={index}
-                  className="transition-all duration-[1200ms] ease-in-out"
                   style={{
                     opacity: currentSlide === index ? 1 : 0,
                     position: currentSlide === index ? 'relative' : 'absolute',
@@ -226,6 +226,7 @@ export default function LandingPage() {
                     left: 0,
                     right: 0,
                     pointerEvents: currentSlide === index ? 'auto' : 'none',
+                    transition: 'opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 >
                   <h1
