@@ -244,10 +244,10 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - Hidden on mobile */}
         <button
           onClick={goToPrev}
-          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center transition-all hover:scale-110"
           style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
           aria-label="Previous slide"
         >
@@ -257,7 +257,7 @@ export default function LandingPage() {
         </button>
         <button
           onClick={goToNext}
-          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center transition-all hover:scale-110"
           style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
           aria-label="Next slide"
         >
