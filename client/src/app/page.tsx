@@ -1,10 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PublicFooter from '@/components/PublicFooter';
 
+// Hero slider images with their overlay opacities
+const heroSlides = [
+  { image: '/hero/hero-1.jpg', overlay: 0.15 },  // Staircase symmetry - 15%
+  { image: '/hero/hero-2.jpg', overlay: 0.15 },  // Black & white symmetry - 15%
+  { image: '/hero/hero-3.jpg', overlay: 0.12 },  // Institution water/fountains - 10-12%
+  { image: '/hero/hero-4.png', overlay: 0.18 },  // UAE skyline golden hour - 18%
+];
+
 export default function LandingPage() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-advance slider every 7 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -65,59 +83,81 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* HERO */}
+      {/* HERO WITH IMAGE SLIDER */}
       <section
         className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden"
-        style={{ padding: '120px 24px 80px', background: '#FFFFFF' }}
+        style={{ padding: '120px 24px 80px' }}
       >
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '-200px', left: '50%', transform: 'translateX(-50%)',
-            width: '900px', height: '900px',
-            background: 'radial-gradient(ellipse, rgba(45,106,106,0.07) 0%, transparent 70%)'
-          }}
-        />
-        <p
-          className="text-[13px] font-semibold tracking-[0.18em] uppercase mb-6"
-          style={{ color: '#2D6A6A', opacity: 0, animation: 'fadeUp 0.7s 0.1s forwards' }}
-        >
-          Naiwa — SME Certification Platform
-        </p>
-        <h1
-          className="text-[clamp(48px,7vw,84px)] font-black leading-[1.05] tracking-[-0.02em] mb-7"
-          style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C', opacity: 0, animation: 'fadeUp 0.7s 0.2s forwards' }}
-        >
-          Certified.<br/><em className="not-italic" style={{ color: '#2D6A6A' }}>Structured.</em><br/>Capital-Ready.
-        </h1>
-        <p
-          className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px] mb-3"
-          style={{ color: '#5A7070', opacity: 0, animation: 'fadeUp 0.7s 0.3s forwards' }}
-        >
-          A bank decline does not always reflect business viability. In many cases, it reflects documentation gaps between your records and institutional review standards.<br/>
-          <strong style={{ color: '#1A2A2A', fontWeight: 600 }}>Naiwa bridges that gap with structured, evidence-based certification.</strong>
-        </p>
-        <p
-          className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px]"
-          style={{ color: '#5A7070', opacity: 0, animation: 'fadeUp 0.7s 0.35s forwards' }}
-        >
-          Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers — and issues a verifiable certification that speaks their language.
-        </p>
-        <p
-          className="text-[13px] mt-7"
-          style={{ color: '#5A7070', opacity: 0, animation: 'fadeUp 0.7s 0.4s forwards' }}
-        >
-          For UAE businesses preparing for bank, investor, or institutional review.
-        </p>
-        <div className="flex gap-3.5 justify-center flex-wrap mt-9" style={{ opacity: 0, animation: 'fadeUp 0.7s 0.45s forwards' }}>
-          <Link
-            href="/register"
-            className="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px]"
-            style={{ color: 'white', background: '#2D6A6A', boxShadow: '0 8px 24px rgba(45,106,106,0.25)' }}
+        {/* Background Image Slider */}
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+            style={{
+              opacity: currentSlide === index ? 1 : 0,
+              zIndex: 0,
+            }}
           >
-            Start Certification
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </Link>
+            {/* Background Image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${slide.image})`,
+              }}
+            />
+            {/* Dark Overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `rgba(0, 0, 0, ${slide.overlay})`,
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Content - Static, stays on top */}
+        <div className="relative z-10">
+          <p
+            className="text-[13px] font-semibold tracking-[0.18em] uppercase mb-6"
+            style={{ color: '#FFFFFF', opacity: 0, animation: 'fadeUp 0.7s 0.1s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+          >
+            Naiwa — SME Certification Platform
+          </p>
+          <h1
+            className="text-[clamp(48px,7vw,84px)] font-black leading-[1.05] tracking-[-0.02em] mb-7"
+            style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', opacity: 0, animation: 'fadeUp 0.7s 0.2s forwards', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
+          >
+            Certified.<br/><em className="not-italic" style={{ color: '#7FBFBF' }}>Structured.</em><br/>Capital-Ready.
+          </h1>
+          <p
+            className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px] mx-auto mb-3"
+            style={{ color: 'rgba(255,255,255,0.9)', opacity: 0, animation: 'fadeUp 0.7s 0.3s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+          >
+            A bank decline does not always reflect business viability. In many cases, it reflects documentation gaps between your records and institutional review standards.<br/>
+            <strong style={{ color: '#FFFFFF', fontWeight: 600 }}>Naiwa bridges that gap with structured, evidence-based certification.</strong>
+          </p>
+          <p
+            className="text-[clamp(16px,2vw,20px)] leading-[1.65] max-w-[580px] mx-auto"
+            style={{ color: 'rgba(255,255,255,0.9)', opacity: 0, animation: 'fadeUp 0.7s 0.35s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+          >
+            Naiwa assesses your business against criteria aligned with institutional review standards used by UAE banks, financial institutions, and capital providers — and issues a verifiable certification that speaks their language.
+          </p>
+          <p
+            className="text-[13px] mt-7"
+            style={{ color: 'rgba(255,255,255,0.75)', opacity: 0, animation: 'fadeUp 0.7s 0.4s forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+          >
+            For UAE businesses preparing for bank, investor, or institutional review.
+          </p>
+          <div className="flex gap-3.5 justify-center flex-wrap mt-9" style={{ opacity: 0, animation: 'fadeUp 0.7s 0.45s forwards' }}>
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px]"
+              style={{ color: '#2D6A6A', background: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}
+            >
+              Start Certification
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          </div>
         </div>
       </section>
 
