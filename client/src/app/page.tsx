@@ -419,8 +419,8 @@ export default function LandingPage() {
               { num: '03', name: 'Business Model & Unit Economics' },
               { num: '04', name: 'Governance & Controls' },
               { num: '05', name: 'Data Integrity, Auditability & Information Reliability' },
-            ].map((p) => (
-              <div key={p.num} className="p-9 transition-colors hover:bg-[#E8F4F4]" style={{ background: '#FFFFFF' }}>
+            ].map((p, i) => (
+              <div key={p.num} className={`p-9 transition-colors hover:bg-[#E8F4F4] ${i === 4 ? 'col-span-2 md:col-span-1' : ''}`} style={{ background: '#FFFFFF' }}>
                 <p className="text-[13px] font-bold tracking-[0.05em] mb-4" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#2D6A6A' }}>Pillar {p.num}</p>
                 <p className="text-[15px] font-semibold leading-[1.4]" style={{ color: '#111C1C' }}>{p.name}</p>
               </div>
