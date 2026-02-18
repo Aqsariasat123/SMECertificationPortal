@@ -171,8 +171,110 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* PILLARS */}
-      <section id="pillars" className="py-24 px-6" style={{ background: '#F5FAFA' }}>
+      {/* ABOUT NAIWA - Summary */}
+      <section className="py-24 px-6" style={{ background: '#FFFFFF' }}>
+        <div className="max-w-[1040px] mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#2D6A6A' }}>About Naiwa</p>
+              <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>Independent SME Certification for the UAE Market</h2>
+              <p className="reveal text-base leading-[1.75] mb-5" style={{ color: '#5A7070' }}>
+                Naiwa provides structured, documentation-based assessment services for small and medium enterprises operating within the United Arab Emirates. We operate independently from commercial entities, ensuring our assessments remain free from external influence or bias.
+              </p>
+              <p className="reveal text-base leading-[1.75] mb-6" style={{ color: '#5A7070' }}>
+                Our certification is designed to serve as a baseline indicator of operational integrity, financial discipline, and governance adherence for enterprises seeking to demonstrate their readiness for institutional engagement.
+              </p>
+              <Link
+                href="/about"
+                className="reveal inline-flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:gap-3"
+                style={{ color: '#2D6A6A' }}
+              >
+                Learn More
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </Link>
+            </div>
+            <div className="reveal grid grid-cols-2 gap-4">
+              {[
+                { title: 'Independence', desc: 'Assessment without commercial affiliations or external pressures' },
+                { title: 'Transparency', desc: 'Clear criteria and deterministic outcomes' },
+                { title: 'Consistency', desc: 'Standardized evaluation applied uniformly' },
+                { title: 'Integrity', desc: 'Immutable audit trails and verification' },
+              ].map((item, i) => (
+                <div key={i} className="p-6 rounded-xl" style={{ background: '#F5FAFA', border: '1px solid #D0E4E4' }}>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{ background: '#E8F4F4' }}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                      <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                  </div>
+                  <p className="text-[13px] font-semibold mb-1" style={{ color: '#111C1C' }}>{item.title}</p>
+                  <p className="text-xs leading-[1.5]" style={{ color: '#5A7070' }}>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* METHODOLOGY - Summary */}
+      <section id="methodology" className="py-24 px-6" style={{ background: '#111C1C' }}>
+        <div className="max-w-[1040px] mx-auto">
+          <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#3D8B8B' }}>Assessment Methodology</p>
+          <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>How the Certification Works</h2>
+          <p className="reveal text-base leading-[1.75] max-w-[640px] mb-12" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Naiwa employs a deterministic, state-driven approach to certification. Each application follows a structured lifecycle from submission to decision.
+          </p>
+
+          {/* Process Steps */}
+          <div className="grid md:grid-cols-3 gap-0 relative mb-14">
+            <div className="hidden md:block absolute h-[1px] top-7" style={{ left: 'calc(16.66% + 20px)', right: 'calc(16.66% + 20px)', background: 'linear-gradient(90deg, #2D6A6A 0%, #3D8B8B 50%, #2D6A6A 100%)' }} />
+            {[
+              { num: '1', title: 'Application Submission', body: "Submit required documentation in accordance with Naiwa's certification standards." },
+              { num: '2', title: 'Document Review', body: 'Materials are reviewed against internal assessment criteria across five pillars.' },
+              { num: '3', title: 'Certification Decision', body: "Status is issued, deferred, or declined and recorded in the certification register." },
+            ].map((s) => (
+              <div key={s.num} className="reveal text-center px-6">
+                <div
+                  className="w-14 h-14 rounded-full mx-auto mb-7 flex items-center justify-center text-xl font-bold relative z-10"
+                  style={{ background: '#2D6A6A', fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}
+                >
+                  {s.num}
+                </div>
+                <p className="text-[15px] font-semibold mb-3" style={{ color: '#FFFFFF' }}>{s.title}</p>
+                <p className="text-[13px] leading-[1.7]" style={{ color: 'rgba(255,255,255,0.45)' }}>{s.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Key Principles */}
+          <div className="reveal grid md:grid-cols-3 gap-5 pt-10" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            {[
+              { title: 'Independent Review', desc: 'Assessment against fixed internal criteria with no external influence.' },
+              { title: 'Point-in-Time Verification', desc: 'Certification reflects documented state at time of submission.' },
+              { title: 'Evidence-Based Assessment', desc: 'Every score derived from submitted documentation.' },
+            ].map((p, i) => (
+              <div key={i} className="p-6 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <p className="text-[14px] font-semibold mb-2" style={{ color: '#FFFFFF' }}>{p.title}</p>
+                <p className="text-[13px] leading-[1.6]" style={{ color: 'rgba(255,255,255,0.45)' }}>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="reveal text-center mt-10">
+            <Link
+              href="/methodology"
+              className="inline-flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:gap-3"
+              style={{ color: '#3D8B8B' }}
+            >
+              View Methodology
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FRAMEWORK */}
+      <section id="framework" className="py-24 px-6" style={{ background: '#F5FAFA' }}>
         <div className="max-w-[1040px] mx-auto">
           <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#2D6A6A' }}>Assessment Framework</p>
           <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>What Naiwa Certifies</h2>
@@ -201,132 +303,9 @@ export default function LandingPage() {
             className="reveal inline-flex items-center gap-2 mt-6 text-sm font-medium no-underline transition-colors hover:gap-3"
             style={{ color: '#2D6A6A' }}
           >
-            View Full Framework
+            Explore Framework
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </Link>
-        </div>
-      </section>
-
-      {/* BRAND STORY */}
-      <section className="relative overflow-hidden">
-        <div className="relative py-24 px-6 overflow-hidden" style={{ background: '#111C1C' }}>
-          <div className="absolute top-0 left-0 w-[3px] h-full" style={{ background: 'linear-gradient(to bottom, transparent, #2D6A6A, transparent)', opacity: 0.4 }} />
-          <div className="absolute pointer-events-none" style={{ top: '-100px', left: '20%', width: '900px', height: '800px', background: 'radial-gradient(ellipse, rgba(45,106,106,0.14) 0%, transparent 60%)' }} />
-          <div
-            className="absolute select-none pointer-events-none whitespace-nowrap"
-            style={{ top: '50%', right: '-40px', transform: 'translateY(-50%)', fontFamily: 'var(--font-playfair), Playfair Display, serif', fontSize: 'clamp(260px, 35vw, 440px)', fontWeight: 900, color: '#2D6A6A', opacity: 0.06, lineHeight: 1 }}
-            aria-hidden="true"
-          >
-            نايوا
-          </div>
-          <div className="max-w-[1040px] mx-auto relative z-10">
-            <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4 flex items-center gap-3.5" style={{ color: '#3D8B8B' }}>
-              The Name
-              <span className="flex-1 max-w-[48px] h-[1px]" style={{ background: '#2D6A6A', opacity: 0.4 }} />
-            </p>
-            <h2 className="reveal text-[clamp(40px,6vw,72px)] font-black leading-[1.05] tracking-[-0.025em] mb-4 max-w-[600px]" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>
-              Naiwa — <span className="italic" style={{ color: '#3D8B8B' }}>نايوا</span>
-            </h2>
-            <p className="reveal text-[13px] tracking-[0.2em] uppercase mb-16" style={{ color: 'rgba(255,255,255,0.18)' }}>A mountain beneath the sea</p>
-            <div className="reveal grid md:grid-cols-2 gap-12 pt-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              <div>
-                <p className="text-[10px] font-semibold tracking-[0.18em] uppercase mb-3.5" style={{ color: '#3D8B8B', opacity: 0.65 }}>Origin</p>
-                <p className="text-[15px] leading-[1.9]" style={{ color: 'rgba(255,255,255,0.42)' }}>
-                  Naiwa is a term rooted in Emirati maritime heritage. It describes a mountain beneath the sea — a formation invisible from the surface, known only to those who sail toward it and dive deep enough to find it. For generations, UAE seamen navigated by these hidden landmarks. Unseen, yet foundational to every voyage.
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold tracking-[0.18em] uppercase mb-3.5" style={{ color: '#3D8B8B', opacity: 0.65 }}>The Parallel</p>
-                <p className="text-[15px] leading-[1.9]" style={{ color: 'rgba(255,255,255,0.42)' }}>
-                  A business&apos;s true foundation — its legal structure, financial discipline, governance, and operational integrity — is rarely visible from the outside. Institutions cannot fund what they cannot see. <strong style={{ color: 'rgba(255,255,255,0.72)', fontWeight: 500 }}>Naiwa exists to surface it.</strong> To bring what is beneath into a form that banks, investors, and capital providers can assess and trust.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="relative py-16 px-6 overflow-hidden" style={{ background: '#2D6A6A' }}>
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px)' }} />
-          <div className="absolute pointer-events-none" style={{ top: '50%', right: '-100px', transform: 'translateY(-50%)', width: '500px', height: '500px', background: 'radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 65%)' }} />
-          <div className="max-w-[960px] mx-auto grid md:grid-cols-[1fr_auto] gap-12 items-center relative z-10">
-            <p className="text-[clamp(22px,3vw,32px)] font-bold leading-[1.35] tracking-[-0.01em]" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>
-              The foundation was always there.<br/>
-              <span className="font-normal italic" style={{ color: 'rgba(255,255,255,0.45)' }}>Naiwa makes it visible.</span>
-            </p>
-            <p className="hidden md:block text-[64px] font-black leading-none select-none whitespace-nowrap" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: 'rgba(255,255,255,0.12)' }} aria-hidden="true">نايوا</p>
-          </div>
-        </div>
-      </section>
-
-      {/* PRINCIPLES */}
-      <section id="principles" className="py-24 px-6" style={{ background: '#FFFFFF' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#2D6A6A' }}>Certification Principles</p>
-          <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}>How the Assessment Works</h2>
-          <div className="grid md:grid-cols-3 gap-6 mt-14">
-            {[
-              {
-                icon: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
-                title: 'Independent Review',
-                body: "Naiwa's assessment is conducted against fixed internal criteria. Reviewers evaluate submitted documentation only — no external influence on the outcome."
-              },
-              {
-                icon: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
-                title: 'Point-in-Time Verification',
-                body: "Certification reflects the documented state of your business at the time of submission. It is recorded in Naiwa's certification register and remains verifiable by any institution you choose to share it with."
-              },
-              {
-                icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>,
-                title: 'Evidence-Based Assessment',
-                body: 'Every pillar score is derived from submitted documentation. If a document is absent, the relevant criterion is scored accordingly. The framework does not infer or assume.'
-              },
-            ].map((p, i) => (
-              <div key={i} className="reveal p-9 rounded-[14px] transition-all hover:shadow-lg hover:translate-y-[-2px]" style={{ border: '1px solid #D0E4E4', background: '#FFFFFF' }}>
-                <div className="w-10 h-10 rounded-[10px] flex items-center justify-center mb-5" style={{ background: '#E8F4F4' }}>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#2D6A6A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{p.icon}</svg>
-                </div>
-                <p className="text-[15px] font-semibold mb-3" style={{ color: '#111C1C' }}>{p.title}</p>
-                <p className="text-sm leading-[1.7]" style={{ color: '#5A7070' }}>{p.body}</p>
-              </div>
-            ))}
-          </div>
-          <div className="reveal text-center mt-10">
-            <Link
-              href="/methodology"
-              className="inline-flex items-center gap-2 text-sm font-medium no-underline transition-colors hover:gap-3"
-              style={{ color: '#2D6A6A' }}
-            >
-              View Full Methodology
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* PROCESS */}
-      <section id="process" className="py-24 px-6" style={{ background: '#111C1C' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <p className="reveal text-[11px] font-semibold tracking-[0.16em] uppercase mb-4" style={{ color: '#3D8B8B' }}>Certification Process</p>
-          <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] tracking-[-0.01em] mb-5" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>Three Steps to Certification</h2>
-          <p className="reveal text-base leading-[1.75]" style={{ color: 'rgba(255,255,255,0.5)' }}>The certification process follows a structured review of submitted documentation.</p>
-          <div className="grid md:grid-cols-3 gap-0 mt-14 relative">
-            <div className="hidden md:block absolute h-[1px] top-7" style={{ left: 'calc(16.66% + 20px)', right: 'calc(16.66% + 20px)', background: 'linear-gradient(90deg, #2D6A6A 0%, #3D8B8B 50%, #2D6A6A 100%)' }} />
-            {[
-              { num: '1', title: 'Application Submission', body: "Businesses submit required documentation in accordance with Naiwa's certification standards." },
-              { num: '2', title: 'Review', body: 'Submitted materials are reviewed against internal assessment criteria at a defined point in time.' },
-              { num: '3', title: 'Certification Decision', body: "Certification status is issued, deferred, or declined and recorded in Naiwa's certification register." },
-            ].map((s) => (
-              <div key={s.num} className="reveal text-center px-6">
-                <div
-                  className="w-14 h-14 rounded-full mx-auto mb-7 flex items-center justify-center text-xl font-bold relative z-10"
-                  style={{ background: '#2D6A6A', fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}
-                >
-                  {s.num}
-                </div>
-                <p className="text-[15px] font-semibold mb-3" style={{ color: '#FFFFFF' }}>{s.title}</p>
-                <p className="text-[13px] leading-[1.7]" style={{ color: 'rgba(255,255,255,0.45)' }}>{s.body}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
