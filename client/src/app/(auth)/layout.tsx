@@ -44,24 +44,6 @@ export default function AuthLayout({
           }}
         />
 
-        {/* Arabic watermark */}
-        <div
-          className="absolute pointer-events-none select-none whitespace-nowrap"
-          style={{
-            bottom: '-20px',
-            right: '-20px',
-            fontFamily: 'var(--font-playfair), serif',
-            fontSize: '260px',
-            fontWeight: 900,
-            color: '#2D6A6A',
-            opacity: 0.055,
-            lineHeight: 1,
-          }}
-          aria-hidden="true"
-        >
-          نايوا
-        </div>
-
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 no-underline relative z-10">
           <div
