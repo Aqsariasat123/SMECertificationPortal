@@ -19,26 +19,60 @@ export default function MethodologyPage() {
 
   return (
     <div style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
-      {/* Hero Section */}
-      <section className="pt-12 pb-16 px-6 md:px-12" style={{ background: '#FFFFFF' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <div className="max-w-[720px]">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-px w-12" style={{ background: '#D0E4E4' }} />
-              <span className="text-[11px] font-semibold tracking-[0.16em] uppercase" style={{ color: '#2D6A6A' }}>Assessment Methodology</span>
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center overflow-hidden">
+        {/* Background Image - B&W Skyscraper */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/hero/methodology-hero.jpg)',
+            backgroundPosition: 'center center',
+            filter: 'grayscale(100%)',
+          }}
+        />
+        {/* Dark Gradient Overlay - 65% opacity, stronger on left for text */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.55) 100%)' }}
+        />
+        {/* Top Gradient for depth */}
+        <div
+          className="absolute inset-x-0 top-0 h-[25%]"
+          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%)' }}
+        />
+
+        {/* Content - Left Aligned */}
+        <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12 w-full">
+          <div className="max-w-[640px]">
+            <div
+              className="flex items-center gap-4 mb-6"
+              style={{ animation: 'fadeUp 0.6s ease-out forwards' }}
+            >
+              <div className="h-px w-12" style={{ background: 'rgba(255,255,255,0.3)' }} />
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>Assessment Methodology</span>
             </div>
             <h1
-              className="text-[clamp(36px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
-              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              className="text-[clamp(32px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', animation: 'fadeUp 0.6s 0.1s ease-out both', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
             >
               Deterministic Certification Logic
             </h1>
-            <p className="text-lg leading-[1.75]" style={{ color: '#5A7070' }}>
+            <p
+              className="text-[clamp(16px,1.8vw,20px)] leading-[1.75]"
+              style={{ color: 'rgba(255,255,255,0.8)', animation: 'fadeUp 0.6s 0.2s ease-out both', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+            >
               Naiwa employs a state-machine approach to certification. Each pillar is assessed independently, with the final outcome derived from the combination of pillar states rather than aggregate scoring.
             </p>
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
       {/* State Logic Section */}
       <section className="py-20 px-6 md:px-12" style={{ background: '#111C1C' }}>
