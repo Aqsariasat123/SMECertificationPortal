@@ -559,17 +559,17 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 text-center relative overflow-hidden" style={{ background: '#2D6A6A' }}>
+      <section className="py-14 md:py-16 px-6 text-center relative overflow-hidden" style={{ background: '#2D6A6A' }}>
         <div className="absolute pointer-events-none" style={{ top: '-300px', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', background: 'radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 65%)' }} />
-        <h2 className="reveal text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.1] mb-4" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>Ready to Get Certified?</h2>
-        <p className="reveal text-base leading-[1.65] max-w-[520px] mx-auto mb-10" style={{ color: 'rgba(255,255,255,0.7)' }}>Submit your documentation for an independent review. Certification results in a verifiable record of capital-readiness status.</p>
+        <h2 className="reveal text-[clamp(24px,3vw,32px)] font-bold leading-[1.1] mb-3" style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}>Ready to Get Certified?</h2>
+        <p className="reveal text-sm leading-[1.65] max-w-[480px] mx-auto mb-6" style={{ color: 'rgba(255,255,255,0.7)' }}>Submit your documentation for an independent review. Certification results in a verifiable record of capital-readiness status.</p>
         <Link
           href="/register"
-          className="reveal inline-flex items-center gap-2 px-9 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px] hover:shadow-lg"
+          className="reveal inline-flex items-center gap-2 px-7 py-3 text-sm font-semibold rounded-lg no-underline transition-all hover:translate-y-[-2px] hover:shadow-lg"
           style={{ color: '#2D6A6A', background: '#FFFFFF' }}
         >
           Start Certification
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </Link>
       </section>
 

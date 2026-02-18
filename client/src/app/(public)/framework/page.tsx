@@ -344,28 +344,28 @@ export default function FrameworkPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 md:px-12 text-center" style={{ background: '#2D6A6A' }}>
-        <div className="max-w-[640px] mx-auto">
+      <section className="py-12 md:py-14 px-6 md:px-12 text-center" style={{ background: '#2D6A6A' }}>
+        <div className="max-w-[560px] mx-auto">
           <h2
-            className="text-[clamp(28px,3.5vw,38px)] font-bold leading-[1.15] mb-6"
+            className="text-[clamp(22px,3vw,28px)] font-bold leading-[1.15] mb-3"
             style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}
           >
             Ready to Begin Assessment?
           </h2>
-          <p className="text-lg leading-[1.65] mb-10" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          <p className="text-sm leading-[1.65] mb-6" style={{ color: 'rgba(255,255,255,0.7)' }}>
             Start your certification journey by registering for an account. Our guided application process will help you submit evidence for each pillar.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/contact"
-              className="px-8 py-3.5 text-[15px] font-medium rounded-lg no-underline transition-all hover:bg-white/10"
+              className="px-6 py-2.5 text-sm font-medium rounded-lg no-underline transition-all hover:bg-white/10"
               style={{ color: '#FFFFFF', border: '1.5px solid rgba(255,255,255,0.3)' }}
             >
               Contact Us
             </Link>
             <Link
               href="/register"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-lg no-underline transition-all hover:translate-y-[-2px]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-lg no-underline transition-all hover:translate-y-[-2px]"
               style={{ color: '#2D6A6A', background: '#FFFFFF' }}
             >
               Apply for Certification
