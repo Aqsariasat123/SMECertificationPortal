@@ -33,7 +33,7 @@ export default function AboutPage() {
           style={{ top: '50%', right: '-40px', transform: 'translateY(-50%)', fontFamily: 'var(--font-playfair), Playfair Display, serif', fontSize: 'clamp(200px, 30vw, 360px)', fontWeight: 900, color: '#2D6A6A', opacity: 0.06, lineHeight: 1 }}
           aria-hidden="true"
         >
-          نايوا
+          نيوا
         </div>
         <div className="max-w-[1040px] mx-auto relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -49,7 +49,7 @@ export default function AboutPage() {
                 className="text-[clamp(32px,4vw,48px)] font-bold leading-[1.1] mb-4"
                 style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF' }}
               >
-                Naiwa — <span style={{ color: '#3D8B8B' }}>نايوا</span>
+                Naiwa — <span style={{ color: '#3D8B8B' }}>نيوا</span>
               </h2>
               <p className="text-xl mb-8" style={{ color: 'rgba(255,255,255,0.5)' }}>A mountain beneath the sea</p>
               <div className="space-y-5" style={{ color: 'rgba(255,255,255,0.42)' }}>
