@@ -88,7 +88,9 @@ export default function PublicFooter({ compact = false }: PublicFooterProps) {
                   { href: '/terms', label: 'Terms of Use' },
                   { href: '/privacy', label: 'Privacy Policy' },
                   { href: '/certification-standards', label: 'Certification Disclaimer' },
-                  { href: '/certification-scope', label: 'Limitation of Liability & Certification Scope' },
+                  { href: '/certification-scope', label: 'Certification Scope' },
+                  { href: '/legal-notice', label: 'Legal Notice' },
+                  { href: '/certification-fees', label: 'Certification Fees' },
                 ].map((link) => (
                   <li key={link.href}>
                     <Link
