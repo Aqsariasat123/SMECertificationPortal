@@ -120,21 +120,39 @@ export default function FrameworkPage() {
 
   return (
     <div style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', color: '#1A2A2A', background: '#FFFFFF' }}>
-      {/* Hero Section */}
-      <section className="pt-12 pb-16 px-6 md:px-12" style={{ background: '#FFFFFF' }}>
-        <div className="max-w-[1040px] mx-auto">
-          <div className="max-w-[720px]">
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-[70vh] md:min-h-[80vh] flex items-center overflow-hidden">
+        {/* Background Image - Evening Architectural Steps */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/hero/framework-hero.jpg)',
+            backgroundPosition: 'center center',
+          }}
+        />
+        {/* Dark Gradient Overlay - 75% on left for text readability */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.70) 40%, rgba(0,0,0,0.50) 100%)' }}
+        />
+
+        {/* Content - Left Aligned */}
+        <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12 w-full">
+          <div className="max-w-[640px]">
             <div className="flex items-center gap-4 mb-6">
-              <div className="h-px w-12" style={{ background: '#D0E4E4' }} />
-              <span className="text-[11px] font-semibold tracking-[0.16em] uppercase" style={{ color: '#2D6A6A' }}>Assessment Framework</span>
+              <div className="h-px w-12" style={{ background: 'rgba(255,255,255,0.3)' }} />
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>Assessment Framework</span>
             </div>
             <h1
-              className="text-[clamp(36px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
-              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#111C1C' }}
+              className="text-[clamp(32px,5vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
             >
               The Five Pillars of Certification
             </h1>
-            <p className="text-lg leading-[1.75]" style={{ color: '#5A7070' }}>
+            <p
+              className="text-[clamp(16px,1.8vw,20px)] leading-[1.75]"
+              style={{ color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+            >
               Each pillar represents a critical dimension of enterprise readiness. Assessment is conducted through document review, evidence verification, and structured evaluation against published criteria.
             </p>
           </div>
