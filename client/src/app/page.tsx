@@ -32,11 +32,11 @@ export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Auto-advance slider every 5 seconds
+  // Auto-advance slider every 7 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, 7000);
     return () => clearInterval(interval);
   }, []);
 
@@ -181,7 +181,7 @@ export default function LandingPage() {
         {heroSlides.map((slide, index) => (
           <div
             key={index}
-            className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
+            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
             style={{
               opacity: currentSlide === index ? 1 : 0,
               zIndex: 0,
@@ -204,34 +204,46 @@ export default function LandingPage() {
           </div>
         ))}
 
-        {/* Content - Left aligned, changes per slide */}
+        {/* Content - Left aligned, changes per slide with smooth transitions */}
         <div className="relative z-10 max-w-[1200px] mx-auto w-full px-6 md:px-12">
           <div className="max-w-[680px]">
             <p
-              key={`label-${currentSlide}`}
               className="text-[12px] font-semibold tracking-[0.2em] uppercase mb-5"
-              style={{ color: 'rgba(255,255,255,0.7)', animation: 'fadeUp 0.6s ease-out forwards', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+              style={{ color: 'rgba(255,255,255,0.7)', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
             >
               Naiwa — SME Certification Platform
             </p>
-            <h1
-              key={`headline-${currentSlide}`}
-              className="text-[clamp(36px,5.5vw,64px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
-              style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', animation: 'fadeUp 0.6s 0.1s ease-out both', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
-            >
-              {heroSlides[currentSlide].headline}
-            </h1>
-            <p
-              key={`subtext-${currentSlide}`}
-              className="text-[clamp(16px,1.8vw,20px)] leading-[1.7] mb-8"
-              style={{ color: 'rgba(255,255,255,0.85)', animation: 'fadeUp 0.6s 0.2s ease-out both', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-            >
-              {heroSlides[currentSlide].subtext}
-            </p>
-            <div
-              key={`cta-${currentSlide}`}
-              style={{ animation: 'fadeUp 0.6s 0.3s ease-out both' }}
-            >
+            {/* Text content with crossfade */}
+            <div className="relative">
+              {heroSlides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="transition-all duration-[1200ms] ease-in-out"
+                  style={{
+                    opacity: currentSlide === index ? 1 : 0,
+                    position: currentSlide === index ? 'relative' : 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    pointerEvents: currentSlide === index ? 'auto' : 'none',
+                  }}
+                >
+                  <h1
+                    className="text-[clamp(36px,5.5vw,64px)] font-bold leading-[1.1] tracking-[-0.02em] mb-6"
+                    style={{ fontFamily: 'var(--font-playfair), Playfair Display, serif', color: '#FFFFFF', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}
+                  >
+                    {slide.headline}
+                  </h1>
+                  <p
+                    className="text-[clamp(16px,1.8vw,20px)] leading-[1.7] mb-8"
+                    style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+                  >
+                    {slide.subtext}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div>
               <Link
                 href="/register"
                 className="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-[10px] no-underline transition-all hover:translate-y-[-2px]"
