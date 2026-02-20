@@ -281,16 +281,16 @@ export default function LandingPage() {
         </button>
 
         {/* Dot Navigation */}
-        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5">
+        <div className="absolute bottom-20 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className="transition-all duration-300"
               style={{
-                width: currentSlide === index ? '24px' : '10px',
-                height: '10px',
-                borderRadius: '5px',
+                width: currentSlide === index ? '28px' : '12px',
+                height: '12px',
+                borderRadius: '6px',
                 background: currentSlide === index ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
               }}
               aria-label={`Go to slide ${index + 1}`}
