@@ -32,11 +32,11 @@ export default function LandingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Auto-advance slider every 7 seconds
+  // Auto-advance slider every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 7000);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
@@ -205,7 +205,7 @@ export default function LandingPage() {
           </div>
         ))}
 
-        {/* Content - Left aligned, changes per slide with smooth transitions */}
+        {/* Content - Left aligned, changes per slide with fade-up animations */}
         <div className="relative z-10 max-w-[1200px] mx-auto w-full px-6 md:px-12">
           <div className="max-w-[680px]">
             <p
@@ -214,19 +214,20 @@ export default function LandingPage() {
             >
               Naiwa — SME Certification Platform
             </p>
-            {/* Text content with crossfade */}
+            {/* Text content with crossfade and fade-up */}
             <div className="relative">
               {heroSlides.map((slide, index) => (
                 <div
                   key={index}
                   style={{
                     opacity: currentSlide === index ? 1 : 0,
+                    transform: currentSlide === index ? 'translateY(0)' : 'translateY(30px)',
                     position: currentSlide === index ? 'relative' : 'absolute',
                     top: 0,
                     left: 0,
                     right: 0,
                     pointerEvents: currentSlide === index ? 'auto' : 'none',
-                    transition: 'opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transition: 'opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 >
                   <h1
@@ -279,28 +280,21 @@ export default function LandingPage() {
           </svg>
         </button>
 
-        {/* Thumbnail Navigation */}
-        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 md:gap-2">
-          {heroSlides.map((slide, index) => (
+        {/* Dot Navigation */}
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5">
+          {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className="transition-all duration-300 overflow-hidden"
+              className="transition-all duration-300"
               style={{
-                width: currentSlide === index ? '48px' : '32px',
-                height: currentSlide === index ? '32px' : '24px',
-                borderRadius: '6px',
-                border: currentSlide === index ? '2px solid white' : '1px solid rgba(255,255,255,0.3)',
-                opacity: currentSlide === index ? 1 : 0.5,
-                transform: currentSlide === index ? 'scale(1.1)' : 'scale(1)',
+                width: currentSlide === index ? '24px' : '10px',
+                height: '10px',
+                borderRadius: '5px',
+                background: currentSlide === index ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
               }}
               aria-label={`Go to slide ${index + 1}`}
-            >
-              <div
-                className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              />
-            </button>
+            />
           ))}
         </div>
       </section>
