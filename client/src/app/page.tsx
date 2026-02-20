@@ -258,40 +258,40 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Navigation Arrows - Desktop only */}
+        {/* Navigation Arrows */}
         <button
           onClick={goToPrev}
-          className="absolute z-20 hidden md:flex items-center justify-center transition-all hover:scale-110 left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full"
-          style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
+          className="absolute z-20 flex items-center justify-center transition-all hover:scale-110 left-4 md:left-8 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)' }}
           aria-label="Previous slide"
         >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
         </button>
         <button
           onClick={goToNext}
-          className="absolute z-20 hidden md:flex items-center justify-center transition-all hover:scale-110 right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full"
-          style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
+          className="absolute z-20 flex items-center justify-center transition-all hover:scale-110 right-4 md:right-8 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full"
+          style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)' }}
           aria-label="Next slide"
         >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 18l6-6-6-6"/>
           </svg>
         </button>
 
-        {/* Dot Navigation - Simple dots */}
-        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {/* Dot Navigation - Simple small dots */}
+        <div className="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className="transition-all duration-300"
               style={{
-                width: currentSlide === index ? '24px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                background: currentSlide === index ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                width: currentSlide === index ? '28px' : '10px',
+                height: '10px',
+                borderRadius: '5px',
+                background: currentSlide === index ? '#FFFFFF' : 'rgba(255,255,255,0.5)',
               }}
               aria-label={`Go to slide ${index + 1}`}
             />
