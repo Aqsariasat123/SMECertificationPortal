@@ -1,30 +1,25 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display, DM_Sans } from 'next/font/google';
+import { Playfair_Display, Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['700', '900'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-playfair',
 });
 
-const dmSans = DM_Sans({
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-dm-sans',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-source-sans',
 });
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#2D6A6A',
+  themeColor: '#1A2F2F',
 };
 
 export const metadata: Metadata = {
@@ -66,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} ${dmSans.variable} font-sans antialiased`}>
+      <body className={`${playfair.variable} ${sourceSans.variable} font-sans antialiased`}>
         <AuthProvider>
           {children}
         </AuthProvider>

@@ -1,36 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  /* Institutional SaaS - Light Neutral Background */
-  --background: #f8f9fb;
-  --background-subtle: #f1f3f6;
-  --foreground: #1a1d21;
-  --foreground-muted: #5c6370;
+  /* Dark Institutional - Professional Background */
+  --background: #f5f7f7;
+  --background-subtle: #eef1f1;
+  --foreground: #1A2F2F;
+  --foreground-muted: #4A5858;
 
-  /* Graphite - Primary Neutral (muted dark grey) */
-  --graphite-50: #f7f8f9;
-  --graphite-100: #eef0f2;
-  --graphite-200: #dce0e5;
-  --graphite-300: #b8c0c9;
-  --graphite-400: #8f99a6;
-  --graphite-500: #6b7685;
-  --graphite-600: #545d6a;
-  --graphite-700: #434a55;
-  --graphite-800: #363c45;
-  --graphite-900: #2a2f36;
-  --graphite-950: #1a1d21;
+  /* Graphite - Primary Neutral (dark institutional grey) */
+  --graphite-50: #f5f7f7;
+  --graphite-100: #e8ecec;
+  --graphite-200: #d1d9d9;
+  --graphite-300: #a8b5b5;
+  --graphite-400: #7a8a8a;
+  --graphite-500: #5a6868;
+  --graphite-600: #4a5555;
+  --graphite-700: #3d4646;
+  --graphite-800: #2d3535;
+  --graphite-900: #1A2F2F;
+  --graphite-950: #111c1c;
 
-  /* Teal - Muted accent (NOT bright/neon) */
-  --teal-50: #f2f8f7;
-  --teal-100: #e0efed;
-  --teal-200: #c3dfdb;
-  --teal-300: #97c7c1;
-  --teal-400: #68a9a1;
-  --teal-500: #4a8f87;
-  --teal-600: #3a736d;
-  --teal-700: #315d59;
-  --teal-800: #2a4c49;
-  --teal-900: #26403e;
+  /* Dark Teal - Primary institutional accent */
+  --teal-50: #f0f5f5;
+  --teal-100: #dceaea;
+  --teal-200: #b8d5d5;
+  --teal-300: #8ab8b8;
+  --teal-400: #5c9999;
+  --teal-500: #3d7a7a;
+  --teal-600: #2d5c5c;
+  --teal-700: #234848;
+  --teal-800: #1A3838;
+  --teal-900: #142a2a;
+  --teal-primary: #1A3838;
 
   /* Sand/Gold - ONLY for certification/verified badges */
   --sand-50: #fdfcf8;
@@ -41,33 +42,33 @@
   --sand-500: #c49f54;
   --sand-600: #a68341;
 
-  /* Status colors - Muted versions */
-  --success-50: #f2f9f4;
-  --success-100: #e1f2e6;
-  --success-500: #4a9362;
-  --success-600: #3d7a51;
+  /* Status colors - Muted institutional versions */
+  --success-50: #f0f7f2;
+  --success-100: #dceee2;
+  --success-500: #3d7a52;
+  --success-600: #2d5c3d;
 
-  --warning-50: #fdf9f2;
-  --warning-100: #faf1e1;
-  --warning-500: #c49354;
-  --warning-600: #a67a41;
+  --warning-50: #fdf8f2;
+  --warning-100: #f9efdf;
+  --warning-500: #b8864a;
+  --warning-600: #956d3a;
 
-  --danger-50: #fdf4f4;
-  --danger-100: #fae6e6;
-  --danger-500: #c45454;
-  --danger-600: #a64141;
+  --danger-50: #fdf2f2;
+  --danger-100: #f9e2e2;
+  --danger-500: #b84a4a;
+  --danger-600: #953a3a;
 
-  /* Cards - Subtle frosted glass (NOT heavy) */
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --card-border: rgba(220, 224, 229, 0.8);
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  /* Cards - Clean professional style */
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(26, 47, 47, 0.1);
+  --card-shadow: 0 1px 3px rgba(26, 47, 47, 0.06), 0 1px 2px rgba(26, 47, 47, 0.04);
+  --card-shadow-hover: 0 4px 12px rgba(26, 47, 47, 0.08), 0 2px 4px rgba(26, 47, 47, 0.04);
 
-  /* Sidebar - Dark graphite */
-  --sidebar-bg: #2a2f36;
-  --sidebar-hover: #363c45;
-  --sidebar-active: rgba(74, 143, 135, 0.12);
-  --sidebar-active-border: #4a8f87;
+  /* Sidebar - Dark institutional */
+  --sidebar-bg: #1A2F2F;
+  --sidebar-hover: #234040;
+  --sidebar-active: rgba(61, 122, 122, 0.15);
+  --sidebar-active-border: #3d7a7a;
 }
 
 @theme inline {
@@ -85,7 +86,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-source-sans), 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
